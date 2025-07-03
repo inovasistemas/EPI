@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --backgroundPrimary: #ffffff;
+  --backgroundSecondary: #f0f4f8;
+
+  --textPrimary: #3483fa;
+  --textSecondary: #29292e;
+
+  --outlinePrimary: #d9d9d9;
+
+  --border: #c5c7c5;
+
+  --buttonDisabled: #d4d4d8;
+  --buttonPrimary: #dde3ea;
+  --buttonSecondary: #ced3da;
+
+  --labelPrimary: #71717a;
+
+  --error: #e4e4e7;
+  --errorSecondary: #d9d9d9;
+  --errorLoader: #ed3a2f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --backgroundPrimary: #282a2c;
+    --backgroundSecondary: #1b1c1d;
+
+    --textPrimary: #3483fa;
+    --textSecondary: #c4c4cc;
+
+    --outlinePrimary: #29292e;
+
+    --border: #4a5050;
+
+    --buttonDisabled: #29292e;
+    --buttonPrimary: #3d3f42;
+    --buttonSecondary: #4c4e51;
+
+    --labelPrimary: #7c7c8a;
+
+    --error: #29292e;
+    --errorSecondary: #323238;
+    --errorLoader: #ed3a2f;
+  }
+}
+
+::selection {
+  background: #e6e6e6;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 640px) {
+  aside[data-show='true'] {
+    width: 216px;
+  }
+
+  aside[data-show='false'] {
+    width: 60px;
+  }
+}
+
+@media (max-width: 640px) {
+  aside[data-show='false'] {
+    height: auto !important;
+  }
+
+  aside[data-show='true'] {
+    height: auto !important;
+  }
+
+  aside[data-show='false'] > div > div > a {
+    display: flex;
+    justify-content: center;
+    @apply !mb-1.5;
+  }
+
+  aside[data-show='true'] > div > div {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  aside[data-show='true'] > div > div > a {
+    display: flex;
+    justify-content: center;
+    @apply !mb-1.5;
+  }
+}
+
+aside[data-show='true'] > div > div > a > span {
+  opacity: 1;
+  transition: all 300ms;
+}
+
+aside[data-show='false'] > div > div > a {
+  @apply !py-1.5;
+}
+
+aside[data-show='false'] > div > div > a > div {
+  @apply flex justify-center min-w-8;
+}
+
+aside[data-show='true'] > div > div > a {
+  @apply !py-2;
+}
+
+aside[data-show='false'] > div > div > a > span {
+  opacity: 0;
+  transition: all 300ms;
+}
+
+input[type='checkbox'] {
+  font-feature-settings: inherit;
+  color: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  font-variation-settings: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.dark [type='checkbox']:checked,
+.dark [type='radio']:checked,
+[type='checkbox']:checked,
+[type='radio']:checked {
+  background-color: #2563eb;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 0.55em 0.55em;
+  border-color: transparent;
+}
+
+[type='checkbox']:checked {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 12'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 0.55em 0.55em;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+[type='checkbox'],
+[type='radio'] {
+  --tw-shadow: 0 0 #0000;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  background-origin: border-box;
+  border-color: #c5c5c5;
+  border-width: 1.5px;
+  color: #1c64f2;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 1rem;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  width: 1rem;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+[data-active='true'] .material-icon {
+  @apply material-symbols-rounded-filled;
+}
+
+.material-symbols-rounded-filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24 !important;
+}
