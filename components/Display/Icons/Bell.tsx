@@ -11,7 +11,7 @@ export function BellIcon({ fill, height, width }: BellIconProps) {
     <svg
       xmlns='http://www.w3.org/2000/svg'
       viewBox='0 0 24 24'
-      className={classnames(fill, height, width, 'transition-all duration-150')}
+      className={classnames(fill, height, width, 'transition-all duration-300')}
     >
       <path
         fillRule='evenodd'

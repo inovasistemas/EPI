@@ -43,7 +43,7 @@ class DocumentInput extends Component<DocumentInputProps, MyComponentState> {
 
     return (
       <div className='max-h-[52px]'>
-        <div className='group relative flex items-center bg-transparent border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-150'>
+        <div className='group relative flex items-center bg-transparent border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300'>
           {icon && <span className='mr-1 ml-3'>{icon}</span>}
 
           <div className='relative flex items-center w-full'>
@@ -70,7 +70,7 @@ class DocumentInput extends Component<DocumentInputProps, MyComponentState> {
             {required && (
               <label
                 htmlFor={name}
-                className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-base duration-150'
+                className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-base duration-300'
               >
                 *
               </label>

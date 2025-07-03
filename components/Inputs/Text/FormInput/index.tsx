@@ -34,7 +34,7 @@ export function FormInput({
 
   return (
     <div className='max-h-[52px]'>
-      <div className='group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-150'>
+      <div className='group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300'>
         {position == 'left' && icon && (
           <span className='mr-1 ml-3'>{icon}</span>
         )}
@@ -60,7 +60,7 @@ export function FormInput({
           {required && (
             <label
               htmlFor={name}
-              className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-base duration-150'
+              className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-base duration-300'
             >
               *
             </label>

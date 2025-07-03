@@ -170,11 +170,11 @@ const Products: FC = async () => {
 
       <div className='flex flex-col bg-white border border-[#D9D9D9] rounded-md divide-y divide-[#D9D9D9] w-full'>
         <div className='rounded-md divide-y divide-[#D9D9D9] overflow-hidden'>
-          <div className='gap-3 grid grid-cols-7 sm:grid-cols-12 bg-zinc-100 p-3 w-full font-medium text-sm transition-all duration-150'>
+          <div className='gap-3 grid grid-cols-7 sm:grid-cols-12 bg-zinc-100 p-3 w-full font-medium text-sm transition-all duration-300'>
             <div className='hidden sm:flex justify-left col-span-1'>
               <button
                 type='button'
-                className='flex justify-left items-center gap-2 hover:opacity-60 truncate transition-all duration-150'
+                className='flex justify-left items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
               >
                 <span>Código</span>
                 <CarretUpDown fill='fill-black' height='h-4' width='w-4' />
@@ -183,7 +183,7 @@ const Products: FC = async () => {
             <div className='col-span-6'>
               <button
                 type='button'
-                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-150'
+                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
               >
                 <span>Nome</span>
                 <CarretUpDown fill='fill-black' height='h-4' width='w-4' />
@@ -192,7 +192,7 @@ const Products: FC = async () => {
             <div className='col-span-2'>
               <button
                 type='button'
-                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-150'
+                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
               >
                 <span>Documento</span>
                 <CarretUpDown fill='fill-black' height='h-4' width='w-4' />
@@ -201,7 +201,7 @@ const Products: FC = async () => {
             <div className='hidden sm:block col-span-2'>
               <button
                 type='button'
-                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-150'
+                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
               >
                 <span>Cidade</span>
                 <CarretUpDown fill='fill-black' height='h-4' width='w-4' />
@@ -210,7 +210,7 @@ const Products: FC = async () => {
             <div className='hidden sm:block col-span-1'>
               <button
                 type='button'
-                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-150'
+                className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
               >
                 <span>Estado</span>
                 <CarretUpDown fill='fill-black' height='h-4' width='w-4' />

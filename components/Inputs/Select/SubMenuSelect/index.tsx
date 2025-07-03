@@ -3,40 +3,50 @@ import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import cn from 'classnames'
+import useAparence from '@/lib/context/aparence'
 
-type SmallSelectCustomOptionsProps = {
+type SubMenuSelectOptionsProps = {
   value: string
   label: string
 }
 
-type SmallSelectCustomProps = {
+type SubMenuSelectProps = {
   name: string
   label?: string
   icon?: React.ReactElement
-  options: SmallSelectCustomOptionsProps[]
-  selectedIndex?: number
+  options: SubMenuSelectOptionsProps[]
 }
 
-export function SmallSelectCustom({
+export function SubMenuSelect({
   name,
   label,
   icon,
   options,
-  selectedIndex = 0,
-}: SmallSelectCustomProps) {
+}: SubMenuSelectProps) {
   const [selectedOption, setSelectedOption] =
-    useState<SmallSelectCustomOptionsProps | null>(null)
+    useState<SubMenuSelectOptionsProps | null>(null)
   const [isSelectMenuOpen, setSelectMenuOpen] = useState(false)
   const [isClient, setIsClient] = useState(false)
+
+  const setAparence = useAparence(state => state.setAparence)
+  const aparence = useAparence(state => state.aparence)
+
+  const handleChange = (option: any) => {
+    setSelectedOption(option)
+    if (option?.value) {
+      setAparence(option.value, '')
+    }
+  }
 
   useEffect(() => {
     setIsClient(true)
     if (options?.length) {
-      setSelectedOption(options[selectedIndex])
+      const option = options.find(option => option.value === aparence) ?? null
+      setSelectedOption(option)
     } else {
       setSelectedOption(null)
     }
-  }, [options, selectedIndex])
+  }, [options])
 
   if (!isClient) {
     return null
@@ -48,7 +58,7 @@ export function SmallSelectCustom({
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center bg-zinc-100 rounded-md']
+        ['group flex items-center rounded-lg']
       )}
     >
       {icon && (
@@ -60,76 +70,91 @@ export function SmallSelectCustom({
       <div className='relative flex items-center w-full'>
         <Select
           value={selectedOption}
-          onChange={setSelectedOption}
+          onChange={handleChange}
           noOptionsMessage={() => ''}
           id={name}
           onMenuOpen={() => setSelectMenuOpen(true)}
           onMenuClose={() => setSelectMenuOpen(false)}
           options={options}
-          className='rounded-md w-full text-sm'
+          className='z-50 flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer'
           placeholder=''
           menuPlacement='auto'
+          isSearchable={false}
           components={{
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
           }}
-          isSearchable={false}
           styles={{
             option: (provided, state) => ({
               ...provided,
               padding: '0.5rem',
               paddingLeft: '0.75rem',
-              borderRadius: '0.375rem',
+              borderRadius: '0.5rem',
               marginTop: '0.5rem',
-              color: 'black',
+              color: 'var(--textSecondary)',
+              border: '0px solid var(--backgroundSecondary)',
               fontSize: '0.875rem',
               backgroundColor: state.isSelected
-                ? '#f3f4f6'
+                ? 'var(--backgroundPrimary)'
                 : state.isFocused
-                  ? '#fff'
+                  ? 'var(--backgroundSecondary)'
                   : 'transparent',
               ':hover': {
                 backgroundColor: state.isSelected
                   ? state.isFocused
-                    ? '#e5e7eb'
-                    : '#f3f4f6'
-                  : '#f3f4f6',
+                    ? 'var(--backgroundPrimary)'
+                    : 'var(--backgroundPrimary)'
+                  : 'var(--backgroundPrimary)',
               },
             }),
             menu: (provided, state) => ({
               ...provided,
-              borderRadius: '0.375rem',
-              boxShadow: 'none',
-              border: '1px solid #D9D9D9',
+              color: '#fff',
+              borderRadius: '0.5rem',
+              boxShadow:
+                'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
+              border: '1px solid var(--outlinePrimary)',
               paddingTop: '0',
               paddingBottom: '0.5rem',
               paddingLeft: '0.5rem',
               paddingRight: '0.5rem',
               fontSize: '0.875rem',
               zIndex: 50,
+              backgroundColor: 'var(--backgroundSecondary)',
+              cursor: 'pointer',
+              width: '13ch',
             }),
             control: (provided, state) => ({
               ...provided,
-              border: state.isFocused ? '0px solid #fff' : '0px solid #fff',
-              backgroundColor: state.isFocused ? '#E9E9EC' : 'transparent',
+              border: state.isFocused
+                ? '0px solid var(--backgroundSecondary)'
+                : '0px solid var(--backgroundSecondary)',
+              backgroundColor: 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
-              borderRadius: '0.375rem',
+              borderRadius: '0.5rem',
               fontSize: '0.875rem',
-              paddingLeft: icon ? '1.675rem' : '0',
+              paddingLeft: icon ? '2rem' : '0',
+              cursor: 'pointer',
             }),
             placeholder: provided => ({
               ...provided,
-              color: '#4B5563',
               width: '100%',
               fontSize: '0.875rem',
             }),
             input: provided => ({
               ...provided,
-              color: 'inherit',
+              color: 'var(--textSecondary)',
               fontFamily: 'inherit',
               width: '100%',
               fontSize: '0.875rem',
+            }),
+            singleValue: provided => ({
+              ...provided,
+              color: 'var(--textSecondary)',
+              fontSize: '0.875rem',
+              textAlign: 'end',
+              paddingRight: '1.5rem',
             }),
           }}
         />
@@ -137,7 +162,7 @@ export function SmallSelectCustom({
         <span
           className={cn(
             {
-              'rotate-180': isSelectMenuOpen,
+              '-rotate-90': !isSelectMenuOpen,
             },
             [
               'right-0 absolute flex items-center mr-3 h-full transition-all duration-300',

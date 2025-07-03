@@ -9,7 +9,7 @@ type SettingIconProps = {
 export function SettingIcon({ fill, height, width }: SettingIconProps) {
   return (
     <svg
-      className={classnames(fill, height, width, 'transition-all duration-150')}
+      className={classnames(fill, height, width, 'transition-all duration-300')}
       viewBox='0 0 18 20'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

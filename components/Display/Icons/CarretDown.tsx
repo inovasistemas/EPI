@@ -1,7 +1,7 @@
 export function CarretDownIcon() {
   return (
     <svg
-      className='fill-[#060604] w-5 h-5'
+      className='fill-[--textSecondary] w-5 h-5'
       viewBox='0 0 24 24'
       xmlns='http://www.w3.org/2000/svg'
     >

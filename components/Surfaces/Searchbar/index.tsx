@@ -117,6 +117,7 @@ const Searchbar: React.FC = () => {
             isMenuOpen={isCardOpen === SearchbarCards.Notifications}
             margin='mt-[115%]'
             width='min-w-72'
+            zIndex='z-[60]'
           >
             <MenuNotifications />
           </MenuCard>
@@ -147,6 +148,7 @@ const Searchbar: React.FC = () => {
             isMenuOpen={isCardOpen === SearchbarCards.Settings}
             margin='mt-[115%]'
             width='min-w-72'
+            zIndex='z-[60]'
           >
             <MenuSettings />
           </MenuCard>

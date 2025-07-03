@@ -2,15 +2,23 @@ import { PostIcon } from '@/components/Display/Icons/Post'
 import { SecurityIcon } from '@/components/Display/Icons/Security'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 import { UserIcon } from '@/components/Display/Icons/User'
-import { UserCircle, ShieldCheck, Article } from '@phosphor-icons/react'
+import {
+  UserCircle,
+  ShieldCheck,
+  Article,
+  CircleHalf,
+} from '@phosphor-icons/react'
 import { useState } from 'react'
 import { AccountIcon } from '@/components/Display/Icons/Account'
+import { CircleHalfIcon } from '@/components/Display/Icons/CircleHalf'
+import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
+import { SubMenuSelect } from '@/components/Inputs/Select/SubMenuSelect'
 
 export function MenuSettings() {
   const [isOn, setIsOn] = useState(false)
 
   return (
-    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-150'>
+    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-300'>
       <li className='whitespace-nowrap'>
         <SubNavLink
           name='Minha conta'
@@ -41,6 +49,28 @@ export function MenuSettings() {
           }
           href='/conta/seguranca'
         />
+        <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--backgroundPrimary] rounded-lg transition-all duration-300'>
+          <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-md font-normal whitespace-normal transition-all duration-300 select-none'>
+            <span>
+              <CircleHalfIcon
+                fill='fill-[--textSecondary]'
+                height='h-4'
+                width='w-4'
+              />
+            </span>
+            <span className='text-[--textSecondary]'>Aparência</span>
+          </span>
+          <div className='w-full'>
+            <SubMenuSelect
+              name='Teste'
+              options={[
+                { value: 'system', label: 'Sistema' },
+                { value: 'dark', label: 'Escuro' },
+                { value: 'light', label: 'Claro' },
+              ]}
+            />
+          </div>
+        </div>
         {/* <div className='flex justify-between items-center px-3 py-2'>
           <div>
             <span className='text-[--textSecondary] text-sm line-clamp-2'>

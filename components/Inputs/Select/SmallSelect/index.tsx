@@ -132,7 +132,7 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
               'rotate-180': isSelectMenuOpen,
             },
             [
-              'right-0 absolute flex items-center mr-3 h-full transition-all duration-150',
+              'right-0 absolute flex items-center mr-3 h-full transition-all duration-300',
             ]
           )}
         >

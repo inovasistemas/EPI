@@ -16,7 +16,7 @@ export function GroupLabel({ isVisible, label, showFixed }: GroupLabelProps) {
           animate={{ opacity: 1, height: 0 }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className='hidden sm:block top-0 left-0 absolute px-1 font-semibold text-[--labelPrimary] text-[10px] transition-all duration-150'
+          className='hidden sm:block top-0 left-0 absolute px-1 font-semibold text-[--labelPrimary] text-[10px] transition-all duration-300 select-none'
         >
           <span className='uppercase'>{label}</span>
         </motion.div>

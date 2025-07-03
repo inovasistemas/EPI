@@ -222,7 +222,7 @@ export function LoginForm() {
                 </span>
                 <button
                   onClick={handleBack}
-                  className='font-medium text-primary hover:text-primaryDarker text-base transition-all duration-150 select-none'
+                  className='font-medium text-primary hover:text-primaryDarker text-base transition-all duration-300 select-none'
                 >
                   Trocar usuário
                 </button>
@@ -259,7 +259,7 @@ export function LoginForm() {
           </motion.div>
         )}
 
-        <div className='right-0 bottom-0 absolute flex justify-end gap-3 p-6 w-full transition-all duration-150'>
+        <div className='right-0 bottom-0 absolute flex justify-end gap-3 p-6 w-full transition-all duration-300'>
           <div className='w-full sm:w-auto sm:max-w-32'>
             <PrimaryButton
               name='primary'

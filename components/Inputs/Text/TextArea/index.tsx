@@ -23,14 +23,14 @@ export function TextArea({ name, label, required = false }: TextAreaProps) {
         />
         <label
           htmlFor={name}
-          className='top-2 peer-focus:top-2 peer-placeholder-shown:top-1/4 left-1 z-10 absolute bg-white px-2 peer-focus:px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-150 transform'
+          className='top-2 peer-focus:top-2 peer-placeholder-shown:top-1/4 left-1 z-10 absolute bg-white px-2 peer-focus:px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-300 transform'
         >
           {label}
         </label>
         {required && (
           <label
             htmlFor={name}
-            className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-sm duration-150'
+            className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-sm duration-300'
           >
             *
           </label>

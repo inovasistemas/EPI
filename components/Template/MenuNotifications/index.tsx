@@ -3,7 +3,7 @@ import { SubNavLinkAction } from '@/components/Navigation/SubNavLinkAction'
 
 export function MenuNotifications() {
   return (
-    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-150'>
+    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-300'>
       <li className='whitespace-nowrap'>
         <SubNavLink
           name='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'

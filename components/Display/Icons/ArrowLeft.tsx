@@ -9,7 +9,7 @@ type ArrowLeftIconProps = {
 export function ArrowLeftIcon({ fill, height, width }: ArrowLeftIconProps) {
   return (
     <svg
-      className={classnames(fill, height, width, 'transition-all duration-150')}
+      className={classnames(fill, height, width, 'transition-all duration-300')}
       viewBox='0 0 24 24'
       xmlns='http://www.w3.org/2000/svg'
     >

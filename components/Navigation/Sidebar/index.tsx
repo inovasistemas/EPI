@@ -29,11 +29,11 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       data-show={isSidebarVisible}
-      className='bottom-0 z-50 fixed sm:relative flex flex-col gap-3 bg-[--backgroundSecondary] px-3 w-full sm:max-w-[186px] overflow-x-hidden font-medium transition-all duration-150'
+      className='bottom-0 z-50 fixed sm:relative flex flex-col gap-3 px-3 w-full sm:max-w-[186px] overflow-x-hidden font-medium transition-all duration-300'
     >
-      <div className='sm:flex sm:flex-col gap-3 sm:gap-0 grid grid-cols-2 w-full transition-all duration-150'>
+      <div className='sm:flex sm:flex-col gap-3 sm:gap-0 grid grid-cols-2 w-full transition-all duration-300'>
         <div
-          className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-150 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+          className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
         >
           <GroupLabel
             isVisible={isSidebarVisible}
@@ -54,7 +54,7 @@ const Sidebar: React.FC = () => {
               // <SquaresFour
               //   size={16}
               //   weight='fill'
-              //   className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-150'
+              //   className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-300'
               // />
             }
             href='/painel'
@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
         </div>
         {/* 
         <div
-          className={`col-span-2 grid grid-cols-2 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-150 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+          className={`col-span-2 grid grid-cols-2 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
         >
           <GroupLabel
             isVisible={isSidebarVisible}
@@ -76,7 +76,7 @@ const Sidebar: React.FC = () => {
               <HardHat
                 size={16}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-300'
               />
             }
             href='/equipamentos'
@@ -88,7 +88,7 @@ const Sidebar: React.FC = () => {
               <Users
                 size={16}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-300'
               />
             }
             href='/colaboradores'
@@ -96,7 +96,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <div
-          className={`col-span-1 hidden grid-cols-1 sm:flex sm:flex-col justify-between w-full relative transition-all duration-150 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+          className={`col-span-1 hidden grid-cols-1 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
         >
           <GroupLabel
             isVisible={isSidebarVisible}
@@ -109,7 +109,7 @@ const Sidebar: React.FC = () => {
               <Warning
                 size={16}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-300'
               />
             }
             href='/relatorio/pendencias'
@@ -120,7 +120,7 @@ const Sidebar: React.FC = () => {
               <ChartPie
                 size={16}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary scale-125 sm:scale-100 transition-all duration-300'
               />
             }
             href='/relatorio/custos'
@@ -128,7 +128,7 @@ const Sidebar: React.FC = () => {
         </div> */}
 
         <div
-          className={`col-span-1 grid-cols-1 sm:flex sm:flex-col justify-between w-full relative transition-all duration-150 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+          className={`col-span-1 grid-cols-1 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
         >
           <GroupLabel
             isVisible={isSidebarVisible}
@@ -150,10 +150,10 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
       <div
-        className={`hidden sm:block mt-auto relative transition-all duration-150 mb-3`}
+        className={`hidden sm:block mt-auto relative transition-all duration-300 mb-3`}
       >
         <div
-          className={`col-span-3 grid grid-cols-3 sm:flex sm:flex-col justify-between w-full relative transition-all duration-150`}
+          className={`col-span-3 grid grid-cols-3 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300`}
         >
           <NavLink
             name='Sair'

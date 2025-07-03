@@ -35,7 +35,7 @@ export default function Home() {
           <Megaphone
             size={18}
             weight='fill'
-            className='text-white group-hover:text-amber-400/30 scale-125 sm:scale-100 transition-all duration-150'
+            className='text-white group-hover:text-amber-400/30 scale-125 sm:scale-100 transition-all duration-300'
           />
 
           <span className='ml-3 font-medium text-white text-sm'>
@@ -53,7 +53,7 @@ export default function Home() {
               <HardHat
                 size={100}
                 weight='duotone'
-                className='text-[--outlinePrimary] group-hover:text-amber-400/30 scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--outlinePrimary] group-hover:text-amber-400/30 scale-125 sm:scale-100 transition-all duration-300'
               />
             </span>
             <span className='z-20 font-medium text-[--textSecondary] group-hover:text-amber-400 text-xl transition-all duration-300'>
@@ -66,7 +66,7 @@ export default function Home() {
               <Users
                 size={100}
                 weight='duotone'
-                className='text-[--outlinePrimary] group-hover:text-purple-400/30 scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--outlinePrimary] group-hover:text-purple-400/30 scale-125 sm:scale-100 transition-all duration-300'
               />
             </span>
             <span className='z-20 font-medium text-[--textSecondary] group-hover:text-purple-400 text-xl transition-all duration-300'>
@@ -79,7 +79,7 @@ export default function Home() {
               <IdentificationBadge
                 size={100}
                 weight='duotone'
-                className='text-[--outlinePrimary] group-hover:text-emerald-400/30 scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--outlinePrimary] group-hover:text-emerald-400/30 scale-125 sm:scale-100 transition-all duration-300'
               />
             </span>
             <span className='z-20 font-medium text-[--textSecondary] group-hover:text-emerald-400 text-xl transition-all duration-300'>
@@ -92,7 +92,7 @@ export default function Home() {
               <ChartBar
                 size={100}
                 weight='duotone'
-                className='text-[--outlinePrimary] group-hover:text-primary/30 scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--outlinePrimary] group-hover:text-primary/30 scale-125 sm:scale-100 transition-all duration-300'
               />
             </span>
             <span className='z-20 font-medium text-[--textSecondary] group-hover:text-primary text-xl transition-all duration-300'>
@@ -105,7 +105,7 @@ export default function Home() {
               <Gear
                 size={100}
                 weight='duotone'
-                className='text-[--outlinePrimary] group-hover:text-red-400/30 scale-125 sm:scale-100 transition-all duration-150'
+                className='text-[--outlinePrimary] group-hover:text-red-400/30 scale-125 sm:scale-100 transition-all duration-300'
               />
             </span>
             <span className='z-20 font-medium text-[--textSecondary] group-hover:text-red-400 text-xl transition-all duration-300'>

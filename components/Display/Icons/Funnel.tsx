@@ -15,7 +15,7 @@ export function FunnelIcon({ fill, height, width }: FunnelIconProps) {
       className={classnames(
         height,
         width,
-        'stroke-[--textSecondary] fill-none transition-all duration-150'
+        'stroke-[--textSecondary] fill-none transition-all duration-300'
       )}
     >
       <path

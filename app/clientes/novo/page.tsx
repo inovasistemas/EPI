@@ -83,7 +83,7 @@ const Products: FC = async () => {
         <fieldset className='flex flex-col border-[#D9D9D9] border-t w-full'>
           <button
             type='button'
-            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-150'
+            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-300'
           >
             <GroupLabel isVisible={true} label='Contato' showFixed={true} />
             <CarretDownIcon />
@@ -94,7 +94,7 @@ const Products: FC = async () => {
         <fieldset className='flex flex-col border-[#D9D9D9] border-t w-full'>
           <button
             type='button'
-            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-150'
+            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-300'
           >
             <GroupLabel isVisible={true} label='Endereço' showFixed={true} />
             <CarretDownIcon />
@@ -105,7 +105,7 @@ const Products: FC = async () => {
         <fieldset className='flex flex-col border-[#D9D9D9] border-t w-full'>
           <button
             type='button'
-            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-150'
+            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-300'
           >
             <GroupLabel isVisible={true} label='Observação' showFixed={true} />
             <CarretDownIcon />
@@ -116,7 +116,7 @@ const Products: FC = async () => {
         <fieldset className='flex flex-col border-[#D9D9D9] border-t w-full'>
           <button
             type='button'
-            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-150'
+            className='flex flex-row justify-between hover:opacity-60 pt-3 h-10 transition-all duration-300'
           >
             <GroupLabel isVisible={true} label='Produtos' showFixed={true} />
             <CarretDownIcon />

@@ -59,16 +59,16 @@ export function Modal({
             className='top-1/2 z-[100] relative flex flex-col bg-[--backgroundPrimary] shadow-xl mx-auto rounded-xl min-w-[50%] max-w-[90%] sm:max-w-[75%] max-h-[80%] sm:max-h-[75%] text-[--textSecondary] -translate-y-1/2'
           >
             <div
-              className={`py-2 flex justify-center items-center bg-transparent rounded-t-xl w-full transition-all duration-150 border-b-[1.5px] border-transparent ${titleFixed ? 'absolute left-0 top-0' : ''} ${hasScrolled ? 'shadow-lg' : ''}`}
+              className={`py-2 flex justify-center items-center bg-transparent rounded-t-xl w-full transition-all duration-300 border-b-[1.5px] border-transparent ${titleFixed ? 'absolute left-0 top-0' : ''} ${hasScrolled ? 'shadow-lg' : ''}`}
             >
               <h2
-                className={`font-semibold text-lg text-center transition-all duration-150 ${hasScrolled ? ' !opacity-100' : 'opacity-0'}`}
+                className={`font-semibold text-lg text-center transition-all duration-300 ${hasScrolled ? ' !opacity-100' : 'opacity-0'}`}
               >
                 {title}
               </h2>
               <button
                 onClick={handleClickOverlay}
-                className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-150'
+                className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
               >
                 <X
                   size={20}

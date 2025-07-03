@@ -144,7 +144,7 @@ export function SearchSelect({
               'rotate-180': isSelectMenuOpen,
             },
             [
-              'right-0 absolute flex items-center mr-3 h-full transition-all duration-150',
+              'right-0 absolute flex items-center mr-3 h-full transition-all duration-300',
             ]
           )}
         >
@@ -160,7 +160,7 @@ export function SearchSelect({
                 'left-1': !icon,
               },
               [
-                'peer-focus:px-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 top-2 z-10 absolute bg-white px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-150 transform',
+                'peer-focus:px-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 top-2 z-10 absolute bg-white px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-300 transform',
               ]
             )}
           >

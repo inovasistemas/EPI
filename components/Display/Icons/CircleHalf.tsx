@@ -1,12 +1,12 @@
 import classnames from 'classnames'
 
-type AccountIconProps = {
+type CircleHalfIconProps = {
   fill: string
   height: string
   width: string
 }
 
-export function AccountIcon({ fill, height, width }: AccountIconProps) {
+export function CircleHalfIcon({ fill, height, width }: CircleHalfIconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -20,7 +20,7 @@ export function AccountIcon({ fill, height, width }: AccountIconProps) {
       <path
         fillRule='evenodd'
         clipRule='evenodd'
-        d='M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 13c-2.395 0-4.383 1.006-5.715 2.6A7.98 7.98 0 0012 20a7.98 7.98 0 005.715-2.4C16.383 16.005 14.395 15 12 15zm0-8.25a3.25 3.25 0 100 6.5 3.25 3.25 0 000-6.5z'
+        d='M12 4a8 8 0 100 16V4zM2 12C2 6.477 6.477 2 12 2c.375 0 .745.02 1.11.061C18.11 2.614 22 6.852 22 12s-3.89 9.386-8.89 9.939c-.365.04-.735.061-1.11.061-5.523 0-10-4.477-10-10z'
         className={classnames(fill, 'transition-all duration-300')}
       />
     </svg>

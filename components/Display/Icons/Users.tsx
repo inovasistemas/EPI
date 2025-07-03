@@ -10,7 +10,7 @@ type UsersIconProps = {
 export function UsersIcon({ fill, height, width, stroke }: UsersIconProps) {
   return (
     <svg
-      className={classnames(fill, height, width, 'transition-all duration-150')}
+      className={classnames(fill, height, width, 'transition-all duration-300')}
       viewBox='0 0 24 18'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

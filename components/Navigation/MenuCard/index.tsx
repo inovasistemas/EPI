@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import cn from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -7,6 +8,7 @@ type MenuCardProps = {
   handleClickOverlay: () => void
   margin: string
   width: string
+  zIndex: string
 }
 
 export function MenuCard({
@@ -15,6 +17,7 @@ export function MenuCard({
   handleClickOverlay,
   margin,
   width,
+  zIndex,
 }: MenuCardProps) {
   return (
     <AnimatePresence>
@@ -25,7 +28,7 @@ export function MenuCard({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className='top-0 left-0 z-[60] fixed w-screen h-screen'
+          className={classNames(zIndex, 'top-0 left-0 fixed w-screen h-screen')}
           onClick={handleClickOverlay}
         ></motion.div>
       )}
@@ -39,7 +42,7 @@ export function MenuCard({
           className={cn([
             margin,
             width,
-            'top-0 right-0 z-[100] absolute bg-[--backgroundSecondary] shadow-md border border-[--outlinePrimary] rounded-xl max-w-80',
+            'top-0 right-0 z-[250] absolute bg-[--backgroundSecondary] shadow-md border border-[--outlinePrimary] rounded-xl max-w-80',
           ])}
         >
           {children}

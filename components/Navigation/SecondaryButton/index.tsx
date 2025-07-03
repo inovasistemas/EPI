@@ -19,7 +19,7 @@ export function SecondaryButton({
     <button
       type='button'
       onClick={action}
-      className='group relative flex items-center gap-3 hover:bg-zinc-200 px-3 rounded-md w-auto min-w-10 h-8 transition-all duration-150'
+      className='group relative flex items-center gap-3 hover:bg-zinc-200 px-3 rounded-md w-auto min-w-10 h-8 transition-all duration-300'
     >
       {icon && (
         <span className='flex justify-center items-center w-full h-full'>
