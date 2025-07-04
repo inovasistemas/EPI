@@ -21,6 +21,7 @@ import { LogOutIcon } from '@/components/Display/Icons/Logout'
 import { PanelIcon } from '@/components/Display/Icons/Panel'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { UserIcon } from '@/components/Display/Icons/User'
+import { KeyCircle } from '@/components/Display/Icons/KeyCircle'
 
 const Sidebar: React.FC = () => {
   const isSidebarVisible = useSidebar(state => state.isSidebarVisible)
@@ -135,6 +136,17 @@ const Sidebar: React.FC = () => {
             label='Cadastro'
             showFixed={false}
           />
+          {/* <NavLink
+            name='Permissões'
+            icon={
+              <KeyCircle
+                fill='fill-[--textSecondary] group-data-[active=true]:fill-primary'
+                height='h-4'
+                width='w-4'
+              />
+            }
+            href='/permissoes'
+          /> */}
           <NavLink
             name='Usuários'
             icon={

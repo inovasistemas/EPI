@@ -9,12 +9,12 @@ export function PaginationSummary({ from, to, total }: PaginationSummaryProps) {
 
   if (currentText) {
     return (
-      <span className='text-black text-sm'>
+      <span className='text-[--textSecondary] text-sm'>
         Exibindo{' '}
-        <span className='font-semibold text-black'>
+        <span className='font-semibold'>
           {from}-{to}
         </span>{' '}
-        de <span className='font-semibold text-black'>{total}</span>{' '}
+        de <span className='font-semibold'>{total}</span>{' '}
         {total > 1 ? 'resultados' : 'resultado'}
       </span>
     )

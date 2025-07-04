@@ -1,15 +1,26 @@
 'use client'
 import { AddIcon } from '@/components/Display/Icons/Add'
+import { CarretUpDown } from '@/components/Display/Icons/CaretUpDown'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { FunnelIcon } from '@/components/Display/Icons/Funnel'
+import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { CreateButton } from '@/components/Navigation/CreateButton'
 import { MenuCard } from '@/components/Navigation/MenuCard'
 import { FilterUser } from '@/components/Template/Filter/User'
+import { PaginationSummary } from '@/components/Utils/PaginationSummary'
 import classNames from 'classnames'
 import { FC, useCallback, useState } from 'react'
 
 const Operator: FC = () => {
+  const exibition = [
+    { value: '100', label: '100' },
+    { value: '200', label: '200' },
+    { value: '500', label: '500' },
+    { value: '1000', label: '1000' },
+    { value: '5000', label: '5000' },
+  ]
+
   enum MenuCards {
     Filter,
     Default,
@@ -60,59 +71,99 @@ const Operator: FC = () => {
           </div>
         </div>
 
-        {/* <div className='w-full'>
-          <ul className='px-3 divide-y divide-zinc-700'>
-            <li className='grid grid-cols-12 px-3 py-3 font-medium text-[--textSecondary] text-sm'>
-              <div className='col-span-2'>Código</div>
-              <div className='col-span-4'>Nome</div>
-              <div className='col-span-3'>Usuário</div>
-              <div className='col-span-2'>Permissão</div>
-              <div className='col-span-1'></div>
+        <div className='w-full'>
+          <ul className='flex flex-col gap-2 px-3'>
+            <li className='gap-3 grid grid-cols-12 px-6 font-medium text-[--textSecondary] text-sm'>
+              <div className='col-span-3 py-3'>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                >
+                  <span>Nome</span>
+                  <CarretUpDown
+                    fill='fill-[--textSecondary]'
+                    height='h-4'
+                    width='w-4'
+                  />
+                </button>
+              </div>
+              <div className='col-span-2 py-3'>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                >
+                  <span>Código</span>
+                  <CarretUpDown
+                    fill='fill-[--textSecondary]'
+                    height='h-4'
+                    width='w-4'
+                  />
+                </button>
+              </div>
+              <div className='col-span-3 py-3'>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                >
+                  <span>Usuário</span>
+                  <CarretUpDown
+                    fill='fill-[--textSecondary]'
+                    height='h-4'
+                    width='w-4'
+                  />
+                </button>
+              </div>
+              <div className='col-span-2 py-3'>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                >
+                  <span>Permissões</span>
+                  <CarretUpDown
+                    fill='fill-[--textSecondary]'
+                    height='h-4'
+                    width='w-4'
+                  />
+                </button>
+              </div>
+              <div className='flex justify-end col-span-2 py-3'>
+                <button
+                  type='button'
+                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                >
+                  <span>Criado em</span>
+                  <CarretUpDown
+                    fill='fill-[--textSecondary]'
+                    height='h-4'
+                    width='w-4'
+                  />
+                </button>
+              </div>
             </li>
-            <li className='grid grid-cols-12 px-3 py-3 !border-t-0 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
-            <li className='grid grid-cols-12 px-3 py-3 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
-            <li className='grid grid-cols-12 px-3 py-3 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
-            <li className='grid grid-cols-12 px-3 py-3 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
-            <li className='grid grid-cols-12 px-3 py-3 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
-            <li className='grid grid-cols-12 px-3 py-3 font-normal text-[--textSecondary] text-sm capitalize'>
-              <div className='col-span-2 lowercase'>op_93d8a0d66ad2494f</div>
-              <div className='col-span-4'>teste</div>
-              <div className='col-span-3'>admin</div>
-              <div className='col-span-2'>admin</div>
-              <div className='col-span-1'></div>
-            </li>
+            {[...Array(3)].map((_, i) => (
+              <li className='gap-3 grid grid-cols-12 bg-[#3D3F42]/50 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'>
+                <div className='flex items-center gap-3 col-span-3 py-4 font-medium'>
+                  <input
+                    type='checkbox'
+                    name='user[]'
+                    className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-primaryDarker'
+                  />
+                  <span>inova teste</span>
+                </div>
+                <div className='col-span-2 py-4 font-medium'>
+                  op_93d8a0d66ad2494f
+                </div>
+                <div className='col-span-3 py-4 lowercase'>
+                  teste@inovasistemas
+                </div>
+                <div className='col-span-2 py-4'>admin</div>
+                <div className='col-span-2 py-4 pr-1 text-right lowercase'>
+                  10/06/2025
+                </div>
+              </li>
+            ))}
           </ul>
-        </div> */}
+        </div>
 
         {/* <div className='w-full'>
           <ul className='w-full'>
@@ -120,6 +171,15 @@ const Operator: FC = () => {
               us_93d8a0d66ad2494f
             </li>
           </ul>
+        </div> */}
+
+        {/* <div className='flex justify-end items-center px-6 w-full'>
+          <div className='flex flex-row justify-between items-center gap-6'>
+            <PaginationSummary from={1} to={3} total={246} />
+            <div className='min-w-36'>
+              <SmallSelect label='/ página' name='status' options={exibition} />
+            </div>
+          </div>
         </div> */}
       </div>
     </div>

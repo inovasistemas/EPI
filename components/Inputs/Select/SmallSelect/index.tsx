@@ -41,7 +41,7 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center bg-white border border-[#D9D9D9] rounded-md']
+        ['group flex items-center bg-[--buttonPrimary] rounded-lg']
       )}
     >
       {icon && (
