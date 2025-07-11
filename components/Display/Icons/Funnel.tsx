@@ -1,23 +1,27 @@
 import classnames from 'classnames'
 
 type FunnelIconProps = {
-  fill: string
   height: string
   width: string
 }
 
-export function FunnelIcon({ fill, height, width }: FunnelIconProps) {
+export function FunnelIcon({ height, width }: FunnelIconProps) {
+  const titleId = 'funnel-icon-title'
+
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       viewBox='0 0 24 24'
       strokeWidth={2}
+      role='img'
+      aria-labelledby={titleId}
       className={classnames(
         height,
         width,
         'stroke-[--textSecondary] fill-none transition-all duration-300'
       )}
     >
+      <title id={titleId}>Ícone de funil</title>
       <path
         strokeLinecap='round'
         strokeLinejoin='round'

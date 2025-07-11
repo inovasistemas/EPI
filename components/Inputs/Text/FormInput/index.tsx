@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 
 type FormInputProps = {
   name: string
@@ -28,14 +27,12 @@ export function FormInput({
   actionButton,
   onKeyDown,
 }: FormInputProps) {
-  const [text, setText] = useState(value)
-
   type = reveal ? 'text' : type
 
   return (
     <div className='max-h-[52px]'>
       <div className='group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300'>
-        {position == 'left' && icon && (
+        {position === 'left' && icon && (
           <span className='mr-1 ml-3'>{icon}</span>
         )}
 
@@ -49,7 +46,7 @@ export function FormInput({
             value={value}
             onChange={onChange}
             onKeyDown={onKeyDown}
-            autoFocus
+            spellCheck='false'
           />
           <label
             htmlFor={name}
@@ -66,8 +63,8 @@ export function FormInput({
             </label>
           )}
 
-          {position == 'right' && icon && (
-            <button onClick={actionButton} className='mr-3'>
+          {position === 'right' && icon && (
+            <button type='button' onClick={actionButton} className='mr-3'>
               {icon}
             </button>
           )}

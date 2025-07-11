@@ -1,36 +1,20 @@
 'use client'
-import useSidebar from '@/lib/context/global'
-import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { NavLink } from '@/components/Navigation/NavLink'
-import { usePathname } from 'next/navigation'
-import {
-  SignOut,
-  Package,
-  Storefront,
-  SquaresFour,
-  Knife,
-  HardHat,
-  Users,
-  IdentificationBadge,
-  ClockUser,
-  Coins,
-  ChartPie,
-  Warning,
-} from '@phosphor-icons/react'
-import { LogOutIcon } from '@/components/Display/Icons/Logout'
-import { PanelIcon } from '@/components/Display/Icons/Panel'
+import { HelmetIcon } from '@/components/Display/Icons/Helmet'
 import { HomeIcon } from '@/components/Display/Icons/Home'
+import { LogOutIcon } from '@/components/Display/Icons/Logout'
 import { UserIcon } from '@/components/Display/Icons/User'
-import { KeyCircle } from '@/components/Display/Icons/KeyCircle'
+import { UsersIcon } from '@/components/Display/Icons/Users'
+import { NavLink } from '@/components/Navigation/NavLink'
+import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import useSidebar from '@/lib/context/global'
 
 const Sidebar: React.FC = () => {
   const isSidebarVisible = useSidebar(state => state.isSidebarVisible)
-  const pathName = usePathname()
 
   return (
     <aside
       data-show={isSidebarVisible}
-      className='bottom-0 z-50 fixed sm:relative flex flex-col gap-3 px-3 w-full sm:max-w-[186px] overflow-x-hidden font-medium transition-all duration-300'
+      className='bottom-0 z-50 fixed sm:relative flex flex-col gap-3 px-3 w-full sm:max-w-[200px] overflow-x-hidden font-medium transition-all duration-300'
     >
       <div className='sm:flex sm:flex-col gap-3 sm:gap-0 grid grid-cols-2 w-full transition-all duration-300'>
         <div
@@ -147,17 +131,30 @@ const Sidebar: React.FC = () => {
             }
             href='/permissoes'
           /> */}
+
           <NavLink
-            name='Usuários'
+            name='Colaborador'
+            icon={
+              <UsersIcon
+                fill='ml-1 fill-[--textSecondary] group-data-[active=true]:fill-primary'
+                height='h-5'
+                width='w-5'
+                stroke='group-data-[active=true]:stroke-primary stroke-[--textSecondary]'
+              />
+            }
+            href='/colaborador'
+          />
+
+          <NavLink
+            name='Usuário'
             icon={
               <UserIcon
                 fill='fill-[--textSecondary] group-data-[active=true]:fill-primary'
                 height='h-4'
                 width='w-4'
-                stroke={'3'}
               />
             }
-            href='/usuarios'
+            href='/usuario'
           />
         </div>
       </div>

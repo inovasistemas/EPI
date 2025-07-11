@@ -22,6 +22,8 @@
   --error: #e4e4e7;
   --errorSecondary: #d9d9d9;
   --errorLoader: #ed3a2f;
+
+  --tableRow: #eef1f5;
 }
 
 .dark {
@@ -44,6 +46,8 @@
   --error: #29292e;
   --errorSecondary: #323238;
   --errorLoader: #ed3a2f;
+
+  --tableRow: #37393b;
 }
 
 ::selection {
@@ -169,4 +173,14 @@ input[type='checkbox'] {
   user-select: none;
   vertical-align: middle;
   width: 1rem;
+}
+
+[type='checkbox'].checkboxSecondary,
+[type='radio'].checkboxSecondary {
+  background-color: var(--backgroundSecondary);
+}
+
+[type='checkbox'].checkboxSecondary:checked,
+[type='radio'].checkboxSecondary {
+  background-color: var(--textPrimary);
 }

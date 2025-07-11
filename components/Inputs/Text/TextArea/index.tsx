@@ -11,19 +11,19 @@ export function TextArea({ name, label, required = false }: TextAreaProps) {
   const [text, setText] = useState('')
 
   return (
-    <div className='group relative flex items-center bg-white border border-[#D9D9D9] rounded-md h-full'>
+    <div className='group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary h-full transition-all duration-300'>
       <div className='relative flex items-center w-full h-full'>
         <textarea
           id={name}
           name={name}
-          className='peer block bg-transparent px-[12px] pt-[23px] pb-[7px] rounded focus:outline-none w-full h-full font-normal text-zinc-900 text-sm appearance-none resize-none'
+          className='peer block bg-transparent px-[12px] pt-[23px] pb-[7px] rounded focus:outline-none w-full h-full font-normal text-[--textSecondary] text-sm appearance-none resize-none'
           placeholder=' '
           value={text}
           onChange={e => setText(e.target.value)}
         />
         <label
           htmlFor={name}
-          className='top-2 peer-focus:top-2 peer-placeholder-shown:top-1/4 left-1 z-10 absolute bg-white px-2 peer-focus:px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-300 transform'
+          className='top-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 left-1 z-10 absolute bg-transparent px-2 peer-focus:px-2 text-[--labelPrimary] peer-focus:text-primary text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] transition-all -translate-y-1 peer-focus:-translate-y-1 peer-placeholder-shown:-translate-y-1/2 transform'
         >
           {label}
         </label>

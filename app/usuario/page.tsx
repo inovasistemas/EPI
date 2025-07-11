@@ -1,25 +1,49 @@
 'use client'
+import classNames from 'classnames'
+import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { AddIcon } from '@/components/Display/Icons/Add'
 import { CarretUpDown } from '@/components/Display/Icons/CaretUpDown'
-import { FilterIcon } from '@/components/Display/Icons/Filter'
-import { FunnelIcon } from '@/components/Display/Icons/Funnel'
-import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
-import { FormInput } from '@/components/Inputs/Text/FormInput'
-import { CreateButton } from '@/components/Navigation/CreateButton'
-import { MenuCard } from '@/components/Navigation/MenuCard'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { FilterUser } from '@/components/Template/Filter/User'
-import { PaginationSummary } from '@/components/Utils/PaginationSummary'
-import classNames from 'classnames'
-import { FC, useCallback, useState } from 'react'
 
-const Operator: FC = () => {
-  const exibition = [
-    { value: '100', label: '100' },
-    { value: '200', label: '200' },
-    { value: '500', label: '500' },
-    { value: '1000', label: '1000' },
-    { value: '5000', label: '5000' },
+type Operator = {
+  id: string
+  name: string
+  code: string
+  username: string
+  permission: string
+  createdAt: string
+}
+
+const User: FC = () => {
+  const [checkedAll, setCheckedAll] = useState(false)
+  const checkboxRefs = useRef<HTMLInputElement[]>([])
+  const [hasChecked, setHasChecked] = useState(false)
+  const operators: Operator[] = [
+    {
+      id: 'us_93d8a0d66ad2494f',
+      name: 'Inova Sistemas',
+      code: 'op_93d8a0d66ad2494f',
+      username: 'teste@inovasistemas',
+      permission: 'administrador',
+      createdAt: '10/06/2025',
+    },
+    {
+      id: 'us_93d8a0d66ad2494g',
+      name: 'João Gomes',
+      code: 'op_93d8a0d66ad2494g',
+      username: 'joao@inovasistemas',
+      permission: 'administrador',
+      createdAt: '10/06/2025',
+    },
   ]
+
+  const updateCheckedStatus = () => {
+    const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
+    setHasChecked(anyChecked)
+  }
 
   enum MenuCards {
     Filter,
@@ -37,15 +61,51 @@ const Operator: FC = () => {
     )
   }, [isCardOpen])
 
+  useEffect(() => {
+    const allChecked =
+      checkboxRefs.current.length > 0 &&
+      checkboxRefs.current.every(ref => ref?.checked)
+    setCheckedAll(allChecked)
+  }, [])
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-2xl leading-none select-none'>
-            Usuários
+            Usuário
           </h2>
 
           <div className='flex flex-row gap-3'>
+            <AnimatePresence>
+              {hasChecked && (
+                <motion.div
+                  key='overlay'
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={handleClickOverlay}
+                >
+                  <Link
+                    href='/usuario'
+                    className={classNames(
+                      'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+                    )}
+                  >
+                    <TrashIcon
+                      height='w-4'
+                      width='h-4'
+                      stroke='group-hover:stroke-white stroke-[--textSecondary]'
+                    />
+                    <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
+                      Excluir
+                    </span>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <FilterUser
               onClick={handleFilterClick}
               action={handleClickOverlay}
@@ -54,8 +114,8 @@ const Operator: FC = () => {
               isOpen={isCardOpen}
             />
 
-            <button
-              type='button'
+            <Link
+              href='/usuario/novo'
               className={classNames(
                 'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-primary hover:bg-primaryDarker rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
               )}
@@ -67,24 +127,44 @@ const Operator: FC = () => {
                 stroke='stroke-white'
               />
               <span className='font-medium text-sm'>Adicionar</span>
-            </button>
+            </Link>
           </div>
         </div>
 
         <div className='w-full'>
           <ul className='flex flex-col gap-2 px-3'>
-            <li className='gap-3 grid grid-cols-12 px-6 font-medium text-[--textSecondary] text-sm'>
-              <div className='col-span-3 py-3'>
+            <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
+              <div className='grid col-span-3 py-3'>
                 <button
                   type='button'
-                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
+                  className='group flex items-center gap-2 transition-all duration-300'
                 >
-                  <span>Nome</span>
-                  <CarretUpDown
-                    fill='fill-[--textSecondary]'
-                    height='h-4'
-                    width='w-4'
-                  />
+                  <div className='flex items-center h-full'>
+                    <input
+                      id='checkboxAll'
+                      type='checkbox'
+                      name='user[]'
+                      className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-primaryDarker checkboxSecondary'
+                      checked={checkedAll}
+                      onChange={() => {
+                        const checkboxes = checkboxRefs.current
+                        const newValue = !checkedAll
+                        checkboxes.forEach(ref => {
+                          if (ref) ref.checked = newValue
+                        })
+                        setCheckedAll(newValue)
+                        updateCheckedStatus()
+                      }}
+                    />
+                  </div>
+                  <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
+                    <span>Nome</span>
+                    <CarretUpDown
+                      fill='fill-[--textSecondary]'
+                      height='h-4'
+                      width='w-4'
+                    />
+                  </div>
                 </button>
               </div>
               <div className='col-span-2 py-3'>
@@ -118,7 +198,7 @@ const Operator: FC = () => {
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
-                  <span>Permissões</span>
+                  <span>Permissão</span>
                   <CarretUpDown
                     fill='fill-[--textSecondary]'
                     height='h-4'
@@ -140,23 +220,38 @@ const Operator: FC = () => {
                 </button>
               </div>
             </li>
-            {[...Array(3)].map((_, i) => (
-              <li className='gap-3 grid grid-cols-12 bg-[#3D3F42]/50 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'>
+            {operators.map((operator, i) => (
+              <li
+                key={operator.id}
+                className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
+              >
                 <div className='flex items-center gap-3 col-span-3 py-4 font-medium'>
                   <input
+                    ref={el => {
+                      checkboxRefs.current[i] = el!
+                    }}
                     type='checkbox'
                     name='user[]'
+                    onChange={() => {
+                      const allChecked =
+                        checkboxRefs.current.length > 0 &&
+                        checkboxRefs.current.every(ref => ref?.checked)
+                      setCheckedAll(allChecked)
+                      updateCheckedStatus()
+                    }}
                     className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-primaryDarker'
                   />
-                  <span>inova teste</span>
+                  <span>{operator.name}</span>
                 </div>
-                <div className='col-span-2 py-4 font-medium'>
-                  op_93d8a0d66ad2494f
+                <div className='col-span-2 py-4 font-normal'>
+                  <span className='inline-block max-w-[18ch] overflow-hidden text-ellipsis leading-none whitespace-nowrap'>
+                    {operator.code}
+                  </span>
                 </div>
                 <div className='col-span-3 py-4 lowercase'>
-                  teste@inovasistemas
+                  {operator.username}
                 </div>
-                <div className='col-span-2 py-4'>admin</div>
+                <div className='col-span-2 py-4'>{operator.permission}</div>
                 <div className='col-span-2 py-4 pr-1 text-right lowercase'>
                   10/06/2025
                 </div>
@@ -186,4 +281,4 @@ const Operator: FC = () => {
   )
 }
 
-export default Operator
+export default User

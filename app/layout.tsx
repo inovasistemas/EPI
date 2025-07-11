@@ -1,7 +1,7 @@
 import { Ubuntu } from 'next/font/google'
 import './globals.css'
-import { pageMetadata } from '@/lib/misc/metadata'
 import Theme from '@/components/Display/Theme'
+import { pageMetadata } from '@/lib/misc/metadata'
 
 const roboto = Ubuntu({
   weight: ['300', '400', '500', '700'],
@@ -17,7 +17,7 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='pt-br' suppressHydrationWarning>
+    <html lang='pt-BR' suppressHydrationWarning>
       <body className={`${roboto.className} antialiased`}>
         <Theme>{children}</Theme>
       </body>

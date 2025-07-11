@@ -1,8 +1,9 @@
 'use client'
-import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
-import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
 import cn from 'classnames'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import Select from 'react-select'
+import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 
 type SearchSelectOptionsProps = {
   value: string
@@ -14,6 +15,7 @@ type SearchSelectProps = {
   label?: string
   icon?: React.ReactElement
   options: SearchSelectOptionsProps[]
+  placeholder?: string
 }
 
 export function SearchSelect({
@@ -21,6 +23,7 @@ export function SearchSelect({
   label,
   icon,
   options,
+  placeholder,
 }: SearchSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SearchSelectOptionsProps | null>(null)
@@ -49,7 +52,9 @@ export function SearchSelect({
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center bg-white border border-[#D9D9D9] rounded-md']
+        [
+          'group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300',
+        ]
       )}
     >
       {icon && (
@@ -60,7 +65,6 @@ export function SearchSelect({
 
       <div className='relative flex items-center w-full'>
         <Select
-          value={selectedOption}
           onChange={setSelectedOption}
           noOptionsMessage={() => ''}
           id={name}
@@ -71,9 +75,11 @@ export function SearchSelect({
             {
               'mt-4 ': label,
             },
-            ['rounded-md w-full']
+            [
+              'h-[54px] z-50 flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer',
+            ]
           )}
-          placeholder=''
+          placeholder={placeholder}
           components={{
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
@@ -83,57 +89,80 @@ export function SearchSelect({
               ...provided,
               padding: '0.5rem',
               paddingLeft: '0.75rem',
-              borderRadius: '0.375rem',
+              borderRadius: '0.5rem',
               marginTop: '0.5rem',
-              color: 'black',
-              fontSize: '0.875rem',
+              color: 'var(--textSecondary)',
+              border: '0px solid var(--backgroundSecondary)',
+              fontSize: '1rem',
               backgroundColor: state.isSelected
-                ? '#f3f4f6'
+                ? 'var(--backgroundPrimary)'
                 : state.isFocused
-                  ? '#fff'
+                  ? 'var(--backgroundSecondary)'
                   : 'transparent',
               ':hover': {
                 backgroundColor: state.isSelected
                   ? state.isFocused
-                    ? '#e5e7eb'
-                    : '#f3f4f6'
-                  : '#f3f4f6',
+                    ? 'var(--backgroundPrimary)'
+                    : 'var(--backgroundPrimary)'
+                  : 'var(--backgroundPrimary)',
               },
             }),
-            menu: (provided, state) => ({
+            menu: provided => ({
               ...provided,
-              borderRadius: '0.375rem',
-              boxShadow: 'none',
-              border: '1px solid #D9D9D9',
+              color: '#fff',
+              borderRadius: '0.5rem',
+              boxShadow:
+                'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
+              border: '1px solid var(--outlinePrimary)',
               paddingTop: '0',
               paddingBottom: '0.5rem',
               paddingLeft: '0.5rem',
               paddingRight: '0.5rem',
-              fontSize: '0.875rem',
+              fontSize: '1rem',
               zIndex: 50,
+              backgroundColor: 'var(--backgroundSecondary)',
+              cursor: 'pointer',
             }),
             control: (provided, state) => ({
               ...provided,
-              border: state.isFocused ? '0px solid #fff' : '0px solid #fff',
-              backgroundColor: state.isFocused ? '#fff' : 'transparent',
+              border: state.isFocused
+                ? '0px solid var(--backgroundSecondary)'
+                : '0px solid var(--backgroundSecondary)',
+              backgroundColor: 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
-              borderRadius: '0.375rem',
+              borderRadius: '0.5rem',
               fontSize: '0.875rem',
               paddingLeft: icon ? '2rem' : '0',
+              cursor: 'pointer',
+              height: '100%',
             }),
             placeholder: provided => ({
               ...provided,
-              color: '#4B5563',
               width: '100%',
-              fontSize: '0.875rem',
+              fontSize: '1rem',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              color: 'var(--labelPrimary)',
             }),
             input: provided => ({
               ...provided,
-              color: 'inherit',
+              color: 'var(--textSecondary)',
               fontFamily: 'inherit',
               width: '100%',
-              fontSize: '0.875rem',
+              fontSize: '1rem',
+              height: '100%',
+            }),
+            singleValue: provided => ({
+              ...provided,
+              color: 'var(--textSecondary)',
+              fontSize: '1rem',
+              textAlign: 'start',
+              paddingRight: '1.5rem',
+              height: '100%',
+              alignItems: 'center',
+              display: 'flex',
             }),
           }}
         />

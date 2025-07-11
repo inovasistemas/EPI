@@ -1,8 +1,9 @@
 'use client'
-import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
-import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
 import cn from 'classnames'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import Select from 'react-select'
+import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 import useAparence from '@/lib/context/aparence'
 
 type SubMenuSelectOptionsProps = {
@@ -31,10 +32,10 @@ export function SubMenuSelect({
   const setAparence = useAparence(state => state.setAparence)
   const aparence = useAparence(state => state.aparence)
 
-  const handleChange = (option: any) => {
+  const handleChange = (option: SubMenuSelectOptionsProps | null) => {
     setSelectedOption(option)
     if (option?.value) {
-      setAparence(option.value, '')
+      setAparence(option.value as 'dark' | 'light' | 'system', '')
     }
   }
 
@@ -46,7 +47,7 @@ export function SubMenuSelect({
     } else {
       setSelectedOption(null)
     }
-  }, [options])
+  }, [options, aparence])
 
   if (!isClient) {
     return null
@@ -107,7 +108,7 @@ export function SubMenuSelect({
                   : 'var(--backgroundPrimary)',
               },
             }),
-            menu: (provided, state) => ({
+            menu: provided => ({
               ...provided,
               color: '#fff',
               borderRadius: '0.5rem',
