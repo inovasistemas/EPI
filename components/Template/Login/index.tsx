@@ -1,9 +1,9 @@
 'use client'
-import { FC, useState, useCallback } from 'react'
-import { LoginForm } from '@/components/Template/LoginForm'
+import { Lock } from '@phosphor-icons/react'
+import { type FC, useCallback, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
+import { LoginForm } from '@/components/Template/LoginForm'
 import { Privacy } from '../Terms/Privacy'
-import { LockIcon } from '@/components/Display/Icons/Lock'
 
 const Login: FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
@@ -26,10 +26,11 @@ const Login: FC = () => {
         <div className='relative flex justify-center items-center bg-[--backgroundPrimary] rounded-xl w-full h-full'>
           <LoginForm />
           <div className='bottom-0 absolute flex justify-center items-center gap-2 mb-6 p-3 w-full text-[--textSecondary] text-xs'>
-            {/* <LockIcon fill='fill-[--textSecondary]' height='h-3' width='w-3' /> */}
+            <Lock size={14} weight='fill' className='text-[--textSecondary]' />
             <p>
               Ao fazer login, você concorda com nossa{' '}
               <button
+                type='button'
                 className='font-medium text-[--textPrimary] hover:text-primaryDarker active:scale-95 transition-all duration-300'
                 onClick={handleClickOverlay}
               >

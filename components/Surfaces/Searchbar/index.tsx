@@ -1,29 +1,14 @@
 'use client'
-import Image from 'next/image'
-import Logotype from '@/public/img/logo@light.png'
-import React, { useCallback, useState } from 'react'
-import useSidebar from '@/lib/context/global'
+import { Bell, Gear, SquareHalf } from '@phosphor-icons/react'
+import type React from 'react'
+import { useCallback, useState } from 'react'
+import { ProfilePicture } from '@/components/Display/Avatar'
+import { Logo } from '@/components/Display/Logo'
+import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
 import { MenuNotifications } from '@/components/Template/MenuNotifications'
 import { MenuSettings } from '@/components/Template/MenuSettings'
-import { NavAction } from '@/components/Inputs/Button/NavAction'
-import { ProfilePicture } from '@/components/Display/Avatar'
-import {
-  SidebarSimple,
-  Gear,
-  Bell,
-  CalendarDots,
-  HandPointing,
-  ArrowsOut,
-  ArrowsOutSimple,
-  FrameCorners,
-  Monitor,
-} from '@phosphor-icons/react'
-import { Logo } from '@/components/Display/Logo'
-import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
-import { BellIcon } from '@/components/Display/Icons/Bell'
-import { SettingIcon } from '@/components/Display/Icons/Setting'
-import { NotificationIcon } from '@/components/Display/Icons/Notification'
+import useSidebar from '@/lib/context/global'
 
 enum SearchbarCards {
   Settings,
@@ -64,16 +49,11 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <SidebarIcon
-              fill='fill-[--textSecondary]'
-              height='h-4'
-              width='w-4'
+            <SquareHalf
+              size={18}
+              weight='fill'
+              className='text-[--textSecondary] group-data-[active=true]:text-primary'
             />
-            // <SidebarSimple
-            //   size={18}
-            //   weight='fill'
-            //   className='text-[--textSecondary]'
-            // />
           }
           mobile={true}
           action={toggleSidebarVisibility}
@@ -84,29 +64,15 @@ const Searchbar: React.FC = () => {
 
       <div className='flex items-center gap-3'>
         <div className='relative'>
-          {/* <div
-            className='top-0 right-0 z-[300] absolute mt-1 mr-1'
-            aria-hidden='true'
-          >
-            <span className='relative flex size-2'>
-              <span className='inline-flex relative bg-primary rounded-full size-2'></span>
-            </span>
-          </div> */}
-
           <NavAction
             type='button'
             desktop={true}
             icon={
-              <NotificationIcon
-                fill='fill-[--textSecondary]'
-                height='h-4'
-                width='w-4'
+              <Bell
+                size={18}
+                weight='fill'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
-              // <Bell
-              //   size={18}
-              //   weight='fill'
-              //   className='text-[--textSecondary]'
-              // />
             }
             mobile={true}
             action={handleNotificationsClick}
@@ -128,16 +94,11 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <SettingIcon
-                fill='fill-[--textSecondary]'
-                height='h-4'
-                width='w-4'
+              <Gear
+                size={18}
+                weight='fill'
+                className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
-              // <Gear
-              //   size={18}
-              //   weight='fill'
-              //   className='text-[--textSecondary]'
-              // />
             }
             mobile={true}
             action={handleSettingsClick}

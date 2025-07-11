@@ -1,9 +1,9 @@
 'use client'
+import { CaretDown } from '@phosphor-icons/react'
 import cn from 'classnames'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 
 type SearchSelectOptionsProps = {
   value: string
@@ -182,7 +182,11 @@ export function SearchSelect({
             ]
           )}
         >
-          <CarretDownIcon />
+          <CaretDown
+            size={18}
+            weight='bold'
+            className='text-[--textSecondary]'
+          />
         </span>
 
         {label && (

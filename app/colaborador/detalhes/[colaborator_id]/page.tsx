@@ -1,9 +1,9 @@
 'use client'
+import { CaretLeft } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { type FC, useState } from 'react'
-import { ArrowLeftIcon } from '@/components/Display/Icons/ArrowLeft'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -51,10 +51,10 @@ const ColaboratorDetails: FC = () => {
                 'active:scale-95 group flex relative justify-center items-center hover:bg-[--backgroundSecondary] bg-[--backgroundPrimary] rounded-lg w-8 h-8 text-zinc-200 transition z-[200]'
               )}
             >
-              <ArrowLeftIcon
-                height='w-5'
-                width='h-5'
-                fill='fill-[--textSecondary]'
+              <CaretLeft
+                size={18}
+                weight='bold'
+                className='text-[--textSecondary]'
               />
             </Link>
 

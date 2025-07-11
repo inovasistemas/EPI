@@ -1,21 +1,22 @@
 'use client'
+import { Eye, EyeClosed, EyeSlash } from '@phosphor-icons/react'
 import Cookies from 'cookies-js'
-import DocumentInput from '@/components/Inputs/Text/Document'
-import React, { useState, useEffect, useRef, FC } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { permission } from 'process'
+import type React from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { CustomAlert } from '@/components/Display/CustomAlert'
 import { EyeIcon } from '@/components/Display/Icons/Eye'
 import { EyeSlashIcon } from '@/components/Display/Icons/EyeSlash'
-import { FormInput } from '@/components/Inputs/Text/FormInput'
-import { PrimaryButton } from '@/components/Inputs/Button/Primary'
-import { isUserRegistered, postAuth } from '@/services/Login'
-import { useRouter } from 'next/navigation'
-import useUser from '@/lib/context/user'
-import { useTheme } from 'next-themes'
 import { Logo } from '@/components/Display/Logo'
-import { permission } from 'process'
-import { Eye, EyeSlash } from '@phosphor-icons/react'
+import { PrimaryButton } from '@/components/Inputs/Button/Primary'
+import DocumentInput from '@/components/Inputs/Text/Document'
+import { FormInput } from '@/components/Inputs/Text/FormInput'
+import useUser from '@/lib/context/user'
+import { isUserRegistered, postAuth } from '@/services/Login'
 
 type User = {
   id: string
@@ -82,8 +83,6 @@ export function LoginForm() {
         password: password,
       })
 
-      console.log(response)
-
       if (response && response.status === 200) {
         setSelectedUser({
           id: response.data.data.user.uuid,
@@ -136,16 +135,11 @@ export function LoginForm() {
   }
 
   const passwordIcon = (
-    <EyeSlashIcon
-      height='h-5'
-      width='w-5'
-      stroke='stroke-[--textSecondary]'
-      fill='fill-[--textSecondary]'
-    />
+    <EyeClosed size={18} weight='bold' className='text-[--textSecondary]' />
   )
 
   const passwordIconShow = (
-    <EyeIcon height='h-5' width='w-5' stroke='stroke-[--textSecondary]' />
+    <Eye size={18} weight='bold' className='text-[--textSecondary]' />
   )
 
   const isNextDisabled = () => {

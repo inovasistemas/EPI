@@ -1,9 +1,9 @@
 'use client'
+import { CaretDown } from '@phosphor-icons/react'
 import cn from 'classnames'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 import useAparence from '@/lib/context/aparence'
 
 type SubMenuSelectOptionsProps = {
@@ -170,7 +170,11 @@ export function SubMenuSelect({
             ]
           )}
         >
-          <CarretDownIcon />
+          <CaretDown
+            size={14}
+            weight='bold'
+            className='text-[--textSecondary]'
+          />
         </span>
 
         <span className='top-0 right-7 z-10 absolute flex items-center px-2 h-full text-zinc-500 text-xs peer-focus:scale-75'>

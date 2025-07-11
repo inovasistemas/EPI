@@ -1,11 +1,9 @@
 'use client'
+import { CaretUp, CaretUpDown, Plus, Trash } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
-import { AddIcon } from '@/components/Display/Icons/Add'
-import { CarretUpDown } from '@/components/Display/Icons/CaretUpDown'
-import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { FilterUser } from '@/components/Template/Filter/User'
 
 type Operator = {
@@ -93,10 +91,10 @@ const User: FC = () => {
                       'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
                     )}
                   >
-                    <TrashIcon
-                      height='w-4'
-                      width='h-4'
-                      stroke='group-hover:stroke-white stroke-[--textSecondary]'
+                    <Trash
+                      size={18}
+                      weight='bold'
+                      className='text-[--textSecondary] group-hover:text-white'
                     />
                     <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
                       Excluir
@@ -120,12 +118,7 @@ const User: FC = () => {
                 'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-primary hover:bg-primaryDarker rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
               )}
             >
-              <AddIcon
-                height='w-3'
-                width='h-3'
-                fill='fill-white'
-                stroke='stroke-white'
-              />
+              <Plus size={18} weight='bold' className='text-white' />
               <span className='font-medium text-sm'>Adicionar</span>
             </Link>
           </div>
@@ -159,10 +152,10 @@ const User: FC = () => {
                   </div>
                   <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
                     <span>Nome</span>
-                    <CarretUpDown
-                      fill='fill-[--textSecondary]'
-                      height='h-4'
-                      width='w-4'
+                    <CaretUpDown
+                      size={18}
+                      weight='bold'
+                      className='text-[--textSecondary]'
                     />
                   </div>
                 </button>
@@ -173,10 +166,10 @@ const User: FC = () => {
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Código</span>
-                  <CarretUpDown
-                    fill='fill-[--textSecondary]'
-                    height='h-4'
-                    width='w-4'
+                  <CaretUpDown
+                    size={18}
+                    weight='bold'
+                    className='text-[--textSecondary]'
                   />
                 </button>
               </div>
@@ -186,10 +179,10 @@ const User: FC = () => {
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Documento</span>
-                  <CarretUpDown
-                    fill='fill-[--textSecondary]'
-                    height='h-4'
-                    width='w-4'
+                  <CaretUpDown
+                    size={18}
+                    weight='bold'
+                    className='text-[--textSecondary]'
                   />
                 </button>
               </div>
@@ -199,10 +192,10 @@ const User: FC = () => {
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Cargo</span>
-                  <CarretUpDown
-                    fill='fill-[--textSecondary]'
-                    height='h-4'
-                    width='w-4'
+                  <CaretUpDown
+                    size={18}
+                    weight='bold'
+                    className='text-[--textSecondary]'
                   />
                 </button>
               </div>
@@ -212,10 +205,10 @@ const User: FC = () => {
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Criado em</span>
-                  <CarretUpDown
-                    fill='fill-[--textSecondary]'
-                    height='h-4'
-                    width='w-4'
+                  <CaretUpDown
+                    size={18}
+                    weight='bold'
+                    className='text-[--textSecondary]'
                   />
                 </button>
               </div>
