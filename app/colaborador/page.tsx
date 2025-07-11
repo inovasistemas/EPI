@@ -90,7 +90,7 @@ const User: FC = () => {
                   <Link
                     href='/colaborador'
                     className={classNames(
-                      'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+                      'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
                     )}
                   >
                     <TrashIcon
@@ -221,40 +221,45 @@ const User: FC = () => {
               </div>
             </li>
             {operators.map((operator, i) => (
-              <li
-                key={operator.id}
-                className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
-              >
-                <div className='flex items-center gap-3 col-span-3 py-4 font-medium'>
-                  <input
-                    ref={el => {
-                      checkboxRefs.current[i] = el!
-                    }}
-                    type='checkbox'
-                    name='user[]'
-                    onChange={() => {
-                      const allChecked =
-                        checkboxRefs.current.length > 0 &&
-                        checkboxRefs.current.every(ref => ref?.checked)
-                      setCheckedAll(allChecked)
-                      updateCheckedStatus()
-                    }}
-                    className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-primaryDarker'
-                  />
-                  <span>{operator.name}</span>
-                </div>
-                <div className='col-span-2 py-4 font-normal'>
-                  <span className='inline-block max-w-[18ch] overflow-hidden text-ellipsis leading-none whitespace-nowrap'>
-                    {operator.code}
-                  </span>
-                </div>
-                <div className='col-span-3 py-4 lowercase'>
-                  {operator.username}
-                </div>
-                <div className='col-span-2 py-4'>{operator.permission}</div>
-                <div className='col-span-2 py-4 pr-1 text-right lowercase'>
-                  10/06/2025
-                </div>
+              <li key={operator.id}>
+                <Link
+                  href={`/colaborador/detalhes/${operator.code}`}
+                  className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
+                >
+                  <div className='flex items-center gap-3 col-span-3 py-4 font-medium'>
+                    <input
+                      ref={el => {
+                        checkboxRefs.current[i] = el!
+                      }}
+                      type='checkbox'
+                      name='user[]'
+                      onClick={e => {
+                        e.stopPropagation()
+                      }}
+                      onChange={() => {
+                        const allChecked =
+                          checkboxRefs.current.length > 0 &&
+                          checkboxRefs.current.every(ref => ref?.checked)
+                        setCheckedAll(allChecked)
+                        updateCheckedStatus()
+                      }}
+                      className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-primaryDarker'
+                    />
+                    <span>{operator.name}</span>
+                  </div>
+                  <div className='col-span-2 py-4 font-normal'>
+                    <span className='inline-block max-w-[18ch] overflow-hidden text-ellipsis leading-none whitespace-nowrap'>
+                      {operator.code}
+                    </span>
+                  </div>
+                  <div className='col-span-3 py-4 lowercase'>
+                    {operator.username}
+                  </div>
+                  <div className='col-span-2 py-4'>{operator.permission}</div>
+                  <div className='col-span-2 py-4 pr-1 text-right lowercase'>
+                    10/06/2025
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>

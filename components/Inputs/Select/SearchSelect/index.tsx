@@ -16,6 +16,7 @@ type SearchSelectProps = {
   icon?: React.ReactElement
   options: SearchSelectOptionsProps[]
   placeholder?: string
+  value?: string | null
 }
 
 export function SearchSelect({
@@ -24,6 +25,7 @@ export function SearchSelect({
   icon,
   options,
   placeholder,
+  value = null,
 }: SearchSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SearchSelectOptionsProps | null>(null)
@@ -32,12 +34,14 @@ export function SearchSelect({
 
   useEffect(() => {
     setIsClient(true)
-    if (options?.length) {
-      setSelectedOption(options[0])
+
+    if (options?.length && value) {
+      const matchedOption = options.find(option => option.value === value)
+      setSelectedOption(matchedOption ?? null)
     } else {
       setSelectedOption(null)
     }
-  }, [options])
+  }, [options, value])
 
   if (!isClient) {
     return null
@@ -65,6 +69,7 @@ export function SearchSelect({
 
       <div className='relative flex items-center w-full'>
         <Select
+          value={selectedOption}
           onChange={setSelectedOption}
           noOptionsMessage={() => ''}
           id={name}

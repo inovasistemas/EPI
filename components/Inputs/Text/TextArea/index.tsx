@@ -1,15 +1,20 @@
 'use client'
-import { useState } from 'react'
 
 type TextAreaProps = {
-  name: string
   label?: string
+  name: string
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
   required: boolean
+  value?: string
 }
 
-export function TextArea({ name, label, required = false }: TextAreaProps) {
-  const [text, setText] = useState('')
-
+export function TextArea({
+  value = '',
+  onChange,
+  name,
+  label,
+  required = false,
+}: TextAreaProps) {
   return (
     <div className='group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary h-full transition-all duration-300'>
       <div className='relative flex items-center w-full h-full'>
@@ -18,8 +23,8 @@ export function TextArea({ name, label, required = false }: TextAreaProps) {
           name={name}
           className='peer block bg-transparent px-[12px] pt-[23px] pb-[7px] rounded focus:outline-none w-full h-full font-normal text-[--textSecondary] text-sm appearance-none resize-none'
           placeholder=' '
-          value={text}
-          onChange={e => setText(e.target.value)}
+          value={value}
+          onChange={onChange}
         />
         <label
           htmlFor={name}

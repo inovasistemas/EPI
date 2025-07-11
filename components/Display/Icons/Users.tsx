@@ -21,7 +21,7 @@ export function UsersIcon({ fill, height, width, stroke }: UsersIconProps) {
         strokeWidth={2}
         strokeLinecap='round'
         strokeLinejoin='round'
-        className={classnames(stroke)}
+        className={classnames(stroke, 'transition-all duration-300')}
       />
     </svg>
   )
