@@ -26,7 +26,7 @@ const CreateUser: FC = () => {
               )}
             >
               <CaretLeft
-                size={18}
+                size={20}
                 weight='bold'
                 className='text-[--textSecondary]'
               />

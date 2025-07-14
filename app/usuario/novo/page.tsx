@@ -19,11 +19,11 @@ const CreateUser: FC = () => {
   }
 
   const passwordIcon = (
-    <EyeClosed size={18} weight='bold' className='text-[--textSecondary]' />
+    <EyeClosed size={20} weight='bold' className='text-[--textSecondary]' />
   )
 
   const passwordIconShow = (
-    <Eye size={18} weight='bold' className='text-[--textSecondary]' />
+    <Eye size={20} weight='bold' className='text-[--textSecondary]' />
   )
 
   return (
@@ -39,7 +39,7 @@ const CreateUser: FC = () => {
               )}
             >
               <CaretLeft
-                size={18}
+                size={20}
                 weight='bold'
                 className='text-[--textSecondary]'
               />

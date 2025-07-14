@@ -1,5 +1,5 @@
 'use client'
-import { CaretUpDown, Plus, Trash } from '@phosphor-icons/react'
+import { CaretUpDown, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
@@ -91,9 +91,9 @@ const User: FC = () => {
                       'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
                     )}
                   >
-                    <Trash
-                      size={18}
-                      weight='bold'
+                    <TrashSimple
+                      size={16}
+                      weight='fill'
                       className='text-[--textSecondary] group-hover:text-white'
                     />
 
@@ -119,7 +119,7 @@ const User: FC = () => {
                 'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-primary hover:bg-primaryDarker rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
               )}
             >
-              <Plus size={18} weight='bold' className='text-white' />
+              <Plus size={16} weight='bold' className='text-white' />
               <span className='font-medium text-sm'>Adicionar</span>
             </Link>
           </div>
@@ -154,7 +154,7 @@ const User: FC = () => {
                   <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
                     <span>Nome</span>
                     <CaretUpDown
-                      size={18}
+                      size={16}
                       weight='bold'
                       className='text-[--textSecondary]'
                     />
@@ -168,7 +168,7 @@ const User: FC = () => {
                 >
                   <span>Código</span>
                   <CaretUpDown
-                    size={18}
+                    size={16}
                     weight='bold'
                     className='text-[--textSecondary]'
                   />
@@ -181,7 +181,7 @@ const User: FC = () => {
                 >
                   <span>Usuário</span>
                   <CaretUpDown
-                    size={18}
+                    size={16}
                     weight='bold'
                     className='text-[--textSecondary]'
                   />
@@ -194,7 +194,7 @@ const User: FC = () => {
                 >
                   <span>Permissão</span>
                   <CaretUpDown
-                    size={18}
+                    size={16}
                     weight='bold'
                     className='text-[--textSecondary]'
                   />
@@ -207,7 +207,7 @@ const User: FC = () => {
                 >
                   <span>Criado em</span>
                   <CaretUpDown
-                    size={18}
+                    size={16}
                     weight='bold'
                     className='text-[--textSecondary]'
                   />
@@ -258,23 +258,6 @@ const User: FC = () => {
             ))}
           </ul>
         </div>
-
-        {/* <div className='w-full'>
-          <ul className='w-full'>
-            <li className='flex flex-col gap-3 bg-transparent hover:bg-[--buttonPrimary] p-3 px-6 w-full transition-all duration-300 cursor-pointer'>
-              us_93d8a0d66ad2494f
-            </li>
-          </ul>
-        </div> */}
-
-        {/* <div className='flex justify-end items-center px-6 w-full'>
-          <div className='flex flex-row justify-between items-center gap-6'>
-            <PaginationSummary from={1} to={3} total={246} />
-            <div className='min-w-36'>
-              <SmallSelect label='/ página' name='status' options={exibition} />
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   )

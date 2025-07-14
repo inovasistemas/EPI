@@ -1,5 +1,5 @@
 'use client'
-import { Bell, Gear, SquareHalf } from '@phosphor-icons/react'
+import { BellSimple, GearSix, SquareHalf } from '@phosphor-icons/react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
@@ -50,7 +50,7 @@ const Searchbar: React.FC = () => {
           desktop={true}
           icon={
             <SquareHalf
-              size={18}
+              size={20}
               weight='fill'
               className='text-[--textSecondary] group-data-[active=true]:text-primary'
             />
@@ -68,8 +68,8 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <Bell
-                size={18}
+              <BellSimple
+                size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
@@ -94,8 +94,8 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <Gear
-                size={18}
+              <GearSix
+                size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />

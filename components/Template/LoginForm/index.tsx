@@ -1,16 +1,12 @@
 'use client'
-import { Eye, EyeClosed, EyeSlash } from '@phosphor-icons/react'
+import { Eye, EyeClosed } from '@phosphor-icons/react'
 import Cookies from 'cookies-js'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
-import { permission } from 'process'
 import type React from 'react'
-import { FC, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { CustomAlert } from '@/components/Display/CustomAlert'
-import { EyeIcon } from '@/components/Display/Icons/Eye'
-import { EyeSlashIcon } from '@/components/Display/Icons/EyeSlash'
 import { Logo } from '@/components/Display/Logo'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
 import DocumentInput from '@/components/Inputs/Text/Document'
@@ -35,26 +31,21 @@ export function LoginForm() {
   const [selectedUser, setSelectedUser] = useState<User>()
   const [step, setStep] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [users, setUsers] = useState<User[]>([])
-  const [storeName, setStoreName] = useState('')
-  const [storeId, setStoreId] = useState(0)
   const router = useRouter()
   const setUser = useUser(state => state.setUser)
-
-  const isDark = useTheme().resolvedTheme === 'dark'
 
   useEffect(() => {
     if (containerRef.current) {
       setHeight(containerRef.current.scrollHeight)
     }
-  }, [step])
+  })
 
   const handleRevealPassword = () => {
     setRevealPassword(prev => !prev)
   }
 
   const handleNext = async () => {
-    if (step == 0) {
+    if (step === 0) {
       const response = await isUserRegistered({
         username: cnpj,
       })
@@ -77,7 +68,7 @@ export function LoginForm() {
       }
     }
 
-    if (step == 1) {
+    if (step === 1) {
       const response = await postAuth({
         username: cnpj,
         password: password,
@@ -86,17 +77,17 @@ export function LoginForm() {
       if (response && response.status === 200) {
         setSelectedUser({
           id: response.data.data.user.uuid,
-          name: selectedUser!.name,
+          name: selectedUser ? selectedUser.name : '',
           permissions: response.data.data.user.permission_group,
         })
-        setUser(selectedUser!.name, selectedUser!.permissions)
+        setUser(selectedUser?.name ?? '', selectedUser?.permissions ?? '')
 
         Cookies.set(
           'authToken',
           Buffer.from(
             JSON.stringify({
-              user: selectedUser!.id,
-              permissions: selectedUser!.permissions,
+              user: selectedUser ? selectedUser.id : '',
+              permissions: selectedUser ? selectedUser.permissions : '',
             }),
             'binary'
           ).toString('base64'),
@@ -120,7 +111,7 @@ export function LoginForm() {
   const handleBack = () => {
     setStep(prev => Math.max(prev - 1, 0))
 
-    if (step == 1) {
+    if (step === 1) {
       setRevealPassword(false)
       setPassword('')
       setSelectedUser(undefined)
@@ -135,11 +126,11 @@ export function LoginForm() {
   }
 
   const passwordIcon = (
-    <EyeClosed size={18} weight='bold' className='text-[--textSecondary]' />
+    <EyeClosed size={20} weight='bold' className='text-[--textSecondary]' />
   )
 
   const passwordIconShow = (
-    <Eye size={18} weight='bold' className='text-[--textSecondary]' />
+    <Eye size={20} weight='bold' className='text-[--textSecondary]' />
   )
 
   const isNextDisabled = () => {
@@ -215,6 +206,7 @@ export function LoginForm() {
                   {selectedUser?.name.toLocaleLowerCase()}
                 </span>
                 <button
+                  type='button'
                   onClick={handleBack}
                   className='font-medium text-primary hover:text-primaryDarker text-base transition-all duration-300 select-none'
                 >

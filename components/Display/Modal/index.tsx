@@ -1,7 +1,6 @@
+import { X } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CloseIcon } from '../Icons/Close'
-import { useState, useRef, useEffect } from 'react'
-import { Circle, X, XCircle } from '@phosphor-icons/react'
+import { useEffect, useRef, useState } from 'react'
 
 type ModalProps = {
   title: string
@@ -37,7 +36,7 @@ export function Modal({
     return () => {
       divElement.removeEventListener('scroll', handleScroll)
     }
-  }, [isModalOpen])
+  })
 
   return (
     <AnimatePresence>
@@ -67,6 +66,7 @@ export function Modal({
                 {title}
               </h2>
               <button
+                type='button'
                 onClick={handleClickOverlay}
                 className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
               >

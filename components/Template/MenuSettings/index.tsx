@@ -1,10 +1,4 @@
-import {
-  Article,
-  CircleHalf,
-  ShieldCheck,
-  SignOut,
-  UserCircle,
-} from '@phosphor-icons/react'
+import { Door, Key, Moon, User } from '@phosphor-icons/react'
 import { SubMenuSelect } from '@/components/Inputs/Select/SubMenuSelect'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 
@@ -15,41 +9,22 @@ export function MenuSettings() {
         <SubNavLink
           name='Minha conta'
           icon={
-            <UserCircle
-              size={18}
-              weight='fill'
-              className='text-[--textSecondary]'
-            />
+            <User size={16} weight='fill' className='text-[--textSecondary]' />
           }
           href='/conta'
         />
         <SubNavLink
-          name='Informações e permissões'
-          icon={
-            <Article
-              size={18}
-              weight='fill'
-              className='text-[--textSecondary]'
-            />
-          }
-          href='/conta/informacoes'
-        />
-        <SubNavLink
           name='Usuários e permissões'
           icon={
-            <ShieldCheck
-              size={18}
-              weight='fill'
-              className='text-[--textSecondary]'
-            />
+            <Key size={16} weight='fill' className='text-[--textSecondary]' />
           }
           href='/usuario'
         />
         <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--backgroundPrimary] rounded-lg transition-all duration-300'>
           <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-md font-normal whitespace-normal transition-all duration-300 select-none'>
             <span>
-              <CircleHalf
-                size={18}
+              <Moon
+                size={16}
                 weight='fill'
                 className='text-[--textSecondary]'
               />
@@ -70,11 +45,7 @@ export function MenuSettings() {
         <SubNavLink
           name='Sair'
           icon={
-            <SignOut
-              size={18}
-              weight='fill'
-              className='text-[--textSecondary]'
-            />
+            <Door size={16} weight='fill' className='text-[--textSecondary]' />
           }
           href='/sair'
         />

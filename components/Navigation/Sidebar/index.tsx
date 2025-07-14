@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
             name='Painel'
             icon={
               <SquaresFour
-                size={18}
+                size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
             name='Colaborador'
             icon={
               <Users
-                size={18}
+                size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
             name='Usuário'
             icon={
               <Keyhole
-                size={18}
+                size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-primary'
               />
@@ -67,26 +67,6 @@ const Sidebar: React.FC = () => {
           />
         </div>
       </div>
-      {/* <div
-        className={`hidden sm:block mt-auto relative transition-all duration-300 mb-3`}
-      >
-        <div
-          className={`col-span-3 grid grid-cols-3 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300`}
-        >
-          <NavLink
-            name='Sair'
-            icon={
-              <LogOutIcon
-                fill='fill-[--textSecondary]'
-                height='h-4'
-                width='w-4'
-                stroke={'3'}
-              />
-            }
-            href='/sair'
-          />
-        </div>
-      </div> */}
     </aside>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 import { Funnel } from '@phosphor-icons/react'
 import classNames from 'classnames'
-import { FunnelIcon } from '@/components/Display/Icons/Funnel'
 import { MenuCard } from '@/components/Navigation/MenuCard'
 import { MenuSettings } from '../../MenuSettings'
 
@@ -34,7 +33,7 @@ export function FilterUser({
           'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-[--textSecondary] transition-all duration-300 px-4 pr-5'
         )}
       >
-        <Funnel size={18} weight='bold' className='text-[--textSecondary]' />
+        <Funnel size={16} weight='fill' className='text-[--textSecondary]' />
         <span className='font-medium text-sm'>{title}</span>
       </button>
 
