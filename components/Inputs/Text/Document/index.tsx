@@ -1,5 +1,6 @@
 import Cleave from 'cleave.js/react'
-import React, { Component } from 'react'
+import type React from 'react'
+import { Component } from 'react'
 
 interface DocumentInputProps {
   name: string
@@ -43,7 +44,7 @@ class DocumentInput extends Component<DocumentInputProps, MyComponentState> {
 
     return (
       <div className='max-h-[52px]'>
-        <div className='group relative flex items-center bg-transparent border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300'>
+        <div className='group relative flex items-center bg-transparent border-box rounded-xl outline outline-transparent focus-within:outline-[--primaryColor] focus-within:outline-2 transition-all duration-300'>
           {icon && <span className='mr-1 ml-3'>{icon}</span>}
 
           <div className='relative flex items-center w-full'>

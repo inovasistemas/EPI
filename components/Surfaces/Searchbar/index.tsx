@@ -52,7 +52,7 @@ const Searchbar: React.FC = () => {
             <SquareHalf
               size={20}
               weight='fill'
-              className='text-[--textSecondary] group-data-[active=true]:text-primary'
+              className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
             />
           }
           mobile={true}
@@ -71,7 +71,7 @@ const Searchbar: React.FC = () => {
               <BellSimple
                 size={20}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
             }
             mobile={true}
@@ -97,7 +97,7 @@ const Searchbar: React.FC = () => {
               <GearSix
                 size={20}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
             }
             mobile={true}

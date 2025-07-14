@@ -22,7 +22,7 @@ export function NavLink({ name, icon, href, action }: NavLinkProps) {
       <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
         {icon}
       </div>
-      <span className='hidden sm:flex w-full font-medium text-[--textSecondary] group-data-[active=true]:text-primary text-sm transition-all select-none'>
+      <span className='hidden sm:flex w-full font-medium text-[--textSecondary] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
         {name}
       </span>
     </Link>

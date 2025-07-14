@@ -1,5 +1,5 @@
 'use client'
-import { Keyhole, SquaresFour, Users } from '@phosphor-icons/react'
+import { HardHat, Key, SquaresFour, Users } from '@phosphor-icons/react'
 import { NavLink } from '@/components/Navigation/NavLink'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import useSidebar from '@/lib/context/global'
@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
               <SquaresFour
                 size={20}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
             }
             href='/painel'
@@ -42,28 +42,41 @@ const Sidebar: React.FC = () => {
             label='Cadastro'
             showFixed={false}
           />
+
           <NavLink
-            name='Colaborador'
+            name='Equipamentos'
+            icon={
+              <HardHat
+                size={20}
+                weight='fill'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              />
+            }
+            href='/equipamentos'
+          />
+
+          <NavLink
+            name='Colaboradores'
             icon={
               <Users
                 size={20}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
             }
-            href='/colaborador'
+            href='/colaboradores'
           />
 
           <NavLink
-            name='Usuário'
+            name='Usuários'
             icon={
-              <Keyhole
+              <Key
                 size={20}
                 weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-primary'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
             }
-            href='/usuario'
+            href='/usuarios'
           />
         </div>
       </div>

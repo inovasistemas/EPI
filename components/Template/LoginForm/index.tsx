@@ -1,5 +1,4 @@
 'use client'
-import { Eye, EyeClosed } from '@phosphor-icons/react'
 import Cookies from 'cookies-js'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -9,30 +8,45 @@ import { v4 as uuidv4 } from 'uuid'
 import { CustomAlert } from '@/components/Display/CustomAlert'
 import { Logo } from '@/components/Display/Logo'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
-import DocumentInput from '@/components/Inputs/Text/Document'
+import { PasswordInput } from '@/components/Inputs/Password'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import useUser from '@/lib/context/user'
 import { isUserRegistered, postAuth } from '@/services/Login'
 
-type User = {
-  id: string
+type OperatorEnterprise = {
+  enterprise_uuid: string
   name: string
-  permissions: string
+  password: string
+  permission_group: string
+  user_uuid: string
+  username: string
 }
 
 export function LoginForm() {
+  const [formData, setFormData] = useState<OperatorEnterprise>({
+    enterprise_uuid: '',
+    name: '',
+    password: '',
+    permission_group: '',
+    user_uuid: '',
+    username: '',
+  })
+
   const [alertState, setAlertState] = useState(false)
   const [alertText, setAlertText] = useState('')
   const [alertUUID, setAlertUUID] = useState('')
-  const [cnpj, setCnpj] = useState('')
   const [height, setHeight] = useState(0)
-  const [password, setPassword] = useState('')
-  const [revealPassword, setRevealPassword] = useState(false)
-  const [selectedUser, setSelectedUser] = useState<User>()
   const [step, setStep] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const setUser = useUser(state => state.setUser)
+
+  const handleChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
 
   useEffect(() => {
     if (containerRef.current) {
@@ -40,22 +54,13 @@ export function LoginForm() {
     }
   })
 
-  const handleRevealPassword = () => {
-    setRevealPassword(prev => !prev)
-  }
-
   const handleNext = async () => {
     if (step === 0) {
       const response = await isUserRegistered({
-        username: cnpj,
+        username: formData.username,
       })
       if (response && response.status === 200) {
-        setSelectedUser({
-          id: '',
-          name: response.data.data.user.name,
-          permissions: '',
-        })
-
+        handleChange('name', response.data.data.user.name)
         setStep(prev => Math.min(prev + 1, 2))
       } else if (response && response.status === 403) {
         setAlertText('Não conseguimos encontrar esse usuário.')
@@ -70,24 +75,27 @@ export function LoginForm() {
 
     if (step === 1) {
       const response = await postAuth({
-        username: cnpj,
-        password: password,
+        username: formData.username,
+        password: formData.password,
       })
 
       if (response && response.status === 200) {
-        setSelectedUser({
-          id: response.data.data.user.uuid,
-          name: selectedUser ? selectedUser.name : '',
-          permissions: response.data.data.user.permission_group,
-        })
-        setUser(selectedUser?.name ?? '', selectedUser?.permissions ?? '')
+        handleChange('user_uuid', response.data.data.user.uuid)
+        handleChange(
+          'permission_group',
+          response.data.data.user.permission_group_uuid
+        )
+
+        setUser(formData.name, formData.permission_group)
 
         Cookies.set(
           'authToken',
           Buffer.from(
             JSON.stringify({
-              user: selectedUser ? selectedUser.id : '',
-              permissions: selectedUser ? selectedUser.permissions : '',
+              enterprise: '',
+              name: formData.name,
+              permission_group: formData.permission_group,
+              user: formData.user_uuid,
             }),
             'binary'
           ).toString('base64'),
@@ -112,9 +120,9 @@ export function LoginForm() {
     setStep(prev => Math.max(prev - 1, 0))
 
     if (step === 1) {
-      setRevealPassword(false)
-      setPassword('')
-      setSelectedUser(undefined)
+      handleChange('password', '')
+      handleChange('user_uuid', '')
+      handleChange('permission_group', '')
     }
   }
 
@@ -125,28 +133,17 @@ export function LoginForm() {
     }
   }
 
-  const passwordIcon = (
-    <EyeClosed size={20} weight='bold' className='text-[--textSecondary]' />
-  )
-
-  const passwordIconShow = (
-    <Eye size={20} weight='bold' className='text-[--textSecondary]' />
-  )
-
-  const isNextDisabled = () => {
+  const handleDisabled = () => {
     if (step === 0) {
-      return !(cnpj.length > 2)
+      return !(formData.username.length > 2)
     }
     if (step === 1) {
-      return !selectedUser
-    }
-    if (step === 2) {
-      return !password
+      return !(formData.password.length > 0)
     }
     return false
   }
 
-  const teste = () => {
+  const handleAlert = () => {
     setAlertState(false)
   }
 
@@ -158,7 +155,7 @@ export function LoginForm() {
             key={alertUUID}
             text={alertText}
             state={alertState}
-            action={teste}
+            action={handleAlert}
           />
         )}
       </AnimatePresence>
@@ -183,11 +180,14 @@ export function LoginForm() {
               transition={{ duration: 0.3 }}
               className='flex flex-col gap-3'
             >
-              <DocumentInput
-                name='document'
+              <FormInput
+                name='username'
                 label='Seu usuário'
                 required={false}
-                onChange={setCnpj}
+                type='text'
+                value={formData.username}
+                position='right'
+                onChange={e => handleChange('username', e.target.value)}
                 onKeyDown={handleKeyDown}
               />
             </motion.div>
@@ -203,28 +203,20 @@ export function LoginForm() {
             >
               <div className='flex justify-start items-center gap-2'>
                 <span className='font-semibold text-lef text-base capitalize'>
-                  {selectedUser?.name.toLocaleLowerCase()}
+                  {formData.name.toLocaleLowerCase()}
                 </span>
                 <button
                   type='button'
                   onClick={handleBack}
-                  className='font-medium text-primary hover:text-primaryDarker text-base transition-all duration-300 select-none'
+                  className='font-medium text-[--primaryColor] hover:text-[--secondaryColor] text-base transition-all duration-300 select-none'
                 >
                   Trocar usuário
                 </button>
               </div>
-              <FormInput
-                name='password'
+              <PasswordInput
                 label='Sua senha'
-                required={false}
-                type='password'
-                reveal={revealPassword}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                position='right'
-                icon={revealPassword ? passwordIconShow : passwordIcon}
-                actionButton={handleRevealPassword}
-                onKeyDown={handleKeyDown}
+                value={formData.password}
+                onChange={e => handleChange('password', e.target.value)}
               />
             </motion.div>
           )}
@@ -252,7 +244,7 @@ export function LoginForm() {
               action={handleNext}
               type='button'
               text={step === 2 ? 'Entrar' : 'Avançar'}
-              disabled={isNextDisabled()}
+              disabled={handleDisabled()}
             />
           </div>
         </div>

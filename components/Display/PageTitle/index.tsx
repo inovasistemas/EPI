@@ -1,9 +1,9 @@
 'use client'
-import Link from 'next/link'
 import { ArrowsOutSimple, CaretDown } from '@phosphor-icons/react'
+import Link from 'next/link'
+import { useCallback, useState } from 'react'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
-import { useCallback, useState } from 'react'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 
 export function PageTitle() {
@@ -24,7 +24,7 @@ export function PageTitle() {
           <Link
             onClick={handleMenuClick}
             href=''
-            className='group box-border flex items-center gap-2 bg-primary hover:bg-primaryDarker px-4 py-2 !pr-2.5 border border-[#D9D9D9] border-box rounded-md h-8 max-h-8 font-medium transition-all duration-300'
+            className='group box-border flex items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 py-2 !pr-2.5 border border-[#D9D9D9] border-box rounded-md h-8 max-h-8 font-medium transition-all duration-300'
           >
             <span className='group pb-0.5 overflow-hidden text-white transition-all duration-300'>
               <span className='opacity-100 text-sm transition-all duration-300'>

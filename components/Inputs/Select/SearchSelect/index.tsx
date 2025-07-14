@@ -57,7 +57,7 @@ export function SearchSelect({
           'grid-cols-2 relative': icon,
         },
         [
-          'group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-primary transition-all duration-300',
+          'group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
         ]
       )}
     >

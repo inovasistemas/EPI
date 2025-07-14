@@ -35,7 +35,7 @@ const Login: FC = () => {
               Ao fazer login, você concorda com nossa{' '}
               <button
                 type='button'
-                className='font-medium text-[--textPrimary] hover:text-primaryDarker active:scale-95 transition-all duration-300'
+                className='font-medium text-[--textPrimary] hover:text-[--secondaryColor] active:scale-95 transition-all duration-300'
                 onClick={handleClickOverlay}
               >
                 Política de Privacidade

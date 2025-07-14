@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 export async function isUserRegistered(data: { username: string }) {
@@ -8,8 +7,11 @@ export async function isUserRegistered(data: { username: string }) {
       data
     )
     return response
-  } catch (error: any) {
-    return error.response || null
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
   }
 }
 
@@ -20,7 +22,10 @@ export async function postAuth(data: { username: string; password: string }) {
       data
     )
     return response
-  } catch (error: any) {
-    return error.response || null
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
   }
 }
