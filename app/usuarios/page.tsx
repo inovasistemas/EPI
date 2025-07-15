@@ -1,9 +1,10 @@
 'use client'
-import { CaretUpDown, Plus, TrashSimple } from '@phosphor-icons/react'
+import { Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterOperator } from '@/components/Template/Filter/Operator'
 
 type Operator = {
@@ -16,6 +17,10 @@ type Operator = {
 }
 
 const Operator: FC = () => {
+  const [orderBy, setOrderBy] = useState({
+    field: '',
+    order: '',
+  })
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
@@ -58,6 +63,23 @@ const Operator: FC = () => {
       isCardOpen === MenuCards.Filter ? MenuCards.Default : MenuCards.Filter
     )
   }, [isCardOpen])
+
+  const handleOrderBy = useCallback(
+    (field: string) => {
+      if (field !== orderBy.field) {
+        setOrderBy({
+          field,
+          order: 'asc',
+        })
+      } else {
+        setOrderBy(prev => ({
+          ...prev,
+          order: prev.order === 'asc' ? 'desc' : 'asc',
+        }))
+      }
+    },
+    [orderBy.field]
+  )
 
   useEffect(() => {
     const allChecked =
@@ -130,6 +152,7 @@ const Operator: FC = () => {
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-3 py-3'>
                 <button
+                  onClick={() => handleOrderBy('name')}
                   type='button'
                   className='group flex items-center gap-2 transition-all duration-300'
                 >
@@ -153,63 +176,67 @@ const Operator: FC = () => {
                   </div>
                   <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
                     <span>Nome</span>
-                    <CaretUpDown
-                      size={16}
-                      weight='bold'
-                      className='text-[--textSecondary]'
+                    <CaretOrder
+                      field={orderBy.field}
+                      name='name'
+                      order={orderBy.order}
                     />
                   </div>
                 </button>
               </div>
               <div className='col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('code')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Código</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='code'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='col-span-3 py-3'>
                 <button
+                  onClick={() => handleOrderBy('username')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Usuário</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='username'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('permission_group')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Permissão</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='permission_group'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='flex justify-end col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('created_at')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Criado em</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='created_at'
+                    order={orderBy.order}
                   />
                 </button>
               </div>

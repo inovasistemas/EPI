@@ -1,9 +1,10 @@
 'use client'
-import { CaretUpDown, Plus, TrashSimple } from '@phosphor-icons/react'
+import { Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
 
 type Collaborator = {
@@ -11,11 +12,15 @@ type Collaborator = {
   name: string
   code: string
   document: string
-  permission: string
+  job_position: string
   createdAt: string
 }
 
 const Collaborator: FC = () => {
+  const [orderBy, setOrderBy] = useState({
+    field: '',
+    order: '',
+  })
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
@@ -25,7 +30,7 @@ const Collaborator: FC = () => {
       name: 'Inova Sistemas',
       code: 'co_93d8a0d66ad2494f',
       document: '447.866.598-17',
-      permission: 'administrador',
+      job_position: 'administrador',
       createdAt: '10/06/2025',
     },
     {
@@ -33,7 +38,7 @@ const Collaborator: FC = () => {
       name: 'João Gomes',
       code: 'co_93d8a0d66ad2494g',
       document: '447.866.598-17',
-      permission: 'administrador',
+      job_position: 'administrador',
       createdAt: '10/06/2025',
     },
   ]
@@ -58,6 +63,23 @@ const Collaborator: FC = () => {
       isCardOpen === MenuCards.Filter ? MenuCards.Default : MenuCards.Filter
     )
   }, [isCardOpen])
+
+  const handleOrderBy = useCallback(
+    (field: string) => {
+      if (field !== orderBy.field) {
+        setOrderBy({
+          field,
+          order: 'asc',
+        })
+      } else {
+        setOrderBy(prev => ({
+          ...prev,
+          order: prev.order === 'asc' ? 'desc' : 'asc',
+        }))
+      }
+    },
+    [orderBy.field]
+  )
 
   useEffect(() => {
     const allChecked =
@@ -129,6 +151,7 @@ const Collaborator: FC = () => {
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-3 py-3'>
                 <button
+                  onClick={() => handleOrderBy('name')}
                   type='button'
                   className='group flex items-center gap-2 transition-all duration-300'
                 >
@@ -152,63 +175,67 @@ const Collaborator: FC = () => {
                   </div>
                   <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
                     <span>Nome</span>
-                    <CaretUpDown
-                      size={16}
-                      weight='bold'
-                      className='text-[--textSecondary]'
+                    <CaretOrder
+                      field={orderBy.field}
+                      name='name'
+                      order={orderBy.order}
                     />
                   </div>
                 </button>
               </div>
               <div className='col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('code')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Código</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='code'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='col-span-3 py-3'>
                 <button
+                  onClick={() => handleOrderBy('document')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Documento</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='document'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('job_position')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Cargo</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='job_position'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='flex justify-end col-span-2 py-3'>
                 <button
+                  onClick={() => handleOrderBy('created_at')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Criado em</span>
-                  <CaretUpDown
-                    size={16}
-                    weight='bold'
-                    className='text-[--textSecondary]'
+                  <CaretOrder
+                    field={orderBy.field}
+                    name='created_at'
+                    order={orderBy.order}
                   />
                 </button>
               </div>
@@ -251,7 +278,7 @@ const Collaborator: FC = () => {
                     {collaborator.document}
                   </div>
                   <div className='col-span-2 py-4'>
-                    {collaborator.permission}
+                    {collaborator.job_position}
                   </div>
                   <div className='col-span-2 py-4 pr-1 text-right lowercase'>
                     10/06/2025

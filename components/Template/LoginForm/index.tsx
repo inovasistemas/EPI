@@ -52,7 +52,7 @@ export function LoginForm() {
     if (containerRef.current) {
       setHeight(containerRef.current.scrollHeight)
     }
-  })
+  }, [])
 
   const handleNext = async () => {
     if (step === 0) {
@@ -237,7 +237,7 @@ export function LoginForm() {
           </motion.div>
         )}
 
-        <div className='right-0 bottom-0 absolute flex justify-end gap-3 p-6 w-full transition-all duration-300'>
+        <div className='flex justify-end gap-3 w-full transition-all duration-300'>
           <div className='w-full sm:w-auto sm:max-w-32'>
             <PrimaryButton
               name='primary'
