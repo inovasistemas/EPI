@@ -103,6 +103,7 @@ const CreateOperator: FC = () => {
                 { value: 'operator', label: 'Operador' },
               ]}
               placeholder='Grupo de permissão'
+              onChange={() => null}
             />
           </div>
 

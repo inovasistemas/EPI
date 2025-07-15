@@ -30,7 +30,7 @@ export function ActionGroup({ showDelete = false }: ActionGroup) {
         <Link
           href='/usuarios'
           className={classNames(
-            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-white transition-all duration-300 px-4'
           )}
         >
           <span className='font-medium text-[--textSecondary] text-sm'>

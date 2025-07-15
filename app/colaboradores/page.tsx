@@ -1,9 +1,10 @@
 'use client'
-import { Plus, TrashSimple } from '@phosphor-icons/react'
+import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
 
@@ -17,6 +18,7 @@ type Collaborator = {
 }
 
 const Collaborator: FC = () => {
+  const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: '',
     order: '',
@@ -30,7 +32,7 @@ const Collaborator: FC = () => {
       name: 'Inova Sistemas',
       code: 'co_93d8a0d66ad2494f',
       document: '447.866.598-17',
-      job_position: 'administrador',
+      job_position: 'auxiliar produção',
       createdAt: '10/06/2025',
     },
     {
@@ -38,7 +40,7 @@ const Collaborator: FC = () => {
       name: 'João Gomes',
       code: 'co_93d8a0d66ad2494g',
       document: '447.866.598-17',
-      job_position: 'administrador',
+      job_position: 'auxiliar produção',
       createdAt: '10/06/2025',
     },
   ]
@@ -47,22 +49,6 @@ const Collaborator: FC = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
     setHasChecked(anyChecked)
   }
-
-  enum MenuCards {
-    Filter,
-    Default,
-  }
-  const [isCardOpen, setCardOpen] = useState(MenuCards.Default)
-
-  const handleClickOverlay = useCallback(() => {
-    setCardOpen(MenuCards.Default)
-  }, [])
-
-  const handleFilterClick = useCallback(() => {
-    setCardOpen(
-      isCardOpen === MenuCards.Filter ? MenuCards.Default : MenuCards.Filter
-    )
-  }, [isCardOpen])
 
   const handleOrderBy = useCallback(
     (field: string) => {
@@ -81,6 +67,10 @@ const Collaborator: FC = () => {
     [orderBy.field]
   )
 
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
+
   useEffect(() => {
     const allChecked =
       checkboxRefs.current.length > 0 &&
@@ -90,6 +80,16 @@ const Collaborator: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      {modalStatus && (
+        <Modal
+          title='Filtros'
+          size='small'
+          isModalOpen={modalStatus}
+          handleClickOverlay={handleCloseModal}
+        >
+          <FilterCollaborator actionClose={handleCloseModal} />
+        </Modal>
+      )}
       <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-2xl leading-none select-none'>
@@ -105,7 +105,7 @@ const Collaborator: FC = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  onClick={handleClickOverlay}
+                  onClick={() => null}
                 >
                   <Link
                     href='/colaboradores'
@@ -126,13 +126,20 @@ const Collaborator: FC = () => {
               )}
             </AnimatePresence>
 
-            <FilterCollaborator
-              onClick={handleFilterClick}
-              action={handleClickOverlay}
-              title={'Filtrar'}
-              type={'button'}
-              isOpen={isCardOpen}
-            />
+            <button
+              type='button'
+              onClick={handleCloseModal}
+              className={classNames(
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-[--textSecondary] transition-all duration-300 px-4 pr-5'
+              )}
+            >
+              <Funnel
+                size={16}
+                weight='fill'
+                className='text-[--textSecondary]'
+              />
+              <span className='font-medium text-sm'>Filtrar</span>
+            </button>
 
             <Link
               href='/colaboradores/novo'

@@ -1,10 +1,11 @@
 'use client'
-import { Plus, TrashSimple } from '@phosphor-icons/react'
+import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterEquipments } from '@/components/Template/Filter/Equipments'
 
@@ -19,6 +20,7 @@ type Equipment = {
 }
 
 const Equipment: FC = () => {
+  const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: '',
     order: '',
@@ -50,22 +52,6 @@ const Equipment: FC = () => {
     setHasChecked(anyChecked)
   }
 
-  enum MenuCards {
-    Filter,
-    Default,
-  }
-  const [isCardOpen, setCardOpen] = useState(MenuCards.Default)
-
-  const handleClickOverlay = useCallback(() => {
-    setCardOpen(MenuCards.Default)
-  }, [])
-
-  const handleFilterClick = useCallback(() => {
-    setCardOpen(
-      isCardOpen === MenuCards.Filter ? MenuCards.Default : MenuCards.Filter
-    )
-  }, [isCardOpen])
-
   const handleOrderBy = useCallback(
     (field: string) => {
       if (field !== orderBy.field) {
@@ -83,6 +69,10 @@ const Equipment: FC = () => {
     [orderBy.field]
   )
 
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
+
   useEffect(() => {
     const allChecked =
       checkboxRefs.current.length > 0 &&
@@ -92,6 +82,16 @@ const Equipment: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      {modalStatus && (
+        <Modal
+          title='Filtros'
+          size='small'
+          isModalOpen={modalStatus}
+          handleClickOverlay={handleCloseModal}
+        >
+          <FilterEquipments actionClose={handleCloseModal} />
+        </Modal>
+      )}
       <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-2xl leading-none select-none'>
@@ -107,7 +107,7 @@ const Equipment: FC = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  onClick={handleClickOverlay}
+                  onClick={() => null}
                 >
                   <Link
                     href='/equipamentos'
@@ -128,13 +128,20 @@ const Equipment: FC = () => {
               )}
             </AnimatePresence>
 
-            <FilterEquipments
-              onClick={handleFilterClick}
-              action={handleClickOverlay}
-              title={'Filtrar'}
-              type={'button'}
-              isOpen={isCardOpen}
-            />
+            <button
+              type='button'
+              onClick={handleCloseModal}
+              className={classNames(
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-[--textSecondary] transition-all duration-300 px-4 pr-5'
+              )}
+            >
+              <Funnel
+                size={16}
+                weight='fill'
+                className='text-[--textSecondary]'
+              />
+              <span className='font-medium text-sm'>Filtrar</span>
+            </button>
 
             <Link
               href='/equipamentos/novo'

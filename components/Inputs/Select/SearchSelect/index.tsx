@@ -17,6 +17,7 @@ type SearchSelectProps = {
   options: SearchSelectOptionsProps[]
   placeholder?: string
   value?: string | null
+  onChange: (value: string) => void
 }
 
 export function SearchSelect({
@@ -26,6 +27,7 @@ export function SearchSelect({
   options,
   placeholder,
   value = null,
+  onChange,
 }: SearchSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SearchSelectOptionsProps | null>(null)
@@ -70,7 +72,7 @@ export function SearchSelect({
       <div className='relative flex items-center w-full'>
         <Select
           value={selectedOption}
-          onChange={setSelectedOption}
+          onChange={option => onChange(option ? option.value : '')}
           noOptionsMessage={() => ''}
           id={name}
           onMenuOpen={() => setSelectMenuOpen(true)}

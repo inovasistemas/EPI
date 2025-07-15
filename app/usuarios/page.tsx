@@ -1,9 +1,10 @@
 'use client'
-import { Plus, TrashSimple } from '@phosphor-icons/react'
+import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterOperator } from '@/components/Template/Filter/Operator'
 
@@ -17,13 +18,14 @@ type Operator = {
 }
 
 const Operator: FC = () => {
+  const [checkedAll, setCheckedAll] = useState(false)
+  const checkboxRefs = useRef<HTMLInputElement[]>([])
+  const [hasChecked, setHasChecked] = useState(false)
+  const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: '',
     order: '',
   })
-  const [checkedAll, setCheckedAll] = useState(false)
-  const checkboxRefs = useRef<HTMLInputElement[]>([])
-  const [hasChecked, setHasChecked] = useState(false)
   const operators: Operator[] = [
     {
       id: 'us_93d8a0d66ad2494f',
@@ -43,26 +45,14 @@ const Operator: FC = () => {
     },
   ]
 
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
+
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
     setHasChecked(anyChecked)
   }
-
-  enum MenuCards {
-    Filter,
-    Default,
-  }
-  const [isCardOpen, setCardOpen] = useState(MenuCards.Default)
-
-  const handleClickOverlay = useCallback(() => {
-    setCardOpen(MenuCards.Default)
-  }, [])
-
-  const handleFilterClick = useCallback(() => {
-    setCardOpen(
-      isCardOpen === MenuCards.Filter ? MenuCards.Default : MenuCards.Filter
-    )
-  }, [isCardOpen])
 
   const handleOrderBy = useCallback(
     (field: string) => {
@@ -90,6 +80,16 @@ const Operator: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      {modalStatus && (
+        <Modal
+          title='Filtros'
+          size='small'
+          isModalOpen={modalStatus}
+          handleClickOverlay={handleCloseModal}
+        >
+          <FilterOperator actionClose={handleCloseModal} />
+        </Modal>
+      )}
       <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-2xl leading-none select-none'>
@@ -105,7 +105,7 @@ const Operator: FC = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  onClick={handleClickOverlay}
+                  onClick={handleCloseModal}
                 >
                   <Link
                     href='/usuarios'
@@ -127,13 +127,20 @@ const Operator: FC = () => {
               )}
             </AnimatePresence>
 
-            <FilterOperator
-              onClick={handleFilterClick}
-              action={handleClickOverlay}
-              title={'Filtrar'}
-              type={'button'}
-              isOpen={isCardOpen}
-            />
+            <button
+              type='button'
+              onClick={handleCloseModal}
+              className={classNames(
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-[--textSecondary] transition-all duration-300 px-4 pr-5'
+              )}
+            >
+              <Funnel
+                size={16}
+                weight='fill'
+                className='text-[--textSecondary]'
+              />
+              <span className='font-medium text-sm'>Filtrar</span>
+            </button>
 
             <Link
               href='/usuarios/novo'
@@ -214,28 +221,28 @@ const Operator: FC = () => {
               </div>
               <div className='col-span-2 py-3'>
                 <button
-                  onClick={() => handleOrderBy('permission_group')}
+                  onClick={() => handleOrderBy('permissionGroup')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Permissão</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='permission_group'
+                    name='permissionGroup'
                     order={orderBy.order}
                   />
                 </button>
               </div>
               <div className='flex justify-end col-span-2 py-3'>
                 <button
-                  onClick={() => handleOrderBy('created_at')}
+                  onClick={() => handleOrderBy('createdAt')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Criado em</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='created_at'
+                    name='createdAt'
                     order={orderBy.order}
                   />
                 </button>
