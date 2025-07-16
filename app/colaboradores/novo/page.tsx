@@ -121,6 +121,7 @@ const CreateCollaborator: FC = () => {
               ]}
               placeholder='Gênero'
               value={formData.gender}
+              onChange={() => null}
             />
           </div>
 
@@ -141,6 +142,7 @@ const CreateCollaborator: FC = () => {
               ]}
               placeholder='Cargo'
               value={formData.name}
+              onChange={() => null}
             />
 
             <FormInput

@@ -10,10 +10,10 @@ import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
 const CreateEquipment: FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    manufacturer: '',
-    stock: '0',
-    category: '',
+    name: 'Nome 1',
+    manufacturer: 'manufacturer1',
+    stock: '13',
+    category: 'category1',
   })
 
   const handleChange = (name: string, value: string) => {
