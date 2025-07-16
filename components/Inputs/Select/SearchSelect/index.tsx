@@ -83,7 +83,7 @@ export function SearchSelect({
               'mt-4 ': label,
             },
             [
-              'h-[54px] z-50 flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer',
+              'h-[54px] flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer',
             ]
           )}
           placeholder={placeholder}
@@ -126,7 +126,7 @@ export function SearchSelect({
               paddingLeft: '0.5rem',
               paddingRight: '0.5rem',
               fontSize: '1rem',
-              zIndex: 50,
+              zIndex: 200,
               backgroundColor: 'var(--backgroundSecondary)',
               cursor: 'pointer',
             }),
@@ -160,6 +160,7 @@ export function SearchSelect({
               width: '100%',
               fontSize: '1rem',
               height: '100%',
+              zIndex: 1,
             }),
             singleValue: provided => ({
               ...provided,
@@ -170,6 +171,7 @@ export function SearchSelect({
               height: '100%',
               alignItems: 'center',
               display: 'flex',
+              zIndex: 1,
             }),
           }}
         />

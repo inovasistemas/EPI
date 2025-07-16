@@ -1,5 +1,5 @@
 'use client'
-import { HardHat, Key, SquaresFour, Users } from '@phosphor-icons/react'
+import { Key, Shapes, SquaresFour, Users } from '@phosphor-icons/react'
 import { NavLink } from '@/components/Navigation/NavLink'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import useSidebar from '@/lib/context/global'
@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Equipamentos'
             icon={
-              <HardHat
+              <Shapes
                 size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'

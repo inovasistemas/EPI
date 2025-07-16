@@ -24,7 +24,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
   }
 
   const handleFilter = () => {
-    setQueryParam('permissionGroup', filters.permissionGroup)
+    setQueryParam({ permissionGroup: filters.permissionGroup })
     actionClose()
   }
 

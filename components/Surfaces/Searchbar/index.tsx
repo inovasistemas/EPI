@@ -1,5 +1,5 @@
 'use client'
-import { BellSimple, GearSix, SquareHalf } from '@phosphor-icons/react'
+import { BellSimpleRinging, SidebarSimple } from '@phosphor-icons/react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
@@ -49,7 +49,7 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <SquareHalf
+            <SidebarSimple
               size={20}
               weight='fill'
               className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
@@ -68,7 +68,7 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <BellSimple
+              <BellSimpleRinging
                 size={20}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
@@ -89,7 +89,7 @@ const Searchbar: React.FC = () => {
           </MenuCard>
         </div>
 
-        <div className='relative'>
+        {/* <div className='relative'>
           <NavAction
             type='button'
             desktop={true}
@@ -113,9 +113,23 @@ const Searchbar: React.FC = () => {
           >
             <MenuSettings />
           </MenuCard>
-        </div>
+        </div> */}
 
-        <ProfilePicture />
+        <div className='relative'>
+          <button onClick={handleSettingsClick} type='button'>
+            <ProfilePicture />
+          </button>
+
+          <MenuCard
+            handleClickOverlay={handleClickOverlay}
+            isMenuOpen={isCardOpen === SearchbarCards.Settings}
+            margin='mt-[115%]'
+            width='min-w-72'
+            zIndex='z-[60]'
+          >
+            <MenuSettings />
+          </MenuCard>
+        </div>
       </div>
     </div>
   )

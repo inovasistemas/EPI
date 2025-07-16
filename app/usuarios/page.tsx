@@ -3,7 +3,15 @@ import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
-import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import {
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterOperator } from '@/components/Template/Filter/Operator'
@@ -18,6 +26,10 @@ type Operator = {
 }
 
 const Operator: FC = () => {
+  const searchParams = useSearchParams()
+  const permissionGroup = useMemo(() => {
+    return searchParams.get('permissionGroup')
+  }, [searchParams])
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
@@ -300,3 +312,6 @@ const Operator: FC = () => {
 }
 
 export default Operator
+function useNavigation() {
+  throw new Error('Function not implemented.')
+}
