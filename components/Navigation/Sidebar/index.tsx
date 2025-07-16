@@ -1,5 +1,11 @@
 'use client'
-import { Key, Shapes, SquaresFour, Users } from '@phosphor-icons/react'
+import {
+  ChartDonut,
+  Key,
+  Shapes,
+  SquaresFour,
+  Users,
+} from '@phosphor-icons/react'
 import { NavLink } from '@/components/Navigation/NavLink'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import useSidebar from '@/lib/context/global'
@@ -77,6 +83,28 @@ const Sidebar: React.FC = () => {
               />
             }
             href='/usuarios'
+          />
+        </div>
+
+        <div
+          className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+        >
+          <GroupLabel
+            isVisible={isSidebarVisible}
+            label='Relatórios'
+            showFixed={false}
+          />
+
+          <NavLink
+            name='Relatórios'
+            icon={
+              <ChartDonut
+                size={20}
+                weight='fill'
+                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              />
+            }
+            href='/relatorios'
           />
         </div>
       </div>

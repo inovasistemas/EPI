@@ -35,7 +35,7 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
       <h2 className='font-semibold text-2xl text-start'>Filtros</h2>
-      <div className='flex flex-col gap-6 divide-y divide-[--border] w-full'>
+      <div className='flex flex-col gap-6 divide-[--outlinePrimary] divide-y w-full'>
         <div className='items-center grid grid-cols-2 w-full select-none'>
           <div>
             <span className='font-medium'>Fabricante</span>
