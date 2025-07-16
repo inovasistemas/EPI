@@ -187,7 +187,7 @@ export function SearchSelect({
           )}
         >
           <CaretDown
-            size={20}
+            size={18}
             weight='bold'
             className='text-[--textSecondary]'
           />

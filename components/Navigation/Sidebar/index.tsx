@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
             name='Painel'
             icon={
               <SquaresFour
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
             name='Equipamentos'
             icon={
               <Shapes
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
             name='Colaboradores'
             icon={
               <Users
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
@@ -77,7 +77,7 @@ const Sidebar: React.FC = () => {
             name='Usuários'
             icon={
               <Key
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
@@ -99,7 +99,7 @@ const Sidebar: React.FC = () => {
             name='Relatórios'
             icon={
               <ChartDonut
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />

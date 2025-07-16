@@ -1,12 +1,10 @@
 'use client'
-import { CaretLeft } from '@phosphor-icons/react'
-import classNames from 'classnames'
-import Link from 'next/link'
 // import { useParams } from 'next/navigation'
 import { type FC, useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
+import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
@@ -33,19 +31,7 @@ const OperatorDetails: FC = () => {
       <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
-            <Link
-              href='/usuarios'
-              type='button'
-              className={classNames(
-                'active:scale-95 group flex relative justify-center items-center hover:bg-[--backgroundSecondary] bg-[--backgroundPrimary] rounded-lg w-8 h-8 text-zinc-200 transition z-[200]'
-              )}
-            >
-              <CaretLeft
-                size={18}
-                weight='bold'
-                className='text-[--textSecondary]'
-              />
-            </Link>
+            <GoBackButton href='/usuarios' />
 
             <h2 className='font-medium text-2xl leading-none select-none'>
               Detalhes do usuário
@@ -107,6 +93,7 @@ const OperatorDetails: FC = () => {
                 { value: 'operator', label: 'Operador' },
               ]}
               placeholder='Grupo de permissão'
+              onChange={() => null}
             />
           </div>
 

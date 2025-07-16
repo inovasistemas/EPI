@@ -27,10 +27,10 @@ export function PasswordInput({ label, value, onChange }: PasswordInputProps) {
       position='right'
       icon={
         showPassword ? (
-          <Eye size={20} weight='bold' className='text-[--textSecondary]' />
+          <Eye size={18} weight='bold' className='text-[--textSecondary]' />
         ) : (
           <EyeClosed
-            size={20}
+            size={18}
             weight='bold'
             className='text-[--textSecondary]'
           />

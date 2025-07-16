@@ -50,7 +50,7 @@ const Searchbar: React.FC = () => {
           desktop={true}
           icon={
             <SidebarSimple
-              size={20}
+              size={18}
               weight='fill'
               className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
             />
@@ -69,7 +69,7 @@ const Searchbar: React.FC = () => {
             desktop={true}
             icon={
               <BellSimpleRinging
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />
@@ -95,7 +95,7 @@ const Searchbar: React.FC = () => {
             desktop={true}
             icon={
               <GearSix
-                size={20}
+                size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
               />

@@ -80,7 +80,7 @@ export function Modal({
                 className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
               >
                 <X
-                  size={20}
+                  size={18}
                   weight='bold'
                   className='absolute group-hover:opacity-80 text-[--textSecondary] scale-125 sm:scale-100 transition-all duration-300'
                 />
