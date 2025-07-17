@@ -50,8 +50,8 @@ const CollaboratorDetails: FC = () => {
           </div>
         </div>
 
-        <form className='gap-x-4 gap-y-10 grid sm:grid-cols-1 px-6 pb-40 w-full overflow-y-auto'>
-          <div className='gap-4 grid sm:grid-cols-3 w-full'>
+        <form className='gap-x-4 gap-y-10 grid sm:grid-cols-1 w-full overflow-y-auto'>
+          <div className='gap-4 grid sm:grid-cols-3 px-6 w-full'>
             <div className='hidden sm:block relative col-span-full mb-4'>
               <GroupLabel
                 isVisible={true}
@@ -115,7 +115,7 @@ const CollaboratorDetails: FC = () => {
             />
           </div>
 
-          <div className='gap-4 grid grid-cols-2 w-full'>
+          <div className='gap-4 grid grid-cols-2 px-6 w-full'>
             <div className='hidden sm:block relative col-span-full mb-4'>
               <GroupLabel
                 isVisible={true}
@@ -148,7 +148,7 @@ const CollaboratorDetails: FC = () => {
             />
           </div>
 
-          <div className='gap-4 grid grid-cols-3 w-full'>
+          <div className='gap-4 grid grid-cols-3 px-6 w-full'>
             <div className='hidden sm:block relative col-span-full mb-4'>
               <GroupLabel
                 isVisible={true}
@@ -235,7 +235,7 @@ const CollaboratorDetails: FC = () => {
             />
           </div>
 
-          <div className='gap-4 grid sm:grid-cols-2 w-full'>
+          <div className='gap-4 grid sm:grid-cols-2 px-6 w-full'>
             <div className='hidden sm:block relative col-span-full mb-4'>
               <GroupLabel
                 isVisible={true}
@@ -252,7 +252,7 @@ const CollaboratorDetails: FC = () => {
             />
           </div>
 
-          <div className='flex flex-col justify-end items-end gap-1 col-span-full w-full'>
+          <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
             <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
               Criado em 01/01/2023 às 11:41
             </div>

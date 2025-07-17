@@ -39,67 +39,69 @@ const OperatorDetails: FC = () => {
           </div>
         </div>
 
-        <form className='gap-4 grid sm:grid-cols-2 px-6 w-full'>
-          <div className='flex flex-col gap-4 w-full'>
-            <div className='hidden sm:block relative mb-4'>
-              <GroupLabel
-                isVisible={true}
-                label={'Dados do Usuário'}
-                showFixed={true}
+        <form className='flex flex-col gap-x-4 gap-y-10 w-full h-full overflow-y-auto'>
+          <div className='gap-4 grid grid-cols-2 h-full'>
+            <div className='flex flex-col gap-4 px-6 w-full'>
+              <div className='hidden sm:block relative mb-4'>
+                <GroupLabel
+                  isVisible={true}
+                  label={'Dados do Usuário'}
+                  showFixed={true}
+                />
+              </div>
+
+              <FormInput
+                name='name'
+                label='Nome'
+                required={false}
+                type='text'
+                value={formData.name}
+                position='right'
+                onChange={e => handleChange('name', e.target.value)}
+              />
+
+              <FormInput
+                name='mail'
+                label='E-mail'
+                required={false}
+                type='mail'
+                value={formData.email}
+                position='right'
+                onChange={e => handleChange('username', e.target.value)}
+              />
+
+              <PasswordInput
+                label='Senha'
+                value={formData.password}
+                onChange={e => handleChange('password', e.target.value)}
               />
             </div>
 
-            <FormInput
-              name='name'
-              label='Nome'
-              required={false}
-              type='text'
-              value={formData.name}
-              position='right'
-              onChange={e => handleChange('name', e.target.value)}
-            />
+            <div className='flex flex-col gap-4 px-6 w-full'>
+              <div className='hidden sm:block relative mb-4'>
+                <GroupLabel
+                  isVisible={true}
+                  label={'Permissões'}
+                  showFixed={true}
+                />
+              </div>
 
-            <FormInput
-              name='mail'
-              label='E-mail'
-              required={false}
-              type='mail'
-              value={formData.email}
-              position='right'
-              onChange={e => handleChange('username', e.target.value)}
-            />
-
-            <PasswordInput
-              label='Senha'
-              value={formData.password}
-              onChange={e => handleChange('password', e.target.value)}
-            />
-          </div>
-
-          <div className='flex flex-col gap-4 w-full'>
-            <div className='hidden sm:block relative mb-4'>
-              <GroupLabel
-                isVisible={true}
-                label={'Permissões'}
-                showFixed={true}
+              <SearchSelect
+                value={formData.permissionGroup}
+                name='Grupo de permissão'
+                options={[
+                  { value: 'admin', label: 'Administrador' },
+                  { value: 'operator', label: 'Operador' },
+                ]}
+                placeholder='Grupo de permissão'
+                onChange={() => null}
               />
             </div>
 
-            <SearchSelect
-              value={formData.permissionGroup}
-              name='Grupo de permissão'
-              options={[
-                { value: 'admin', label: 'Administrador' },
-                { value: 'operator', label: 'Operador' },
-              ]}
-              placeholder='Grupo de permissão'
-              onChange={() => null}
-            />
-          </div>
-
-          <div className='flex flex-col justify-end items-end gap-1 col-span-full w-full'>
-            <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
-              Criado em 01/01/2023 às 11:41
+            <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
+              <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
+                Criado em 01/01/2023 às 11:41
+              </div>
             </div>
           </div>
 

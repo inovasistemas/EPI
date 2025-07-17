@@ -8,7 +8,7 @@ type ActionGroup = {
 
 export function ActionGroup({ showDelete = false }: ActionGroup) {
   return (
-    <div className='right-0 bottom-0 z-40 absolute flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
+    <div className='bottom-0 z-40 sticky inset-x-0 flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
       {showDelete && (
         <Link
           href='/usuarios'

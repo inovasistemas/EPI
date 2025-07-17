@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface GroupLabelProps {
