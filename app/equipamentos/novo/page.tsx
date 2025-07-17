@@ -4,29 +4,37 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
+import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
 const CreateEquipment: FC = () => {
   const [equipmentData, setEquipmentData] = useState({
-    picture: '',
-    name: '',
-    ean: '',
+    abcClassification: '',
+    additionalCode: '',
+    approvalCertification: '',
+    category: '',
+    composition: '',
     cost: '',
-    price: '',
-    abc_classification: '',
-    manufacturer: '',
-    stockControl: true,
-    stock: '',
-    stockMinimum: '',
-    stockMaximum: '',
+    details: '',
     dimensions: '',
+    disposable: false,
+    ean: '',
+    expirationDate: '',
+    family: '',
+    manufacturer: '',
     measure: 'un',
+    name: '',
+    picture: '',
+    price: '',
+    stock: '',
+    stockControl: true,
+    stockLocation: '',
+    stockMaximum: '',
+    stockMinimum: '',
     weight: '',
     weightMeasure: 'kg',
-    category: '',
-    family: '',
   })
 
   const handleChange = (name: string, value: string) => {
@@ -60,11 +68,25 @@ const CreateEquipment: FC = () => {
               type='button'
               className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg w-8 aspect-square font-medium text-[10px] transition-all duration-300'
             >
-              <TrendUp
-                size={18}
-                weight='bold'
-                className='text-[--textSecondary]'
-              />
+              {equipmentData.abcClassification === 'A' ? (
+                <span className='font-medium text-[--textSecondary] text-base'>
+                  A
+                </span>
+              ) : equipmentData.abcClassification === 'B' ? (
+                <span className='font-medium text-[--textSecondary] text-base'>
+                  B
+                </span>
+              ) : equipmentData.abcClassification === 'C' ? (
+                <span className='font-medium text-[--textSecondary] text-base'>
+                  C
+                </span>
+              ) : (
+                <TrendUp
+                  size={18}
+                  weight='bold'
+                  className='text-[--textSecondary]'
+                />
+              )}
             </button>
           </div>
         </div>
@@ -128,6 +150,27 @@ const CreateEquipment: FC = () => {
                   onChange={() => null}
                 />
               </div>
+
+              <div className='flex items-center'>
+                <div className='flex flex-row items-center gap-1'>
+                  <input
+                    id='disposable'
+                    type='checkbox'
+                    name='disposable'
+                    className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                    checked={equipmentData.disposable}
+                    onChange={e =>
+                      handleChangeBool('disposable', e.target.checked)
+                    }
+                  />
+                  <label
+                    htmlFor='disposable'
+                    className='hidden sm:block top-0 left-0 relative px-1 font-semibold text-[--labelPrimary] text-[10px] uppercase whitespace-nowrap transition-all duration-300 select-none'
+                  >
+                    Não reutilizável
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -153,53 +196,75 @@ const CreateEquipment: FC = () => {
                   </label>
                 </div>
               </div>
-              <AnimatePresence>
-                {equipmentData.stockControl && (
+              <div className='gap-4 grid sm:grid-cols-5 w-full'>
+                <AnimatePresence>
+                  {equipmentData.stockControl && (
+                    <motion.div
+                      key='motion.div'
+                      layout
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      onClick={() => null}
+                      className='gap-4 grid sm:grid-cols-3 col-span-3 w-full'
+                    >
+                      <FormInput
+                        name='stock'
+                        label='Estoque'
+                        required={false}
+                        type='text'
+                        value={equipmentData.stock}
+                        position='right'
+                        onChange={e => handleChange('stock', e.target.value)}
+                      />
+
+                      <FormInput
+                        name='stockMinimum'
+                        label='Estoque mínimo'
+                        required={false}
+                        type='text'
+                        value={equipmentData.stockMinimum}
+                        position='right'
+                        onChange={e =>
+                          handleChange('stockMinimum', e.target.value)
+                        }
+                      />
+
+                      <FormInput
+                        name='stockMaximum'
+                        label='Estoque máximo'
+                        required={false}
+                        type='text'
+                        value={equipmentData.stockMaximum}
+                        position='right'
+                        onChange={e =>
+                          handleChange('stockMaximum', e.target.value)
+                        }
+                      />
+                    </motion.div>
+                  )}
                   <motion.div
-                    key='motion.div'
-                    initial={{ opacity: 0, height: 0, marginTop: -16 }}
-                    animate={{ opacity: 1, height: 'auto', marginTop: 0 }}
-                    exit={{ opacity: 0, height: 0, marginTop: -16 }}
-                    transition={{ duration: 0.15 }}
-                    onClick={() => null}
-                    className='gap-4 grid sm:grid-cols-5 w-full'
+                    layout
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.3 }}
+                    className='col-span-2'
                   >
-                    <FormInput
-                      name='stock'
-                      label='Estoque'
-                      required={false}
-                      type='text'
-                      value={equipmentData.stock}
-                      position='right'
-                      onChange={e => handleChange('stock', e.target.value)}
-                    />
-
-                    <FormInput
-                      name='stockMinimum'
-                      label='Estoque mínimo'
-                      required={false}
-                      type='text'
-                      value={equipmentData.stockMinimum}
-                      position='right'
-                      onChange={e =>
-                        handleChange('stockMinimum', e.target.value)
-                      }
-                    />
-
-                    <FormInput
-                      name='stockMaximum'
-                      label='Estoque máximo'
-                      required={false}
-                      type='text'
-                      value={equipmentData.stockMaximum}
-                      position='right'
-                      onChange={e =>
-                        handleChange('stockMaximum', e.target.value)
-                      }
+                    <SearchSelect
+                      value={equipmentData.stockLocation}
+                      name='stockLocation'
+                      options={[
+                        { value: 'lc1', label: 'Local 1' },
+                        { value: 'lc2', label: 'Local 2' },
+                      ]}
+                      placeholder='Localização'
+                      onChange={() => null}
                     />
                   </motion.div>
-                )}
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             </div>
 
             <div className='gap-4 grid sm:grid-cols-4 w-full'>
@@ -242,7 +307,7 @@ const CreateEquipment: FC = () => {
             </div>
           </div>
 
-          <div className='gap-4 grid sm:grid-cols-3 px-6 w-full'>
+          <div className='gap-4 grid grid-cols-3 px-6 w-full'>
             <div className='hidden sm:block relative col-span-full mb-4'>
               <GroupLabel
                 isVisible={true}
@@ -284,6 +349,67 @@ const CreateEquipment: FC = () => {
               onChange={() => null}
             />
           </div>
+
+          <div className='gap-4 grid grid-cols-2 px-6 w-full'>
+            <div className='hidden sm:block relative col-span-full mb-4'>
+              <GroupLabel
+                isVisible={true}
+                label={'Informações adicionais'}
+                showFixed={true}
+              />
+            </div>
+
+            <TextArea
+              value={equipmentData.details}
+              onChange={e => handleChange('details', e.target.value)}
+              name='details'
+              required={false}
+              label='Detalhes'
+            />
+
+            <TextArea
+              value={equipmentData.composition}
+              onChange={e => handleChange('composition', e.target.value)}
+              name='composition'
+              required={false}
+              label='Composição'
+            />
+
+            <FormInput
+              name='approvalCertification'
+              label='Certificado aprovação'
+              required={false}
+              type='text'
+              value={equipmentData.approvalCertification}
+              position='right'
+              onChange={e =>
+                handleChange('approvalCertification', e.target.value)
+              }
+            />
+
+            <div className='gap-4 grid grid-cols-2'>
+              <FormInput
+                name='additionalCode'
+                label='Código'
+                required={false}
+                type='text'
+                value={equipmentData.additionalCode}
+                position='right'
+                onChange={e => handleChange('additionalCode', e.target.value)}
+              />
+
+              <FormInput
+                name='expirationDate'
+                label='Data expiração'
+                required={false}
+                type='text'
+                value={equipmentData.expirationDate}
+                position='right'
+                onChange={e => handleChange('expirationDate', e.target.value)}
+              />
+            </div>
+          </div>
+
           <ActionGroup />
         </form>
       </div>

@@ -24,7 +24,7 @@ export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
   }
 
   const handleFilter = () => {
-    setQueryParam('jobPosition', filters.jobPosition)
+    setQueryParam({ jobPosition: filters.jobPosition })
     actionClose()
   }
 
