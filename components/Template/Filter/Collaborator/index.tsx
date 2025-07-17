@@ -28,6 +28,10 @@ export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
     actionClose()
   }
 
+  const handleFilterClean = () => {
+    handleFiltersChange('jobPosition', '')
+  }
+
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
       <h2 className='font-semibold text-2xl text-start'>Filtros</h2>
@@ -51,14 +55,14 @@ export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
       </div>
       <div className='flex justify-end gap-3'>
         <button
-          onClick={actionClose}
+          onClick={handleFilterClean}
           type='button'
           className={classNames(
             'select-none active:scale-95 cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--buttonPrimary] rounded-lg h-10 text-white transition-all duration-300 px-4'
           )}
         >
           <span className='font-medium text-[--textSecondary] text-sm'>
-            Cancelar
+            Limpar
           </span>
         </button>
 

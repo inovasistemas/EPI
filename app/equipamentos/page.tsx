@@ -1,10 +1,5 @@
 'use client'
-import {
-  Funnel,
-  MagnifyingGlass,
-  Plus,
-  TrashSimple,
-} from '@phosphor-icons/react'
+import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
@@ -13,6 +8,7 @@ import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterEquipments } from '@/components/Template/Filter/Equipments'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
 type Equipment = {
   id: string
@@ -25,6 +21,8 @@ type Equipment = {
 }
 
 const Equipment: FC = () => {
+  const setQueryParam = useQueryParams()
+  //const [showSearch, setShowSearch] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: '',
@@ -70,8 +68,13 @@ const Equipment: FC = () => {
           order: prev.order === 'asc' ? 'desc' : 'asc',
         }))
       }
+
+      setQueryParam({
+        sortField: field,
+        sortOrder: orderBy.order === 'asc' ? 'desc' : 'asc',
+      })
     },
-    [orderBy.field]
+    [orderBy.field, orderBy.order, setQueryParam]
   )
 
   const handleCloseModal = useCallback(() => {
@@ -132,40 +135,40 @@ const Equipment: FC = () => {
                 </motion.div>
               )}
 
-              {/* <motion.div
-                layout
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 50 }}
-                transition={{ duration: 0.3 }}
-                className='z-50 flex flex-row bg-[--buttonPrimary] rounded-lg'
-              >
-                <motion.div
-                  key='overlay'
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  onClick={() => null}
-                >
-                  <input
-                    type='text'
-                    className='bg-[--buttonPrimary] px-3 pl-5 rounded-lg focus:outline-none h-full text-sm'
-                    placeholder='Digite sua pesquisa'
-                  />
-                </motion.div>
-                <button
-                  type='button'
-                  className={classNames(
-                    'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+              {/* <motion.div className='z-50 flex flex-row justify-end bg-[--buttonPrimary] rounded-lg min-w-10 h-10'>
+                <AnimatePresence mode='wait'>
+                  {showSearch && (
+                    <motion.div
+                      key='search'
+                      initial={{ opacity: 0, scaleX: 0 }}
+                      animate={{ opacity: 1, scaleX: 1 }}
+                      exit={{ opacity: 0, scaleX: 0 }}
+                      transition={{ duration: 0.25, ease: 'easeInOut' }}
+                      style={{ originX: 1 }} // começa da direita
+                      className='w-[18rem] overflow-hidden'
+                    >
+                      <input
+                        type='text'
+                        className='bg-[--buttonPrimary] pl-3 rounded-lg focus:outline-none h-full placeholder:font-medium text-sm'
+                        placeholder='Digite sua pesquisa'
+                      />
+                    </motion.div>
                   )}
-                >
-                  <MagnifyingGlass
-                    size={18}
-                    weight='bold'
-                    className='text-[--textSecondary]'
-                  />
-                </button>
+
+                  <button
+                    onClick={() => setShowSearch(prev => !prev)}
+                    type='button'
+                    className={classNames(
+                      'group select-none z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent rounded-lg h-10 text-white transition-all duration-300 px-[10px]'
+                    )}
+                  >
+                    <MagnifyingGlass
+                      size={18}
+                      weight='bold'
+                      className='text-[--textSecondary]'
+                    />
+                  </button>
+                </AnimatePresence>
               </motion.div> */}
             </AnimatePresence>
 
@@ -200,11 +203,7 @@ const Equipment: FC = () => {
           <ul className='flex flex-col gap-2 px-3'>
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
-                <button
-                  onClick={() => handleOrderBy('name')}
-                  type='button'
-                  className='group flex items-center gap-2 transition-all duration-300'
-                >
+                <div className='group flex items-center gap-2 transition-all duration-300'>
                   <div className='flex items-center h-full'>
                     <input
                       id='checkboxAll'
@@ -212,7 +211,7 @@ const Equipment: FC = () => {
                       name='equipment[]'
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={checkedAll}
-                      onChange={() => {
+                      onChange={e => {
                         const checkboxes = checkboxRefs.current
                         const newValue = !checkedAll
                         checkboxes.forEach(ref => {
@@ -220,18 +219,23 @@ const Equipment: FC = () => {
                         })
                         setCheckedAll(newValue)
                         updateCheckedStatus()
+                        e.stopPropagation()
                       }}
                     />
                   </div>
-                  <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
+                  <button
+                    onClick={() => handleOrderBy('name')}
+                    type='button'
+                    className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'
+                  >
                     <span>Nome</span>
                     <CaretOrder
                       field={orderBy.field}
                       name='name'
                       order={orderBy.order}
                     />
-                  </div>
-                </button>
+                  </button>
+                </div>
               </div>
               <div className='col-span-3 py-3'>
                 <button

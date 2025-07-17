@@ -7,6 +7,7 @@ import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
 type Collaborator = {
   id: string
@@ -18,6 +19,7 @@ type Collaborator = {
 }
 
 const Collaborator: FC = () => {
+  const setQueryParam = useQueryParams()
   const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: '',
@@ -63,8 +65,13 @@ const Collaborator: FC = () => {
           order: prev.order === 'asc' ? 'desc' : 'asc',
         }))
       }
+
+      setQueryParam({
+        sortField: field,
+        sortOrder: orderBy.order === 'asc' ? 'desc' : 'asc',
+      })
     },
-    [orderBy.field]
+    [orderBy.field, orderBy.order, setQueryParam]
   )
 
   const handleCloseModal = useCallback(() => {
@@ -156,12 +163,8 @@ const Collaborator: FC = () => {
         <div className='w-full'>
           <ul className='flex flex-col gap-2 px-3'>
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
-              <div className='grid col-span-3 py-3'>
-                <button
-                  onClick={() => handleOrderBy('name')}
-                  type='button'
-                  className='group flex items-center gap-2 transition-all duration-300'
-                >
+              <div className='grid col-span-5 py-3'>
+                <div className='group flex items-center gap-2 transition-all duration-300'>
                   <div className='flex items-center h-full'>
                     <input
                       id='checkboxAll'
@@ -180,29 +183,19 @@ const Collaborator: FC = () => {
                       }}
                     />
                   </div>
-                  <div className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'>
+                  <button
+                    onClick={() => handleOrderBy('name')}
+                    type='button'
+                    className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'
+                  >
                     <span>Nome</span>
                     <CaretOrder
                       field={orderBy.field}
                       name='name'
                       order={orderBy.order}
                     />
-                  </div>
-                </button>
-              </div>
-              <div className='col-span-2 py-3'>
-                <button
-                  onClick={() => handleOrderBy('code')}
-                  type='button'
-                  className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
-                >
-                  <span>Código</span>
-                  <CaretOrder
-                    field={orderBy.field}
-                    name='code'
-                    order={orderBy.order}
-                  />
-                </button>
+                  </button>
+                </div>
               </div>
               <div className='col-span-3 py-3'>
                 <button
@@ -241,7 +234,7 @@ const Collaborator: FC = () => {
                   <span>Criado em</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='created_at'
+                    name='createdAt'
                     order={orderBy.order}
                   />
                 </button>
@@ -253,7 +246,7 @@ const Collaborator: FC = () => {
                   href={`/colaboradores/detalhes/${collaborator.code}`}
                   className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
                 >
-                  <div className='flex items-center gap-3 col-span-3 py-4 font-medium'>
+                  <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
                     <input
                       ref={el => {
                         if (el) {
@@ -275,11 +268,6 @@ const Collaborator: FC = () => {
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
                     />
                     <span>{collaborator.name}</span>
-                  </div>
-                  <div className='col-span-2 py-4 font-normal'>
-                    <span className='inline-block max-w-[18ch] overflow-hidden text-ellipsis leading-none whitespace-nowrap'>
-                      {collaborator.code}
-                    </span>
                   </div>
                   <div className='col-span-3 py-4 lowercase'>
                     {collaborator.document}
