@@ -1,5 +1,10 @@
 'use client'
-import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
+import {
+  Funnel,
+  MagnifyingGlass,
+  Plus,
+  TrashSimple,
+} from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
@@ -126,6 +131,42 @@ const Equipment: FC = () => {
                   </Link>
                 </motion.div>
               )}
+
+              {/* <motion.div
+                layout
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.3 }}
+                className='z-50 flex flex-row bg-[--buttonPrimary] rounded-lg'
+              >
+                <motion.div
+                  key='overlay'
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  onClick={() => null}
+                >
+                  <input
+                    type='text'
+                    className='bg-[--buttonPrimary] px-3 pl-5 rounded-lg focus:outline-none h-full text-sm'
+                    placeholder='Digite sua pesquisa'
+                  />
+                </motion.div>
+                <button
+                  type='button'
+                  className={classNames(
+                    'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+                  )}
+                >
+                  <MagnifyingGlass
+                    size={18}
+                    weight='bold'
+                    className='text-[--textSecondary]'
+                  />
+                </button>
+              </motion.div> */}
             </AnimatePresence>
 
             <button

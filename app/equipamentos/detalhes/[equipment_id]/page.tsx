@@ -246,7 +246,7 @@ const CreateEquipment: FC = () => {
                   )}
                   <motion.div
                     layout
-                    initial={{ opacity: 0, x: 50 }}
+                    initial={{ opacity: 0, x: 0 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 50 }}
                     transition={{ duration: 0.3 }}
@@ -263,46 +263,62 @@ const CreateEquipment: FC = () => {
                       onChange={() => null}
                     />
                   </motion.div>
+
+                  <motion.div
+                    key='dimensions'
+                    layout
+                    initial={{ opacity: 0, x: 0 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.3 }}
+                    className='col-span-1'
+                  >
+                    <FormInput
+                      name='dimensions'
+                      label='Dimensões'
+                      required={false}
+                      type='text'
+                      value={equipmentData.dimensions}
+                      position='right'
+                      onChange={e => handleChange('dimensions', e.target.value)}
+                    />
+                  </motion.div>
+
+                  <motion.div
+                    className='col-span-2'
+                    key='weight'
+                    layout
+                    initial={{ opacity: 0, x: 0 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 50 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className='gap-4 grid grid-cols-3'>
+                      <div className='col-span-2'>
+                        <FormInput
+                          name='weight'
+                          label='Peso'
+                          required={false}
+                          type='text'
+                          value={equipmentData.weight}
+                          position='right'
+                          onChange={e => handleChange('weight', e.target.value)}
+                        />
+                      </div>
+
+                      <SearchSelect
+                        value={equipmentData.weightMeasure}
+                        name='weightMeasure'
+                        options={[
+                          { value: 'kg', label: 'Kg' },
+                          { value: 'lb', label: 'Lb' },
+                        ]}
+                        placeholder=''
+                        onChange={() => null}
+                      />
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
-              </div>
-            </div>
-
-            <div className='gap-4 grid sm:grid-cols-4 w-full'>
-              <div className='col-span-1'>
-                <FormInput
-                  name='dimensions'
-                  label='Dimensões'
-                  required={false}
-                  type='text'
-                  value={equipmentData.dimensions}
-                  position='right'
-                  onChange={e => handleChange('dimensions', e.target.value)}
-                />
-              </div>
-
-              <div className='gap-3 grid grid-cols-3 col-span-1'>
-                <div className='col-span-2'>
-                  <FormInput
-                    name='weight'
-                    label='Peso'
-                    required={false}
-                    type='text'
-                    value={equipmentData.weight}
-                    position='right'
-                    onChange={e => handleChange('weight', e.target.value)}
-                  />
-                </div>
-
-                <SearchSelect
-                  value={equipmentData.weightMeasure}
-                  name='weightMeasure'
-                  options={[
-                    { value: 'kg', label: 'Kg' },
-                    { value: 'lb', label: 'Lb' },
-                  ]}
-                  placeholder=''
-                  onChange={() => null}
-                />
               </div>
             </div>
           </div>
@@ -410,7 +426,7 @@ const CreateEquipment: FC = () => {
             </div>
           </div>
 
-          <ActionGroup showDelete={true} />
+          <ActionGroup />
         </form>
       </div>
     </div>
