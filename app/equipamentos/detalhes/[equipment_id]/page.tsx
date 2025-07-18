@@ -426,7 +426,7 @@ const CreateEquipment: FC = () => {
             </div>
           </div>
 
-          <ActionGroup />
+          <ActionGroup showDelete={true} />
         </form>
       </div>
     </div>

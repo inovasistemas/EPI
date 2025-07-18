@@ -135,7 +135,7 @@ const Operator: FC = () => {
                     <TrashSimple
                       size={16}
                       weight='fill'
-                      className='text-[--textSecondary] group-hover:text-white'
+                      className='text-[--textSecondary] group-hover:text-white transition-all duration-300'
                     />
 
                     <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
