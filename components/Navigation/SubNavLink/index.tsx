@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import cn from 'classnames'
+import Link from 'next/link'
 
 type SubNavLinkProps = {
   name: string
@@ -18,9 +18,12 @@ export function SubNavLink({
   read,
   variant = 'default',
 }: SubNavLinkProps) {
-  const textClassName = cn('text-[--textSecondary] text-sm line-clamp-2', {
-    'font-medium': variant === 'plain' && read === true,
-  })
+  const textClassName = cn(
+    'font-medium text-[--textSecondary] text-sm line-clamp-2',
+    {
+      'font-normal': read === false,
+    }
+  )
 
   return (
     <Link

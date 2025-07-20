@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --primaryColor: #3483fa;
+  --primaryColor: #027bfc;
   --secondaryColor: #2868c7;
 
   --backgroundPrimary: #ffffff;
-  --backgroundSecondary: #f0f4f8;
+  --backgroundSecondary: #f7f5f3;
 
-  --textPrimary: #3483fa;
-  --textSecondary: #29292e;
+  --textPrimary: #027bfc;
+  --textSecondary: #0a0a0a;
 
   --outlinePrimary: #e6ebf1;
 
   --border: #c5c7c5;
 
   --buttonDisabled: #d4d4d8;
-  --buttonPrimary: #dde3ea;
+  --buttonPrimary: #f7f5f3;
   --buttonSecondary: #ced3da;
 
   --labelPrimary: #71717a;
@@ -26,14 +26,14 @@
   --errorSecondary: #d9d9d9;
   --errorLoader: #ed3a2f;
 
-  --tableRow: #eef1f5;
+  --tableRow: #f6f5f4;
 }
 
 .dark {
   --backgroundPrimary: #282a2c;
   --backgroundSecondary: #1c1c1e;
 
-  --textPrimary: #3483fa;
+  --textPrimary: #027bfc;
   --textSecondary: #c4c4cc;
 
   --outlinePrimary: #3d3d3f;

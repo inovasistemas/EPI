@@ -190,7 +190,7 @@ const Equipment: FC = () => {
             <Link
               href='/equipamentos/novo'
               className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-2 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
               )}
             >
               <Plus size={16} weight='bold' className='text-white' />
@@ -199,11 +199,20 @@ const Equipment: FC = () => {
           </div>
         </div>
 
-        <div className='w-full'>
+        <div className='flex flex-col gap-y-6 w-full'>
+          {/* <div className='grid grid-cols-1 px-3 max-w-96'>
+            <div className='bg-[--tableRow] box-border rounded-xl w-full h-10'>
+              <input
+                type='text'
+                placeholder=''
+                className='bg-transparent px-3 rounded-xl focus:outline-none w-full h-full text-sm'
+              />
+            </div>
+          </div> */}
           <ul className='flex flex-col gap-2 px-3'>
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
-                <div className='group flex items-center gap-2 transition-all duration-300'>
+                <div className='group flex justify-start items-center gap-2 transition-all duration-300'>
                   <div className='flex items-center h-full'>
                     <input
                       id='checkboxAll'
@@ -223,21 +232,33 @@ const Equipment: FC = () => {
                       }}
                     />
                   </div>
+
                   <button
                     onClick={() => handleOrderBy('name')}
                     type='button'
                     className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'
                   >
                     <span>Nome</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name='name'
-                      order={orderBy.order}
-                    />
+                    <div className='min-w-4'>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name='name'
+                        order={orderBy.order}
+                      />
+                    </div>
                   </button>
+
+                  <div className='bg-[--tableRow] box-border rounded-xl w-72 h-10'>
+                    <input
+                      type='text'
+                      placeholder='Digite sua pesquisa'
+                      spellCheck={false}
+                      className='bg-transparent px-3 rounded-xl focus:outline-none w-full h-full placeholder:font-normal text-sm'
+                    />
+                  </div>
                 </div>
               </div>
-              <div className='col-span-3 py-3'>
+              <div className='flex items-center col-span-3 py-3'>
                 <button
                   onClick={() => handleOrderBy('manufacturer')}
                   type='button'
@@ -251,7 +272,7 @@ const Equipment: FC = () => {
                   />
                 </button>
               </div>
-              <div className='col-span-2 py-3'>
+              <div className='flex items-center col-span-2 py-3'>
                 <button
                   onClick={() => handleOrderBy('category')}
                   type='button'
@@ -265,7 +286,7 @@ const Equipment: FC = () => {
                   />
                 </button>
               </div>
-              <div className='flex justify-end col-span-2 py-3'>
+              <div className='flex justify-end items-center col-span-2 py-3'>
                 <button
                   onClick={() => handleOrderBy('stock')}
                   type='button'
@@ -307,7 +328,7 @@ const Equipment: FC = () => {
                       }}
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
                     />
-                    <div className='relative bg-white rounded-lg w-16 aspect-square overflow-hidden'>
+                    <div className='relative bg-[--backgroundPrimary] rounded-lg w-16 aspect-square overflow-hidden'>
                       {equipment.image && (
                         <Image
                           src={equipment.image}

@@ -1,24 +1,21 @@
-import { Door, Key, Moon, User } from '@phosphor-icons/react'
+import { Door, GearSix, Moon } from '@phosphor-icons/react'
 import { SubMenuSelect } from '@/components/Inputs/Select/SubMenuSelect'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 
 export function MenuSettings() {
   return (
-    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-300'>
+    <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-300 select-none'>
       <li className='whitespace-nowrap'>
         <SubNavLink
-          name='Minha conta'
+          name='Configurações'
           icon={
-            <User size={16} weight='fill' className='text-[--textSecondary]' />
+            <GearSix
+              size={16}
+              weight='fill'
+              className='text-[--textSecondary]'
+            />
           }
-          href='/conta'
-        />
-        <SubNavLink
-          name='Usuários e permissões'
-          icon={
-            <Key size={16} weight='fill' className='text-[--textSecondary]' />
-          }
-          href='/usuarios'
+          href='/configuracoes'
         />
         <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--backgroundPrimary] rounded-lg transition-all duration-300'>
           <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-md font-normal whitespace-normal transition-all duration-300 select-none'>
@@ -29,7 +26,9 @@ export function MenuSettings() {
                 className='text-[--textSecondary]'
               />
             </span>
-            <span className='text-[--textSecondary]'>Aparência</span>
+            <span className='font-medium text-[--textSecondary]'>
+              Aparência
+            </span>
           </span>
           <div className='w-full'>
             <SubMenuSelect

@@ -1,5 +1,13 @@
 'use client'
-import { BellSimpleRinging, SidebarSimple } from '@phosphor-icons/react'
+import {
+  BellRinging,
+  BellSimpleRinging,
+  ChatCircleDots,
+  ChatDots,
+  Chats,
+  SidebarSimple,
+  SquareHalf,
+} from '@phosphor-icons/react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
@@ -49,10 +57,10 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <SidebarSimple
+            <SquareHalf
               size={18}
               weight='fill'
-              className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor] -rotate-180'
             />
           }
           mobile={true}
@@ -68,7 +76,7 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <BellSimpleRinging
+              <BellRinging
                 size={18}
                 weight='fill'
                 className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'

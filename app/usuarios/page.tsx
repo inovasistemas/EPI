@@ -164,7 +164,7 @@ const Operator: FC = () => {
             <Link
               href='/usuarios/novo'
               className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-2 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
               )}
             >
               <Plus size={16} weight='bold' className='text-white' />
@@ -202,15 +202,25 @@ const Operator: FC = () => {
                     className='flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300'
                   >
                     <span>Nome</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name='name'
-                      order={orderBy.order}
-                    />
+                    <div className='min-w-4'>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name='name'
+                        order={orderBy.order}
+                      />
+                    </div>
                   </button>
+                  <div className='bg-[--tableRow] box-border flex items-center rounded-xl w-72 h-10'>
+                    <input
+                      type='text'
+                      placeholder='Digite sua pesquisa'
+                      spellCheck={false}
+                      className='bg-transparent px-3 rounded-xl focus:outline-none w-full h-full placeholder:font-normal text-sm'
+                    />
+                  </div>
                 </div>
               </div>
-              <div className='col-span-3 py-3'>
+              <div className='flex items-center col-span-3 py-3'>
                 <button
                   onClick={() => handleOrderBy('username')}
                   type='button'
@@ -224,7 +234,7 @@ const Operator: FC = () => {
                   />
                 </button>
               </div>
-              <div className='col-span-2 py-3'>
+              <div className='flex items-center col-span-2 py-3'>
                 <button
                   onClick={() => handleOrderBy('permissionGroup')}
                   type='button'
@@ -238,7 +248,7 @@ const Operator: FC = () => {
                   />
                 </button>
               </div>
-              <div className='flex justify-end col-span-2 py-3'>
+              <div className='flex justify-end items-center col-span-2 py-3'>
                 <button
                   onClick={() => handleOrderBy('createdAt')}
                   type='button'
