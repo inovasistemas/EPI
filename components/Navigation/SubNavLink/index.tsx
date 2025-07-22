@@ -10,14 +10,7 @@ type SubNavLinkProps = {
   variant?: 'default' | 'plain'
 }
 
-export function SubNavLink({
-  name,
-  icon,
-  href,
-  date,
-  read,
-  variant = 'default',
-}: SubNavLinkProps) {
+export function SubNavLink({ name, icon, href, date, read }: SubNavLinkProps) {
   const textClassName = cn(
     'font-medium text-[--textSecondary] text-sm line-clamp-2',
     {
