@@ -59,7 +59,7 @@ export function SubMenuSelect({
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center rounded-lg']
+        ['group flex items-center rounded-xl']
       )}
     >
       {icon && (
@@ -111,9 +111,9 @@ export function SubMenuSelect({
             menu: provided => ({
               ...provided,
               color: '#fff',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               boxShadow:
-                'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)',
+                '0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
               border: '1px solid var(--outlinePrimary)',
               paddingTop: '0',
               paddingBottom: '0.5rem',

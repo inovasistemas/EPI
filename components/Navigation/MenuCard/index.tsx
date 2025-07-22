@@ -42,7 +42,7 @@ export function MenuCard({
           className={cn([
             margin,
             width,
-            'top-0 right-0 z-[250] absolute bg-[--backgroundSecondary] shadow-md border border-[--outlinePrimary] rounded-xl max-w-80',
+            'top-0 right-0 z-[250] absolute bg-[--backgroundSecondary] shadow-xl border border-[--outlinePrimary] rounded-xl max-w-80',
           ])}
         >
           {children}
