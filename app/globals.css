@@ -3,37 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --primaryColor: #027bfc;
+  --primaryColor: #3280fc;
   --secondaryColor: #2868c7;
 
-  --backgroundPrimary: #ffffff;
-  --backgroundSecondary: #f7f5f3;
+  --backgroundPrimary: #feffff;
+  --backgroundSecondary: #f0f4f8;
 
-  --textPrimary: #027bfc;
+  --textPrimary: #3280fc;
   --textSecondary: #0a0a0a;
 
   --outlinePrimary: #e6ebf1;
 
-  --border: #c5c7c5;
+  --border: #eceded;
 
   --buttonDisabled: #d4d4d8;
-  --buttonPrimary: #f7f5f3;
-  --buttonSecondary: #ced3da;
+  --buttonPrimary: #dde3ea;
+  --buttonSecondary: #cfd3d9;
 
-  --labelPrimary: #71717a;
+  --labelPrimary: #727676;
 
   --error: #e4e4e7;
   --errorSecondary: #d9d9d9;
   --errorLoader: #ed3a2f;
 
-  --tableRow: #f6f5f4;
+  --iconPrimaryColor: #0a0a0a;
+
+  --tableRow: #f0f4f8;
 }
 
 .dark {
   --backgroundPrimary: #282a2c;
-  --backgroundSecondary: #1c1c1e;
+  --backgroundSecondary: #1b1c1d;
 
-  --textPrimary: #027bfc;
+  --textPrimary: #3280fc;
   --textSecondary: #c4c4cc;
 
   --outlinePrimary: #3d3d3f;
@@ -44,11 +46,13 @@
   --buttonPrimary: #3d3f42;
   --buttonSecondary: #4c4e51;
 
-  --labelPrimary: #7c7c8a;
+  --labelPrimary: #727676;
 
   --error: #29292e;
   --errorSecondary: #323238;
   --errorLoader: #ed3a2f;
+
+  --iconPrimaryColor: #a2a9b0;
 
   --tableRow: #37393b;
 }

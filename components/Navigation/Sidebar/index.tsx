@@ -1,11 +1,9 @@
 'use client'
-import {
-  ChartDonut,
-  Key,
-  Shapes,
-  SquaresFour,
-  Users,
-} from '@phosphor-icons/react'
+import { ChartIcon } from '@/components/Display/Icons/Chart'
+import { HomeIcon } from '@/components/Display/Icons/Home'
+import { PackageIcon } from '@/components/Display/Icons/Package'
+import { UserIcon } from '@/components/Display/Icons/User'
+import { UsersIcon } from '@/components/Display/Icons/Users'
 import { NavLink } from '@/components/Navigation/NavLink'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import useSidebar from '@/lib/context/global'
@@ -31,10 +29,9 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Painel'
             icon={
-              <SquaresFour
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <HomeIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             href='/painel'
@@ -52,10 +49,9 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Equipamentos'
             icon={
-              <Shapes
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <PackageIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             href='/equipamentos'
@@ -64,10 +60,9 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Colaboradores'
             icon={
-              <Users
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <UsersIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             href='/colaboradores'
@@ -76,10 +71,9 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Usuários'
             icon={
-              <Key
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <UserIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             href='/usuarios'
@@ -98,10 +92,9 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Relatórios'
             icon={
-              <ChartDonut
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <ChartIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             href='/relatorios'

@@ -1,16 +1,9 @@
 'use client'
-import {
-  BellRinging,
-  BellSimpleRinging,
-  ChatCircleDots,
-  ChatDots,
-  Chats,
-  SidebarSimple,
-  SquareHalf,
-} from '@phosphor-icons/react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
+import { BellIcon } from '@/components/Display/Icons/Bell'
+import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
@@ -57,10 +50,9 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <SquareHalf
-              size={18}
-              weight='fill'
-              className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor] -rotate-180'
+            <SidebarIcon
+              size='size-5'
+              stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
             />
           }
           mobile={true}
@@ -76,10 +68,9 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <BellRinging
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <BellIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             mobile={true}

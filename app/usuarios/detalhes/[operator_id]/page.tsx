@@ -33,7 +33,7 @@ const OperatorDetails: FC = () => {
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/usuarios' />
 
-            <h2 className='font-medium text-2xl leading-none select-none'>
+            <h2 className='font-medium text-xl leading-none select-none'>
               Detalhes do usuário
             </h2>
           </div>

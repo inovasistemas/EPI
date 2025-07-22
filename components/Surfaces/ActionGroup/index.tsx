@@ -1,6 +1,7 @@
-import { FloppyDiskBack, TrashSimple } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import Link from 'next/link'
+import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
 
 type ActionGroup = {
   showDelete?: boolean
@@ -16,11 +17,12 @@ export function ActionGroup({ showDelete = false }: ActionGroup) {
             'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
           )}
         >
-          <TrashSimple
-            size={16}
-            weight='fill'
-            className='text-[--textSecondary] group-hover:text-white transition-all duration-300'
+          <TrashIcon
+            size='size-4'
+            stroke='stroke-[--textSecondary] group-hover:stroke-white'
+            strokeWidth={2.5}
           />
+
           <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
             Excluir
           </span>
@@ -44,7 +46,11 @@ export function ActionGroup({ showDelete = false }: ActionGroup) {
             'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
           )}
         >
-          <FloppyDiskBack size={16} weight='fill' className='text-white' />
+          <FloppyDiskIcon
+            size='size-4'
+            stroke='stroke-white'
+            strokeWidth={2.5}
+          />
           <span className='font-medium text-white text-sm'>Salvar</span>
         </Link>
       </div>

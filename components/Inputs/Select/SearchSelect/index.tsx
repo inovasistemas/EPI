@@ -1,9 +1,9 @@
 'use client'
-import { CaretDown } from '@phosphor-icons/react'
 import cn from 'classnames'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
+import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
 
 type SearchSelectOptionsProps = {
   value: string
@@ -49,9 +49,6 @@ export function SearchSelect({
     return null
   }
 
-  if (label) {
-  }
-
   return (
     <div
       className={cn(
@@ -59,7 +56,7 @@ export function SearchSelect({
           'grid-cols-2 relative': icon,
         },
         [
-          'group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
+          'max-h-[54px] group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
         ]
       )}
     >
@@ -80,11 +77,9 @@ export function SearchSelect({
           options={options}
           className={cn(
             {
-              'mt-4 ': label,
+              'mt-0': label,
             },
-            [
-              'h-[54px] flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer',
-            ]
+            'h-[54px] flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer'
           )}
           placeholder={placeholder}
           components={{
@@ -172,6 +167,7 @@ export function SearchSelect({
               alignItems: 'center',
               display: 'flex',
               zIndex: 1,
+              boxSizing: 'border-box',
             }),
           }}
         />
@@ -186,11 +182,7 @@ export function SearchSelect({
             ]
           )}
         >
-          <CaretDown
-            size={18}
-            weight='bold'
-            className='text-[--textSecondary]'
-          />
+          <CaretDownIcon size='size-5' stroke='stroke-[--textSecondary]' />
         </span>
 
         {label && (

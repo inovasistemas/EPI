@@ -1,7 +1,6 @@
 'use client'
 import { motion } from 'framer-motion'
-import { useRef, useEffect } from 'react'
-import { WarningCircle } from '@phosphor-icons/react'
+import { useEffect, useRef } from 'react'
 
 type CustomAlertProps = {
   text: string
@@ -10,7 +9,7 @@ type CustomAlertProps = {
   action: () => void
 }
 
-export function CustomAlert({ text, link, state, action }: CustomAlertProps) {
+export function CustomAlert({ text, state, action }: CustomAlertProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleClick = () => {
@@ -25,14 +24,14 @@ export function CustomAlert({ text, link, state, action }: CustomAlertProps) {
 
     timeoutRef.current = setTimeout(() => {
       action()
-    }, 7000)
+    }, 10000)
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [state])
+  }, [state, action])
 
   return (
     <motion.button
@@ -41,16 +40,10 @@ export function CustomAlert({ text, link, state, action }: CustomAlertProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       onClick={handleClick}
-      className='group top-0 right-0 z-50 absolute flex flex-col items-center gap-3 bg-[--error] m-3 rounded-md w-auto max-w-[75%] overflow-hidden text-[--textSecondary] text-sm'
+      className='group top-0 right-0 z-50 absolute flex flex-col items-center gap-3 bg-[--buttonPrimary] m-3 rounded-md w-auto max-w-[75%] overflow-hidden text-[--textSecondary] text-sm'
     >
       <div className='relative w-full'>
         <div className='flex flex-row justify-start items-center gap-3 px-4 py-3 pr-5'>
-          <WarningCircle
-            size={16}
-            weight='bold'
-            className='text-[--errorLoader]'
-          />
-
           <span>{text}</span>
         </div>
 
@@ -60,7 +53,7 @@ export function CustomAlert({ text, link, state, action }: CustomAlertProps) {
             key={text}
             initial={{ width: '100%' }}
             animate={{ width: '0%' }}
-            transition={{ duration: 7 }}
+            transition={{ duration: 10 }}
             className='bottom-0 left-0 absolute bg-[--errorLoader] w-full h-0.5'
           ></motion.div>
         </div>

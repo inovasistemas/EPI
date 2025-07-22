@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      <div className='flex flex-col gap-6 bg-[--backgroundPrimary] p-6 sm:rounded-xl w-full h-full'>
+      <div className='flex flex-col gap-6 bg-[--backgroundPrimary] p-6 sm:rounded-2xl w-full h-full'>
         {/* <button
           type='button'
           className='flex flex-row items-center bg-[--errorLoader] px-3 py-2 rounded-md w-full transition-all duration-300'

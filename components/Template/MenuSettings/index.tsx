@@ -1,4 +1,6 @@
-import { Door, GearSix, Moon } from '@phosphor-icons/react'
+import { LogoutIcon } from '@/components/Display/Icons/Logout'
+import { MoonIcon } from '@/components/Display/Icons/Moon'
+import { SettingsIcon } from '@/components/Display/Icons/Settings'
 import { SubMenuSelect } from '@/components/Inputs/Select/SubMenuSelect'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 
@@ -9,22 +11,14 @@ export function MenuSettings() {
         <SubNavLink
           name='Configurações'
           icon={
-            <GearSix
-              size={16}
-              weight='fill'
-              className='text-[--textSecondary]'
-            />
+            <SettingsIcon size='size-5' stroke='stroke-[--textSecondary]' />
           }
           href='/configuracoes'
         />
         <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--backgroundPrimary] rounded-lg transition-all duration-300'>
           <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-md font-normal whitespace-normal transition-all duration-300 select-none'>
             <span>
-              <Moon
-                size={16}
-                weight='fill'
-                className='text-[--textSecondary]'
-              />
+              <MoonIcon size='size-5' stroke='stroke-[--textSecondary]' />
             </span>
             <span className='font-medium text-[--textSecondary]'>
               Aparência
@@ -43,9 +37,7 @@ export function MenuSettings() {
         </div>
         <SubNavLink
           name='Sair'
-          icon={
-            <Door size={16} weight='fill' className='text-[--textSecondary]' />
-          }
+          icon={<LogoutIcon size='size-5' stroke='stroke-[--textSecondary]' />}
           href='/sair'
         />
       </li>

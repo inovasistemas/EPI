@@ -1,6 +1,6 @@
 'use client'
-import { ShieldCheck } from '@phosphor-icons/react'
 import { type FC, useCallback, useState } from 'react'
+import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Modal } from '@/components/Display/Modal'
 import { LoginForm } from '@/components/Template/LoginForm'
 import { Privacy } from '../Terms/Privacy'
@@ -26,11 +26,12 @@ const Login: FC = () => {
         <div className='relative flex justify-center items-center bg-[--backgroundPrimary] rounded-xl w-full h-full'>
           <LoginForm />
           <div className='bottom-0 absolute flex justify-center items-center gap-2 mb-6 p-3 w-full text-[--textSecondary] text-xs'>
-            <ShieldCheck
-              size={14}
-              weight='fill'
-              className='text-[--textSecondary]'
+            <LockIcon
+              size='size-3'
+              stroke='stroke-[--textSecondary]'
+              strokeWidth={2.5}
             />
+
             <p>
               Ao fazer login, você concorda com nossa{' '}
               <button

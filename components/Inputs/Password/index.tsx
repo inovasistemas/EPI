@@ -1,5 +1,6 @@
-import { Eye, EyeClosed } from '@phosphor-icons/react'
 import { useState } from 'react'
+import { ViewIcon } from '@/components/Display/Icons/View'
+import { ViewOffIcon } from '@/components/Display/Icons/ViewOff'
 import { FormInput } from '../Text/FormInput'
 
 type PasswordInputProps = {
@@ -27,13 +28,9 @@ export function PasswordInput({ label, value, onChange }: PasswordInputProps) {
       position='right'
       icon={
         showPassword ? (
-          <Eye size={18} weight='bold' className='text-[--textSecondary]' />
+          <ViewIcon size='size-5' stroke='stroke-[--textSecondary]' />
         ) : (
-          <EyeClosed
-            size={18}
-            weight='bold'
-            className='text-[--textSecondary]'
-          />
+          <ViewOffIcon size='size-5' stroke='stroke-[--textSecondary]' />
         )
       }
       actionButton={handleShowPassword}

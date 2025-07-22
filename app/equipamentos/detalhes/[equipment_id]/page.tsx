@@ -1,7 +1,8 @@
 'use client'
-import { Image, TrendUp } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useState } from 'react'
+import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
+import { ImageIcon } from '@/components/Display/Icons/Image'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -58,7 +59,7 @@ const CreateEquipment: FC = () => {
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/equipamentos' />
 
-            <h2 className='font-medium text-2xl leading-none select-none'>
+            <h2 className='font-medium text-xl leading-none select-none'>
               Detalhes do equipamento
             </h2>
           </div>
@@ -81,10 +82,9 @@ const CreateEquipment: FC = () => {
                   C
                 </span>
               ) : (
-                <TrendUp
-                  size={18}
-                  weight='bold'
-                  className='text-[--textSecondary]'
+                <ChartLineIcon
+                  size='size-5'
+                  stroke='stroke-[--textSecondary]'
                 />
               )}
             </button>
@@ -98,10 +98,10 @@ const CreateEquipment: FC = () => {
                 type='button'
                 className='flex justify-center items-center bg-[--backgroundSecondary] hover:opacity-70 border-[--border] border-2 border-dashed rounded-2xl w-32 aspect-square transition-all duration-300'
               >
-                <Image
-                  size={38}
-                  weight='regular'
-                  className='opacity-50 text-[--textSecondary] select-none'
+                <ImageIcon
+                  size='size-10'
+                  stroke='stroke-[--buttonSecondary]'
+                  strokeWidth={1.5}
                 />
               </button>
             </div>
@@ -149,27 +149,6 @@ const CreateEquipment: FC = () => {
                   placeholder='Unidade medida'
                   onChange={() => null}
                 />
-              </div>
-
-              <div className='flex items-center'>
-                <div className='flex flex-row items-center gap-1'>
-                  <input
-                    id='disposable'
-                    type='checkbox'
-                    name='disposable'
-                    className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                    checked={equipmentData.disposable}
-                    onChange={e =>
-                      handleChangeBool('disposable', e.target.checked)
-                    }
-                  />
-                  <label
-                    htmlFor='disposable'
-                    className='hidden sm:block top-0 left-0 relative px-1 font-semibold text-[--labelPrimary] text-[10px] uppercase whitespace-nowrap transition-all duration-300 select-none'
-                  >
-                    Não reutilizável
-                  </label>
-                </div>
               </div>
             </div>
           </div>

@@ -1,4 +1,6 @@
-import { CaretDown, CaretUp, CaretUpDown } from '@phosphor-icons/react'
+import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
+import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
+import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
 
 type CaretOrderProps = {
   field: string
@@ -9,11 +11,23 @@ type CaretOrderProps = {
 export function CaretOrder({ field, name, order }: CaretOrderProps) {
   return field === name ? (
     order === 'asc' ? (
-      <CaretDown size={13} weight='bold' className='text-[--textSecondary]' />
+      <CaretDownIcon
+        size='size-4'
+        stroke='stroke-[--textSecondary]'
+        strokeWidth={2.5}
+      />
     ) : (
-      <CaretUp size={13} weight='bold' className='text-[--textSecondary]' />
+      <CaretUpIcon
+        size='size-4'
+        stroke='stroke-[--textSecondary]'
+        strokeWidth={2.5}
+      />
     )
   ) : (
-    <CaretUpDown size={16} weight='bold' className='text-[--textSecondary]' />
+    <CaretUpDownIcon
+      size='size-4'
+      stroke='stroke-[--textSecondary]'
+      strokeWidth={2.5}
+    />
   )
 }

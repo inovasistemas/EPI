@@ -1,6 +1,4 @@
 'use client'
-import { Funnel, Plus, TrashSimple } from '@phosphor-icons/react'
-import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -12,7 +10,14 @@ import {
   useRef,
   useState,
 } from 'react'
+import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { AddIcon } from '@/components/Display/Icons/Add'
+import { FilterIcon } from '@/components/Display/Icons/Filter'
+import { SearchIcon } from '@/components/Display/Icons/Search'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { Modal } from '@/components/Display/Modal'
+import { PrimaryLink } from '@/components/Links/PrimaryLink'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterOperator } from '@/components/Template/Filter/Operator'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
@@ -109,9 +114,9 @@ const Operator: FC = () => {
           <FilterOperator actionClose={handleCloseModal} />
         </Modal>
       )}
-      <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
+      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
-          <h2 className='font-medium text-2xl leading-none select-none'>
+          <h2 className='font-medium text-xl leading-none select-none'>
             Usuários
           </h2>
 
@@ -126,51 +131,61 @@ const Operator: FC = () => {
                   transition={{ duration: 0.15 }}
                   onClick={handleCloseModal}
                 >
-                  <Link
-                    href='/usuarios'
-                    className={classNames(
-                      'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
-                    )}
-                  >
-                    <TrashSimple
-                      size={16}
-                      weight='fill'
-                      className='text-[--textSecondary] group-hover:text-white transition-all duration-300'
-                    />
-
-                    <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
-                      Excluir
-                    </span>
-                  </Link>
+                  <DestructiveButton
+                    label='Excluir'
+                    icon={
+                      <TrashIcon
+                        size='size-4'
+                        stroke='stroke-[--textSecondary] group-hover:stroke-white'
+                        strokeWidth={2.5}
+                      />
+                    }
+                    onClick={() => null}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <button
-              type='button'
-              onClick={handleCloseModal}
-              className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg h-10 text-[--textSecondary] transition-all duration-300 px-4 pr-5'
-              )}
-            >
-              <Funnel
-                size={16}
-                weight='fill'
-                className='text-[--textSecondary]'
-              />
-              <span className='font-medium text-sm'>Filtrar</span>
-            </button>
-
-            <Link
+            <PrimaryLink
+              label='Adicionar'
+              icon={
+                <AddIcon
+                  size='size-4'
+                  fill='fill-white group-data-[active=true]:fill-[--primaryColor]'
+                />
+              }
               href='/usuarios/novo'
-              className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-2 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-4 pr-5'
-              )}
-            >
-              <Plus size={16} weight='bold' className='text-white' />
-              <span className='font-medium text-sm'>Adicionar</span>
-            </Link>
+            />
           </div>
+        </div>
+
+        <div className='flex flex-row items-center gap-3 px-6 w-1/2'>
+          <div className='bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-lg w-full h-10 transition-all duration-300'>
+            <div className='flex'>
+              <SearchIcon
+                size='size-4'
+                stroke='stroke-[--textSecondary]'
+                strokeWidth={2.5}
+              />
+            </div>
+            <input
+              type='text'
+              placeholder=''
+              spellCheck={false}
+              className='bg-transparent pr-3 pl-1 rounded-xl focus:outline-none w-full h-full placeholder:font-normal font-medium text-sm'
+            />
+          </div>
+          <SecondaryButton
+            label='Filtrar'
+            icon={
+              <FilterIcon
+                size='size-4'
+                stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                strokeWidth={2.5}
+              />
+            }
+            onClick={handleCloseModal}
+          />
         </div>
 
         <div className='w-full'>
@@ -210,14 +225,6 @@ const Operator: FC = () => {
                       />
                     </div>
                   </button>
-                  <div className='bg-[--tableRow] box-border flex items-center rounded-xl w-72 h-10'>
-                    <input
-                      type='text'
-                      placeholder='Digite sua pesquisa'
-                      spellCheck={false}
-                      className='bg-transparent px-3 rounded-xl focus:outline-none w-full h-full placeholder:font-normal text-sm'
-                    />
-                  </div>
                 </div>
               </div>
               <div className='flex items-center col-span-3 py-3'>

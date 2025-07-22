@@ -1,5 +1,4 @@
 'use client'
-import { Plus } from '@phosphor-icons/react'
 import { type FC, useCallback, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
@@ -37,17 +36,6 @@ const Settings: FC = () => {
           <h2 className='font-medium text-2xl leading-none select-none'>
             Configurações
           </h2>
-        </div>
-
-        <div className='flex flex-row justify-between px-6 w-full'>
-          <div className='font-medium text-lg'>Grupo de permissões</div>
-          <button
-            type='button'
-            className='group z-[55] relative flex justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 pr-5 rounded-lg h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-          >
-            <Plus size={16} weight='bold' className='text-white' />
-            <span className='font-medium text-sm'>Adicionar</span>
-          </button>
         </div>
 
         <div className='px-6 w-full'>

@@ -1,0 +1,26 @@
+import classNames from 'classnames'
+
+type ChartIconProps = {
+  size: string
+  stroke: string
+}
+
+export function ChartIcon({ size, stroke }: ChartIconProps) {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width={24}
+      height={24}
+      viewBox='0 0 24 24'
+      className={classNames(size, 'fill-none transition-all duration-300')}
+    >
+      <title>ChartIcon</title>
+      <path
+        d='M11.024 22c4.3 0 7.898-3.008 8.804-7.034.186-.825.278-1.237-.023-1.614-.3-.376-.788-.376-1.762-.376h-7.019m0 9.024a9.024 9.024 0 01-1.99-17.828c.825-.185 1.237-.278 1.614.023.376.3.376.788.376 1.762v7.019m0 9.024v-9.024M21.554 7.026a8.142 8.142 0 00-4.58-4.58c-1.096-.432-1.643-.647-2.309-.194C14 2.705 14 3.446 14 4.927v2.03c0 1.434 0 2.152.446 2.597.445.446 1.163.446 2.598.446h2.029c1.481 0 2.222 0 2.675-.665.453-.666.237-1.213-.194-2.309z'
+        className={classNames(stroke, 'transition-all duration-300')}
+        strokeWidth={2}
+        strokeLinejoin='round'
+      />
+    </svg>
+  )
+}

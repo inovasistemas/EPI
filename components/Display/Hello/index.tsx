@@ -1,12 +1,5 @@
 'use client'
 import useUser from '@/lib/context/user'
-import { NavAction } from '@/components/Inputs/Button/NavAction'
-import {
-  ArrowsClockwise,
-  ArrowsDownUp,
-  CaretUpDown,
-  Swap,
-} from '@phosphor-icons/react'
 
 export function Hello() {
   const storeName = useUser(state => state.store_name)

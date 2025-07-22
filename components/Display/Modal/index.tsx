@@ -1,7 +1,7 @@
-import { X } from '@phosphor-icons/react'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { CloseIcon } from '@/components/Display/Icons/Close'
 
 type ModalProps = {
   title: string
@@ -51,7 +51,7 @@ export function Modal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={handleClickOverlay}
-            className='top-0 left-0 z-[60] fixed bg-black/30 w-screen h-screen'
+            className='top-0 left-0 z-[60] fixed bg-black/30 w-screen h-screen pointer-events-auto'
           />
           <motion.div
             initial={{ y: '-40%', opacity: 0 }}
@@ -79,10 +79,10 @@ export function Modal({
                 onClick={handleClickOverlay}
                 className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
               >
-                <X
-                  size={18}
-                  weight='bold'
-                  className='absolute group-hover:opacity-80 text-[--textSecondary] scale-125 sm:scale-100 transition-all duration-300'
+                <CloseIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary]'
+                  strokeWidth={2.5}
                 />
               </button>
             </div>
