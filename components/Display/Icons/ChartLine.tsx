@@ -17,7 +17,7 @@ export function ChartLineIcon({ size, stroke }: ChartLineIconProps) {
       <title>ChartIcon</title>
       <path
         d='M21 21H10c-3.3 0-4.95 0-5.975-1.025C3 18.95 3 17.3 3 14V3'
-        stroke='#000'
+        className={classNames(stroke, 'transition-all duration-300')}
         strokeWidth={2}
         strokeLinecap='round'
       />
