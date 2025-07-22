@@ -35,7 +35,7 @@ export function SubNavLink({
           {date}
           {read && (
             <div
-              className='bg-blue-500 rounded-full w-2 h-2'
+              className='bg-[--primaryColor] rounded-full w-2 h-2'
               aria-hidden='true'
             ></div>
           )}

@@ -68,10 +68,13 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <BellIcon
-                size='size-5'
-                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-              />
+              <span className='relative'>
+                <BellIcon
+                  size='size-5'
+                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                />
+                <span className='top-0 right-0 absolute flex justify-center items-center bg-[--primaryColor] rounded-full w-2 h-2'></span>
+              </span>
             }
             mobile={true}
             action={handleNotificationsClick}
