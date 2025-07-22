@@ -5,11 +5,11 @@ import { useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
-type FilterCollaboratorProps = {
+type FilterColaboratorProps = {
   actionClose: () => void
 }
 
-export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
+export function FilterColaborator({ actionClose }: FilterColaboratorProps) {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [filters, setFilters] = useState({

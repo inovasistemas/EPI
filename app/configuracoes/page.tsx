@@ -1,7 +1,7 @@
 'use client'
 import { type FC, useCallback, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
-import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
+import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
 
 type SettingsProps = {
   id: string
@@ -28,7 +28,7 @@ const Settings: FC = () => {
           isModalOpen={modalStatus}
           handleClickOverlay={handleCloseModal}
         >
-          <FilterCollaborator actionClose={handleCloseModal} />
+          <FilterColaborator actionClose={handleCloseModal} />
         </Modal>
       )}
       <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>

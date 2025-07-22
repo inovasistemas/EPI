@@ -10,9 +10,9 @@ import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
 const OperatorDetails: FC = () => {
   // const params = useParams()
-  // const CollaboratorId = params?.Collaborator_id
+  // const ColaboratorId = params?.colaborator_id
 
-  const [formData, setFormData] = useState({
+  const [operatorData, setOperatorData] = useState({
     name: 'João Felipe Gomes',
     email: 'teste@inovasistemas.com.br',
     password: '123456',
@@ -20,7 +20,7 @@ const OperatorDetails: FC = () => {
   })
 
   const handleChange = (name: string, value: string) => {
-    setFormData(prev => ({
+    setOperatorData(prev => ({
       ...prev,
       [name]: value,
     }))
@@ -34,7 +34,7 @@ const OperatorDetails: FC = () => {
             <GoBackButton href='/usuarios' />
 
             <h2 className='font-medium text-xl leading-none select-none'>
-              Detalhes do usuário
+              {operatorData.name ? operatorData.name : 'Detalhes do usuário'}
             </h2>
           </div>
         </div>
@@ -55,7 +55,7 @@ const OperatorDetails: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={formData.name}
+                value={operatorData.name}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
               />
@@ -65,14 +65,14 @@ const OperatorDetails: FC = () => {
                 label='E-mail'
                 required={false}
                 type='mail'
-                value={formData.email}
+                value={operatorData.email}
                 position='right'
                 onChange={e => handleChange('username', e.target.value)}
               />
 
               <PasswordInput
                 label='Senha'
-                value={formData.password}
+                value={operatorData.password}
                 onChange={e => handleChange('password', e.target.value)}
               />
             </div>
@@ -87,7 +87,7 @@ const OperatorDetails: FC = () => {
               </div>
 
               <SearchSelect
-                value={formData.permissionGroup}
+                value={operatorData.permissionGroup}
                 name='Grupo de permissão'
                 options={[
                   { value: 'admin', label: 'Administrador' },

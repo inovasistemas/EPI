@@ -8,11 +8,11 @@ import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
-const CollaboratorDetails: FC = () => {
+const ColaboratorDetails: FC = () => {
   const params = useParams()
-  const CollaboratorId = params?.Collaborator_id
+  const ColaboratorId = params?.colaborator_id
 
-  const [formData, setFormData] = useState({
+  const [colaboratorData, setColaboratorData] = useState({
     name: 'João Felipe Gomes',
     birthdate: '05/04/1997',
     rg: '37.349.666-7',
@@ -31,7 +31,7 @@ const CollaboratorDetails: FC = () => {
   })
 
   const handleChange = (name: string, value: string) => {
-    setFormData(prev => ({
+    setColaboratorData(prev => ({
       ...prev,
       [name]: value,
     }))
@@ -45,7 +45,9 @@ const CollaboratorDetails: FC = () => {
             <GoBackButton href='/colaboradores' />
 
             <h2 className='font-medium text-xl leading-none select-none'>
-              Detalhes do colaborador
+              {colaboratorData.name
+                ? colaboratorData.name
+                : 'Detalhes do colaborador'}
             </h2>
           </div>
         </div>
@@ -66,7 +68,7 @@ const CollaboratorDetails: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={formData.name}
+                value={colaboratorData.name}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
               />
@@ -77,7 +79,7 @@ const CollaboratorDetails: FC = () => {
               label='Data de nascimento'
               required={false}
               type='text'
-              value={formData.birthdate}
+              value={colaboratorData.birthdate}
               position='right'
               onChange={e => handleChange('birthdate', e.target.value)}
             />
@@ -87,7 +89,7 @@ const CollaboratorDetails: FC = () => {
               label='RG'
               required={false}
               type='text'
-              value={formData.rg}
+              value={colaboratorData.rg}
               position='right'
               onChange={e => handleChange('rg', e.target.value)}
             />
@@ -97,14 +99,14 @@ const CollaboratorDetails: FC = () => {
               label='CPF'
               required={false}
               type='text'
-              value={formData.cpf}
+              value={colaboratorData.cpf}
               position='right'
               onChange={e => handleChange('cpf', e.target.value)}
             />
 
             <SearchSelect
               name='gender'
-              value={formData.gender}
+              value={colaboratorData.gender}
               options={[
                 { value: 'female', label: 'Feminino' },
                 { value: 'male', label: 'Masculino' },
@@ -125,7 +127,7 @@ const CollaboratorDetails: FC = () => {
             </div>
 
             <SearchSelect
-              value={formData.cargo}
+              value={colaboratorData.cargo}
               name='cargo'
               options={[
                 {
@@ -142,7 +144,7 @@ const CollaboratorDetails: FC = () => {
               label='Data de admissão'
               required={false}
               type='text'
-              value={formData.admissionDate}
+              value={colaboratorData.admissionDate}
               position='right'
               onChange={e => handleChange('admissionDate', e.target.value)}
             />
@@ -162,7 +164,7 @@ const CollaboratorDetails: FC = () => {
               label='CEP'
               required={false}
               type='text'
-              value={formData.zipCode}
+              value={colaboratorData.zipCode}
               position='right'
               onChange={e => handleChange('zipCode', e.target.value)}
             />
@@ -174,7 +176,7 @@ const CollaboratorDetails: FC = () => {
                   label='Endereço'
                   required={false}
                   type='text'
-                  value={formData.address}
+                  value={colaboratorData.address}
                   position='right'
                   onChange={e => handleChange('address', e.target.value)}
                 />
@@ -185,7 +187,7 @@ const CollaboratorDetails: FC = () => {
                 label='Número'
                 required={false}
                 type='text'
-                value={formData.number}
+                value={colaboratorData.number}
                 position='right'
                 onChange={e => handleChange('number', e.target.value)}
               />
@@ -196,7 +198,7 @@ const CollaboratorDetails: FC = () => {
               label='Bairro'
               required={false}
               type='text'
-              value={formData.neighborhood}
+              value={colaboratorData.neighborhood}
               position='right'
               onChange={e => handleChange('neighborhood', e.target.value)}
             />
@@ -208,7 +210,7 @@ const CollaboratorDetails: FC = () => {
                   label='Cidade'
                   required={false}
                   type='text'
-                  value={formData.city}
+                  value={colaboratorData.city}
                   position='right'
                   onChange={e => handleChange('city', e.target.value)}
                 />
@@ -218,7 +220,7 @@ const CollaboratorDetails: FC = () => {
                 label='UF'
                 required={false}
                 type='text'
-                value={formData.state}
+                value={colaboratorData.state}
                 position='right'
                 onChange={e => handleChange('state', e.target.value)}
               />
@@ -229,7 +231,7 @@ const CollaboratorDetails: FC = () => {
               label='Telefone'
               required={false}
               type='text'
-              value={formData.phone}
+              value={colaboratorData.phone}
               position='right'
               onChange={e => handleChange('phone', e.target.value)}
             />
@@ -244,7 +246,7 @@ const CollaboratorDetails: FC = () => {
               />
             </div>
             <TextArea
-              value={formData.observations}
+              value={colaboratorData.observations}
               onChange={e => handleChange('observations', e.target.value)}
               name='observations'
               required={false}
@@ -265,4 +267,4 @@ const CollaboratorDetails: FC = () => {
   )
 }
 
-export default CollaboratorDetails
+export default ColaboratorDetails

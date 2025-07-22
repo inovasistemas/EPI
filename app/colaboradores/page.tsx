@@ -11,10 +11,10 @@ import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { Modal } from '@/components/Display/Modal'
 import { PrimaryLink } from '@/components/Links/PrimaryLink'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
-import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
+import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
-type Collaborator = {
+type Colaborator = {
   id: string
   name: string
   code: string
@@ -23,7 +23,7 @@ type Collaborator = {
   createdAt: string
 }
 
-const Collaborator: FC = () => {
+const Colaborator: FC = () => {
   const setQueryParam = useQueryParams()
   const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
@@ -33,7 +33,7 @@ const Collaborator: FC = () => {
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
-  const collaborators: Collaborator[] = [
+  const colaborators: Colaborator[] = [
     {
       id: 'us_93d8a0d66ad2494f',
       name: 'Inova Sistemas',
@@ -99,7 +99,7 @@ const Collaborator: FC = () => {
           isModalOpen={modalStatus}
           handleClickOverlay={handleCloseModal}
         >
-          <FilterCollaborator actionClose={handleCloseModal} />
+          <FilterColaborator actionClose={handleCloseModal} />
         </Modal>
       )}
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
@@ -185,7 +185,7 @@ const Collaborator: FC = () => {
                     <input
                       id='checkboxAll'
                       type='checkbox'
-                      name='collaborator[]'
+                      name='colaborator[]'
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={checkedAll}
                       onChange={() => {
@@ -258,10 +258,10 @@ const Collaborator: FC = () => {
                 </button>
               </div>
             </li>
-            {collaborators.map((collaborator, i) => (
-              <li key={collaborator.id}>
+            {colaborators.map((colaborator, i) => (
+              <li key={colaborator.id}>
                 <Link
-                  href={`/colaboradores/detalhes/${collaborator.code}`}
+                  href={`/colaboradores/detalhes/${colaborator.code}`}
                   className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
                 >
                   <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
@@ -272,7 +272,7 @@ const Collaborator: FC = () => {
                         }
                       }}
                       type='checkbox'
-                      name='collaborator[]'
+                      name='colaborator[]'
                       onClick={e => {
                         e.stopPropagation()
                       }}
@@ -285,13 +285,13 @@ const Collaborator: FC = () => {
                       }}
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
                     />
-                    <span>{collaborator.name}</span>
+                    <span>{colaborator.name}</span>
                   </div>
                   <div className='col-span-3 py-4 lowercase'>
-                    {collaborator.document}
+                    {colaborator.document}
                   </div>
                   <div className='col-span-2 py-4'>
-                    {collaborator.job_position}
+                    {colaborator.job_position}
                   </div>
                   <div className='col-span-2 py-4 pr-1 text-right lowercase'>
                     10/06/2025
@@ -306,4 +306,4 @@ const Collaborator: FC = () => {
   )
 }
 
-export default Collaborator
+export default Colaborator

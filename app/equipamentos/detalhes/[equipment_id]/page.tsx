@@ -26,7 +26,7 @@ const CreateEquipment: FC = () => {
     family: '',
     manufacturer: '',
     measure: 'un',
-    name: '',
+    name: 'Luva Nitrílica Sem Forro',
     picture: '',
     price: '',
     stock: '',
@@ -60,7 +60,9 @@ const CreateEquipment: FC = () => {
             <GoBackButton href='/equipamentos' />
 
             <h2 className='font-medium text-xl leading-none select-none'>
-              Detalhes do equipamento
+              {equipmentData.name
+                ? equipmentData.name
+                : 'Detalhes do equipamento'}
             </h2>
           </div>
 
