@@ -3,9 +3,14 @@ import classNames from 'classnames'
 type PackageIconProps = {
   size: string
   stroke: string
+  strokeWidth?: number
 }
 
-export function PackageIcon({ size, stroke }: PackageIconProps) {
+export function PackageIcon({
+  size,
+  stroke,
+  strokeWidth = 2,
+}: PackageIconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -16,10 +21,9 @@ export function PackageIcon({ size, stroke }: PackageIconProps) {
     >
       <title>PackageIcon</title>
       <path
-        d='M12 22c-.818 0-1.6-.33-3.163-.99C4.946 19.366 3 18.543 3 17.16V7m9 15c.818 0 1.6-.33 3.163-.99C19.054 19.366 21 18.543 21 17.16V7m-9 15V11.355M8.326 9.691L5.405 8.278C3.802 7.502 3 7.114 3 6.5c0-.614.802-1.002 2.405-1.778l2.92-1.413C10.13 2.436 11.03 2 12 2c.97 0 1.871.436 3.674 1.309l2.921 1.413C20.198 5.498 21 5.886 21 6.5c0 .614-.802 1.002-2.405 1.778l-2.92 1.413C13.87 10.564 12.97 11 12 11c-.97 0-1.871-.436-3.674-1.309zM6 12l2 1M17 4L7 9'
+        d='M8 2H4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2V4a2 2 0 00-2-2zM20 6h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2V8a2 2 0 00-2-2zM20 14h-4a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2zM12 14H8a2 2 0 00-2 2v4a2 2 0 002 2h4a2 2 0 002-2v-4a2 2 0 00-2-2z'
         className={classNames(stroke, 'transition-all duration-300')}
-        strokeWidth={2}
-        strokeLinecap='round'
+        strokeWidth={strokeWidth}
         strokeLinejoin='round'
       />
     </svg>
