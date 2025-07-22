@@ -3,15 +3,6 @@ import { type FC, useCallback, useState } from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
 
-type SettingsProps = {
-  id: string
-  name: string
-  code: string
-  document: string
-  job_position: string
-  createdAt: string
-}
-
 const Settings: FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
 
@@ -31,16 +22,14 @@ const Settings: FC = () => {
           <FilterColaborator actionClose={handleCloseModal} />
         </Modal>
       )}
-      <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
+      <div className='flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 pt-8 w-full'>
-          <h2 className='font-medium text-2xl leading-none select-none'>
+          <h2 className='font-medium text-xl leading-none select-none'>
             Configurações
           </h2>
         </div>
 
-        <div className='px-6 w-full'>
-          <div className='bg-[--tableRow] rounded-xl w-full h-48'></div>
-        </div>
+        <div className='grid grid-cols-3 px-6 w-full'></div>
       </div>
     </div>
   )

@@ -29,6 +29,8 @@
   --iconPrimaryColor: #0a0a0a;
 
   --tableRow: #f0f4f8;
+
+  --buttonHover: #dce1e9;
 }
 
 .dark {
@@ -55,6 +57,8 @@
   --iconPrimaryColor: #a2a9b0;
 
   --tableRow: #37393b;
+
+  --buttonHover: #262829;
 }
 
 ::selection {
