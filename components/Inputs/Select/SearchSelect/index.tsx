@@ -79,7 +79,7 @@ export function SearchSelect({
             {
               'mt-0': label,
             },
-            'h-[54px] flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer'
+            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
           )}
           placeholder={placeholder}
           components={{
@@ -91,28 +91,28 @@ export function SearchSelect({
               ...provided,
               padding: '0.5rem',
               paddingLeft: '0.75rem',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               marginTop: '0.5rem',
               color: 'var(--textSecondary)',
               border: '0px solid var(--backgroundSecondary)',
               fontSize: '1rem',
               backgroundColor: state.isSelected
-                ? 'var(--backgroundPrimary)'
+                ? 'var(--buttonHover)'
                 : state.isFocused
                   ? 'var(--backgroundSecondary)'
                   : 'transparent',
               ':hover': {
                 backgroundColor: state.isSelected
                   ? state.isFocused
-                    ? 'var(--backgroundPrimary)'
-                    : 'var(--backgroundPrimary)'
-                  : 'var(--backgroundPrimary)',
+                    ? 'var(--buttonHover)'
+                    : 'var(--buttonHover)'
+                  : 'var(--buttonHover)',
               },
             }),
             menu: provided => ({
               ...provided,
               color: '#fff',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               boxShadow:
                 '0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
               border: '1px solid var(--outlinePrimary)',
@@ -133,7 +133,7 @@ export function SearchSelect({
               backgroundColor: 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               fontSize: '0.875rem',
               paddingLeft: icon ? '2rem' : '0',
               cursor: 'pointer',

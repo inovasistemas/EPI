@@ -59,7 +59,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
           onClick={handleFilterClean}
           type='button'
           className={classNames(
-            'select-none active:scale-95 cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--buttonPrimary] rounded-lg h-10 text-white transition-all duration-300 px-4'
+            'select-none active:scale-95 cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--buttonPrimary] rounded-xl h-10 text-white transition-all duration-300 px-4'
           )}
         >
           <span className='font-medium text-[--textSecondary] text-sm'>
@@ -71,7 +71,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
           onClick={handleFilter}
           type='button'
           className={classNames(
-            'select-none active:scale-95 cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-lg h-10 text-white transition-all duration-300 px-8'
+            'select-none active:scale-95 cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-xl h-10 text-white transition-all duration-300 px-8'
           )}
         >
           <span className='font-medium text-sm'>Filtrar</span>

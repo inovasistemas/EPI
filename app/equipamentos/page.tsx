@@ -151,7 +151,7 @@ const Equipment: FC = () => {
         </div>
 
         <div className='flex flex-row items-center gap-3 px-6 w-1/2'>
-          <div className='bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-lg w-full h-10 transition-all duration-300'>
+          <div className='bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300'>
             <div className='flex'>
               <SearchIcon
                 size='size-4'
@@ -290,7 +290,7 @@ const Equipment: FC = () => {
                       }}
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
                     />
-                    <div className='relative bg-[--backgroundPrimary] rounded-lg w-16 aspect-square overflow-hidden'>
+                    <div className='relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden'>
                       {equipment.image && (
                         <Image
                           src={equipment.image}

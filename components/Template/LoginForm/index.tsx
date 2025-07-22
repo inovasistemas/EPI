@@ -164,7 +164,7 @@ export function LoginForm() {
         animate={{ height: step === 0 ? height + 300 : height + 230 }}
         initial={{ height: 300 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className='relative flex flex-col gap-6 p-8 rounded-md w-full lg:w-3/4 h-full overflow-hidden'
+        className='relative flex flex-col gap-6 p-8 rounded-xl w-full lg:w-3/4 h-full overflow-hidden'
       >
         <div className='flex justify-center items-center py-6'>
           <Logo width={110} />

@@ -1,8 +1,9 @@
 'use client'
-import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
-import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
 import cn from 'classnames'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import Select from 'react-select'
+import { CarretDownIcon } from '@/components/Display/Icons/CarretDown'
 
 type SmallSelectCustomOptionsProps = {
   value: string
@@ -48,7 +49,7 @@ export function SmallSelectCustom({
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center bg-zinc-100 rounded-md']
+        ['group flex items-center bg-zinc-100 rounded-xl']
       )}
     >
       {icon && (
@@ -66,7 +67,7 @@ export function SmallSelectCustom({
           onMenuOpen={() => setSelectMenuOpen(true)}
           onMenuClose={() => setSelectMenuOpen(false)}
           options={options}
-          className='rounded-md w-full text-sm'
+          className='rounded-xl w-full text-sm'
           placeholder=''
           menuPlacement='auto'
           components={{
@@ -79,7 +80,7 @@ export function SmallSelectCustom({
               ...provided,
               padding: '0.5rem',
               paddingLeft: '0.75rem',
-              borderRadius: '0.375rem',
+              borderRadius: '0.75rem',
               marginTop: '0.5rem',
               color: 'black',
               fontSize: '0.875rem',
@@ -98,7 +99,7 @@ export function SmallSelectCustom({
             }),
             menu: (provided, state) => ({
               ...provided,
-              borderRadius: '0.375rem',
+              borderRadius: '0.75rem',
               boxShadow: 'none',
               border: '1px solid #D9D9D9',
               paddingTop: '0',
@@ -114,7 +115,7 @@ export function SmallSelectCustom({
               backgroundColor: state.isFocused ? '#E9E9EC' : 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
-              borderRadius: '0.375rem',
+              borderRadius: '0.75rem',
               fontSize: '0.875rem',
               paddingLeft: icon ? '1.675rem' : '0',
             }),

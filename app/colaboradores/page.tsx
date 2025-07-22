@@ -148,7 +148,7 @@ const Colaborator: FC = () => {
         </div>
 
         <div className='flex flex-row items-center gap-3 px-6 w-1/2'>
-          <div className='bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-lg w-full h-10 transition-all duration-300'>
+          <div className='bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300'>
             <div className='flex'>
               <SearchIcon
                 size='size-4'

@@ -21,7 +21,7 @@ export function SubNavLink({ name, icon, href, date, read }: SubNavLinkProps) {
   return (
     <Link
       href={href}
-      className='relative flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-md font-normal whitespace-normal transition-all duration-300'
+      className='relative flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--buttonHover] px-3 py-2 rounded-xl font-normal whitespace-normal transition-all duration-300'
     >
       {date && (
         <div className='top-0 right-0 absolute flex items-center gap-2 p-2 font-normal text-zinc-500 text-xs'>

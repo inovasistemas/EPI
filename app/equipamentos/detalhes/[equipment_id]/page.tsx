@@ -69,7 +69,7 @@ const CreateEquipment: FC = () => {
           <div>
             <button
               type='button'
-              className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-lg w-8 aspect-square font-medium text-[10px] transition-all duration-300'
+              className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl w-8 aspect-square font-medium text-[10px] transition-all duration-300'
             >
               {equipmentData.abcClassification === 'A' ? (
                 <span className='font-medium text-[--textSecondary] text-base'>

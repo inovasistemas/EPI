@@ -5,7 +5,7 @@ export default function Home() {
       <div className='flex flex-col gap-6 bg-[--backgroundPrimary] p-6 sm:rounded-2xl w-full h-full'>
         {/* <button
           type='button'
-          className='flex flex-row items-center bg-[--errorLoader] px-3 py-2 rounded-md w-full transition-all duration-300'
+          className='flex flex-row items-center bg-[--errorLoader] px-3 py-2 rounded-xl w-full transition-all duration-300'
         >
           <BellSimpleRinging
             size={18}
@@ -23,7 +23,7 @@ export default function Home() {
         </button> */}
 
         {/* <div className='gap-3 grid grid-cols-2 sm:grid-cols-3'>
-          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-amber-400/50 rounded-md w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
+          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-amber-400/50 rounded-xl w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
             <span className='group right-0 bottom-0 absolute -mr-6 -mb-6'>
               <HardHat
                 size={100}
@@ -36,7 +36,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-purple-400/50 rounded-md w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
+          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-purple-400/50 rounded-xl w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
             <span className='group right-0 bottom-0 absolute -mr-2 -mb-6'>
               <Users
                 size={100}
@@ -49,7 +49,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-emerald-400/50 rounded-md w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
+          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-emerald-400/50 rounded-xl w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
             <span className='group right-0 bottom-0 absolute -mr-6 -mb-6'>
               <IdentificationBadge
                 size={100}
@@ -62,7 +62,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] rounded-md w-full overflow-hidden hover:text-[--primaryColor] hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
+          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] rounded-xl w-full overflow-hidden hover:text-[--primaryColor] hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
             <span className='group right-0 bottom-0 absolute -mr-6 -mb-6'>
               <ChartBar
                 size={100}
@@ -75,7 +75,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-red-400/50 rounded-md w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
+          <div className='group relative flex items-center gap-3 bg-[--backgroundSecondary] hover:shadow-lg p-6 py-10 border border-[--outlinePrimary] hover:border-red-400/50 rounded-xl w-full overflow-hidden hover:scale-[1.015] transition-all duration-300 cursor-pointer'>
             <span className='group right-0 bottom-0 absolute -mr-6 -mb-6'>
               <Gear
                 size={100}

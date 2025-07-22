@@ -13,7 +13,7 @@ export function GoBackButton({ href }: GoBackButtonProps) {
       href={href}
       type='button'
       className={classNames(
-        'active:scale-95 group flex relative justify-center items-center hover:bg-[--backgroundSecondary] bg-[--backgroundPrimary] rounded-lg w-8 h-8 text-zinc-200 transition z-[200]'
+        'active:scale-95 group flex relative justify-center items-center hover:bg-[--backgroundSecondary] bg-[--backgroundPrimary] rounded-xl w-8 h-8 text-zinc-200 transition z-[200]'
       )}
     >
       <span className='-rotate-90'>

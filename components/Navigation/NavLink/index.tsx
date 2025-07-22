@@ -16,7 +16,7 @@ export function NavLink({ name, icon, href }: NavLinkProps) {
     <Link
       href={href}
       data-active={pathName.includes(href)}
-      className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--buttonHover] mt-1.5 py-1 data-[active=false]:py-2 data-[active=true]:py-2 rounded-lg font-normal active:scale-95 transition-all duration-300'
+      className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--buttonHover] mt-1.5 py-1 data-[active=false]:py-2 data-[active=true]:py-2 rounded-xl font-normal active:scale-95 transition-all duration-300'
     >
       <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
         {icon}

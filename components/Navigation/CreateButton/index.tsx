@@ -17,7 +17,7 @@ export function CreateButton({ label, icon, href }: CreateButtonProps) {
           '!pr-4': icon,
         },
         [
-          'border-box group box-border flex items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 py-1.5 border border-[--outlinePrimary] rounded-lg font-medium transition-all duration-300',
+          'border-box group box-border flex items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 py-1.5 border border-[--outlinePrimary] rounded-xl font-medium transition-all duration-300',
         ]
       )}
     >

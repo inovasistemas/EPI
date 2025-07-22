@@ -21,7 +21,7 @@ export function PrimaryButton({
       name={name}
       onClick={action}
       type={type}
-      className='relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-lg w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+      className='relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
     >
       {text}
     </button>

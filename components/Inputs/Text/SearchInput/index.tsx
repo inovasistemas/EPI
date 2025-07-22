@@ -19,7 +19,7 @@ export function SearchInput({
   const [text, setText] = useState('')
 
   return (
-    <div className='group relative flex items-center bg-white border border-[#E5E5E5] rounded-md'>
+    <div className='group relative flex items-center bg-white border border-[#E5E5E5] rounded-xl'>
       {icon && <span className='ml-3'>{icon}</span>}
 
       <div className='relative flex items-center pr-1.5 w-full'>

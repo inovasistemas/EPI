@@ -15,7 +15,7 @@ type SpacedListItemProps = {
 
 export function SpacedListItem({ data }: SpacedListItemProps) {
   return (
-    <div className='gap-3 grid grid-cols-12 bg-white hover:bg-zinc-100 p-3 border border-[#D9D9D9] rounded-md w-full text-sm transition-all duration-300 cursor-pointer'>
+    <div className='gap-3 grid grid-cols-12 bg-white hover:bg-zinc-100 p-3 border border-[#D9D9D9] rounded-xl w-full text-sm transition-all duration-300 cursor-pointer'>
       <div className='col-span-4 truncate'>
         <span>{data.name}</span>
       </div>

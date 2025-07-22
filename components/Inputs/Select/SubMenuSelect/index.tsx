@@ -77,7 +77,7 @@ export function SubMenuSelect({
           onMenuOpen={() => setSelectMenuOpen(true)}
           onMenuClose={() => setSelectMenuOpen(false)}
           options={options}
-          className='z-50 flex justify-end rounded-lg w-full placeholder:text-white cursor-pointer'
+          className='z-50 flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
           placeholder=''
           menuPlacement='auto'
           isSearchable={false}
@@ -90,22 +90,22 @@ export function SubMenuSelect({
               ...provided,
               padding: '0.5rem',
               paddingLeft: '0.75rem',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               marginTop: '0.5rem',
               color: 'var(--textSecondary)',
               border: '0px solid var(--backgroundSecondary)',
               fontSize: '0.875rem',
               backgroundColor: state.isSelected
-                ? 'var(--backgroundPrimary)'
+                ? 'var(--buttonHover)'
                 : state.isFocused
                   ? 'var(--backgroundSecondary)'
                   : 'transparent',
               ':hover': {
                 backgroundColor: state.isSelected
                   ? state.isFocused
-                    ? 'var(--backgroundPrimary)'
-                    : 'var(--backgroundPrimary)'
-                  : 'var(--backgroundPrimary)',
+                    ? 'var(--buttonHover)'
+                    : 'var(--buttonHover)'
+                  : 'var(--buttonHover)',
               },
             }),
             menu: provided => ({
@@ -133,7 +133,7 @@ export function SubMenuSelect({
               backgroundColor: 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
-              borderRadius: '0.5rem',
+              borderRadius: '0.75rem',
               fontSize: '0.875rem',
               paddingLeft: icon ? '2rem' : '0',
               cursor: 'pointer',
