@@ -231,7 +231,7 @@ const Operator: FC = () => {
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
-                  <span>Usuário</span>
+                  <span>E-mail</span>
                   <CaretOrder
                     field={orderBy.field}
                     name='username'

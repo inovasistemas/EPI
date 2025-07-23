@@ -6,7 +6,10 @@ import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 export function SectorSettings() {
   return (
     <div className='relative flex flex-col w-full h-full'>
-      <div className='flex flex-col px-3 divide-y divide-[--border] h-full overflow-y-auto'>
+      <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
+        <div className='py-6 select-none'>
+          <h2 className='font-medium text-xl'>Setores e substores</h2>
+        </div>
         <li className='items-start gap-6 grid grid-cols-1 py-6 select-none'>
           <div className='flex flex-col'>
             <div className='flex flex-row justify-between gap-2 itens-center'>

@@ -7,8 +7,8 @@ import { ShieldIcon } from '@/components/Display/Icons/Shield'
 import { Modal } from '@/components/Display/Modal'
 import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
+import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
 import { SectorSettings } from '@/components/Template/SectorSettings'
-import { SecuritySettings } from '@/components/Template/SecuritySettings'
 
 enum menus {
   personalDetails,
@@ -113,6 +113,7 @@ const Settings: FC = () => {
         </div>
 
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
+          {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
           {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
           {activeMenu === menus.sector && <SectorSettings />}
         </div>
