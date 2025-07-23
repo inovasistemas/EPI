@@ -18,7 +18,7 @@ const ColaboratorDetails: FC = () => {
     rg: '37.349.666-7',
     cpf: '447.866.598-27',
     gender: 'male',
-    cargo: 'Auxiliar de Produção',
+    cargo: 'Auxiliar Produção',
     admissionDate: '01/01/2023',
     zipCode: '13031-390',
     address: 'Avenida João Batista Morato do Canto',
@@ -131,8 +131,8 @@ const ColaboratorDetails: FC = () => {
               name='cargo'
               options={[
                 {
-                  value: 'Auxiliar de Produção',
-                  label: 'Auxiliar de Produção',
+                  value: 'Auxiliar Produção',
+                  label: 'Auxiliar Produção',
                 },
               ]}
               placeholder='Cargo'

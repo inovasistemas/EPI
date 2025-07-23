@@ -31,6 +31,7 @@
   --tableRow: #f0f4f8;
 
   --buttonHover: #dce1e9;
+  --tableColor: #e2e7eb;
 }
 
 .dark {
@@ -59,6 +60,7 @@
   --tableRow: #37393b;
 
   --buttonHover: #262829;
+  --tableColor: #202223;
 }
 
 ::selection {

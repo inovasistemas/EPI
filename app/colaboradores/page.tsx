@@ -94,16 +94,14 @@ const Colaborator: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      {modalStatus && (
-        <Modal
-          title='Filtros'
-          size='small'
-          isModalOpen={modalStatus}
-          handleClickOverlay={handleCloseModal}
-        >
-          <FilterColaborator actionClose={handleCloseModal} />
-        </Modal>
-      )}
+      <Modal
+        title='Filtros'
+        size='small'
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleCloseModal}
+      >
+        <FilterColaborator actionClose={handleCloseModal} />
+      </Modal>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>

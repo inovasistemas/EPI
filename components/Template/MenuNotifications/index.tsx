@@ -28,7 +28,7 @@ export function MenuNotifications() {
           read={false}
         />
       </li>
-      <li>
+      <li className='pt-2'>
         <SubNavLinkAction name='Ver tudo' href='conta/notificacoes' />
       </li>
     </ul>
