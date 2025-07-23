@@ -7,6 +7,7 @@ import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { AddIcon } from '@/components/Display/Icons/Add'
+import { ConnectedIcon } from '@/components/Display/Icons/Connected'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { SearchIcon } from '@/components/Display/Icons/Search'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
@@ -137,6 +138,18 @@ const Equipment: FC = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            <SecondaryButton
+              label='Associar'
+              icon={
+                <ConnectedIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseModal}
+            />
 
             <PrimaryLink
               label='Adicionar'
