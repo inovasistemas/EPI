@@ -2,6 +2,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
@@ -27,11 +28,11 @@ type Equipment = {
 
 const Equipment: FC = () => {
   const setQueryParam = useQueryParams()
-  //const [showSearch, setShowSearch] = useState(false)
+  const searchParams = useSearchParams()
   const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
-    field: '',
-    order: '',
+    field: searchParams.get('sortField') || '',
+    order: searchParams.get('sortOrder') || '',
   })
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])

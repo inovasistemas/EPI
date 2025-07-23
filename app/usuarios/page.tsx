@@ -42,8 +42,8 @@ const Operator: FC = () => {
   const [hasChecked, setHasChecked] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [orderBy, setOrderBy] = useState({
-    field: '',
-    order: '',
+    field: searchParams.get('sortField') || '',
+    order: searchParams.get('sortOrder') || '',
   })
   const operators: Operator[] = [
     {

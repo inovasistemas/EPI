@@ -2,6 +2,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useState } from 'react'
 import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
+import { ClockIcon } from '@/components/Display/Icons/Clock'
 import { ImageIcon } from '@/components/Display/Icons/Image'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
@@ -66,7 +67,7 @@ const CreateEquipment: FC = () => {
             </h2>
           </div>
 
-          <div>
+          <div className='flex items-center gap-3'>
             <button
               type='button'
               className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl w-8 aspect-square font-medium text-[10px] transition-all duration-300'
@@ -89,6 +90,17 @@ const CreateEquipment: FC = () => {
                   stroke='stroke-[--textSecondary]'
                 />
               )}
+            </button>
+
+            <button
+              type='button'
+              className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl w-8 aspect-square font-medium text-[10px] transition-all duration-300'
+            >
+              <ClockIcon
+                size='size-4'
+                stroke='stroke-[--textSecondary]'
+                strokeWidth={2.5}
+              />
             </button>
           </div>
         </div>
