@@ -6,11 +6,13 @@ import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
 import { ShieldIcon } from '@/components/Display/Icons/Shield'
 import { Modal } from '@/components/Display/Modal'
 import { PasswordSettings } from '@/components/Template/PasswordSettings'
+import { PermissionGroup } from '@/components/Template/PermissionGroup'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
 import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
 import { Sector } from '@/components/Template/Sector'
 import { SectorSettings } from '@/components/Template/SectorSettings'
 import { SecurityCode } from '@/components/Template/SecurityCode'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
 enum menus {
   personalDetails,
@@ -20,12 +22,17 @@ enum menus {
 }
 
 const Settings: FC = () => {
+  const setQueryParam = useQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
 
   const handleCloseModal = useCallback(() => {
+    if (modalStatus) {
+      setQueryParam({ sector: '' })
+    }
+
     setModalStatus(prev => !prev)
-  }, [])
+  }, [setQueryParam, modalStatus])
 
   const handleActiveMenu = (menu: menus) => {
     setActiveMenu(menu)
@@ -39,6 +46,7 @@ const Settings: FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       >
+        {activeMenu === menus.permissionGroup && <PermissionGroup />}
         {activeMenu === menus.sector && <Sector />}
         {activeMenu === menus.security && <SecurityCode />}
       </Modal>

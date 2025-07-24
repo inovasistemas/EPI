@@ -1,14 +1,25 @@
+import { useSearchParams } from 'next/navigation'
 import { SubIcon } from '@/components/Display/Icons/Sub'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
 type SubsectorProps = {
+  id: string
   label: string
   onClick: () => void
 }
 
-export function Subsector({ label, onClick }: SubsectorProps) {
+export function Subsector({ id, label, onClick }: SubsectorProps) {
+  const setQueryParam = useQueryParams()
+  const handleClick = () => {
+    setQueryParam({
+      sector: id,
+    })
+    onClick()
+  }
+
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       type='button'
       className='group z-[200] relative flex justify-center items-center gap-2 bg-blue-600/10 hover:bg-blue-600/20 px-3 pr-4 rounded-xl h-8 active:scale-95 transition-all duration-300'
     >

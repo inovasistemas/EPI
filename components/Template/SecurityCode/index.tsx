@@ -89,7 +89,7 @@ export function SecurityCode() {
           />
         ))}
       </div>
-      <div className='flex flex-row justify-end mt-6 w-full'>
+      <div className='flex flex-row justify-end mt-3 w-full'>
         <div className='flex flex-row gap-3'>
           <button
             type='button'
