@@ -149,7 +149,8 @@ const Operator: FC = () => {
               icon={
                 <AddIcon
                   size='size-4'
-                  fill='fill-white group-data-[active=true]:fill-[--primaryColor]'
+                  stroke='stroke-white group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
                 />
               }
               href='/usuarios/novo'

@@ -5,9 +5,9 @@ import { LaborIcon } from '@/components/Display/Icons/Labor'
 import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
 import { ShieldIcon } from '@/components/Display/Icons/Shield'
 import { Modal } from '@/components/Display/Modal'
-import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
 import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
+import { Sector } from '@/components/Template/Sector'
 import { SectorSettings } from '@/components/Template/SectorSettings'
 
 enum menus {
@@ -38,7 +38,7 @@ const Settings: FC = () => {
           isModalOpen={modalStatus}
           handleClickOverlay={handleCloseModal}
         >
-          <FilterColaborator actionClose={handleCloseModal} />
+          {activeMenu === menus.sector && <Sector />}
         </Modal>
       )}
       <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
@@ -113,9 +113,15 @@ const Settings: FC = () => {
         </div>
 
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
-          {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
-          {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
-          {activeMenu === menus.sector && <SectorSettings />}
+          {activeMenu === menus.personalDetails && (
+            <PersonalDetailsSettings actionModal={handleCloseModal} />
+          )}
+          {activeMenu === menus.permissionGroup && (
+            <PermissionGroupSettings actionModal={handleCloseModal} />
+          )}
+          {activeMenu === menus.sector && (
+            <SectorSettings actionModal={handleCloseModal} />
+          )}
         </div>
       </div>
     </div>

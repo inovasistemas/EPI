@@ -1,9 +1,16 @@
 import { EditIcon } from '@/components/Display/Icons/Edit'
+import { Tag } from '@/components/Display/Tag'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
-export function PermissionGroupSettings() {
+type PermissionGroupSettingsProps = {
+  actionModal: () => void
+}
+
+export function PermissionGroupSettings({
+  actionModal,
+}: PermissionGroupSettingsProps) {
   return (
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
@@ -48,54 +55,22 @@ export function PermissionGroupSettings() {
               />
             </div>
             <div className='flex flex-wrap gap-2'>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Criar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Excluir Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Criar Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Excluir Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Usuários
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Criar Usuários
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Excluir Usuários
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Usuários
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Criar Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Excluir Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Relatório
-              </span>
+              <Tag label='Visualizar Equipamento' />
+              <Tag label='Criar Equipamento' />
+              <Tag label='Excluir Equipamento' />
+              <Tag label='Atualizar Equipamento' />
+              <Tag label='Visualizar Colaborador' />
+              <Tag label='Criar Colaborador' />
+              <Tag label='Excluir Colaborador' />
+              <Tag label='Atualizar Colaborador' />
+              <Tag label='Visualizar Usuários' />
+              <Tag label='Criar Usuários' />
+              <Tag label='Excluir Usuários' />
+              <Tag label='Atualizar Usuários' />
+              <Tag label='Visualizar Relatório' />
+              <Tag label='Criar Relatório' />
+              <Tag label='Excluir Relatório' />
+              <Tag label='Atualizar Relatório' />
             </div>
           </div>
         </li>
@@ -136,30 +111,14 @@ export function PermissionGroupSettings() {
               />
             </div>
             <div className='flex flex-wrap gap-2'>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Colaborador
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Criar Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Excluir Relatório
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Atualizar Relatório
-              </span>
+              <Tag label='Visualizar Equipamento' />
+              <Tag label='Atualizar Equipamento' />
+              <Tag label='Visualizar Colaborador' />
+              <Tag label='Atualizar Colaborador' />
+              <Tag label='Visualizar Relatório' />
+              <Tag label='Criar Relatório' />
+              <Tag label='Excluir Relatório' />
+              <Tag label='Atualizar Relatório' />
             </div>
           </div>
         </li>
@@ -200,18 +159,14 @@ export function PermissionGroupSettings() {
               />
             </div>
             <div className='flex flex-wrap gap-2'>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Equipamento
-              </span>
-              <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--primaryColor] text-[10px] whitespace-nowrap'>
-                Visualizar Colaborador
-              </span>
+              <Tag label='Visualizar Equipamento' />
+              <Tag label='Visualizar Colaborador' />
             </div>
           </div>
         </li>
       </div>
 
-      <ActionGroupAdd />
+      <ActionGroupAdd onClick={actionModal} />
     </div>
   )
 }

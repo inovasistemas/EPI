@@ -44,7 +44,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {isModalOpen && (
-        <div className='top-0 left-0 z-[201] fixed w-full h-full'>
+        <div className='top-0 left-0 z-[205] fixed w-full h-full'>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

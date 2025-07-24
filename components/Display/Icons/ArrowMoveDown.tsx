@@ -1,16 +1,16 @@
 import classNames from 'classnames'
 
-type ConnectedIconProps = {
+type ArrowMoveDownIconProps = {
   size: string
   stroke: string
   strokeWidth?: number
 }
 
-export function ConnectedIcon({
+export function ArrowMoveDownIcon({
   size,
   stroke,
   strokeWidth = 2,
-}: ConnectedIconProps) {
+}: ArrowMoveDownIconProps) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -19,25 +19,20 @@ export function ConnectedIcon({
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>ConnectedIcon</title>
+      <title>ArrowMoveDownIcon</title>
       <path
-        d='M9 4.5c-3.496 1.201-6 4.442-6 8.251 0 1.207.251 2.357.706 3.402M15 4.5c3.496 1.201 6 4.442 6 8.251 0 1.023-.18 2.004-.512 2.916M16.5 20.33A9.157 9.157 0 0112 21.5a9.157 9.157 0 01-4.5-1.17M15 5a3 3 0 11-6 0 3 3 0 016 0z'
+        d='M4 3v2.077c0 2 0 3.001.145 3.838.8 4.609 4.762 8.223 9.812 8.952C14.875 18 16.807 18 19 18'
         className={classNames(stroke, 'transition-all duration-300')}
         strokeWidth={strokeWidth}
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
-      <circle
-        cx={5}
-        cy={19}
-        r={3}
+      <path
+        d='M17 21c.607-.59 3-2.16 3-3 0-.84-2.393-2.41-3-3'
         className={classNames(stroke, 'transition-all duration-300')}
         strokeWidth={strokeWidth}
-      />
-      <circle
-        cx={19}
-        cy={19}
-        r={3}
-        className={classNames(stroke, 'transition-all duration-300')}
-        strokeWidth={strokeWidth}
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
     </svg>
   )
