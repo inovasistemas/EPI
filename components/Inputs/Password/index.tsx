@@ -4,12 +4,18 @@ import { ViewOffIcon } from '@/components/Display/Icons/ViewOff'
 import { FormInput } from '../Text/FormInput'
 
 type PasswordInputProps = {
+  name?: string
   label: string
   value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-export function PasswordInput({ label, value, onChange }: PasswordInputProps) {
+export function PasswordInput({
+  name = 'password',
+  label,
+  value,
+  onChange,
+}: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false)
 
   const handleShowPassword = () => {
@@ -18,7 +24,7 @@ export function PasswordInput({ label, value, onChange }: PasswordInputProps) {
 
   return (
     <FormInput
-      name='password'
+      name={name}
       label={label}
       required={false}
       type='password'

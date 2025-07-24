@@ -44,7 +44,10 @@ export function PersonalDetailsSettings({
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
         <div className='py-6 select-none'>
-          <h2 className='font-medium text-xl'>Dados pessoais</h2>
+          <h2 className='font-medium text-xl leading-none'>Dados pessoais</h2>
+          <span className='opacity-60 text-[--textSecondary] text-sm'>
+            Edite seus dados pessoais e mantenha seu perfil atualizado.
+          </span>
         </div>
 
         <div className='gap-3 grid grid-cols-2 pt-8'>

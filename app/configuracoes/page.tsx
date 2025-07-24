@@ -5,10 +5,12 @@ import { LaborIcon } from '@/components/Display/Icons/Labor'
 import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
 import { ShieldIcon } from '@/components/Display/Icons/Shield'
 import { Modal } from '@/components/Display/Modal'
+import { PasswordSettings } from '@/components/Template/PasswordSettings'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
 import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
 import { Sector } from '@/components/Template/Sector'
 import { SectorSettings } from '@/components/Template/SectorSettings'
+import { SecurityCode } from '@/components/Template/SecurityCode'
 
 enum menus {
   personalDetails,
@@ -31,16 +33,15 @@ const Settings: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      {modalStatus && (
-        <Modal
-          title='Filtros'
-          size='small'
-          isModalOpen={modalStatus}
-          handleClickOverlay={handleCloseModal}
-        >
-          {activeMenu === menus.sector && <Sector />}
-        </Modal>
-      )}
+      <Modal
+        title='Filtros'
+        size='small'
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleCloseModal}
+      >
+        {activeMenu === menus.sector && <Sector />}
+        {activeMenu === menus.security && <SecurityCode />}
+      </Modal>
       <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
         <div className='flex flex-col gap-2 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
           <button
@@ -121,6 +122,9 @@ const Settings: FC = () => {
           )}
           {activeMenu === menus.sector && (
             <SectorSettings actionModal={handleCloseModal} />
+          )}
+          {activeMenu === menus.security && (
+            <PasswordSettings actionModal={handleCloseModal} />
           )}
         </div>
       </div>

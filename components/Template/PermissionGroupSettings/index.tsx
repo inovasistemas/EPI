@@ -15,7 +15,12 @@ export function PermissionGroupSettings({
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
         <div className='py-6 select-none'>
-          <h2 className='font-medium text-xl'>Grupo de permissões</h2>
+          <h2 className='font-medium text-xl leading-none'>
+            Grupo de permissões
+          </h2>
+          <span className='opacity-60 text-[--textSecondary] text-sm'>
+            Gerencie permissões por grupos e controle o acesso com facilidade.
+          </span>
         </div>
 
         <li className='items-start gap-6 grid grid-cols-1 py-6 select-none'>

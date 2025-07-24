@@ -41,7 +41,7 @@ export function FormInput({
             id={name}
             type={type}
             name={name}
-            className='peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
+            className='peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
             placeholder=' '
             value={value}
             onChange={onChange}
