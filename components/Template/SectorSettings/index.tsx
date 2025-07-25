@@ -1,5 +1,3 @@
-import { AddIcon } from '@/components/Display/Icons/Add'
-import { ArrowMoveDownIcon } from '@/components/Display/Icons/ArrowMoveDown'
 import { EditIcon } from '@/components/Display/Icons/Edit'
 import { SubIcon } from '@/components/Display/Icons/Sub'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
@@ -14,10 +12,18 @@ type SectorSettingsProps = {
 
 export function SectorSettings({ actionModal }: SectorSettingsProps) {
   const setQueryParam = useQueryParams()
-  const handleClick = (id: string) => {
-    setQueryParam({
-      sector: id,
-    })
+  const handleClick = (id: string, type?: string) => {
+    if (type) {
+      setQueryParam({
+        type: type,
+        sector: id,
+      })
+    } else {
+      setQueryParam({
+        sector: id,
+      })
+    }
+
     actionModal()
   }
 
@@ -64,7 +70,7 @@ export function SectorSettings({ actionModal }: SectorSettingsProps) {
                     />
                   }
                   mobile={true}
-                  action={() => null}
+                  action={() => handleClick('1', 'editSector')}
                 />
               </div>
             </div>
@@ -144,7 +150,7 @@ export function SectorSettings({ actionModal }: SectorSettingsProps) {
                     />
                   }
                   mobile={true}
-                  action={() => null}
+                  action={() => handleClick('1', 'editSector')}
                 />
               </div>
             </div>
@@ -213,7 +219,7 @@ export function SectorSettings({ actionModal }: SectorSettingsProps) {
                     />
                   }
                   mobile={true}
-                  action={() => null}
+                  action={() => handleClick('1', 'editSector')}
                 />
               </div>
             </div>

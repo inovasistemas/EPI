@@ -1,4 +1,3 @@
-import { useSearchParams } from 'next/navigation'
 import { SubIcon } from '@/components/Display/Icons/Sub'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 
@@ -13,6 +12,7 @@ export function Subsector({ id, label, onClick }: SubsectorProps) {
   const handleClick = () => {
     setQueryParam({
       sector: id,
+      type: 'editSubsector',
     })
     onClick()
   }

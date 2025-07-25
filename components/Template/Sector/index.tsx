@@ -5,12 +5,15 @@ import { FormInput } from '@/components/Inputs/Text/FormInput'
 
 export function Sector() {
   const searchParams = useSearchParams()
-  const sectorId = useMemo(() => {
-    return searchParams.get('sector')
+  const sector = useMemo(() => {
+    return {
+      sector: searchParams.get('sector'),
+      type: searchParams.get('type'),
+    }
   }, [searchParams])
 
   const [sectorData, setSectorData] = useState({
-    id: sectorId,
+    id: sector.sector,
     parentName: '',
     name: '',
     inherit: true,
@@ -24,34 +27,43 @@ export function Sector() {
     }))
   }
 
+  const title = useMemo(() => {
+    if (!sector.sector) {
+      return 'Adicionar novo setor'
+    } else {
+      if (sector.type === 'editSector') return 'Editar dados do setor'
+    }
+
+    if (sector.type === 'editSubsector') return 'Editar dados do subsetor'
+
+    return (
+      <>
+        <span>Adicionar subsetor à </span>
+        <span className='font-medium text-[--primaryColor]'>
+          {sectorData.parentName}
+        </span>
+      </>
+    )
+  }, [sector, sectorData.parentName])
+
   useEffect(() => {
-    if (sectorId) {
+    if (sector.sector) {
       setSectorData(prev => ({
         ...prev,
         parentName: 'Manutenção Máquinas',
       }))
     }
-  }, [sectorId])
+  }, [sector.sector])
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
       <div className='flex flex-col items-center gap-3 w-full'>
-        <h2 className='font-medium text-xl leading-none'>
-          {!sectorId && 'Adicionar novo setor'}
-          {sectorId && (
-            <>
-              <span>Adicionar subsetor à </span>
-              <span className='font-medium text-[--primaryColor]'>
-                {sectorData.parentName}
-              </span>
-            </>
-          )}
-        </h2>
+        <h2 className='font-medium text-xl leading-none'>{title}</h2>
         <div className='flex flex-col'>
           <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-            {!sectorId &&
+            {!sector.sector &&
               'Adicione um novo setor para organizar as áreas principais da empresa.'}
-            {sectorId &&
+            {sector.sector &&
               'Adicione um subsetor vinculado a um setor principal para detalhar a estrutura.'}
           </span>
         </div>
@@ -68,7 +80,7 @@ export function Sector() {
           onChange={e => handleSectorDataChange('name', e.target.value)}
         />
 
-        {sectorId && (
+        {sector.sector && (
           <div className='col-span-full pt-6'>
             <div className='flex flex-row justify-between items-center gap-1 bg-[--backgroundSecondary] p-3 rounded-2xl w-full'>
               <div className='flex flex-col gap-1 p-3'>

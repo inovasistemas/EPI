@@ -28,7 +28,7 @@ const Settings: FC = () => {
 
   const handleCloseModal = useCallback(() => {
     if (modalStatus) {
-      setQueryParam({ sector: '' })
+      setQueryParam({ sector: '', type: '' })
     }
 
     setModalStatus(prev => !prev)
