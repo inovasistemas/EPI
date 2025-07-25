@@ -29,7 +29,7 @@ export function MenuNotifications() {
         />
       </li>
       <li className='pt-2'>
-        <SubNavLinkAction name='Ver tudo' href='conta/notificacoes' />
+        <SubNavLinkAction name='Ver tudo' href='notificacoes' />
       </li>
     </ul>
   )
