@@ -1,7 +1,7 @@
 'use client'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 
 type Notification = {
   id: string
@@ -12,8 +12,20 @@ type Notification = {
   createdAt: string
 }
 
+const tabs = ['all', 'unread', 'read'] as const
+
 const Notification: FC = () => {
   const [filter, setFilter] = useState<'read' | 'unread' | 'all'>('all')
+  const tabRefs = useRef<Record<string, HTMLLabelElement | null>>({})
+  const [bgStyle, setBgStyle] = useState({ x: 0, width: 0 })
+
+  useEffect(() => {
+    const el = tabRefs.current[filter]
+    if (el) {
+      const { offsetLeft, offsetWidth } = el
+      setBgStyle({ x: offsetLeft, width: offsetWidth })
+    }
+  }, [filter])
   const notificationData: Notification[] = [
     {
       id: '1',
@@ -53,46 +65,37 @@ const Notification: FC = () => {
               Notificações
             </h2>
           </div>
-          <div className='flex items-center gap-0.5 bg-[--backgroundSecondary] p-1 rounded-full'>
-            <label className='flex items-center gap-2 cursor-pointer'>
-              <input
-                type='radio'
-                name='notificationStatus'
-                value='all'
-                className='peer !hidden'
-                checked={filter === 'all'}
-                onChange={() => setFilter('all')}
-              />
-              <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
-                Todas
-              </span>
-            </label>
-            <label className='flex items-center gap-2 cursor-pointer'>
-              <input
-                type='radio'
-                name='notificationStatus'
-                value='unread'
-                className='peer !hidden'
-                checked={filter === 'unread'}
-                onChange={() => setFilter('unread')}
-              />
-              <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
-                Não lidas
-              </span>
-            </label>
-            <label className='flex items-center gap-2 cursor-pointer'>
-              <input
-                type='radio'
-                name='notificationStatus'
-                value='read'
-                className='peer !hidden'
-                checked={filter === 'read'}
-                onChange={() => setFilter('read')}
-              />
-              <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
-                Lidas
-              </span>
-            </label>
+          <div className='box-border relative flex items-center gap-0.5 bg-[--backgroundSecondary] p-1 rounded-full'>
+            <motion.div
+              className='top-0 left-0 z-0 absolute bg-[--primaryColor] mt-1 rounded-full h-10'
+              animate={{ x: bgStyle.x, width: bgStyle.width }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            />
+            {tabs.map(tab => (
+              <label
+                key={tab}
+                ref={el => {
+                  tabRefs.current[tab] = el
+                }}
+                className='z-10 relative flex items-center gap-2 px-3 py-2 rounded-full h-10 cursor-pointer'
+              >
+                <input
+                  type='radio'
+                  name='notificationStatus'
+                  value={tab}
+                  className='peer !hidden'
+                  checked={filter === tab}
+                  onChange={() => setFilter(tab)}
+                />
+                <span className='font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
+                  {tab === 'all'
+                    ? 'Todas'
+                    : tab === 'unread'
+                      ? 'Não lidas'
+                      : 'Lidas'}
+                </span>
+              </label>
+            ))}
           </div>
         </div>
         <AnimatePresence mode='popLayout'>
