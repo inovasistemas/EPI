@@ -197,3 +197,18 @@ input[type='checkbox'] {
 [type='radio'].checkboxSecondary {
   background-color: var(--textPrimary);
 }
+
+.animate-stroke {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: draw 4s ease-in-out infinite alternate;
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 600;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}

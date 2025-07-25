@@ -3,12 +3,14 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
 import { BellIcon } from '@/components/Display/Icons/Bell'
+import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
 import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
 import { MenuNotifications } from '@/components/Template/MenuNotifications'
 import { MenuSettings } from '@/components/Template/MenuSettings'
+import { TakeoutModal } from '@/components/Template/TakeoutModal'
 import useSidebar from '@/lib/context/global'
 
 enum SearchbarCards {
@@ -18,6 +20,12 @@ enum SearchbarCards {
 }
 
 const Searchbar: React.FC = () => {
+  const [modalStatus, setModalStatus] = useState(false)
+
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
+
   const [isCardOpen, setCardOpen] = useState(SearchbarCards.Default)
   const toggleSidebarVisibility = useSidebar(
     state => state.toggleSidebarVisibility
@@ -45,6 +53,11 @@ const Searchbar: React.FC = () => {
 
   return (
     <div className='h-[calc(50px+(env(safe-area-inset-top)))] min-h-[calc(50px+(env(safe-area-inset-top)))] pt-[calc(env(safe-area-inset-top))] flex justify-between items-center col-span-full bg-[--backgroundSecondary] px-3 sm:pt-0 w-full sm:w-auto lg:h-[50px]'>
+      <TakeoutModal
+        title=''
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleCloseModal}
+      />
       <div className='flex items-center gap-3'>
         <NavAction
           type='button'
@@ -63,6 +76,19 @@ const Searchbar: React.FC = () => {
       </div>
 
       <div className='flex items-center gap-3'>
+        <NavAction
+          type='button'
+          desktop={true}
+          icon={
+            <FingerPrintIcon
+              size='size-5'
+              stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+            />
+          }
+          mobile={true}
+          action={handleCloseModal}
+        />
+
         <div className='relative'>
           <NavAction
             type='button'

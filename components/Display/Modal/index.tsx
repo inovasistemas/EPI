@@ -11,6 +11,7 @@ type ModalProps = {
   titleFixed?: boolean
   size?: string
   overflow?: boolean
+  showClose?: boolean
 }
 
 export function Modal({
@@ -21,6 +22,7 @@ export function Modal({
   titleFixed = false,
   size = 'default',
   overflow = false,
+  showClose = true,
 }: ModalProps) {
   const [hasScrolled, setHasScrolled] = useState(false)
   const divRef = useRef<HTMLDivElement>(null)
@@ -77,17 +79,19 @@ export function Modal({
               >
                 {title}
               </h2>
-              <button
-                type='button'
-                onClick={handleClickOverlay}
-                className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
-              >
-                <CloseIcon
-                  size='size-4'
-                  stroke='stroke-[--textSecondary]'
-                  strokeWidth={2.5}
-                />
-              </button>
+              {showClose && (
+                <button
+                  type='button'
+                  onClick={handleClickOverlay}
+                  className='group right-0 z-[202] absolute flex justify-center items-center rounded-full min-w-10 min-h-10 transition-all duration-300'
+                >
+                  <CloseIcon
+                    size='size-4'
+                    stroke='stroke-[--textSecondary]'
+                    strokeWidth={2.5}
+                  />
+                </button>
+              )}
             </div>
             <div
               ref={divRef}
