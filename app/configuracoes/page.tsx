@@ -12,7 +12,10 @@ import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSe
 import { Sector } from '@/components/Template/Sector'
 import { SectorSettings } from '@/components/Template/SectorSettings'
 import { SecurityCode } from '@/components/Template/SecurityCode'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import {
+  useClearQueryParams,
+  useQueryParams,
+} from '@/components/Utils/UseQueryParams'
 
 enum menus {
   personalDetails,
@@ -22,17 +25,17 @@ enum menus {
 }
 
 const Settings: FC = () => {
-  const setQueryParam = useQueryParams()
+  const setClearQueryParam = useClearQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
 
   const handleCloseModal = useCallback(() => {
     if (modalStatus) {
-      setQueryParam({ sector: '', type: '' })
+      setClearQueryParam()
     }
 
     setModalStatus(prev => !prev)
-  }, [setQueryParam, modalStatus])
+  }, [modalStatus, setClearQueryParam])
 
   const handleActiveMenu = (menu: menus) => {
     setActiveMenu(menu)
@@ -45,6 +48,7 @@ const Settings: FC = () => {
         size='small'
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
+        overflow={true}
       >
         {activeMenu === menus.permissionGroup && <PermissionGroup />}
         {activeMenu === menus.sector && <Sector />}

@@ -1,6 +1,14 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 
+function useClearQueryParams() {
+  const router = useRouter()
+
+  return () => {
+    router.push('?')
+  }
+}
+
 export function useQueryParams() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -19,3 +27,5 @@ export function useQueryParams() {
     router.push(`?${params.toString()}`)
   }
 }
+
+export { useClearQueryParams }

@@ -10,6 +10,7 @@ type ModalProps = {
   children: React.ReactNode
   titleFixed?: boolean
   size?: string
+  overflow?: boolean
 }
 
 export function Modal({
@@ -19,6 +20,7 @@ export function Modal({
   children,
   titleFixed = false,
   size = 'default',
+  overflow = false,
 }: ModalProps) {
   const [hasScrolled, setHasScrolled] = useState(false)
   const divRef = useRef<HTMLDivElement>(null)
@@ -63,6 +65,7 @@ export function Modal({
               {
                 'max-w-[90%] sm:max-w-[75%]': size === 'default',
                 'max-w-[50%] sm:max-w-[35%]': size === 'small',
+                'overflow-y-auto': overflow,
               }
             )}
           >

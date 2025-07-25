@@ -3,6 +3,10 @@ import { Tag } from '@/components/Display/Tag'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import {
+  useClearQueryParams,
+  useQueryParams,
+} from '@/components/Utils/UseQueryParams'
 
 type PermissionGroupSettingsProps = {
   actionModal: () => void
@@ -11,6 +15,24 @@ type PermissionGroupSettingsProps = {
 export function PermissionGroupSettings({
   actionModal,
 }: PermissionGroupSettingsProps) {
+  const setClearQueryParam = useClearQueryParams()
+  const setQueryParam = useQueryParams()
+  const handleClick = (id: string, type?: string) => {
+    setClearQueryParam()
+
+    if (type) {
+      setQueryParam({
+        type: type,
+        permissionGroup: id,
+      })
+    } else {
+      setQueryParam({
+        permissionGroup: id,
+      })
+    }
+
+    actionModal()
+  }
   return (
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
@@ -38,7 +60,7 @@ export function PermissionGroupSettings({
                   />
                 }
                 mobile={true}
-                action={() => null}
+                action={() => handleClick('1', 'editPermissionGroup')}
               />
             </div>
             <div>
@@ -94,7 +116,7 @@ export function PermissionGroupSettings({
                   />
                 }
                 mobile={true}
-                action={() => null}
+                action={() => handleClick('2', 'editPermissionGroup')}
               />
             </div>
             <div>
@@ -142,7 +164,7 @@ export function PermissionGroupSettings({
                   />
                 }
                 mobile={true}
-                action={() => null}
+                action={() => handleClick('3', 'editPermissionGroup')}
               />
             </div>
             <div>
