@@ -13,7 +13,7 @@ type Notification = {
 }
 
 const Notification: FC = () => {
-  const [filter, setFilter] = useState(false)
+  const [filter, setFilter] = useState<'read' | 'unread' | 'all'>('all')
   const notificationData: Notification[] = [
     {
       id: '1',
@@ -58,10 +58,23 @@ const Notification: FC = () => {
               <input
                 type='radio'
                 name='notificationStatus'
+                value='all'
+                className='peer !hidden'
+                checked={filter === 'all'}
+                onChange={() => setFilter('all')}
+              />
+              <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
+                Todas
+              </span>
+            </label>
+            <label className='flex items-center gap-2 cursor-pointer'>
+              <input
+                type='radio'
+                name='notificationStatus'
                 value='unread'
                 className='peer !hidden'
-                checked={filter === false}
-                onChange={() => setFilter(false)}
+                checked={filter === 'unread'}
+                onChange={() => setFilter('unread')}
               />
               <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
                 Não lidas
@@ -73,8 +86,8 @@ const Notification: FC = () => {
                 name='notificationStatus'
                 value='read'
                 className='peer !hidden'
-                checked={filter === true}
-                onChange={() => setFilter(true)}
+                checked={filter === 'read'}
+                onChange={() => setFilter('read')}
               />
               <span className='flex items-center bg-[--backgroundSecondary] peer-checked:bg-[--primaryColor] px-4 py-2 rounded-full h-10 font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
                 Lidas
@@ -82,21 +95,26 @@ const Notification: FC = () => {
             </label>
           </div>
         </div>
-        <AnimatePresence>
+        <AnimatePresence mode='popLayout'>
           <div className='px-6 w-full'>
             <ul className='divide-y divide-[--border] w-full'>
               {notificationData
                 .filter(notification =>
-                  filter === true ? notification.read : !notification.read
+                  filter === 'all'
+                    ? true
+                    : filter === 'read'
+                      ? notification.read
+                      : !notification.read
                 )
                 .map(notification => (
                   <motion.li
                     key={notification.id}
+                    layout
                     className='relative flex flex-row justify-between py-6 w-full'
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.1 }}
                     onClick={() => null}
                   >
                     <div
