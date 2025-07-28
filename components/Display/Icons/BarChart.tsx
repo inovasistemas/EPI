@@ -1,0 +1,32 @@
+import classNames from 'classnames'
+
+type BarChartIconProps = {
+  size: string
+  stroke: string
+  strokeWidth?: number
+}
+
+export function BarChartIcon({
+  size,
+  stroke,
+  strokeWidth = 2,
+}: BarChartIconProps) {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      width={24}
+      height={24}
+      viewBox='0 0 24 24'
+      className={classNames(size, 'fill-none transition-all duration-300')}
+    >
+      <title>BarChartIcon</title>
+      <path
+        d='M3.5 9.5v9c0 .466 0 .699.076.883a1 1 0 00.541.54C4.301 20 4.534 20 5 20s.699 0 .883-.076a1 1 0 00.54-.541c.077-.184.077-.417.077-.883v-9c0-.466 0-.699-.076-.883a1 1 0 00-.541-.54C5.699 8 5.466 8 5 8s-.699 0-.883.076a1 1 0 00-.54.541c-.077.184-.077.417-.077.883zM10.5 5.5v13c0 .465 0 .698.076.882a1 1 0 00.541.541c.184.077.417.077.883.077s.699 0 .883-.077a1 1 0 00.54-.54c.077-.185.077-.418.077-.883v-13c0-.466 0-.699-.076-.883a1 1 0 00-.541-.54C12.699 4 12.466 4 12 4s-.699 0-.883.076a1 1 0 00-.54.541c-.077.184-.077.417-.077.883zM17.5 12.5v6c0 .466 0 .699.076.883a1 1 0 00.541.54c.184.077.417.077.883.077s.699 0 .883-.076a1 1 0 00.54-.541c.077-.184.077-.417.077-.883v-6c0-.466 0-.699-.076-.883a1 1 0 00-.541-.54C19.699 11 19.466 11 19 11s-.699 0-.883.076a1 1 0 00-.54.541c-.077.184-.077.417-.077.883z'
+        className={classNames(stroke, 'transition-all duration-300')}
+        strokeWidth={strokeWidth}
+        strokeLinecap='square'
+        strokeLinejoin='round'
+      />
+    </svg>
+  )
+}

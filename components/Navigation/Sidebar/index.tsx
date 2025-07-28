@@ -1,5 +1,5 @@
 'use client'
-import { ChartIcon } from '@/components/Display/Icons/Chart'
+import { BarChartIcon } from '@/components/Display/Icons/BarChart'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { PackageIcon } from '@/components/Display/Icons/Package'
 import { UserIcon } from '@/components/Display/Icons/User'
@@ -90,14 +90,14 @@ const Sidebar: React.FC = () => {
           />
 
           <NavLink
-            name='Relatórios'
+            name='Custos'
             icon={
-              <ChartIcon
+              <BarChartIcon
                 size='size-5'
                 stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
-            href='/relatorios'
+            href='/relatorios/custos'
           />
         </div>
       </div>
