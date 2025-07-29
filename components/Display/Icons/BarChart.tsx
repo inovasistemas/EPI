@@ -17,7 +17,10 @@ export function BarChartIcon({
       width={24}
       height={24}
       viewBox='0 0 24 24'
-      className={classNames(size, 'fill-none transition-all duration-300')}
+      className={classNames(
+        size,
+        'fill-none transition-all duration-300 rotate-90'
+      )}
     >
       <title>BarChartIcon</title>
       <path

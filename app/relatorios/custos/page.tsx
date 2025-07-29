@@ -2,6 +2,7 @@
 import dayjs from 'dayjs'
 import { type FC, useCallback, useState } from 'react'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { ChartCost } from '@/components/Chart/Cost'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { Modal } from '@/components/Display/Modal'
 import { FilterReportCost } from '@/components/Template/Filter/ReportCost'
@@ -27,7 +28,7 @@ const Costs: FC = () => {
       >
         <FilterReportCost start={filter.dateStart} end={filter.dateEnd} />
       </Modal>
-      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
+      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>
             Relatório custos
@@ -45,7 +46,9 @@ const Costs: FC = () => {
           />
         </div>
 
-        <div className='w-full'></div>
+        <div className='flex flex-col gap-3 w-full'>
+          <ChartCost />
+        </div>
       </div>
     </div>
   )
