@@ -65,6 +65,30 @@
   --tableColor: #202223;
 }
 
+.ant-picker,
+.ant-picker-dropdown,
+.ant-picker-panel,
+.ant-picker-cell,
+.ant-picker-header,
+.ant-picker-footer {
+  font-family: 'Ubuntu', sans-serif !important;
+  color: var(--textSecondary);
+}
+
+:where(.css-dev-only-do-not-override-7t2xvq).ant-picker
+  .ant-picker-input
+  > input {
+  font-size: 1rem !important;
+}
+
+.ant-picker-cell {
+  padding: 2px 4px !important;
+}
+
+.ant-picker-active-bar {
+  display: none;
+}
+
 ::selection {
   background: #e6e6e6;
 }

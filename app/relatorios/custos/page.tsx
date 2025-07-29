@@ -1,11 +1,17 @@
 'use client'
+import dayjs from 'dayjs'
 import { type FC, useCallback, useState } from 'react'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { Modal } from '@/components/Display/Modal'
+import { FilterReportCost } from '@/components/Template/Filter/ReportCost'
 
 const Costs: FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
+  const [filter, setFilter] = useState({
+    dateStart: dayjs().startOf('month'),
+    dateEnd: dayjs().endOf('month'),
+  })
 
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
@@ -19,12 +25,12 @@ const Costs: FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       >
-        <div></div>
+        <FilterReportCost start={filter.dateStart} end={filter.dateEnd} />
       </Modal>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>
-            Relatório de custos
+            Relatório custos
           </h2>
           <SecondaryButton
             label='Filtrar'
