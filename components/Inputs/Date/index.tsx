@@ -3,6 +3,8 @@ import ptBR from 'antd/es/locale/pt_BR'
 import classNames from 'classnames'
 import type dayjs from 'dayjs'
 import { Ubuntu } from 'next/font/google'
+import { ArrowMoveDownIcon } from '@/components/Display/Icons/ArrowMoveDown'
+import { TransferArrowIcon } from '@/components/Display/Icons/TransferArrow'
 
 type DateInputProps = {
   start: dayjs.Dayjs
@@ -25,7 +27,12 @@ export function DateInput({ start, end }: DateInputProps) {
           <ConfigProvider locale={ptBR}>
             <RangePicker
               format='DD/MM/YYYY'
-              separator={false}
+              separator={
+                <TransferArrowIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary]'
+                />
+              }
               nextIcon={false}
               prevIcon={false}
               suffixIcon={false}
@@ -34,9 +41,10 @@ export function DateInput({ start, end }: DateInputProps) {
               placeholder={['Inicial', 'Final']}
               allowClear={false}
               defaultValue={[start, end]}
+              defaultOpen={false}
               className={classNames(
                 !ubuntu.className,
-                'peer text-[1rem] placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
+                'w-full peer text-[1rem] placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
               )}
             />
           </ConfigProvider>

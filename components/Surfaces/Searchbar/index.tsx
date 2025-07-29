@@ -23,6 +23,7 @@ const Searchbar: React.FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
 
   const handleCloseModal = useCallback(() => {
+    setCardOpen(SearchbarCards.Default)
     setModalStatus(prev => !prev)
   }, [])
 

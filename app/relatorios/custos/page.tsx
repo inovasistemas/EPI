@@ -28,7 +28,7 @@ const Costs: FC = () => {
       >
         <FilterReportCost start={filter.dateStart} end={filter.dateEnd} />
       </Modal>
-      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
+      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>
             Relatório custos
@@ -46,7 +46,7 @@ const Costs: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col gap-3 w-full'>
+        <div className='flex flex-col gap-3 px-6 pb-6 w-full overflow-hidden'>
           <ChartCost />
         </div>
       </div>

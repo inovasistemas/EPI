@@ -1,6 +1,16 @@
 'use client'
+
+import classNames from 'classnames'
 import { TrendingUp } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from 'recharts'
 import {
   Card,
   CardContent,
@@ -16,48 +26,49 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
-export const description = 'A multiple bar chart'
+export const description = 'A bar chart with a custom label'
 
 const chartData = [
-  { month: 'Manutenção Máquinas', sector: 186, subsector: 80 },
-  { month: 'Operação Máquinas', sector: 305, subsector: 200 },
-  { month: 'Logística Interna', sector: 237, subsector: 120 },
-  { month: 'Almoxarifado', sector: 237, subsector: 120 },
-  { month: 'Laboratório', sector: 237, subsector: 120 },
-  { month: 'Limpeza Industrial', sector: 237, subsector: 120 },
-  { month: 'Soldagem', sector: 237, subsector: 120 },
-  { month: 'Manutenção Máquinas 1', sector: 186, subsector: 80 },
-  { month: 'Operação Máquinas 2', sector: 305, subsector: 200 },
-  { month: 'Logística Interna 3', sector: 237, subsector: 120 },
-  { month: 'Almoxarifado 4', sector: 237, subsector: 120 },
-  { month: 'Laboratório 5', sector: 237, subsector: 120 },
-  { month: 'Limpeza Industrial 6', sector: 237, subsector: 120 },
-  { month: 'Soldagem 7', sector: 237, subsector: 120 },
+  { month: 'January', desktop: 186, mobile: 80 },
+  { month: 'February', desktop: 305, mobile: 200 },
+  { month: 'March', desktop: 237, mobile: 120 },
+  { month: 'April', desktop: 73, mobile: 190 },
+  { month: 'May', desktop: 209, mobile: 130 },
+  { month: 'June', desktop: 214, mobile: 140 },
 ]
 
 const chartConfig = {
-  sector: {
-    label: 'Setor',
-    color: 'var(--primaryColor)',
+  desktop: {
+    label: 'Desktop',
+    color: 'var(--textPrimary)',
   },
-  subsector: {
-    label: 'Subsetores',
-    color: 'var(--secondaryColor)',
+  mobile: {
+    label: 'Mobile',
+    color: 'var(--chart-2)',
+  },
+  label: {
+    color: 'var(--background)',
   },
 } satisfies ChartConfig
 
 export function ChartCost() {
   return (
-    <Card className='bg-transparent shadow-none border-none w-full h-full'>
-      <CardContent className='w-full h-full'>
-        <ChartContainer config={chartConfig} className='w-full'>
+    <ResponsiveContainer width='100%' height='100%'>
+      <CardContent className='p-0 w-full h-full'>
+        <ChartContainer
+          config={chartConfig}
+          className='w-full'
+          style={{ height: `${(chartData.length + 2) * 32}px` }}
+        >
           <BarChart
             accessibilityLayer
             data={chartData}
             layout='vertical'
             margin={{
-              right: 16,
+              right: 0,
             }}
+            barCategoryGap={2}
+            barSize={32}
           >
             <CartesianGrid horizontal={false} />
             <YAxis
@@ -69,29 +80,31 @@ export function ChartCost() {
               tickFormatter={value => value.slice(0, 3)}
               hide
             />
-            <XAxis dataKey='sector' type='number' hide />
+            <XAxis dataKey='desktop' type='number' hide />
             <ChartTooltip
               cursor={false}
               content={
-                <ChartTooltipContent indicator='line' className='border-none' />
+                <ChartTooltipContent
+                  indicator='line'
+                  className='shadow-xl border-[--border]'
+                />
               }
             />
             <Bar
-              dataKey='sector'
+              dataKey='desktop'
               layout='vertical'
-              fill='var(--color-sector)'
-              radius={4}
-              className='transition-all duration-300'
+              fill='var(--color-desktop)'
+              radius={12}
             >
               <LabelList
                 dataKey='month'
                 position='insideLeft'
                 offset={8}
-                className='fill-white font-medium'
+                className='fill-white text-sm'
                 fontSize={12}
               />
               <LabelList
-                dataKey='sector'
+                dataKey='desktop'
                 position='right'
                 offset={8}
                 className='fill-foreground'
@@ -101,6 +114,6 @@ export function ChartCost() {
           </BarChart>
         </ChartContainer>
       </CardContent>
-    </Card>
+    </ResponsiveContainer>
   )
 }

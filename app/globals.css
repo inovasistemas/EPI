@@ -73,20 +73,104 @@
 .ant-picker-footer {
   font-family: 'Ubuntu', sans-serif !important;
   color: var(--textSecondary);
+  user-select: none;
+}
+
+:where(
+    .css-dev-only-do-not-override-1vjf2v5
+  ).ant-picker-dropdown.ant-picker-dropdown-placement-topLeft
+  .ant-picker-range-arrow,
+:where(
+    .css-dev-only-do-not-override-1vjf2v5
+  ).ant-picker-dropdown.ant-picker-dropdown-placement-topRight
+  .ant-picker-range-arrow {
+  display: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-panel-container {
+  background-color: var(--backgroundSecondary);
+  user-select: none;
+  border: 1px solid var(--border);
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-content
+  th {
+  color: var(--textSecondary);
+  user-select: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-header-view
+  > button {
+  color: var(--textSecondary);
+  user-select: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view {
+  color: var(--textSecondary);
+  opacity: 1 !important;
+  user-select: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell {
+  color: var(--textSecondary);
+  opacity: 0.25;
+  user-select: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-in-range:not(
+    .ant-picker-cell-disabled
+  ):before,
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  ):before,
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background-color: var(--buttonPrimary);
+  user-select: none;
 }
 
 :where(.css-dev-only-do-not-override-7t2xvq).ant-picker
   .ant-picker-input
   > input {
   font-size: 1rem !important;
+  user-select: none;
 }
 
 .ant-picker-cell {
-  padding: 2px 4px !important;
+  padding: 1px 4px !important;
+  user-select: none;
+}
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner,
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background: var(--primaryColor);
 }
 
 .ant-picker-active-bar {
   display: none;
+  user-select: none;
 }
 
 ::selection {
@@ -237,8 +321,6 @@ input[type='checkbox'] {
   }
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -295,8 +377,6 @@ input[type='checkbox'] {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -304,4 +384,8 @@ input[type='checkbox'] {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input[date-range='end'] {
+  text-align: right;
 }
