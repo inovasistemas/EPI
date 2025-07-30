@@ -13,6 +13,7 @@ import { SearchIcon } from '@/components/Display/Icons/Search'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { Modal } from '@/components/Display/Modal'
 import { PrimaryLink } from '@/components/Links/PrimaryLink'
+import { Paginations } from '@/components/Navigation/Paginations'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterEquipments } from '@/components/Template/Filter/Equipments'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
@@ -194,7 +195,7 @@ const Equipment: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col gap-y-6 w-full'>
+        <div className='flex flex-col justify-between gap-y-6 pb-6 w-full h-full'>
           <ul className='flex flex-col gap-2 px-3'>
             <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
@@ -332,6 +333,8 @@ const Equipment: FC = () => {
               </li>
             ))}
           </ul>
+
+          <Paginations numberOfPages={10} />
         </div>
       </div>
     </div>

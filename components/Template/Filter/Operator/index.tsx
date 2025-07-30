@@ -34,7 +34,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
 
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
-      <h2 className='font-semibold text-2xl text-start'>Filtros</h2>
+      <h2 className='font-medium text-xl text-start'>Filtros</h2>
       <div className='items-center grid grid-cols-2 w-full select-none'>
         <div>
           <span className='font-medium'>Grupo de permissão</span>

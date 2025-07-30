@@ -1,12 +1,11 @@
 import type dayjs from 'dayjs'
-import { RangeDateInput } from '@/components/Inputs/RangeDate'
+import { DateInput } from '@/components/Inputs/Date'
 
-type FilterReportCostProps = {
+type FilterReportIssuesProps = {
   start: dayjs.Dayjs
-  end: dayjs.Dayjs
 }
 
-export function FilterReportCost({ start, end }: FilterReportCostProps) {
+export function FilterReportIssues({ start }: FilterReportIssuesProps) {
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
@@ -16,7 +15,7 @@ export function FilterReportCost({ start, end }: FilterReportCostProps) {
             <span className='font-medium'>Período</span>
           </div>
           <div>
-            <RangeDateInput start={start} end={end} />
+            <DateInput start={start} />
           </div>
         </div>
       </div>

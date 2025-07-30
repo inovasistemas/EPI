@@ -1,7 +1,4 @@
 'use client'
-
-import classNames from 'classnames'
-import { TrendingUp } from 'lucide-react'
 import {
   Bar,
   BarChart,
@@ -11,14 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import {
   type ChartConfig,
   ChartContainer,
@@ -29,17 +19,14 @@ import {
 export const description = 'A bar chart with a custom label'
 
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+  { month: 'Manutenção Máquinas', cost: 186 },
+  { month: 'Operação Máquinas', cost: 305 },
+  { month: 'Logística Interna', cost: 237 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  cost: {
+    label: 'Recursos',
     color: 'var(--textPrimary)',
   },
   mobile: {
@@ -58,14 +45,14 @@ export function ChartCost() {
         <ChartContainer
           config={chartConfig}
           className='w-full'
-          style={{ height: `${(chartData.length + 2) * 32}px` }}
+          style={{ height: `${(chartData.length + 1) * 32}px` }}
         >
           <BarChart
             accessibilityLayer
             data={chartData}
             layout='vertical'
             margin={{
-              right: 0,
+              right: 30,
             }}
             barCategoryGap={2}
             barSize={32}
@@ -80,35 +67,49 @@ export function ChartCost() {
               tickFormatter={value => value.slice(0, 3)}
               hide
             />
-            <XAxis dataKey='desktop' type='number' hide />
+            <XAxis dataKey='cost' type='number' hide />
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
                   indicator='line'
                   className='shadow-xl border-[--border]'
+                  labelKey='month'
+                  labelFormatter={label => label}
+                  formatter={value =>
+                    value.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                  }
                 />
               }
             />
             <Bar
-              dataKey='desktop'
+              dataKey='cost'
               layout='vertical'
-              fill='var(--color-desktop)'
+              fill='var(--color-cost)'
               radius={12}
             >
               <LabelList
                 dataKey='month'
                 position='insideLeft'
                 offset={8}
-                className='fill-white text-sm'
+                className='fill-white font-medium text-sm'
                 fontSize={12}
               />
               <LabelList
-                dataKey='desktop'
+                dataKey='cost'
                 position='right'
                 offset={8}
-                className='fill-foreground'
+                className='fill-foreground font-medium text-sm'
                 fontSize={12}
+                formatter={(value: number | string) =>
+                  value.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })
+                }
               />
             </Bar>
           </BarChart>

@@ -2,6 +2,7 @@
 import { BarChartIcon } from '@/components/Display/Icons/BarChart'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { PackageIcon } from '@/components/Display/Icons/Package'
+import { ReportChartIcon } from '@/components/Display/Icons/ReportChart'
 import { UserIcon } from '@/components/Display/Icons/User'
 import { UsersIcon } from '@/components/Display/Icons/Users'
 import { NavLink } from '@/components/Navigation/NavLink'
@@ -90,14 +91,25 @@ const Sidebar: React.FC = () => {
           />
 
           <NavLink
-            name='Custos'
+            name='Pendências'
+            icon={
+              <ReportChartIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            }
+            href='/relatorios/pendencias'
+          />
+
+          <NavLink
+            name='Recursos'
             icon={
               <BarChartIcon
                 size='size-5'
                 stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
-            href='/relatorios/custos'
+            href='/relatorios/recursos'
           />
         </div>
       </div>

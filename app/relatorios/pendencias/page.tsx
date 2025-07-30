@@ -2,16 +2,14 @@
 import dayjs from 'dayjs'
 import { type FC, useCallback, useState } from 'react'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { ChartCost } from '@/components/Chart/Cost'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { Modal } from '@/components/Display/Modal'
-import { FilterReportCost } from '@/components/Template/Filter/ReportCost'
+import { FilterReportIssues } from '@/components/Template/Filter/ReportIssues'
 
-const Costs: FC = () => {
+const Issues: FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
   const [filter, setFilter] = useState({
-    dateStart: dayjs().startOf('month'),
-    dateEnd: dayjs().endOf('month'),
+    dateStart: dayjs(),
   })
 
   const handleCloseModal = useCallback(() => {
@@ -26,12 +24,12 @@ const Costs: FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       >
-        <FilterReportCost start={filter.dateStart} end={filter.dateEnd} />
+        <FilterReportIssues start={filter.dateStart} />
       </Modal>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>
-            Relatório custos
+            Relatório pendências
           </h2>
           <SecondaryButton
             label='Filtrar'
@@ -46,12 +44,10 @@ const Costs: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col gap-3 px-6 pb-6 w-full overflow-hidden'>
-          <ChartCost />
-        </div>
+        <div className='flex flex-col gap-3 px-6 pb-6 w-full overflow-hidden'></div>
       </div>
     </div>
   )
 }
 
-export default Costs
+export default Issues
