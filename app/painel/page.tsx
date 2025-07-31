@@ -1,5 +1,6 @@
 'use client'
 
+import { ChartAreaGradient } from '@/components/Chart/Small/Colaborator'
 import { SmallChartIssues } from '@/components/Chart/Small/Issues'
 import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 
@@ -27,9 +28,20 @@ export default function Home() {
         </button> */}
 
         <div className='gap-3 grid sm:grid-cols-3'>
-          <div className=''></div>
-          <div className=''></div>
-          <div className='group relative flex flex-col justify-center items-start p-2 py-3 rounded-2xl w-full transition-all duration-300'>
+          <div className='group flex flex-col justify-start items-start col-span-2 border border-[--border] rounded-2xl w-full transition-all duration-300'>
+            <div className='flex justify-between items-center p-3 w-full'>
+              <h3 className='font-medium text-base'>
+                Retirada de equipamentos
+              </h3>
+              <span className='rotate-90'>
+                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
+              </span>
+            </div>
+            <div className='relative col-span-2 w-full'>
+              <ChartAreaGradient />
+            </div>
+          </div>
+          <div className='group relative flex flex-col justify-between items-start p-3 border border-[--border] rounded-2xl w-full transition-all duration-300'>
             <div className='flex justify-between items-center px-1 w-full'>
               <h3 className='font-medium text-base'>Taxa de pendências</h3>
               <span className='rotate-90'>
@@ -54,6 +66,15 @@ export default function Home() {
                 </div>
                 <span className='opacity-50 text-[--textSecondary] text-sm'>
                   50 colaboradores
+                </span>
+              </div>
+              <div className='flex justify-between items-center pr-1 w-full h-5'>
+                <div className='flex items-center gap-2 h-full'>
+                  <span className='bg-[--buttonPrimary] rounded-full w-1 h-full'></span>
+                  <span className='font-medium leading-none'>0%</span>
+                </div>
+                <span className='opacity-50 text-[--textSecondary] text-sm'>
+                  0 colaboradores
                 </span>
               </div>
             </div>
