@@ -3,7 +3,7 @@ import type React from 'react'
 import { useCallback, useState } from 'react'
 import { ProfilePicture } from '@/components/Display/Avatar'
 import { BellIcon } from '@/components/Display/Icons/Bell'
-import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
+import { SearchIcon } from '@/components/Display/Icons/Search'
 import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
@@ -81,7 +81,7 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <FingerPrintIcon
+            <SearchIcon
               size='size-5'
               stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
             />
