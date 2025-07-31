@@ -33,6 +33,10 @@
 
   --buttonHover: #dce1e9;
   --tableColor: #e2e7eb;
+
+  --chartGreen: #3cb295;
+  --chartYellow: #f6cf54;
+  --chartOrange: #ffa244;
 }
 
 .dark {
@@ -63,6 +67,10 @@
 
   --buttonHover: #262829;
   --tableColor: #202223;
+
+  --chartGreen: #3cb295;
+  --chartYellow: #f6cf54;
+  --chartOrange: #ffa244;
 }
 
 .ant-picker,
