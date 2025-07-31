@@ -82,7 +82,7 @@ export function SmallChartIssues() {
             <Bar
               dataKey='notwithdrawn'
               stackId='a'
-              fill='var(--chartOrange)'
+              fill='var(--chartYellow)'
               radius={[0, 4, 4, 0]}
             />
           </BarChart>

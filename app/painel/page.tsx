@@ -49,7 +49,7 @@ export default function Home() {
               </div>
               <div className='flex justify-between items-center pr-1 w-full h-5'>
                 <div className='flex items-center gap-2 h-full'>
-                  <span className='bg-[--chartOrange] rounded-full w-1 h-full'></span>
+                  <span className='bg-[--chartYellow] rounded-full w-1 h-full'></span>
                   <span className='font-medium leading-none'>21,19%</span>
                 </div>
                 <span className='opacity-50 text-[--textSecondary] text-sm'>
