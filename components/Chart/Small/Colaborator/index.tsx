@@ -42,7 +42,7 @@ const chartConfig = {
 
 export function ChartAreaGradient() {
   return (
-    <Card className='bg-transparent shadow-none -ml-[2%] p-0 border-none w-[100%]'>
+    <Card className='bg-transparent shadow-none -ml-[2%] p-0 border-none w-[104%]'>
       <CardContent className='m-0 p-0 w-full h-44'>
         <ChartContainer config={chartConfig} className='m-0 p-0 w-full h-44'>
           <AreaChart
