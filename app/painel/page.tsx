@@ -54,53 +54,53 @@ export default function Home() {
         </div>
 
         <div className='gap-6 grid grid-cols-2 sm:grid-cols-3'>
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-6 pt-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
-            <span className='z-20 py-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
+          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+            <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Colaboradores
             </span>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Ativos</span>
-              <span className='font-medium'>103</span>
+              <span className='text-sm'>Ativos</span>
+              <span className='font-medium text-sm'>103</span>
             </div>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Afastados</span>
-              <span className='font-medium'>1</span>
+              <span className='text-sm'>Afastados</span>
+              <span className='font-medium text-sm'>1</span>
             </div>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Devolução pendente</span>
-              <span className='font-medium'>0</span>
+              <span className='text-sm'>Devolução pendente</span>
+              <span className='font-medium text-sm'>0</span>
             </div>
           </div>
 
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-6 pt-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
-            <span className='z-20 py-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
+          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+            <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Operadores
             </span>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Ativos</span>
-              <span className='font-medium'>103</span>
+              <span className='text-sm'>Ativos</span>
+              <span className='font-medium text-sm'>103</span>
             </div>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Afastados</span>
-              <span className='font-medium'>1</span>
+              <span className='text-sm'>Afastados</span>
+              <span className='font-medium text-sm'>1</span>
             </div>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Devolução pendente</span>
-              <span className='font-medium'>0</span>
+              <span className='text-sm'>Devolução pendente</span>
+              <span className='font-medium text-sm'>0</span>
             </div>
           </div>
 
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-6 pt-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
-            <span className='z-20 py-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
+          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+            <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Equipamentos
             </span>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Ativos</span>
-              <span className='font-medium'>103</span>
+              <span className='text-sm'>Ativos</span>
+              <span className='font-medium text-sm'>103</span>
             </div>
             <div className='flex flex-row justify-between items-center w-full'>
-              <span className=''>Vencidos</span>
-              <span className='font-medium'>1</span>
+              <span className='text-sm'>Vencidos</span>
+              <span className='font-medium text-sm'>1</span>
             </div>
           </div>
         </div>
