@@ -48,7 +48,7 @@ export function SmallChartIssues() {
             data={chartData}
             layout='vertical'
             barCategoryGap={2}
-            barSize={18}
+            barSize={28}
           >
             <CartesianGrid horizontal={false} />
             <YAxis

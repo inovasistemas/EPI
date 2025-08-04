@@ -1,16 +1,7 @@
 'use client'
-
-import { TrendingUp } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   type ChartConfig,
   ChartContainer,
@@ -68,7 +59,14 @@ export function ChartAreaGradient() {
               content={<ChartTooltipContent className='border-[--border]' />}
             />
             <defs>
-              <linearGradient id='fillDesktop' x1='0' y1='0' x2='0' y2='1'>
+              <linearGradient
+                id='fillDesktop'
+                x1='0'
+                y1='0'
+                x2='0'
+                y2='1'
+                stroke='#8884d8'
+              >
                 <stop
                   offset='5%'
                   stopColor='var(--color-desktop)'
@@ -100,6 +98,7 @@ export function ChartAreaGradient() {
               fillOpacity={0.4}
               stroke='var(--color-mobile)'
               stackId='a'
+              strokeWidth={2}
             />
             <Area
               dataKey='desktop'
@@ -108,6 +107,7 @@ export function ChartAreaGradient() {
               fillOpacity={0.4}
               stroke='var(--color-desktop)'
               stackId='a'
+              strokeWidth={2}
             />
           </AreaChart>
         </ChartContainer>
