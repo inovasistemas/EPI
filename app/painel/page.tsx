@@ -7,9 +7,9 @@ import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 export default function Home() {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      <div className='flex flex-col gap-6 bg-[--backgroundPrimary] p-6 sm:rounded-2xl w-full h-full'>
+      <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:rounded-2xl w-full h-full'>
         <div className='gap-6 grid sm:grid-cols-3'>
-          <div className='group bg-[--tableRow] flex flex-col justify-start items-start col-span-2 rounded-2xl w-full overflow-hidden transition-all duration-300'>
+          <div className='group flex flex-col justify-start items-start col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full overflow-hidden transition-all duration-300'>
             <div className='flex justify-between items-center p-3 w-full'>
               <h3 className='font-medium text-base'>
                 Retirada de equipamentos
@@ -22,7 +22,7 @@ export default function Home() {
               <ChartAreaGradient />
             </div>
           </div>
-          <div className='group bg-[--tableRow] relative flex flex-col justify-between items-start p-3 rounded-2xl w-full transition-all duration-300'>
+          <div className='group relative flex flex-col justify-between items-start bg-[--backgroundPrimary] p-3 rounded-2xl w-full transition-all duration-300'>
             <div className='flex justify-between items-center px-1 w-full'>
               <h3 className='font-medium text-base'>Taxa de pendências</h3>
               <span className='rotate-90'>
@@ -54,7 +54,7 @@ export default function Home() {
         </div>
 
         <div className='gap-6 grid grid-cols-2 sm:grid-cols-3'>
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+          <div className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
             <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Colaboradores
             </span>
@@ -72,7 +72,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+          <div className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
             <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Operadores
             </span>
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className='group bg-[--tableRow] relative flex flex-col justify-start items-center p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
+          <div className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'>
             <span className='z-20 pb-3 w-full font-medium text-[--textSecondary] text-base transition-all duration-300'>
               Equipamentos
             </span>

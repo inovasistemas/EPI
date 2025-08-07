@@ -12,21 +12,22 @@ import {
 export const description = 'An area chart with gradient fill'
 
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+  { month: 'Domingo', desktop: 0, mobile: 0 },
+  { month: 'Segunda-feira', desktop: 186, mobile: 80 },
+  { month: 'Terça-feira', desktop: 305, mobile: 200 },
+  { month: 'Quarta-feira', desktop: 237, mobile: 120 },
+  { month: 'Quinta-feira', desktop: 73, mobile: 190 },
+  { month: 'Sexta-feira', desktop: 209, mobile: 130 },
+  { month: 'Sábado', desktop: 214, mobile: 140 },
 ]
 
 const chartConfig = {
   desktop: {
-    label: 'Desktop',
+    label: 'Passada',
     color: 'var(--primaryColor)',
   },
   mobile: {
-    label: 'Mobile',
+    label: 'Esta semana',
     color: 'var(--chartYellow)',
   },
 } satisfies ChartConfig
