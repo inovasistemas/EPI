@@ -133,33 +133,6 @@ export function LoginForm() {
         setAlertState(true)
       }
     }
-
-    // if (step === 2) {
-    //   const response = await checkTwoFactorAuthentication({
-    //     code: formData.security_code,
-    //   })
-
-    //   if (response && response.status === 204) {
-    //     Cookies.set(
-    //       'authToken',
-    //       Buffer.from(
-    //         JSON.stringify({
-    //           enterprise: '',
-    //           name: formData.name,
-    //           permission_group: formData.permission_group,
-    //           user: formData.user_uuid,
-    //         }),
-    //         'binary'
-    //       ).toString('base64'),
-    //       { expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) }
-    //     )
-
-    //     router.push('/painel')
-    //   } else {
-    //     setAlertText('Erro ao verificar o código.')
-    //     setAlertState(true)
-    //   }
-    // }
   }
 
   const handleBack = () => {
@@ -377,18 +350,6 @@ export function LoginForm() {
                   <SecondaryButton label='Voltar' onClick={handleBack} />
                 </div>
               )}
-
-              {/* <FormInput
-                name='security_code'
-                label='Código'
-                required={false}
-                type='text'
-                value={formData.security_code}
-                position='right'
-                onChange={e => }
-                onKeyDown={handleKeyDown}
-                maxLength={6}
-              /> */}
             </motion.div>
           )}
         </div>
