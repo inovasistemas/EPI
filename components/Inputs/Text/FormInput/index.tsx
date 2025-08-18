@@ -9,6 +9,7 @@ type FormInputProps = {
   type?: string
   reveal?: boolean
   position?: string
+  maxLength?: number
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   actionButton?: () => void
@@ -26,6 +27,7 @@ export function FormInput({
   position = 'left',
   actionButton,
   onKeyDown,
+  maxLength = 255,
 }: FormInputProps) {
   type = reveal ? 'text' : type
 
@@ -47,6 +49,7 @@ export function FormInput({
             onChange={onChange}
             onKeyDown={onKeyDown}
             spellCheck='false'
+            maxLength={maxLength}
           />
           <label
             htmlFor={name}

@@ -1,6 +1,8 @@
+import classNames from 'classnames'
+
 type SecondaryButtonProps = {
   label: string
-  icon: React.ReactElement
+  icon?: React.ReactElement
   onClick: () => void
 }
 
@@ -13,9 +15,15 @@ export function SecondaryButton({
     <button
       type='button'
       onClick={onClick}
-      className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-4 pr-5 rounded-xl h-10 text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
+      className={classNames(
+        {
+          'pl-4 pr-5': icon,
+          'px-8': !icon,
+        },
+        'group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-4 rounded-xl h-10 text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
+      )}
     >
-      {icon}
+      {icon ?? icon}
 
       <span className='font-medium text-sm'>{label}</span>
     </button>
