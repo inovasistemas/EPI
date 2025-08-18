@@ -1,9 +1,10 @@
 'use client'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { getPermissionGroups } from '@/services/User'
 
 type FilterOperatorProps = {
   actionClose: () => void
@@ -15,6 +16,8 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
   const [filters, setFilters] = useState({
     permissionGroup: searchParams.get('permissionGroup') || '',
   })
+  const fetchedPermissionGroups = useRef(false)
+  const [permissionGroups, setPermissionGroups] = useState([])
 
   const handleFiltersChange = (name: string, value: string) => {
     setFilters(prev => ({
@@ -32,6 +35,26 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
     handleFiltersChange('permissionGroup', '')
   }
 
+  useEffect(() => {
+    if (fetchedPermissionGroups.current) return
+    fetchedPermissionGroups.current = true
+
+    const fetchPermissionGroups = async () => {
+      const response = await getPermissionGroups()
+
+      if (response && response.status === 200) {
+        const filtered = response.data.data.map(
+          (item: { name: string; uuid: string }) => ({
+            label: item.name,
+            value: item.uuid,
+          })
+        )
+        setPermissionGroups(filtered)
+      }
+    }
+    fetchPermissionGroups()
+  }, [])
+
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
@@ -46,10 +69,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
             onChange={(value: string) =>
               handleFiltersChange('permissionGroup', value)
             }
-            options={[
-              { value: 'admin', label: 'Administrador' },
-              { value: 'operator', label: 'Operador' },
-            ]}
+            options={permissionGroups}
             placeholder=''
           />
         </div>

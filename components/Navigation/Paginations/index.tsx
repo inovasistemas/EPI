@@ -147,7 +147,7 @@ export function Paginations({ numberOfPages }: Paginations) {
             }}
             className={
               filters.page === numberOfPages
-                ? 'pointer-events-none opacity-50'
+                ? 'pointer-events-none text-[--buttonSecondary]'
                 : ''
             }
           />

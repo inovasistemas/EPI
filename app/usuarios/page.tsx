@@ -22,14 +22,17 @@ import { Paginations } from '@/components/Navigation/Paginations'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterOperator } from '@/components/Template/Filter/Operator'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { getUsers } from '@/services/User'
+import { timestampToDate } from '@/utils/timestamp-to-date'
+import { calcPages } from '@/utils/calc-pages'
 
 type Operator = {
-  id: string
+  uuid: string
   name: string
   code: string
-  username: string
-  permission: string
-  createdAt: string
+  email: string
+  permission_group: string
+  created_at: string
 }
 
 const Operator: FC = () => {
@@ -38,36 +41,34 @@ const Operator: FC = () => {
   const permissionGroup = useMemo(() => {
     return searchParams.get('permissionGroup')
   }, [searchParams])
+  const page = useMemo(() => {
+    return searchParams.get('page')
+  }, [searchParams])
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const fetchedSearch = useRef(false)
   const [orderBy, setOrderBy] = useState({
     field: searchParams.get('sortField') || '',
     order: searchParams.get('sortOrder') || '',
   })
-  const operators: Operator[] = [
-    {
-      id: 'us_93d8a0d66ad2494f',
-      name: 'Inova Sistemas',
-      code: 'op_93d8a0d66ad2494f',
-      username: 'teste@inovasistemas',
-      permission: 'administrador',
-      createdAt: '10/06/2025',
-    },
-    {
-      id: 'us_93d8a0d66ad2494g',
-      name: 'João Gomes',
-      code: 'op_93d8a0d66ad2494g',
-      username: 'joao@inovasistemas',
-      permission: 'administrador',
-      createdAt: '10/06/2025',
-    },
-  ]
+  const [pageSettings, setPageSettings] = useState({
+    numberOfDocuments: 1,
+    numberPerPage: 1,
+  })
+  const [users, setUsers] = useState<Operator[]>([])
 
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
   }, [])
+
+  const handlePageSettings = (name: string, value: string) => {
+    setPageSettings(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
 
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
@@ -102,6 +103,25 @@ const Operator: FC = () => {
       checkboxRefs.current.every(ref => ref?.checked)
     setCheckedAll(allChecked)
   }, [])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await getUsers({
+        sortField: orderBy.field || 'name',
+        sortOrder: orderBy.order || 'asc',
+        permissionGroup: permissionGroup || undefined,
+        page: Number(page) || undefined,
+      })
+
+      if (response && response.status === 200) {
+        handlePageSettings('numberOfDocuments', response.data.total)
+        handlePageSettings('numberPerPage', response.data.per_page)
+        setUsers(response.data.data)
+      }
+    }
+
+    fetchUsers()
+  }, [orderBy, permissionGroup, searchParams])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -188,9 +208,9 @@ const Operator: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col justify-between pb-6 w-full h-full'>
-          <ul className='flex flex-col gap-2 px-3'>
-            <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
+        <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full overflow-hidden'>
+          <div className='flex flex-col gap-2 px-3 h-full'>
+            <div className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
                 <div className='group flex items-center gap-2 transition-all duration-300'>
                   <div className='flex items-center h-full'>
@@ -229,14 +249,14 @@ const Operator: FC = () => {
               </div>
               <div className='flex items-center col-span-3 py-3'>
                 <button
-                  onClick={() => handleOrderBy('username')}
+                  onClick={() => handleOrderBy('email')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>E-mail</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='username'
+                    name='email'
                     order={orderBy.order}
                   />
                 </button>
@@ -269,49 +289,62 @@ const Operator: FC = () => {
                   />
                 </button>
               </div>
-            </li>
-            {operators.map((operator, i) => (
-              <li key={operator.id}>
-                <Link
-                  href={`/usuarios/detalhes/${operator.id}`}
-                  className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
-                >
-                  <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
-                    <input
-                      ref={el => {
-                        if (el) {
-                          checkboxRefs.current[i] = el
-                        }
-                      }}
-                      type='checkbox'
-                      name='operator[]'
-                      onClick={e => {
-                        e.stopPropagation()
-                      }}
-                      onChange={() => {
-                        const allChecked =
-                          checkboxRefs.current.length > 0 &&
-                          checkboxRefs.current.every(ref => ref?.checked)
-                        setCheckedAll(allChecked)
-                        updateCheckedStatus()
-                      }}
-                      className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
-                    />
-                    <span>{operator.name}</span>
-                  </div>
-                  <div className='col-span-3 py-4 lowercase'>
-                    {operator.username}
-                  </div>
-                  <div className='col-span-2 py-4'>{operator.permission}</div>
-                  <div className='col-span-2 py-4 pr-1 text-right lowercase'>
-                    10/06/2025
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+            </div>
+            <div className='flex flex-col gap-6 pb-6 h-full overflow-auto'>
+              <ul className='flex flex-col gap-3'>
+                {users.map((operator, i) => (
+                  <li key={operator.uuid}>
+                    <Link
+                      href={`/usuarios/detalhes/${operator.uuid}`}
+                      className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
+                    >
+                      <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
+                        <input
+                          ref={el => {
+                            if (el) {
+                              checkboxRefs.current[i] = el
+                            }
+                          }}
+                          type='checkbox'
+                          name='operator[]'
+                          onClick={e => {
+                            e.stopPropagation()
+                          }}
+                          onChange={() => {
+                            const allChecked =
+                              checkboxRefs.current.length > 0 &&
+                              checkboxRefs.current.every(ref => ref?.checked)
+                            setCheckedAll(allChecked)
+                            updateCheckedStatus()
+                          }}
+                          className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
+                        />
+                        <span className='capitalize'>
+                          {operator.name.toLocaleLowerCase()}
+                        </span>
+                      </div>
+                      <div className='col-span-3 py-4 lowercase'>
+                        {operator.email}
+                      </div>
+                      <div className='col-span-2 py-4 capitalize'>
+                        {operator.permission_group.toLocaleLowerCase()}
+                      </div>
+                      <div className='col-span-2 py-4 pr-1 text-right lowercase'>
+                        {timestampToDate(operator.created_at)}
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
 
-          <Paginations numberOfPages={10} />
+              <Paginations
+                numberOfPages={calcPages(
+                  pageSettings.numberOfDocuments,
+                  pageSettings.numberPerPage
+                )}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

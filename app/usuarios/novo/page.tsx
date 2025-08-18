@@ -1,19 +1,24 @@
 'use client'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { createUser, getPermissionGroups } from '@/services/User'
+import { useRouter } from 'next/navigation'
 
 const CreateOperator: FC = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     permissionGroup: '',
   })
+  const fetchedPermissionGroups = useRef(false)
+  const [permissionGroups, setPermissionGroups] = useState([])
 
   const handleChange = (name: string, value: string) => {
     setFormData(prev => ({
@@ -21,6 +26,41 @@ const CreateOperator: FC = () => {
       [name]: value,
     }))
   }
+
+  const handleCreateUser = async () => {
+    const response = await createUser({
+      email: formData.email,
+      name: formData.name,
+      password: formData.password,
+      permissionGroup: formData.permissionGroup,
+    })
+
+    if (response && response.status === 201) {
+      router.push('/usuarios')
+    } else {
+      // mostrar erro
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedPermissionGroups.current) return
+    fetchedPermissionGroups.current = true
+
+    const fetchPermissionGroups = async () => {
+      const response = await getPermissionGroups()
+
+      if (response && response.status === 200) {
+        const filtered = response.data.data.map(
+          (item: { name: string; uuid: string }) => ({
+            label: item.name,
+            value: item.uuid,
+          })
+        )
+        setPermissionGroups(filtered)
+      }
+    }
+    fetchPermissionGroups()
+  }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -63,7 +103,7 @@ const CreateOperator: FC = () => {
                 type='mail'
                 value={formData.email}
                 position='right'
-                onChange={e => handleChange('username', e.target.value)}
+                onChange={e => handleChange('email', e.target.value)}
               />
 
               <PasswordInput
@@ -84,24 +124,17 @@ const CreateOperator: FC = () => {
 
               <SearchSelect
                 value={formData.permissionGroup}
-                name='Grupo de permissão'
-                options={[
-                  { value: 'admin', label: 'Administrador' },
-                  { value: 'operator', label: 'Operador' },
-                ]}
-                placeholder='Grupo de permissão'
-                onChange={() => null}
+                name='permission-groups'
+                options={permissionGroups}
+                placeholder='Grupo'
+                onChange={(value: string) =>
+                  handleChange('permissionGroup', value)
+                }
               />
-            </div>
-
-            <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
-              <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
-                Criado em 01/01/2023 às 11:41
-              </div>
             </div>
           </div>
 
-          <ActionGroup showDelete={false} />
+          <ActionGroup onClick={handleCreateUser} showDelete={false} />
         </form>
       </div>
     </div>

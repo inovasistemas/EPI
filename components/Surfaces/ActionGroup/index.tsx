@@ -4,10 +4,11 @@ import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
 
 type ActionGroup = {
+  onClick?: () => void
   showDelete?: boolean
 }
 
-export function ActionGroup({ showDelete = false }: ActionGroup) {
+export function ActionGroup({ onClick, showDelete = false }: ActionGroup) {
   return (
     <div className='bottom-0 z-[201] sticky inset-x-0 flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
       {showDelete && (
@@ -40,8 +41,9 @@ export function ActionGroup({ showDelete = false }: ActionGroup) {
           </span>
         </Link>
 
-        <Link
-          href='/usuarios'
+        <button
+          onClick={onClick}
+          type='button'
           className={classNames(
             'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5'
           )}
@@ -52,7 +54,7 @@ export function ActionGroup({ showDelete = false }: ActionGroup) {
             strokeWidth={2.5}
           />
           <span className='font-medium text-white text-sm'>Salvar</span>
-        </Link>
+        </button>
       </div>
     </div>
   )

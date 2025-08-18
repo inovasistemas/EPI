@@ -86,6 +86,11 @@ export function SearchSelect({
             DropdownIndicator: () => null,
             IndicatorSeparator: () => null,
           }}
+          formatOptionLabel={option =>
+            option.label
+              .toLowerCase()
+              .replace(/(?:^|\s)\S/g, char => char.toUpperCase())
+          }
           styles={{
             option: (provided, state) => ({
               ...provided,
@@ -96,6 +101,7 @@ export function SearchSelect({
               color: 'var(--textSecondary)',
               border: '0px solid var(--backgroundSecondary)',
               fontSize: '1rem',
+              textTransform: 'capitalize',
               backgroundColor: state.isSelected
                 ? 'var(--buttonHover)'
                 : state.isFocused
@@ -162,6 +168,7 @@ export function SearchSelect({
               color: 'var(--textSecondary)',
               fontSize: '1rem',
               textAlign: 'start',
+              textTransform: 'capitalize',
               paddingRight: '1.5rem',
               height: '100%',
               alignItems: 'center',
