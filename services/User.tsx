@@ -62,6 +62,21 @@ export async function getUsers({
   }
 }
 
+export async function getUser(id: string) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
+      { withCredentials: true }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
 export async function createUser({
   name,
   email,

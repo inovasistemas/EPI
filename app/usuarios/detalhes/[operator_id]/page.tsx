@@ -1,23 +1,29 @@
 'use client'
-// import { useParams } from 'next/navigation'
-import { type FC, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { getUser } from '@/services/User'
+import { capitalize } from '@/utils/capitalize'
 
 const OperatorDetails: FC = () => {
-  // const params = useParams()
-  // const ColaboratorId = params?.colaborator_id
-
-  const [operatorData, setOperatorData] = useState({
-    name: 'João Felipe Gomes',
-    email: 'teste@inovasistemas.com.br',
-    password: '123456',
-    permissionGroup: 'admin',
-  })
+  const params = useParams()
+  const OperatorId = Array.isArray(params.operator_id)
+    ? params.operator_id[0]
+    : params.operator_id
+  type OperatorData = {
+    name?: string
+    email?: string
+    password?: string
+    permissionGroup?: string
+    [key: string]: any
+  }
+  const [operatorData, setOperatorData] = useState<OperatorData>({})
+  const fetchedUser = useRef(false)
 
   const handleChange = (name: string, value: string) => {
     setOperatorData(prev => ({
@@ -25,6 +31,22 @@ const OperatorDetails: FC = () => {
       [name]: value,
     }))
   }
+
+  useEffect(() => {
+    if (fetchedUser.current) return
+    fetchedUser.current = true
+
+    const fetchPermissionGroups = async () => {
+      if (OperatorId) {
+        const response = await getUser(OperatorId)
+
+        if (response && response.status === 200) {
+          setOperatorData(response.data[0])
+        }
+      }
+    }
+    fetchPermissionGroups()
+  }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -34,7 +56,9 @@ const OperatorDetails: FC = () => {
             <GoBackButton href='/usuarios' />
 
             <h2 className='font-medium text-xl leading-none select-none'>
-              {operatorData.name ? operatorData.name : 'Detalhes do usuário'}
+              {operatorData.name
+                ? capitalize(operatorData.name)
+                : 'Detalhes do usuário'}
             </h2>
           </div>
         </div>
@@ -55,7 +79,7 @@ const OperatorDetails: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={operatorData.name}
+                value={capitalize(operatorData.name ?? '')}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
               />
@@ -65,14 +89,14 @@ const OperatorDetails: FC = () => {
                 label='E-mail'
                 required={false}
                 type='mail'
-                value={operatorData.email}
+                value={operatorData.email?.toLowerCase()}
                 position='right'
                 onChange={e => handleChange('username', e.target.value)}
               />
 
               <PasswordInput
                 label='Senha'
-                value={operatorData.password}
+                value={operatorData.password || ''}
                 onChange={e => handleChange('password', e.target.value)}
               />
             </div>
