@@ -1,4 +1,5 @@
 'use client'
+import { AlertIcon } from '@/components/Display/Icons/Alert'
 import { BarChartIcon } from '@/components/Display/Icons/BarChart'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { PackageIcon } from '@/components/Display/Icons/Package'
@@ -93,7 +94,7 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Pendências'
             icon={
-              <ReportChartIcon
+              <AlertIcon
                 size='size-5'
                 stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />

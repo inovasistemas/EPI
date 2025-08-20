@@ -1,5 +1,7 @@
 'use client'
 
+import classNames from 'classnames'
+
 type FormInputProps = {
   name: string
   label?: string
@@ -13,6 +15,7 @@ type FormInputProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   actionButton?: () => void
+  textTransform?: string
 }
 
 export function FormInput({
@@ -28,6 +31,7 @@ export function FormInput({
   actionButton,
   onKeyDown,
   maxLength = 255,
+  textTransform = '',
 }: FormInputProps) {
   type = reveal ? 'text' : type
 
@@ -43,7 +47,10 @@ export function FormInput({
             id={name}
             type={type}
             name={name}
-            className='peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
+            className={classNames(
+              'peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none',
+              textTransform
+            )}
             placeholder=' '
             value={value}
             onChange={onChange}

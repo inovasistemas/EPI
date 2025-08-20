@@ -32,6 +32,14 @@ type CreateUserType = {
   permissionGroup: string
 }
 
+type UpdateUserType = {
+  id: string
+  name: string
+  email: string
+  password?: string
+  permissionGroup?: string
+}
+
 export async function getUsers({
   q,
   permissionGroup,
@@ -92,6 +100,52 @@ export async function createUser({
         password,
         permissionGroup,
       },
+      {
+        withCredentials: true,
+      }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function updateUser({
+  id,
+  name,
+  email,
+  password,
+  permissionGroup,
+}: UpdateUserType) {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
+      {
+        name,
+        email,
+        password: password ? password : undefined,
+        permission_group: permissionGroup ? permissionGroup : undefined,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function deleteUser(id: string) {
+  try {
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
       {
         withCredentials: true,
       }

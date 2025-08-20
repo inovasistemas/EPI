@@ -1,5 +1,5 @@
 'use client'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
@@ -7,11 +7,17 @@ import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { getUser } from '@/services/User'
-import { capitalize } from '@/utils/capitalize'
+import {
+  deleteUser,
+  getPermissionGroups,
+  getUser,
+  updateUser,
+} from '@/services/User'
 import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
+import classNames from 'classnames'
 
 const OperatorDetails: FC = () => {
+  const router = useRouter()
   const params = useParams()
   const OperatorId = Array.isArray(params.operator_id)
     ? params.operator_id[0]
@@ -25,9 +31,15 @@ const OperatorDetails: FC = () => {
     [key: string]: any
   }
   const [operatorData, setOperatorData] = useState<OperatorData>({
+    name: '',
+    email: '',
+    password: '',
+    permission_group: '',
     created_at: '',
   })
   const fetchedUser = useRef(false)
+  const fetchedPermissionGroups = useRef(false)
+  const [permissionGroups, setPermissionGroups] = useState([])
 
   const handleChange = (name: string, value: string) => {
     setOperatorData(prev => ({
@@ -36,17 +48,63 @@ const OperatorDetails: FC = () => {
     }))
   }
 
+  const handleUpdateUser = async () => {
+    const response = await updateUser({
+      id: OperatorId || '',
+      email: operatorData.email?.toLocaleUpperCase() || '',
+      name: operatorData.name?.toLocaleUpperCase() || '',
+      password: operatorData.password,
+      permissionGroup: operatorData.permissionGroup,
+    })
+
+    if (response && response.status === 201) {
+      // mostrar sucesso
+    } else {
+      // mostrar erro
+    }
+  }
+
+  const handleDeleteUser = async () => {
+    const response = await deleteUser(OperatorId || '')
+
+    if (response && response.status === 204) {
+      router.push('/usuarios')
+    } else {
+      // mostrar erro
+    }
+  }
+
   useEffect(() => {
     if (fetchedUser.current) return
     fetchedUser.current = true
 
-    const fetchPermissionGroups = async () => {
+    const fetchUser = async () => {
       if (OperatorId) {
         const response = await getUser(OperatorId)
 
         if (response && response.status === 200) {
           setOperatorData(response.data[0])
         }
+      }
+    }
+    fetchUser()
+  }, [])
+
+  useEffect(() => {
+    if (fetchedPermissionGroups.current) return
+    fetchedPermissionGroups.current = true
+
+    const fetchPermissionGroups = async () => {
+      const response = await getPermissionGroups()
+
+      if (response && response.status === 200) {
+        const filtered = response.data.data.map(
+          (item: { name: string; uuid: string }) => ({
+            label: item.name,
+            value: item.uuid,
+          })
+        )
+        setPermissionGroups(filtered)
       }
     }
     fetchPermissionGroups()
@@ -59,9 +117,14 @@ const OperatorDetails: FC = () => {
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/usuarios' />
 
-            <h2 className='font-medium text-xl leading-none select-none'>
+            <h2
+              className={classNames(
+                { capitalize: operatorData.name },
+                'font-medium text-xl leading-none select-none'
+              )}
+            >
               {operatorData.name
-                ? capitalize(operatorData.name)
+                ? operatorData.name.toLocaleLowerCase()
                 : 'Detalhes do usuário'}
             </h2>
           </div>
@@ -83,9 +146,10 @@ const OperatorDetails: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={capitalize(operatorData.name ?? '')}
+                value={operatorData.name?.toLocaleLowerCase()}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
+                textTransform='capitalize'
               />
 
               <FormInput
@@ -115,12 +179,9 @@ const OperatorDetails: FC = () => {
               </div>
 
               <SearchSelect
-                value={operatorData.permissionGroup}
+                value={operatorData.permission_group}
                 name='Grupo de permissão'
-                options={[
-                  { value: 'admin', label: 'Administrador' },
-                  { value: 'operator', label: 'Operador' },
-                ]}
+                options={permissionGroups}
                 placeholder='Grupo de permissão'
                 onChange={() => null}
               />
@@ -133,7 +194,11 @@ const OperatorDetails: FC = () => {
             </div>
           </div>
 
-          <ActionGroup showDelete={true} />
+          <ActionGroup
+            onDelete={handleDeleteUser}
+            onClick={handleUpdateUser}
+            showDelete={true}
+          />
         </form>
       </div>
     </div>

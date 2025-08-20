@@ -29,8 +29,8 @@ const CreateOperator: FC = () => {
 
   const handleCreateUser = async () => {
     const response = await createUser({
-      email: formData.email,
-      name: formData.name,
+      email: formData.email?.toLocaleUpperCase(),
+      name: formData.name?.toLocaleUpperCase(),
       password: formData.password,
       permissionGroup: formData.permissionGroup,
     })
@@ -94,6 +94,7 @@ const CreateOperator: FC = () => {
                 value={formData.name}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
+                textTransform='capitalize'
               />
 
               <FormInput
