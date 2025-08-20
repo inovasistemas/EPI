@@ -1,9 +1,9 @@
 'use client'
 import { AlertIcon } from '@/components/Display/Icons/Alert'
 import { BarChartIcon } from '@/components/Display/Icons/BarChart'
+import { CalculatorIcon } from '@/components/Display/Icons/Calculator'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { PackageIcon } from '@/components/Display/Icons/Package'
-import { ReportChartIcon } from '@/components/Display/Icons/ReportChart'
 import { UserIcon } from '@/components/Display/Icons/User'
 import { UsersIcon } from '@/components/Display/Icons/Users'
 import { NavLink } from '@/components/Navigation/NavLink'
@@ -105,7 +105,7 @@ const Sidebar: React.FC = () => {
           <NavLink
             name='Recursos'
             icon={
-              <BarChartIcon
+              <CalculatorIcon
                 size='size-5'
                 stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
