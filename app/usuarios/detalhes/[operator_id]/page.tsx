@@ -9,6 +9,7 @@ import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { getUser } from '@/services/User'
 import { capitalize } from '@/utils/capitalize'
+import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
 
 const OperatorDetails: FC = () => {
   const params = useParams()
@@ -19,10 +20,13 @@ const OperatorDetails: FC = () => {
     name?: string
     email?: string
     password?: string
-    permissionGroup?: string
+    permission_group?: string
+    created_at: string
     [key: string]: any
   }
-  const [operatorData, setOperatorData] = useState<OperatorData>({})
+  const [operatorData, setOperatorData] = useState<OperatorData>({
+    created_at: '',
+  })
   const fetchedUser = useRef(false)
 
   const handleChange = (name: string, value: string) => {
@@ -124,7 +128,7 @@ const OperatorDetails: FC = () => {
 
             <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
               <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
-                Criado em 01/01/2023 às 11:41
+                Criado em {timestampToDateTime(operatorData.created_at)}
               </div>
             </div>
           </div>

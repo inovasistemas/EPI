@@ -65,16 +65,16 @@ export function SecurityCodeSimple({ onChange }: SecurityCodeSimpleType) {
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      <div className='flex flex-row gap-3'>
+      <div className='flex justify-between w-full'>
         {values.map((val, i) => (
           <input
             // biome-ignore lint/suspicious/noArrayIndexKey: need this key to be the index
             key={i}
             ref={el => setInputRef(i, el)}
-            type='text'
+            type='number'
             inputMode='numeric'
             maxLength={1}
-            className='flex bg-[--backgroundSecondary] rounded-xl outline-[--primaryColor] w-14 h-14 font-medium text-xl text-center uppercase select-none'
+            className='flex bg-[--backgroundSecondary] border-2 focus:border-[--primaryColor] border-transparent rounded-xl outline-none w-14 h-14 font-medium text-xl text-center uppercase transition-all duration-300 select-none'
             value={val}
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(e, i)}

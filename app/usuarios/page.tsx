@@ -133,7 +133,7 @@ const Operator: FC = () => {
       >
         <FilterOperator actionClose={handleCloseModal} />
       </Modal>
-      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
+      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto scroll-smooth'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <h2 className='font-medium text-xl leading-none select-none'>
             Usuários
@@ -208,7 +208,7 @@ const Operator: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full overflow-hidden'>
+        <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full'>
           <div className='flex flex-col gap-2 px-3 h-full'>
             <div className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
@@ -290,7 +290,7 @@ const Operator: FC = () => {
                 </button>
               </div>
             </div>
-            <div className='flex flex-col gap-6 pb-6 h-full overflow-auto'>
+            <div className='flex flex-col gap-6 pb-6 h-full'>
               <ul className='flex flex-col gap-3'>
                 {users.map((operator, i) => (
                   <li key={operator.uuid}>
@@ -298,7 +298,7 @@ const Operator: FC = () => {
                       href={`/usuarios/detalhes/${operator.uuid}`}
                       className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
                     >
-                      <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
+                      <div className='flex items-center gap-3 col-span-5 py-3 font-medium'>
                         <input
                           ref={el => {
                             if (el) {
@@ -323,13 +323,13 @@ const Operator: FC = () => {
                           {operator.name.toLocaleLowerCase()}
                         </span>
                       </div>
-                      <div className='col-span-3 py-4 lowercase'>
+                      <div className='col-span-3 py-3 lowercase'>
                         {operator.email}
                       </div>
-                      <div className='col-span-2 py-4 capitalize'>
+                      <div className='col-span-2 py-3 capitalize'>
                         {operator.permission_group.toLocaleLowerCase()}
                       </div>
-                      <div className='col-span-2 py-4 pr-1 text-right lowercase'>
+                      <div className='col-span-2 py-3 pr-1 text-right lowercase'>
                         {timestampToDate(operator.created_at)}
                       </div>
                     </Link>

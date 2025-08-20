@@ -21,11 +21,12 @@ const Login: FC = () => {
       >
         <Privacy />
       </Modal>
-      <div className='gap-6 grid sm:grid-cols-2 p-4 w-full h-full'>
-        <div className='hidden sm:flex justify-center items-center bg-[--backgroundSecondary] bg-cover bg-no-repeat bg-center'></div>
-        <div className='relative flex justify-center items-center bg-[--backgroundPrimary] rounded-xl w-full h-full'>
-          <LoginForm />
-          <div className='bottom-0 absolute flex justify-center items-center gap-2 mb-6 p-3 w-full text-[--textSecondary] text-xs'>
+      <div className='flex justify-center gap-6 p-4 w-full h-full'>
+        <div className='flex flex-col justify-center items-center gap-3 rounded-xl w-full h-full'>
+          <div className='flex justify-center items-center bg-[--backgroundPrimary] rounded-3xl w-full sm:w-[650px] h-full'>
+            <LoginForm />
+          </div>
+          <div className='flex justify-center items-center gap-2 p-3 w-full text-[--textSecondary] text-xs'>
             <LockIcon
               size='size-3'
               stroke='stroke-[--textSecondary]'

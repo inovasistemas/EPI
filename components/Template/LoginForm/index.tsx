@@ -20,6 +20,8 @@ import {
 import QRCode from 'react-qr-code'
 import { SecurityCodeSimple } from '../SecurityCodeSimples'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { SecurityIcon } from '@/components/Display/Icons/Security'
+import classNames from 'classnames'
 
 type OperatorEnterprise = {
   enterprise_uuid: string
@@ -234,12 +236,20 @@ export function LoginForm() {
         className='relative flex flex-col justify-center gap-6 p-8 rounded-xl w-full lg:w-3/4 h-full'
       >
         {step < 2 && (
-          <div className='flex justify-center items-center py-6'>
+          <div className='flex justify-center items-center'>
             <Logo width={110} />
           </div>
         )}
 
-        <div ref={containerRef} className='w-full'>
+        <div
+          ref={containerRef}
+          className={classNames(
+            {
+              'h-full': step === 2,
+            },
+            'w-full'
+          )}
+        >
           {step === 0 && (
             <motion.div
               key='cnpj'
@@ -296,19 +306,25 @@ export function LoginForm() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className='flex flex-col gap-6'
+              className='flex flex-col justify-center gap-6 h-full overflow-auto'
             >
-              <span className='justify-start items-start w-full font-medium text-lg text-left'>
-                {formData.required_2fa_configuration
-                  ? 'Configurar Aplicativo Autenticador'
-                  : 'Autenticação de 2 Fatores'}
-              </span>
-              {formData.required_2fa_configuration && (
+              <div className='flex flex-row items-center gap-3'>
+                <SecurityIcon
+                  size='size-5'
+                  stroke='stroke-[--iconPrimaryColor]'
+                />
+                <span className='justify-start items-start w-full font-medium text-lg text-left'>
+                  {formData.required_2fa_configuration
+                    ? 'Configurar Aplicativo Autenticador'
+                    : 'Autenticação de 2 Fatores'}
+                </span>
+              </div>
+              {/* {formData.required_2fa_configuration && (
                 <span className='text-sm'>
                   Cada vez que você fizer login, além da sua senha, você usará
                   um aplicativo autenticador para gerar um código de uso único.
                 </span>
-              )}
+              )} */}
 
               {formData.required_2fa_configuration && (
                 <div className='bg-[--tableRow] flex flex-col justify-center items-center gap-6 p-4 rounded-xl'>
@@ -343,11 +359,22 @@ export function LoginForm() {
                 Insira o código de 6 dígitos que você vê no seu aplicativo
                 autenticador
               </span>
-              <SecurityCodeSimple onChange={handleChangeSecurityCode} />
 
-              {formData.required_2fa_configuration === false && (
+              <div className='w-full overflow-hidden'>
+                <SecurityCodeSimple onChange={handleChangeSecurityCode} />
+              </div>
+
+              {step === 2 && (
                 <div className='flex justify-end'>
-                  <SecondaryButton label='Voltar' onClick={handleBack} />
+                  <button
+                    type='button'
+                    onClick={() => handleBack()}
+                    className={classNames(
+                      'px-8 py-2.5 group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] sm:w-auto w-full rounded-xl text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                    )}
+                  >
+                    <span className='font-medium'>Voltar</span>
+                  </button>
                 </div>
               )}
             </motion.div>
