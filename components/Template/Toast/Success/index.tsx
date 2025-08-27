@@ -10,7 +10,7 @@ export function ToastSuccess({ text }: ToastSuccessType) {
     <div className='flex items-center gap-2 bg-[--backgroundPrimary] shadow-lg p-4 border border-[--outlinePrimary] rounded-2xl'>
       <CheckIcon size='size-5' stroke='stroke-[--chartGreen]' />
       <div>
-        <div className='text-[--textSecondary] text-sm'>{text}</div>
+        <div className='text-[--textSecondary] text-sm select-none'>{text}</div>
       </div>
     </div>
   )

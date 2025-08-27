@@ -4,7 +4,7 @@ type TagProps = {
 
 export function Tag({ label }: TagProps) {
   return (
-    <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--textSecondaryLight] text-[10px] whitespace-nowrap'>
+    <span className='bg-blue-600/10 px-2 py-1 rounded-md font-medium text-[--textSecondaryLight] text-[10px] capitalize whitespace-nowrap'>
       {label}
     </span>
   )

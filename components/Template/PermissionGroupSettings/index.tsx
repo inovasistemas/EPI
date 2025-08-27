@@ -7,16 +7,53 @@ import {
   useClearQueryParams,
   useQueryParams,
 } from '@/components/Utils/UseQueryParams'
+import { getPermissionGroups } from '@/services/PermissionGroups'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+import { ToastError } from '../Toast/Error'
 
 type PermissionGroupSettingsProps = {
   actionModal: () => void
 }
 
+type PermissionGroupsAccessType = {
+  screen: string
+  description: string
+  show: boolean
+  insert: boolean
+  update: boolean
+  delete: boolean
+  password: boolean
+  created_at: string
+  updated_at?: string
+}
+
+type PermissionGroupsType = {
+  uuid: string
+  name: string
+  active_users: number
+  created_at: string
+  updated_at?: string
+  access: [PermissionGroupsAccessType]
+}
+
+type PermissionActionKey = 'insert' | 'update' | 'delete' | 'view'
+
 export function PermissionGroupSettings({
   actionModal,
 }: PermissionGroupSettingsProps) {
+  const actions: { key: PermissionActionKey; label: string }[] = [
+    { key: 'insert', label: 'Criar' },
+    { key: 'update', label: 'Editar' },
+    { key: 'delete', label: 'Excluir' },
+    { key: 'view', label: 'Visualizar' },
+  ]
   const setClearQueryParam = useClearQueryParams()
   const setQueryParam = useQueryParams()
+  const [permissionGroups, setPermissionGroups] = useState<
+    PermissionGroupsType[] | null
+  >(null)
+  const fetchedPermissionGroups = useRef(false)
   const handleClick = (id: string, type?: string) => {
     setClearQueryParam()
 
@@ -33,6 +70,24 @@ export function PermissionGroupSettings({
 
     actionModal()
   }
+
+  const fetchPermissionGroups = async () => {
+    const response = await getPermissionGroups()
+
+    if (response && response.status === 200) {
+      setPermissionGroups(response.data.data)
+    } else {
+      toast.custom(() => (
+        <ToastError text='Erro ao buscar os grupos de permissões' />
+      ))
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedPermissionGroups.current) return
+    fetchedPermissionGroups.current = true
+    fetchPermissionGroups()
+  }, [])
   return (
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
@@ -45,152 +100,90 @@ export function PermissionGroupSettings({
           </span>
         </div>
 
-        <li className='items-start gap-6 grid grid-cols-1 py-6 select-none'>
-          <div className='flex flex-col'>
-            <div className='flex flex-row justify-between gap-2 itens-center'>
-              <span className='font-medium'>Administrador</span>
-              <NavAction
-                type='button'
-                desktop={true}
-                icon={
-                  <EditIcon
-                    size='size-4'
-                    stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                    strokeWidth={2.5}
+        {permissionGroups?.map((permissionGroup, i) => (
+          <div
+            key={permissionGroup.uuid}
+            className='items-start gap-6 grid grid-cols-1 py-6 select-none'
+          >
+            <div className='flex flex-col'>
+              <div className='flex flex-row justify-between gap-2 itens-center'>
+                <span className='font-medium capitalize'>
+                  {permissionGroup.name.toLocaleLowerCase()}
+                </span>
+                <NavAction
+                  type='button'
+                  desktop={true}
+                  icon={
+                    <EditIcon
+                      size='size-4'
+                      stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                      strokeWidth={2.5}
+                    />
+                  }
+                  mobile={true}
+                  action={() => handleClick('1', 'editPermissionGroup')}
+                />
+              </div>
+              <div>
+                <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
+                  <GroupLabel
+                    isVisible={true}
+                    label={`${permissionGroup.active_users} usuário nesse grupo`}
+                    showFixed={false}
                   />
-                }
-                mobile={true}
-                action={() => handleClick('1', 'editPermissionGroup')}
-              />
+                </div>
+              </div>
             </div>
-            <div>
-              <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
+            <div className='flex flex-col gap-3 w-full'>
+              <div className='block relative col-span-full mb-4 -ml-1'>
                 <GroupLabel
                   isVisible={true}
-                  label='1 usuário nesse grupo'
+                  label='Permissões'
                   showFixed={false}
                 />
               </div>
-            </div>
-          </div>
-          <div className='flex flex-col gap-3 w-full'>
-            <div className='block relative col-span-full mb-4 -ml-1'>
-              <GroupLabel
-                isVisible={true}
-                label='Permissões'
-                showFixed={false}
-              />
-            </div>
-            <div className='flex flex-wrap gap-2'>
-              <Tag label='Visualizar Equipamento' />
-              <Tag label='Criar Equipamento' />
-              <Tag label='Excluir Equipamento' />
-              <Tag label='Atualizar Equipamento' />
-              <Tag label='Visualizar Colaborador' />
-              <Tag label='Criar Colaborador' />
-              <Tag label='Excluir Colaborador' />
-              <Tag label='Atualizar Colaborador' />
-              <Tag label='Visualizar Usuários' />
-              <Tag label='Criar Usuários' />
-              <Tag label='Excluir Usuários' />
-              <Tag label='Atualizar Usuários' />
-              <Tag label='Visualizar Relatório' />
-              <Tag label='Criar Relatório' />
-              <Tag label='Excluir Relatório' />
-              <Tag label='Atualizar Relatório' />
-            </div>
-          </div>
-        </li>
-        <li className='items-start gap-6 grid grid-cols-1 py-6 select-none'>
-          <div className='flex flex-col'>
-            <div className='flex flex-row justify-between gap-2 itens-center'>
-              <span className='font-medium'>Financeiro</span>
-              <NavAction
-                type='button'
-                desktop={true}
-                icon={
-                  <EditIcon
-                    size='size-4'
-                    stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                    strokeWidth={2.5}
-                  />
-                }
-                mobile={true}
-                action={() => handleClick('2', 'editPermissionGroup')}
-              />
-            </div>
-            <div>
-              <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
-                <GroupLabel
-                  isVisible={true}
-                  label='1 usuário nesse grupo'
-                  showFixed={false}
-                />
+              <div className='flex flex-wrap gap-2'>
+                {permissionGroup.access.map((access, j) =>
+                  actions.map((action, i) => {
+                    if (action.key === 'insert' && access.insert) {
+                      return (
+                        <Tag
+                          key={`${j}-${action.key}`}
+                          label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                        />
+                      )
+                    }
+                    if (action.key === 'update' && access.update) {
+                      return (
+                        <Tag
+                          key={`${j}-${action.key}`}
+                          label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                        />
+                      )
+                    }
+                    if (action.key === 'delete' && access.delete) {
+                      return (
+                        <Tag
+                          key={`${j}-${action.key}`}
+                          label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                        />
+                      )
+                    }
+                    if (action.key === 'view' && access.show) {
+                      return (
+                        <Tag
+                          key={`${j}-${action.key}`}
+                          label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                        />
+                      )
+                    }
+                    return null
+                  })
+                )}
               </div>
             </div>
           </div>
-          <div className='flex flex-col gap-3 w-full'>
-            <div className='block relative col-span-full mb-4 -ml-1'>
-              <GroupLabel
-                isVisible={true}
-                label='Permissões'
-                showFixed={false}
-              />
-            </div>
-            <div className='flex flex-wrap gap-2'>
-              <Tag label='Visualizar Equipamento' />
-              <Tag label='Atualizar Equipamento' />
-              <Tag label='Visualizar Colaborador' />
-              <Tag label='Atualizar Colaborador' />
-              <Tag label='Visualizar Relatório' />
-              <Tag label='Criar Relatório' />
-              <Tag label='Excluir Relatório' />
-              <Tag label='Atualizar Relatório' />
-            </div>
-          </div>
-        </li>
-        <li className='items-start gap-6 grid grid-cols-1 py-6 select-none'>
-          <div className='flex flex-col'>
-            <div className='flex flex-row justify-between gap-2 itens-center'>
-              <span className='font-medium'>Operador</span>
-              <NavAction
-                type='button'
-                desktop={true}
-                icon={
-                  <EditIcon
-                    size='size-4'
-                    stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                    strokeWidth={2.5}
-                  />
-                }
-                mobile={true}
-                action={() => handleClick('3', 'editPermissionGroup')}
-              />
-            </div>
-            <div>
-              <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
-                <GroupLabel
-                  isVisible={true}
-                  label='3 usuários nesse grupo'
-                  showFixed={false}
-                />
-              </div>
-            </div>
-          </div>
-          <div className='flex flex-col gap-3 w-full'>
-            <div className='block relative col-span-full mb-4 -ml-1'>
-              <GroupLabel
-                isVisible={true}
-                label='Permissões'
-                showFixed={false}
-              />
-            </div>
-            <div className='flex flex-wrap gap-2'>
-              <Tag label='Visualizar Equipamento' />
-              <Tag label='Visualizar Colaborador' />
-            </div>
-          </div>
-        </li>
+        ))}
       </div>
 
       <ActionGroupAdd onClick={actionModal} />
