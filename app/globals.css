@@ -25,7 +25,7 @@
 
   --error: #e4e4e7;
   --errorSecondary: #d9d9d9;
-  --errorLoader: #ed3a2f;
+  --errorLoader: #e13554;
 
   --iconPrimaryColor: #0a0a0a;
 
@@ -59,7 +59,7 @@
 
   --error: #29292e;
   --errorSecondary: #323238;
-  --errorLoader: #ed3a2f;
+  --errorLoader: #e13554;
 
   --iconPrimaryColor: #a2a9b0;
 
@@ -209,42 +209,42 @@ body {
     height: auto !important;
   }
 
-  aside[data-show='false'] > div > div > a {
+  aside[data-show='false'] > div > div > div > a {
     display: flex;
     justify-content: center;
     @apply !mb-1.5;
   }
 
-  aside[data-show='true'] > div > div {
+  aside[data-show='true'] > div > div > div {
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  aside[data-show='true'] > div > div > a {
+  aside[data-show='true'] > div > div > div > a {
     display: flex;
     justify-content: center;
     @apply !mb-1.5;
   }
 }
 
-aside[data-show='true'] > div > div > a > span {
+aside[data-show='true'] > div > div > div > a > span {
   opacity: 1;
   transition: all 300ms;
 }
 
-aside[data-show='false'] > div > div > a {
+aside[data-show='false'] > div > div > div > a {
   @apply !py-1.5;
 }
 
-aside[data-show='false'] > div > div > a > div {
+aside[data-show='false'] > div > div > div > a > div {
   @apply flex justify-center min-w-8;
 }
 
-aside[data-show='true'] > div > div > a {
+aside[data-show='true'] > div > div > div > a {
   @apply !py-2;
 }
 
-aside[data-show='false'] > div > div > a > span {
+aside[data-show='false'] > div > div > div > a > span {
   opacity: 0;
   transition: all 300ms;
 }
@@ -422,4 +422,15 @@ input[type='number']::-webkit-inner-spin-button {
 
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+[data-sonner-toast][data-styled='true'] [data-title] {
+  font-weight: 400 !important;
+  color: var(--textSecondary) !important;
+  font-size: 0.85rem;
+}
+
+[data-sonner-toast][data-styled='true'] {
+  background-color: var(--backgroundPrimary) !important;
+  border: 1px solid var(--border) !important;
 }

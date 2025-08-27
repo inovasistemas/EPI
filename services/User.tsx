@@ -1,4 +1,5 @@
 import axios from 'axios'
+import React from 'react'
 
 export async function getPermissionGroups() {
   try {
@@ -18,6 +19,7 @@ export async function getPermissionGroups() {
 }
 
 type GetUsersType = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
   q?: string
   permissionGroup?: string
   sortField?: string
@@ -41,6 +43,7 @@ type UpdateUserType = {
 }
 
 export async function getUsers({
+  loading,
   q,
   permissionGroup,
   sortField,
@@ -48,6 +51,7 @@ export async function getUsers({
   page = 1,
 }: GetUsersType) {
   try {
+    loading(true)
     const params: Record<string, any> = {
       page,
     }
@@ -61,11 +65,13 @@ export async function getUsers({
       `${process.env.NEXT_PUBLIC_API_HOST}/users`,
       { params, withCredentials: true }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       return error.response || null
     }
+    loading(false)
     return null
   }
 }

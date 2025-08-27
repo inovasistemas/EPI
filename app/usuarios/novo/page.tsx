@@ -8,6 +8,8 @@ import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { createUser, getPermissionGroups } from '@/services/User'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { ToastError } from '@/components/Template/Toast/Error'
 
 const CreateOperator: FC = () => {
   const router = useRouter()
@@ -38,7 +40,7 @@ const CreateOperator: FC = () => {
     if (response && response.status === 201) {
       router.push('/usuarios')
     } else {
-      // mostrar erro
+      toast.custom(() => <ToastError text='Erro ao criar o usuário' />)
     }
   }
 

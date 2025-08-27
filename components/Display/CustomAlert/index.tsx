@@ -40,7 +40,7 @@ export function CustomAlert({ text, state, action }: CustomAlertProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       onClick={handleClick}
-      className='group top-0 right-0 z-50 absolute flex flex-col items-center gap-3 bg-[--backgroundPrimary] m-4 rounded-xl w-auto max-w-[75%] overflow-hidden text-[--textSecondary] text-sm'
+      className='group top-0 right-0 z-[9999] absolute flex flex-col items-center gap-3 bg-[--backgroundPrimary] m-4 rounded-xl w-auto max-w-[75%] overflow-hidden text-[--textSecondary] text-sm'
     >
       <div className='relative w-full'>
         <div className='flex flex-row justify-start items-center gap-3 px-4 py-3 pr-5'>

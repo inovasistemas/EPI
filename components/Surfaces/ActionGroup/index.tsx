@@ -45,7 +45,7 @@ export function ActionGroup({
             permanentemente apagados.
           </span>
 
-          <div className='flex flex-row justify-end gap-3 pt-6'>
+          <div className='flex flex-row justify-center gap-3 pt-6'>
             <button
               type='button'
               onClick={handleDelete}

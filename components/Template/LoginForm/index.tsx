@@ -1,11 +1,9 @@
 'use client'
 import Cookies from 'cookies-js'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
-import { CustomAlert } from '@/components/Display/CustomAlert'
 import { Logo } from '@/components/Display/Logo'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
 import { PasswordInput } from '@/components/Inputs/Password'
@@ -19,9 +17,10 @@ import {
 } from '@/services/Login'
 import QRCode from 'react-qr-code'
 import { SecurityCodeSimple } from '../SecurityCodeSimples'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { SecurityIcon } from '@/components/Display/Icons/Security'
 import classNames from 'classnames'
+import { toast } from 'sonner'
+import { ToastError } from '../Toast/Error'
 
 type OperatorEnterprise = {
   enterprise_uuid: string
@@ -84,17 +83,17 @@ export function LoginForm() {
       const response = await isUserRegistered({
         email: formData.username,
       })
-      if (response && response.status === 200) {
+      if (response && response.status === 200 && response.data.name) {
         handleChange('name', response.data.name)
         setStep(prev => Math.min(prev + 1, 2))
-      } else if (response && response.status === 403) {
-        setAlertText('Não conseguimos encontrar esse usuário.')
-        setAlertState(true)
-        setAlertUUID(uuidv4())
+      } else if (response && !response.data.name) {
+        toast.custom(() => (
+          <ToastError text='Não conseguimos encontrar esse usuário' />
+        ))
       } else {
-        setAlertText('Não foi possível buscar o usuário no momento.')
-        setAlertState(true)
-        setAlertUUID(uuidv4())
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar o usuário no momento' />
+        ))
       }
     }
 
@@ -124,15 +123,14 @@ export function LoginForm() {
         }
 
         setStep(prev => Math.min(prev + 1, 2))
-      } else if (response && response.status === 401) {
-        setAlertText('Usuário ou senha incorretos.')
-        setAlertState(true)
       } else if (response && response.status === 400) {
-        setAlertText('Os dados informados não são válidos.')
-        setAlertState(true)
+        toast.custom(() => <ToastError text='Usuário ou senha incorretos' />)
+      } else if (response && response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Os dados informados não são válidos' />
+        ))
       } else {
-        setAlertText('Erro ao autenticar o usuário.')
-        setAlertState(true)
+        toast.custom(() => <ToastError text='Erro ao autenticar o usuário' />)
       }
     }
   }
@@ -220,17 +218,6 @@ export function LoginForm() {
 
   return (
     <div className='flex justify-center items-center w-full h-full'>
-      <AnimatePresence mode='wait'>
-        {alertState && (
-          <CustomAlert
-            key={alertUUID}
-            text={alertText}
-            state={alertState}
-            action={handleAlert}
-          />
-        )}
-      </AnimatePresence>
-
       <motion.div
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className='relative flex flex-col justify-center gap-6 p-8 rounded-xl w-full lg:w-3/4 h-full'

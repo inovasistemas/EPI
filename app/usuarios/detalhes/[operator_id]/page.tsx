@@ -15,8 +15,14 @@ import {
 } from '@/services/User'
 import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
 import classNames from 'classnames'
+import { toast } from 'sonner'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { ToastError } from '@/components/Template/Toast/Error'
 
 const OperatorDetails: FC = () => {
+  const [alertState, setAlertState] = useState(false)
+  const [alertText, setAlertText] = useState('')
+  const [alertUUID, setAlertUUID] = useState('')
   const router = useRouter()
   const params = useParams()
   const OperatorId = Array.isArray(params.operator_id)
@@ -57,10 +63,10 @@ const OperatorDetails: FC = () => {
       permissionGroup: operatorData.permissionGroup,
     })
 
-    if (response && response.status === 201) {
-      // mostrar sucesso
+    if (response && response.status === 200) {
+      toast.custom(() => <ToastSuccess text='Usuário atualizado com sucesso' />)
     } else {
-      // mostrar erro
+      toast.custom(() => <ToastError text='Erro ao atualizar o usuário' />)
     }
   }
 
@@ -70,7 +76,7 @@ const OperatorDetails: FC = () => {
     if (response && response.status === 204) {
       router.push('/usuarios')
     } else {
-      // mostrar erro
+      toast.custom(() => <ToastError text='Erro ao buscar dados do usuário' />)
     }
   }
 

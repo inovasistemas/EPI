@@ -123,10 +123,9 @@ const Searchbar: React.FC = () => {
             type='button'
             desktop={true}
             icon={
-              <GearSix
-                size={18}
-                weight='fill'
-                className='text-[--textSecondary] group-data-[active=true]:text-[--primaryColor]'
+              <BellIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
               />
             }
             mobile={true}
@@ -143,22 +142,6 @@ const Searchbar: React.FC = () => {
             <MenuSettings />
           </MenuCard>
         </div> */}
-
-        <div className='relative'>
-          <button onClick={handleSettingsClick} type='button'>
-            <ProfilePicture />
-          </button>
-
-          <MenuCard
-            handleClickOverlay={handleClickOverlay}
-            isMenuOpen={isCardOpen === SearchbarCards.Settings}
-            margin='mt-[115%]'
-            width='min-w-72'
-            zIndex='z-[60]'
-          >
-            <MenuSettings />
-          </MenuCard>
-        </div>
       </div>
     </div>
   )
