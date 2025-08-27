@@ -10,6 +10,7 @@ type MenuCardProps = {
   width: string
   zIndex: string
   position?: string
+  align?: string
 }
 
 export function MenuCard({
@@ -20,6 +21,7 @@ export function MenuCard({
   width,
   zIndex,
   position,
+  align = 'top',
 }: MenuCardProps) {
   return (
     <AnimatePresence>
@@ -37,9 +39,9 @@ export function MenuCard({
       {isMenuOpen && (
         <motion.div
           key='menu'
-          initial={{ y: -20, opacity: 0 }}
+          initial={{ y: align === 'top' ? -20 : 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -20, opacity: 0 }}
+          exit={{ y: align === 'top' ? -20 : 20, opacity: 0 }}
           transition={{ duration: 0.15 }}
           className={cn(
             {

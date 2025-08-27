@@ -206,6 +206,7 @@ const Sidebar: React.FC = () => {
             margin='mb-2'
             width='min-w-72'
             zIndex='z-[60]'
+            align='bottom'
           >
             <MenuSettings />
           </MenuCard>
