@@ -261,7 +261,7 @@ export function LoginForm() {
             >
               <div className='flex justify-start items-center gap-2'>
                 <span className='font-semibold text-lef text-base capitalize'>
-                  {formData.name.toLocaleLowerCase()}
+                  {formData.name?.split(' ')[0].toLocaleLowerCase()}
                 </span>
                 <button
                   type='button'
@@ -298,12 +298,6 @@ export function LoginForm() {
                     : 'Autenticação de 2 Fatores'}
                 </span>
               </div>
-              {/* {formData.required_2fa_configuration && (
-                <span className='text-sm'>
-                  Cada vez que você fizer login, além da sua senha, você usará
-                  um aplicativo autenticador para gerar um código de uso único.
-                </span>
-              )} */}
 
               {formData.required_2fa_configuration && (
                 <div className='bg-[--tableRow] flex flex-col justify-center items-center gap-6 p-4 rounded-xl'>
