@@ -1,28 +1,54 @@
-import { useState } from 'react'
-import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { ActionGroupSave } from '@/components/Surfaces/ActionGroupSave'
+import { FormInput } from '@/components/Inputs/Text/FormInput'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { getUserMe, updateUser } from '@/services/User'
+import { toast } from 'sonner'
+import { useEffect, useRef, useState } from 'react'
+import { ToastSuccess } from '../Toast/Success'
 
-type PersonalDetailsSettingsProps = {
-  actionModal: () => void
+type UserMeType = {
+  uuid: string
+  name: string
+  email: string
+  is_active: boolean
+  permission_group: boolean
+  notifications_enabled: boolean
+  created_at: string
+  updated_at: string
 }
 
-export function PersonalDetailsSettings({
-  actionModal,
-}: PersonalDetailsSettingsProps) {
-  const [operatorData, setOperatorData] = useState({
-    name: 'João Felipe Gomes',
-    email: 'teste@inovasistemas.com.br',
-    notifications: true,
-  })
-  const [isOn, setIsOn] = useState(operatorData.notifications)
+export function PersonalDetailsSettings() {
+  const [operatorData, setOperatorData] = useState<UserMeType | null>(null)
+  const [isOn, setIsOn] = useState(operatorData?.notifications_enabled ?? false)
+  const fetchedUserMe = useRef(false)
 
   const [customOperatorData, setCustomOperatorData] = useState({
-    name: operatorData.name,
-    email: operatorData.email,
-    notifications: operatorData.notifications,
+    name: operatorData?.name ?? '',
+    email: operatorData?.email ?? '',
+    notifications_enabled: operatorData?.notifications_enabled ?? false,
   })
 
   const [hasChanges, setHasChanges] = useState(false)
+
+  const handleUpdateUser = async () => {
+    const response = await updateUser({
+      id: operatorData?.uuid || '',
+      email: customOperatorData?.email.toLocaleUpperCase() || '',
+      name: customOperatorData?.name.toLocaleUpperCase() || '',
+    })
+
+    if (response && response.status === 200) {
+      fetchedUserMe.current = false
+      fetchUser()
+      setHasChanges(false)
+
+      toast.custom(() => (
+        <ToastSuccess text='Dados pessoais atualizados com sucesso' />
+      ))
+    } else {
+      toast.custom(() => <ToastError text='Erro ao atualizar dados pessoais' />)
+    }
+  }
 
   const handleChange = (name: string, value: string | boolean) => {
     const newData = {
@@ -33,12 +59,30 @@ export function PersonalDetailsSettings({
     setCustomOperatorData(newData)
 
     const changed =
-      newData.name !== operatorData.name ||
-      newData.email !== operatorData.email ||
-      newData.notifications !== operatorData.notifications
+      newData.name !== operatorData?.name ||
+      newData.email !== operatorData?.email ||
+      newData.notifications_enabled !== operatorData?.notifications_enabled
 
     setHasChanges(changed)
   }
+
+  const fetchUser = async () => {
+    const response = await getUserMe()
+
+    if (response && response.status === 200) {
+      setOperatorData(response.data[0])
+      setCustomOperatorData(response.data[0])
+      setIsOn(response.data[0].notifications_enabled ?? false)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar dados do usuário' />)
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedUserMe.current) return
+    fetchedUserMe.current = true
+    fetchUser()
+  }, [])
 
   return (
     <div className='relative flex flex-col w-full h-full'>
@@ -56,9 +100,10 @@ export function PersonalDetailsSettings({
             label='Nome'
             required={false}
             type='text'
-            value={customOperatorData.name}
+            value={customOperatorData.name.toLocaleLowerCase()}
             position='right'
             onChange={e => handleChange('name', e.target.value)}
+            textTransform='capitalize'
           />
 
           <FormInput
@@ -69,6 +114,7 @@ export function PersonalDetailsSettings({
             value={customOperatorData.email}
             position='right'
             onChange={e => handleChange('email', e.target.value)}
+            textTransform='lowercase'
           />
 
           <div className='col-span-full pt-6'>
@@ -89,7 +135,7 @@ export function PersonalDetailsSettings({
                 <button
                   type='button'
                   onClick={() => {
-                    handleChange('notifications', !isOn)
+                    handleChange('notifications_enabled', !isOn)
                     setIsOn(!isOn)
                   }}
                   onKeyDown={e => {
@@ -115,7 +161,10 @@ export function PersonalDetailsSettings({
         </div>
       </div>
 
-      <ActionGroupSave actionDisabled={!hasChanges} onClick={actionModal} />
+      <ActionGroupSave
+        actionDisabled={!hasChanges}
+        onClick={handleUpdateUser}
+      />
     </div>
   )
 }

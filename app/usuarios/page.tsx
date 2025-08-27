@@ -324,7 +324,7 @@ const Operator: FC = () => {
                       fill='currentFill'
                     />
                   </svg>
-                  <span className='sr-only'>Loading...</span>
+                  <span className='sr-only'>Carregando...</span>
                 </div>
               </motion.div>
             )}

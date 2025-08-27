@@ -16,6 +16,10 @@ import {
   useClearQueryParams,
   useQueryParams,
 } from '@/components/Utils/UseQueryParams'
+import { updateUserMePassword } from '@/services/User'
+import { toast } from 'sonner'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { ToastError } from '@/components/Template/Toast/Error'
 
 enum menus {
   personalDetails,
@@ -28,6 +32,32 @@ const Settings: FC = () => {
   const setClearQueryParam = useClearQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
+  const [securityCode, setSecurityCode] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordReset, setPasswordReset] = useState(false)
+
+  const handleChangeSecurityCode = (value: string) => {
+    setSecurityCode(value)
+  }
+
+  const handleChangePassword = (value: string) => {
+    setPassword(value)
+  }
+
+  const handlePasswordChange = async () => {
+    const response = await updateUserMePassword({
+      code: securityCode,
+      password,
+    })
+
+    if (response && response.status === 204) {
+      toast.custom(() => <ToastSuccess text='Senha atualizada com sucesso' />)
+      setPasswordReset(prev => !prev)
+      handleCloseModal()
+    } else {
+      toast.custom(() => <ToastError text='Erro ao atualizar sua senha' />)
+    }
+  }
 
   const handleCloseModal = useCallback(() => {
     if (modalStatus) {
@@ -52,7 +82,13 @@ const Settings: FC = () => {
       >
         {activeMenu === menus.permissionGroup && <PermissionGroup />}
         {activeMenu === menus.sector && <Sector />}
-        {activeMenu === menus.security && <SecurityCode />}
+        {activeMenu === menus.security && (
+          <SecurityCode
+            buttonLabel='Confirmar'
+            onSuccess={handlePasswordChange}
+            onChange={handleChangeSecurityCode}
+          />
+        )}
       </Modal>
       <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
         <div className='flex flex-col gap-2 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
@@ -126,9 +162,7 @@ const Settings: FC = () => {
         </div>
 
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
-          {activeMenu === menus.personalDetails && (
-            <PersonalDetailsSettings actionModal={handleCloseModal} />
-          )}
+          {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
           {activeMenu === menus.permissionGroup && (
             <PermissionGroupSettings actionModal={handleCloseModal} />
           )}
@@ -136,7 +170,11 @@ const Settings: FC = () => {
             <SectorSettings actionModal={handleCloseModal} />
           )}
           {activeMenu === menus.security && (
-            <PasswordSettings actionModal={handleCloseModal} />
+            <PasswordSettings
+              key={passwordReset ? 'reset-1' : 'reset-0'}
+              onChange={handleChangePassword}
+              actionModal={handleCloseModal}
+            />
           )}
         </div>
       </div>

@@ -100,7 +100,7 @@ const Searchbar: React.FC = () => {
                   size='size-5'
                   stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
                 />
-                <span className='top-0 right-0 absolute flex justify-center items-center bg-[--primaryColor] rounded-full w-2 h-2'></span>
+                <span className='hidden top-0 right-0 absolute justify-center items-center bg-[--primaryColor] rounded-full w-2 h-2'></span>
               </span>
             }
             mobile={true}

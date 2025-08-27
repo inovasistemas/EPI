@@ -18,30 +18,6 @@ export async function getPermissionGroups() {
   }
 }
 
-type GetUsersType = {
-  loading: React.Dispatch<React.SetStateAction<boolean>>
-  q?: string
-  permissionGroup?: string
-  sortField?: string
-  sortOrder?: string
-  page?: number
-}
-
-type CreateUserType = {
-  name: string
-  email: string
-  password: string
-  permissionGroup: string
-}
-
-type UpdateUserType = {
-  id: string
-  name: string
-  email: string
-  password?: string
-  permissionGroup?: string
-}
-
 export async function getUsers({
   loading,
   q,
@@ -82,6 +58,22 @@ export async function getUser(id: string) {
       `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
       { withCredentials: true }
     )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function getUserMe() {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/me`,
+      { withCredentials: true }
+    )
+    console.log(response.data)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -134,6 +126,30 @@ export async function updateUser({
         email,
         password: password ? password : undefined,
         permission_group: permissionGroup ? permissionGroup : undefined,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function updateUserMePassword({
+  code,
+  password,
+}: UpdateUserMePasswordType) {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/me/password`,
+      {
+        code,
+        password: password ? password : undefined,
       },
       {
         withCredentials: true,

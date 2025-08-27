@@ -47,9 +47,6 @@ export function LoginForm() {
     required_2fa_configuration: false,
   })
 
-  const [alertState, setAlertState] = useState(false)
-  const [alertText, setAlertText] = useState('')
-  const [alertUUID, setAlertUUID] = useState('')
   const [height, setHeight] = useState(0)
   const [step, setStep] = useState(0)
   const [qrCodeUri, setQrCodeUri] = useState('')
@@ -165,10 +162,6 @@ export function LoginForm() {
     return false
   }
 
-  const handleAlert = () => {
-    setAlertState(false)
-  }
-
   const handleCopyToClipboard = async () => {
     await navigator.clipboard.writeText(formData.security_code_secret)
     setCopied(true)
@@ -208,8 +201,7 @@ export function LoginForm() {
 
           router.push('/painel')
         } else {
-          setAlertText('Erro ao verificar o código.')
-          setAlertState(true)
+          toast.custom(() => <ToastError text='Erro ao verificar o código' />)
         }
       }
     }

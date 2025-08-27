@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
-import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { ActionGroupSave } from '@/components/Surfaces/ActionGroupSave'
 
 type PasswordSettingsProps = {
+  onChange: (value: string) => void
   actionModal: () => void
 }
 
-export function PasswordSettings({ actionModal }: PasswordSettingsProps) {
+export function PasswordSettings({
+  onChange,
+  actionModal,
+}: PasswordSettingsProps) {
   const [operatorData, setOperatorData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -22,8 +25,12 @@ export function PasswordSettings({ actionModal }: PasswordSettingsProps) {
     }
 
     setOperatorData(newData)
+    onChange(newData.newPassword)
 
-    const changed = newData.currentPassword !== '' && newData.newPassword !== ''
+    const changed =
+      newData.currentPassword !== '' &&
+      newData.newPassword !== '' &&
+      newData.currentPassword === newData.newPassword
 
     setHasChanges(changed)
   }

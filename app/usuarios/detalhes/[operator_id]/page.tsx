@@ -20,9 +20,6 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
 
 const OperatorDetails: FC = () => {
-  const [alertState, setAlertState] = useState(false)
-  const [alertText, setAlertText] = useState('')
-  const [alertUUID, setAlertUUID] = useState('')
   const router = useRouter()
   const params = useParams()
   const OperatorId = Array.isArray(params.operator_id)

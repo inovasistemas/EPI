@@ -1,7 +1,16 @@
 import { useRef, useState } from 'react'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 
-export function SecurityCode() {
+type SecurityCodeType = {
+  buttonLabel: string
+  onSuccess: () => void
+  onChange: (value: string) => void
+}
+
+export function SecurityCode({
+  buttonLabel,
+  onSuccess,
+  onChange,
+}: SecurityCodeType) {
   const length = 6
   const [values, setValues] = useState(Array(length).fill(''))
   const inputsRef = useRef<(HTMLInputElement | null)[]>([])
@@ -11,6 +20,7 @@ export function SecurityCode() {
     const newValues = [...values]
     newValues[index] = value
     setValues(newValues)
+    onChange(newValues.join(''))
     if (value) {
       const next = index + 1
       if (next < length) {
@@ -28,11 +38,13 @@ export function SecurityCode() {
       if (values[index]) {
         newValues[index] = ''
         setValues(newValues)
+        onChange(newValues.join(''))
       } else if (index > 0) {
         inputsRef.current[index - 1]?.focus()
         const prevValues = [...values]
         prevValues[index - 1] = ''
         setValues(prevValues)
+        onChange(newValues.join(''))
       }
     }
   }
@@ -48,6 +60,7 @@ export function SecurityCode() {
       }
     }
     setValues(newValues)
+    onChange(newValues.join(''))
     const nextIndex = newValues.findIndex(v => v === '')
     inputsRef.current[nextIndex === -1 ? length - 1 : nextIndex]?.focus()
   }
@@ -81,7 +94,7 @@ export function SecurityCode() {
             type='text'
             inputMode='numeric'
             maxLength={1}
-            className='flex bg-[--backgroundSecondary] rounded-xl w-14 h-14 font-medium text-xl text-center uppercase select-none'
+            className='flex bg-[--backgroundSecondary] border-2 focus:border-[--primaryColor] border-transparent rounded-xl outline-none w-14 h-14 font-medium text-xl text-center uppercase transition-all duration-300 select-none'
             value={val}
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(e, i)}
@@ -92,10 +105,11 @@ export function SecurityCode() {
       <div className='flex flex-row justify-end mt-3 w-full'>
         <div className='flex flex-row gap-3'>
           <button
+            onClick={onSuccess}
             type='button'
             className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
           >
-            <span className='font-medium text-sm'>Verificar código</span>
+            <span className='font-medium text-sm'>{buttonLabel}</span>
           </button>
         </div>
       </div>
