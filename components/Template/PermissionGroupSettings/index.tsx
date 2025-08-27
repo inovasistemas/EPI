@@ -8,7 +8,7 @@ import {
   useQueryParams,
 } from '@/components/Utils/UseQueryParams'
 import { getPermissionGroups } from '@/services/PermissionGroups'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { ToastError } from '../Toast/Error'
 
@@ -88,6 +88,7 @@ export function PermissionGroupSettings({
     fetchedPermissionGroups.current = true
     fetchPermissionGroups()
   }, [])
+
   return (
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
@@ -110,6 +111,7 @@ export function PermissionGroupSettings({
                 <span className='font-medium capitalize'>
                   {permissionGroup.name.toLocaleLowerCase()}
                 </span>
+
                 <NavAction
                   type='button'
                   desktop={true}
@@ -121,7 +123,9 @@ export function PermissionGroupSettings({
                     />
                   }
                   mobile={true}
-                  action={() => handleClick('1', 'editPermissionGroup')}
+                  action={() =>
+                    handleClick(permissionGroup.uuid, 'editPermissionGroup')
+                  }
                 />
               </div>
               <div>
