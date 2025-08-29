@@ -6,11 +6,9 @@ import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
 import { ShieldIcon } from '@/components/Display/Icons/Shield'
 import { Modal } from '@/components/Display/Modal'
 import { PasswordSettings } from '@/components/Template/PasswordSettings'
-import { PermissionGroup } from '@/components/Template/PermissionGroup'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
 import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
-import { Sector } from '@/components/Template/Sector'
-import { SectorSettings } from '@/components/Template/SectorSettings'
+import { Sector } from '@/components/Features/Sector'
 import { SecurityCode } from '@/components/Template/SecurityCode'
 import {
   useClearQueryParams,
@@ -94,7 +92,6 @@ const Settings: FC = () => {
         handleClickOverlay={handleCloseModal}
         overflow={true}
       >
-        {activeMenu === menus.sector && <Sector />}
         {activeMenu === menus.security && (
           <SecurityCode
             buttonLabel='Confirmar'
@@ -215,12 +212,8 @@ const Settings: FC = () => {
 
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
           {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
-          {activeMenu === menus.permissionGroup && (
-            <PermissionGroupSettings actionModal={handleCloseModal} />
-          )}
-          {activeMenu === menus.sector && (
-            <SectorSettings actionModal={handleCloseModal} />
-          )}
+          {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
+          {activeMenu === menus.sector && <Sector />}
           {activeMenu === menus.security && (
             <PasswordSettings
               key={passwordReset ? 'reset-1' : 'reset-0'}

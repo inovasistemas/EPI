@@ -28,7 +28,7 @@ export function Subsector({ id, label, onClick }: SubsectorProps) {
         stroke='stroke-[--textSecondaryLight] group-data-[active=true]:stroke-[--primaryColor]'
         strokeWidth={2}
       />
-      <span className='font-medium text-[--textSecondaryLight] text-xs'>
+      <span className='font-medium text-[--textSecondaryLight] text-xs capitalize'>
         {label}
       </span>
     </button>
