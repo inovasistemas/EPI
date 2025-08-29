@@ -32,9 +32,11 @@ const Settings: FC = () => {
   const setClearQueryParam = useClearQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalAlertStatus, setModalAlertStatus] = useState(false)
   const [securityCode, setSecurityCode] = useState('')
   const [password, setPassword] = useState('')
   const [passwordReset, setPasswordReset] = useState(false)
+  const [deleteAction, setDeleteAction] = useState(false)
 
   const handleChangeSecurityCode = (value: string) => {
     setSecurityCode(value)
@@ -67,8 +69,20 @@ const Settings: FC = () => {
     setModalStatus(prev => !prev)
   }, [modalStatus, setClearQueryParam])
 
+  const handleCloseModalAlert = () => {
+    setModalAlertStatus(prev => !prev)
+  }
+
   const handleActiveMenu = (menu: menus) => {
     setActiveMenu(menu)
+  }
+
+  const handleDeleteAction = () => {
+    setDeleteAction(prev => !prev)
+
+    if (deleteAction) {
+      handleCloseModalAlert()
+    }
   }
 
   return (
@@ -80,7 +94,6 @@ const Settings: FC = () => {
         handleClickOverlay={handleCloseModal}
         overflow={true}
       >
-        {activeMenu === menus.permissionGroup && <PermissionGroup />}
         {activeMenu === menus.sector && <Sector />}
         {activeMenu === menus.security && (
           <SecurityCode
@@ -89,6 +102,45 @@ const Settings: FC = () => {
             onChange={handleChangeSecurityCode}
           />
         )}
+      </Modal>
+      <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalAlertStatus}
+        handleClickOverlay={handleCloseModalAlert}
+        showClose={false}
+      >
+        <div className='flex flex-col gap-2'>
+          <span className='font-medium text-xl text-center'>
+            Tem certeza que deseja excluir?
+          </span>
+          <span className='px-6 text-base text-center'>
+            Esta ação é irreversível e todos os dados associados serão
+            permanentemente apagados.
+          </span>
+
+          <div className='flex flex-row justify-center gap-3 pt-6'>
+            <button
+              onClick={handleDeleteAction}
+              type='button'
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-white text-sm transition-all duration-300'>
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type='button'
+              onClick={handleCloseModalAlert}
+              className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-[--textSecondary] text-sm'>
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
       </Modal>
       <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
         <div className='flex flex-col gap-2 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>

@@ -63,10 +63,11 @@ export function Modal({
             exit={{ y: '-40%', opacity: 0 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={classNames(
-              'top-1/2 z-[100] relative flex flex-col border border-[--outlinePrimary] bg-[--backgroundPrimary] shadow-xl mx-auto rounded-xl min-w-[50%] max-h-[80%] sm:max-h-[75%] text-[--textSecondary] -translate-y-1/2',
+              'top-1/2 absolute z-[900] flex flex-col border border-[--outlinePrimary] bg-[--backgroundPrimary] shadow-xl mx-auto rounded-xl max-h-[80%] sm:max-h-[75%] text-[--textSecondary] -translate-y-1/2 translate-x-1/2 left-1/4',
               {
-                'max-w-[90%] sm:max-w-[75%]': size === 'default',
-                'max-w-[50%] sm:max-w-[35%]': size === 'small',
+                'min-w-[50%] max-w-[90%] sm:max-w-[75%]': size === 'default',
+                'min-w-[50%] max-w-[50%] sm:max-w-[35%]': size === 'small',
+                'max-w-[40%] !translate-x-[13%]': size === 'extra-small',
                 'overflow-y-auto': overflow,
               }
             )}

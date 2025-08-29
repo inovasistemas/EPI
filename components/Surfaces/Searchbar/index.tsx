@@ -1,17 +1,15 @@
 'use client'
 import type React from 'react'
 import { useCallback, useState } from 'react'
-import { ProfilePicture } from '@/components/Display/Avatar'
 import { BellIcon } from '@/components/Display/Icons/Bell'
-import { SearchIcon } from '@/components/Display/Icons/Search'
 import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
 import { MenuNotifications } from '@/components/Template/MenuNotifications'
-import { MenuSettings } from '@/components/Template/MenuSettings'
 import { TakeoutModal } from '@/components/Template/TakeoutModal'
 import useSidebar from '@/lib/context/global'
+import { IdentificationIcon } from '@/components/Display/Icons/Identification'
 
 enum SearchbarCards {
   Settings,
@@ -81,7 +79,7 @@ const Searchbar: React.FC = () => {
           type='button'
           desktop={true}
           icon={
-            <SearchIcon
+            <IdentificationIcon
               size='size-5'
               stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
             />
