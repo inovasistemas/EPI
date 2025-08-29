@@ -1,65 +1,35 @@
-import { EditIcon } from '@/components/Display/Icons/Edit'
-import { Tag } from '@/components/Display/Tag'
-import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
+import { EditIcon } from '@/components/Display/Icons/Edit'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import {
-  useClearQueryParams,
-  useQueryParams,
-} from '@/components/Utils/UseQueryParams'
+import { Modal } from '@/components/Display/Modal'
+import { NavAction } from '@/components/Inputs/Button/NavAction'
+import { PermissionGroup } from '../PermissionGroup'
+import { Tag } from '@/components/Display/Tag'
+import { ToastError } from '../Toast/Error'
 import {
   deletePermissionGroup,
   getPermissionGroups,
 } from '@/services/PermissionGroups'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { ToastError } from '../Toast/Error'
-import { Modal } from '@/components/Display/Modal'
-import { PermissionGroup } from '../PermissionGroup'
-import cn from 'classnames'
+import { useEffect, useRef, useState } from 'react'
+import { Dialog } from '@/components/Dialog'
 
-type PermissionGroupSettingsProps = {
-  actionModal: () => void
-}
-
-type PermissionGroupsAccessType = {
-  screen: string
-  description: string
-  show: boolean
-  insert: boolean
-  update: boolean
-  delete: boolean
-  password: boolean
-  created_at: string
-  updated_at?: string
-}
-
-type PermissionGroupsType = {
-  uuid: string
-  name: string
-  active_users: number
-  created_at: string
-  updated_at?: string
-  access: [PermissionGroupsAccessType]
-}
-
-type PermissionActionKey = 'insert' | 'update' | 'delete' | 'view'
-
-export function PermissionGroupSettings({
-  actionModal,
-}: PermissionGroupSettingsProps) {
-  const [selectedPermissionGroup, setSelectedPermissionGroup] = useState('')
+export function PermissionGroupSettings() {
+  const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
+  const [modalStatus, setModalStatus] = useState(false)
   const [permissionGroupModalProps, setPermissionGroupModalProps] = useState('')
+  const [permissionGroups, setPermissionGroups] = useState<
+    PermissionGroupsType[] | null
+  >(null)
+  const [selectedPermissionGroup, setSelectedPermissionGroup] = useState('')
+  const fetchedPermissionGroups = useRef(false)
+
   const actions: { key: PermissionActionKey; label: string }[] = [
     { key: 'insert', label: 'Criar' },
     { key: 'update', label: 'Editar' },
     { key: 'delete', label: 'Excluir' },
     { key: 'view', label: 'Visualizar' },
   ]
-  const [permissionGroups, setPermissionGroups] = useState<
-    PermissionGroupsType[] | null
-  >(null)
-  const fetchedPermissionGroups = useRef(false)
 
   const handleClick = (id: string) => {
     setSelectedPermissionGroup(id)
@@ -78,15 +48,6 @@ export function PermissionGroupSettings({
       ))
     }
   }
-
-  useEffect(() => {
-    if (fetchedPermissionGroups.current) return
-    fetchedPermissionGroups.current = true
-    fetchPermissionGroups()
-  }, [])
-
-  const [modalStatus, setModalStatus] = useState(false)
-  const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
 
   const handleCloseModal = () => {
     setModalStatus(prev => !prev)
@@ -109,6 +70,12 @@ export function PermissionGroupSettings({
       ))
     }
   }
+
+  useEffect(() => {
+    if (fetchedPermissionGroups.current) return
+    fetchedPermissionGroups.current = true
+    fetchPermissionGroups()
+  }, [])
 
   return (
     <>
@@ -133,41 +100,12 @@ export function PermissionGroupSettings({
         handleClickOverlay={handleCloseModalConfirmation}
         showClose={false}
       >
-        <div className='flex flex-col gap-2'>
-          <span className='font-medium text-xl text-center'>
-            Tem certeza que deseja excluir o grupo de permissão?
-          </span>
-          <span className='px-6 text-base text-center'>
-            Esta ação é irreversível e todos os dados associados serão
-            permanentemente apagados.
-          </span>
-
-          <div className='flex flex-row justify-center gap-3 pt-6'>
-            <button
-              type='button'
-              onClick={handleDeletePermissionGroup}
-              className={cn(
-                'group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-              )}
-            >
-              <span className='font-medium text-white text-sm transition-all duration-300'>
-                Confirmar
-              </span>
-            </button>
-
-            <button
-              type='button'
-              onClick={handleCloseModalConfirmation}
-              className={cn(
-                'group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-              )}
-            >
-              <span className='font-medium text-[--textSecondary] text-sm'>
-                Cancelar
-              </span>
-            </button>
-          </div>
-        </div>
+        <Dialog
+          title={'Tem certeza que deseja excluir o grupo de permissão?'}
+          description='Esta ação é irreversível e todos os dados associados serão permanentemente apagados.'
+          handleDelete={handleDeletePermissionGroup}
+          handleCancel={handleCloseModalConfirmation}
+        />
       </Modal>
       <div className='relative flex flex-col w-full h-full'>
         <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
