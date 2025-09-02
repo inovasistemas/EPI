@@ -1,6 +1,6 @@
 'use client'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BellIcon } from '@/components/Display/Icons/Bell'
 import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
@@ -10,6 +10,7 @@ import { MenuNotifications } from '@/components/Template/MenuNotifications'
 import { TakeoutModal } from '@/components/Template/TakeoutModal'
 import useSidebar from '@/lib/context/global'
 import { IdentificationIcon } from '@/components/Display/Icons/Identification'
+import { getNotifications } from '@/services/Notification'
 
 enum SearchbarCards {
   Settings,
@@ -19,6 +20,7 @@ enum SearchbarCards {
 
 const Searchbar: React.FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
 
   const handleCloseModal = useCallback(() => {
     setCardOpen(SearchbarCards.Default)
@@ -49,6 +51,26 @@ const Searchbar: React.FC = () => {
         : SearchbarCards.Notifications
     )
   }, [isCardOpen])
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const response = await getNotifications({ status: 'RECEIVED' })
+      if (response && response.status === 200) {
+        const data = response.data
+        if (data.total > 0) {
+          setHasUnreadNotifications(true)
+        } else {
+          setHasUnreadNotifications(false)
+        }
+      }
+    }
+
+    fetchNotifications()
+
+    const interval = setInterval(fetchNotifications, 30000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className='h-[calc(50px+(env(safe-area-inset-top)))] min-h-[calc(50px+(env(safe-area-inset-top)))] pt-[calc(env(safe-area-inset-top))] flex justify-between items-center col-span-full bg-[--backgroundSecondary] px-3 sm:pt-0 w-full sm:w-auto lg:h-[50px]'>
@@ -98,7 +120,9 @@ const Searchbar: React.FC = () => {
                   size='size-5'
                   stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
                 />
-                <span className='hidden top-0 right-0 absolute justify-center items-center bg-[--primaryColor] rounded-full w-2 h-2'></span>
+                {hasUnreadNotifications && (
+                  <span className='block top-0 right-0 absolute justify-center items-center bg-[--primaryColor] rounded-full w-2 h-2'></span>
+                )}
               </span>
             }
             mobile={true}
