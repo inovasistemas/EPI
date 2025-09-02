@@ -44,7 +44,7 @@ export function MenuNotifications() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className='flex justify-center items-start py-3 w-full h-full'
+          className='flex justify-center items-start py-0 w-full h-full'
         >
           <div role='status'>
             <svg
