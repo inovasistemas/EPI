@@ -10,6 +10,7 @@ type SubSectorType = {
 type SectorType = {
   uuid: string
   name: string
+  active_collaborators: number
   parent: string
   inherit: boolean
   created_at: string

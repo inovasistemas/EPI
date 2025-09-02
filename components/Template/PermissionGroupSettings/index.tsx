@@ -147,7 +147,7 @@ export function PermissionGroupSettings() {
                   <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
                     <GroupLabel
                       isVisible={true}
-                      label={`${permissionGroup.active_users} usuário nesse grupo`}
+                      label={`${permissionGroup.active_users} usuário${permissionGroup.active_users > 1 || permissionGroup.active_users === 0 ? 's' : ''} nesse grupo`}
                       showFixed={false}
                     />
                   </div>

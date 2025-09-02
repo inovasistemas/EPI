@@ -6,27 +6,30 @@ import { Subsector } from '@/components/Inputs/Button/Subsector'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
-import { getSectors } from '@/services/Sector'
+import { deleteSector, getSectors } from '@/services/Sector'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { SectorModal } from './Modal'
+import { Dialog } from '@/components/Dialog'
 
 export function Sector() {
+  const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalProps, setModalProps] = useState({
+    sector: '',
+    type: '',
+  })
   const fetchedSectors = useRef(false)
-  const setQueryParam = useQueryParams()
   const [sectorsData, setSectorsData] = useState<SectorType[] | null>()
+  const [selectedSector, setSelectedSector] = useState('')
 
-  const handleClick = (id: string, type?: string) => {
-    if (type) {
-      setQueryParam({
-        type: type,
-        sector: id,
-      })
-    } else {
-      setQueryParam({
-        sector: id,
-      })
+  const handleClick = (id?: string, type?: string) => {
+    if (!id && !type) {
+      setSelectedSector('')
+      setModalProps({ sector: '', type: 'createSector' })
+    } else if (id && type) {
+      setSelectedSector(id)
+      setModalProps({ sector: id, type: type })
     }
 
     handleModalStatus()
@@ -46,6 +49,22 @@ export function Sector() {
     }
   }
 
+  const handleCloseModalConfirmation = () => {
+    setModalConfirmationStatus(prev => !prev)
+  }
+
+  const handleDeleteSector = async () => {
+    const response = await deleteSector(selectedSector || '')
+
+    if (response && response.status === 204) {
+      fetchSectors()
+      handleCloseModalConfirmation()
+      handleModalStatus()
+    } else {
+      toast.custom(() => <ToastError text='Erro ao excluir o setor' />)
+    }
+  }
+
   useEffect(() => {
     if (fetchedSectors.current) return
     fetchedSectors.current = true
@@ -55,13 +74,34 @@ export function Sector() {
   return (
     <>
       <Modal
-        title='Filtros'
+        title=''
         size='small'
         isModalOpen={modalStatus}
         handleClickOverlay={handleModalStatus}
+        showClose={false}
         overflow={true}
       >
-        <div></div>
+        <SectorModal
+          sector={modalProps.sector}
+          type={modalProps.type}
+          modalAction={handleModalStatus}
+          reload={fetchSectors}
+          confirmationModal={handleCloseModalConfirmation}
+        />
+      </Modal>
+      <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalConfirmationStatus}
+        handleClickOverlay={handleCloseModalConfirmation}
+        showClose={false}
+      >
+        <Dialog
+          title={'Tem certeza que deseja excluir o setor?'}
+          description='Esta ação é irreversível e todos os dados associados serão permanentemente apagados.'
+          handleDelete={handleDeleteSector}
+          handleCancel={handleCloseModalConfirmation}
+        />
       </Modal>
       <div className='relative flex flex-col w-full h-full'>
         <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
@@ -76,7 +116,10 @@ export function Sector() {
           </div>
 
           {sectorsData?.map((sector, i) => (
-            <div className='items-start gap-6 grid grid-cols-1 py-6 select-none'>
+            <div
+              key={sector.uuid}
+              className='items-start gap-6 grid grid-cols-1 py-6 select-none'
+            >
               <div className='flex flex-col'>
                 <div className='flex flex-row justify-between gap-2 itens-center'>
                   <span className='font-medium capitalize'>
@@ -84,7 +127,9 @@ export function Sector() {
                   </span>
                   <div className='flex flex-row items-center gap-2'>
                     <button
-                      onClick={() => handleClick(sector.uuid)}
+                      onClick={() =>
+                        handleClick(sector.uuid, 'createSubsector')
+                      }
                       type='button'
                       className='group z-[200] relative flex justify-center items-center gap-2 bg-[--backgroundSecondary] hover:bg-[--buttonHover] px-3 pr-4 rounded-xl h-8 text-zinc-200 active:scale-95 transition'
                     >
@@ -117,7 +162,7 @@ export function Sector() {
                   <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
                     <GroupLabel
                       isVisible={true}
-                      label='NaN colaborador nesse setor'
+                      label={`${sector.active_collaborators} colaborador${sector.active_collaborators > 1 || sector.active_collaborators === 0 ? 'es' : ''} nesse setor`}
                       showFixed={false}
                     />
                   </div>
@@ -141,7 +186,9 @@ export function Sector() {
                       key={subsector.uuid}
                       id={subsector.uuid}
                       label={subsector.name.toLocaleLowerCase()}
-                      onClick={handleModalStatus}
+                      onClick={() =>
+                        handleClick(subsector.uuid, 'editSubsector')
+                      }
                     />
                   ))}
                 </div>
@@ -150,7 +197,7 @@ export function Sector() {
           ))}
         </div>
 
-        <ActionGroupAdd addLabel='Adicionar' onClick={handleModalStatus} />
+        <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />
       </div>
     </>
   )
