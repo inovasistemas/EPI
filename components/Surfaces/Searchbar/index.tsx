@@ -54,7 +54,7 @@ const Searchbar: React.FC = () => {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      const response = await getNotifications({ status: 'RECEIVED' })
+      const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
       if (response && response.status === 200) {
         const data = response.data
         if (data.total > 0) {

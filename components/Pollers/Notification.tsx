@@ -14,7 +14,7 @@ export function NotificationPoller() {
           toast.custom(() => <ToastSuccess text={`${data.data.message}`} />)
         }
       }
-    }, 30000)
+    }, 15000)
 
     return () => clearInterval(interval)
   }, [])

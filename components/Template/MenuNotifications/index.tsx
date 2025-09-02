@@ -1,5 +1,7 @@
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 import { SubNavLinkAction } from '@/components/Navigation/SubNavLinkAction'
+import { formatDistance } from '@/components/Utils/FormatDistance'
+import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
 import { getNotifications } from '@/services/Notification'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
@@ -79,9 +81,11 @@ export function MenuNotifications() {
               transition={{ duration: 0.3 }}
             >
               <SubNavLink
-                name={notification.message}
+                name={normalizeDescription(
+                  notification.message.toLocaleLowerCase()
+                )}
                 href='/conta'
-                date='25m'
+                date={formatDistance(notification.created_at)}
                 read={notification.status !== 'READ' ? true : false}
               />
             </motion.li>

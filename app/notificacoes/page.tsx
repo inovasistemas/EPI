@@ -1,23 +1,29 @@
 'use client'
+import { formatDistance } from '@/components/Utils/FormatDistance'
+import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
+import { getNotifications } from '@/services/Notification'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useEffect, useRef, useState } from 'react'
 
 type Notification = {
-  id: string
+  uuid: string
   title: string
-  description: string
-  read: boolean
-  accepted: boolean
-  createdAt: string
+  message: string
+  status: string
+  answered_at: string
+  needs_approval: boolean
+  approved: boolean
+  created_at: string
 }
 
-const tabs = ['all', 'unread', 'read'] as const
+const tabs = ['ALL', 'RECEIVED', 'READ'] as const
 
 const Notification: FC = () => {
-  const [filter, setFilter] = useState<'read' | 'unread' | 'all'>('all')
+  const [filter, setFilter] = useState<'READ' | 'RECEIVED' | 'ALL'>('ALL')
   const tabRefs = useRef<Record<string, HTMLLabelElement | null>>({})
   const [bgStyle, setBgStyle] = useState({ x: 0, width: 0 })
+  const [notificationsData, setNotificationsData] = useState<Notification[]>([])
 
   useEffect(() => {
     const el = tabRefs.current[filter]
@@ -26,35 +32,24 @@ const Notification: FC = () => {
       setBgStyle({ x: offsetLeft, width: offsetWidth })
     }
   }, [filter])
-  const notificationData: Notification[] = [
-    {
-      id: '1',
-      title: 'Teste 1',
-      description:
-        'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto, modi pariatur. Exercitationem vitae et quidem. Illo corporis non qui quibusdam esse ullam, itaque officiis? Quaerat eos esse doloremque dicta veniam.',
-      read: false,
-      accepted: false,
-      createdAt: '25m',
-    },
-    {
-      id: '2',
-      title: 'Teste 2',
-      description:
-        'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto, modi pariatur. Exercitationem vitae et quidem. Illo corporis non qui quibusdam esse ullam, itaque officiis? Quaerat eos esse doloremque dicta veniam.',
-      read: false,
-      accepted: false,
-      createdAt: '1d',
-    },
-    {
-      id: '3',
-      title: 'Teste 3',
-      description:
-        'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Architecto, modi pariatur. Exercitationem vitae et quidem. Illo corporis non qui quibusdam esse ullam, itaque officiis? Quaerat eos esse doloremque dicta veniam.',
-      read: true,
-      accepted: true,
-      createdAt: '3d',
-    },
-  ]
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
+      if (response && response.status === 200) {
+        const data = response.data
+        if (data.total > 0) {
+          setNotificationsData(data.data)
+        }
+      }
+    }
+
+    fetchNotifications()
+
+    const interval = setInterval(fetchNotifications, 30000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -88,9 +83,9 @@ const Notification: FC = () => {
                   onChange={() => setFilter(tab)}
                 />
                 <span className='font-medium text-[--textSecondary] peer-checked:text-white text-sm transition-all duration-300'>
-                  {tab === 'all'
+                  {tab === 'ALL'
                     ? 'Todas'
-                    : tab === 'unread'
+                    : tab === 'RECEIVED'
                       ? 'Não lidas'
                       : 'Lidas'}
                 </span>
@@ -101,17 +96,13 @@ const Notification: FC = () => {
         <AnimatePresence mode='popLayout'>
           <div className='px-6 w-full'>
             <ul className='divide-y divide-[--border] w-full'>
-              {notificationData
+              {notificationsData
                 .filter(notification =>
-                  filter === 'all'
-                    ? true
-                    : filter === 'read'
-                      ? notification.read
-                      : !notification.read
+                  filter === 'ALL' ? true : notification.status === filter
                 )
                 .map(notification => (
                   <motion.li
-                    key={notification.id}
+                    key={notification.uuid}
                     layout
                     className='relative flex flex-row justify-between py-6 w-full'
                     initial={{ opacity: 0 }}
@@ -123,48 +114,63 @@ const Notification: FC = () => {
                     <div
                       className={classNames(
                         {
-                          'opacity-60 hover:opacity-100': notification.read,
+                          'opacity-60 hover:opacity-100':
+                            notification.status === 'READ',
                         },
                         'flex flex-col transition-all duration-300 w-full'
                       )}
                     >
-                      <span className='font-medium'>{notification.title}</span>
+                      <span className='font-medium capitalize'>
+                        {notification.title.toLocaleLowerCase()}
+                      </span>
                       <span className='font-regular text-sm'>
-                        {notification.description}
+                        {normalizeDescription(
+                          notification.message.toLocaleLowerCase()
+                        )}
                       </span>
 
-                      {!notification.accepted && (
-                        <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
-                          <button
-                            type='button'
-                            className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                          >
-                            <span className='font-medium text-sm'>Recusar</span>
-                          </button>
-                          <button
-                            type='button'
-                            className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                          >
-                            <span className='font-medium text-sm'>Aprovar</span>
-                          </button>
-                        </div>
-                      )}
+                      {notification.needs_approval &&
+                        !notification.answered_at && (
+                          <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
+                            <button
+                              type='button'
+                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+                            >
+                              <span className='font-medium text-sm'>
+                                Recusar
+                              </span>
+                            </button>
+                            <button
+                              type='button'
+                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+                            >
+                              <span className='font-medium text-sm'>
+                                Aprovar
+                              </span>
+                            </button>
+                          </div>
+                        )}
 
-                      {notification.accepted && (
-                        <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
-                          <button
-                            disabled
-                            type='button'
-                            className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                          >
-                            <span className='font-medium text-sm'>Aceito</span>
-                          </button>
-                        </div>
-                      )}
+                      {notification.needs_approval &&
+                        notification.approved !== null && (
+                          <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
+                            <button
+                              disabled
+                              type='button'
+                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+                            >
+                              <span className='font-medium text-sm'>
+                                {notification.approved
+                                  ? 'Aprovado'
+                                  : 'Recusado'}
+                              </span>
+                            </button>
+                          </div>
+                        )}
                     </div>
 
                     <span className='top-0 right-0 absolute mt-3 font-regular text-xs'>
-                      {notification.createdAt}
+                      {formatDistance(notification.created_at)}
                     </span>
                   </motion.li>
                 ))}
