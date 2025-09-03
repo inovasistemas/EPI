@@ -17,7 +17,7 @@ export async function getUnreadNotifications() {
   }
 }
 
-export async function getNotifications({ status, limit }: NotificatioProps) {
+export async function getNotifications({ status, limit }: NotificationProps) {
   try {
     const params: Record<string, any> = {}
 
@@ -27,6 +27,47 @@ export async function getNotifications({ status, limit }: NotificatioProps) {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/notifications`,
       { params, withCredentials: true }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function updateNotification({
+  id,
+  status,
+}: UpdateNotificationProps) {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_HOST}/notifications/${id}`,
+      {
+        status,
+      },
+      {
+        withCredentials: true,
+      }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function updateNotificationRead({
+  id,
+}: UpdateNotificationReadProps) {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_HOST}/notifications/${id}/read`,
+      {},
+      { withCredentials: true }
     )
     return response
   } catch (error: unknown) {

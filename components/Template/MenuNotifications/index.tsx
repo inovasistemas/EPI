@@ -84,9 +84,15 @@ export function MenuNotifications() {
                 name={normalizeDescription(
                   notification.message.toLocaleLowerCase()
                 )}
-                href='/conta'
+                href='/notificacoes'
                 date={formatDistance(notification.created_at)}
-                read={notification.status !== 'READ' ? true : false}
+                read={
+                  notification.status !== 'READ' &&
+                  notification.status !== 'REJECTED' &&
+                  notification.status !== 'APPROVED'
+                    ? true
+                    : false
+                }
               />
             </motion.li>
           ))}

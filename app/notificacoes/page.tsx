@@ -1,10 +1,19 @@
 'use client'
+import { Modal } from '@/components/Display/Modal'
+import { NotificationModal } from '@/components/Features/Notification'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { formatDistance } from '@/components/Utils/FormatDistance'
 import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
-import { getNotifications } from '@/services/Notification'
+import {
+  getNotifications,
+  updateNotification,
+  updateNotificationRead,
+} from '@/services/Notification'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 type Notification = {
   uuid: string
@@ -24,6 +33,29 @@ const Notification: FC = () => {
   const tabRefs = useRef<Record<string, HTMLLabelElement | null>>({})
   const [bgStyle, setBgStyle] = useState({ x: 0, width: 0 })
   const [notificationsData, setNotificationsData] = useState<Notification[]>([])
+  const [modalStatus, setModalStatus] = useState(false)
+  const [selectedNotification, setSelectedNotification] =
+    useState<Notification>({
+      uuid: '',
+      title: '',
+      message: '',
+      status: '',
+      answered_at: '',
+      needs_approval: false,
+      approved: false,
+      created_at: '',
+    })
+
+  const handleModalStatus = () => {
+    setModalStatus(prev => !prev)
+  }
+
+  const handleUpdateNotificationRead = async (notification: Notification) => {
+    setSelectedNotification(notification)
+    handleModalStatus()
+    await updateNotificationRead({ id: notification.uuid })
+    fetchNotifications()
+  }
 
   useEffect(() => {
     const el = tabRefs.current[filter]
@@ -33,26 +65,40 @@ const Notification: FC = () => {
     }
   }, [filter])
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
-      if (response && response.status === 200) {
-        const data = response.data
-        if (data.total > 0) {
-          setNotificationsData(data.data)
-        }
+  const fetchNotifications = async () => {
+    const response = await getNotifications({ status: 'ALL', limit: 100 })
+    if (response && response.status === 200) {
+      const data = response.data
+      if (data.total > 0) {
+        setNotificationsData(data.data)
       }
     }
+  }
 
+  useEffect(() => {
     fetchNotifications()
 
-    const interval = setInterval(fetchNotifications, 30000)
+    const interval = setInterval(fetchNotifications, 15000)
 
     return () => clearInterval(interval)
   }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <Modal
+        title=''
+        size='small'
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleModalStatus}
+        showClose={false}
+        overflow={true}
+      >
+        <NotificationModal
+          notification={selectedNotification}
+          modalAction={handleModalStatus}
+          reload={fetchNotifications}
+        />
+      </Modal>
       <div className='flex flex-col items-start bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-y-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
@@ -104,74 +150,59 @@ const Notification: FC = () => {
                   <motion.li
                     key={notification.uuid}
                     layout
-                    className='relative flex flex-row justify-between py-6 w-full'
+                    className='hover:bg-[--tableRow] flex rounded-xl w-full transition-all duration-300 cursor-pointer'
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.1 }}
                     onClick={() => null}
                   >
-                    <div
-                      className={classNames(
-                        {
-                          'opacity-60 hover:opacity-100':
-                            notification.status === 'READ',
-                        },
-                        'flex flex-col transition-all duration-300 w-full'
-                      )}
+                    <button
+                      onClick={() => handleUpdateNotificationRead(notification)}
+                      className='relative flex flex-row justify-between px-3 py-4 w-full'
                     >
-                      <span className='font-medium capitalize'>
-                        {notification.title.toLocaleLowerCase()}
-                      </span>
-                      <span className='font-regular text-sm'>
-                        {normalizeDescription(
-                          notification.message.toLocaleLowerCase()
+                      <div
+                        className={classNames(
+                          {
+                            'opacity-60 hover:opacity-100':
+                              notification.status === 'READ',
+                          },
+                          'text-left flex flex-col transition-all duration-300 w-full'
                         )}
-                      </span>
+                      >
+                        <span className='font-medium capitalize'>
+                          {notification.title.toLocaleLowerCase()}
+                        </span>
+                        <span className='font-regular text-sm'>
+                          {normalizeDescription(
+                            notification.message.toLocaleLowerCase()
+                          )}
+                        </span>
 
-                      {notification.needs_approval &&
-                        !notification.answered_at && (
-                          <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
-                            <button
-                              type='button'
-                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                            >
-                              <span className='font-medium text-sm'>
-                                Recusar
-                              </span>
-                            </button>
-                            <button
-                              type='button'
-                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                            >
-                              <span className='font-medium text-sm'>
-                                Aprovar
-                              </span>
-                            </button>
-                          </div>
+                        {notification.needs_approval &&
+                          notification.approved !== null && (
+                            <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
+                              <div className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-4 rounded-xl h-8 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'>
+                                <span className='font-medium text-xs'>
+                                  {notification.approved
+                                    ? 'Aprovado'
+                                    : 'Recusado'}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                      </div>
+
+                      <div className='top-0 right-0 absolute flex items-center gap-2 pt-4 pr-3 font-normal text-zinc-500 text-xs'>
+                        {formatDistance(notification.created_at)}
+                        {notification.status === 'RECEIVED' && (
+                          <div
+                            className='bg-[--primaryColor] rounded-full w-2 h-2'
+                            aria-hidden='true'
+                          ></div>
                         )}
-
-                      {notification.needs_approval &&
-                        notification.approved !== null && (
-                          <div className='flex flex-row justify-start gap-3 pt-3 w-full'>
-                            <button
-                              disabled
-                              type='button'
-                              className='group relative flex flex-row justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-[--textSecondary] disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-                            >
-                              <span className='font-medium text-sm'>
-                                {notification.approved
-                                  ? 'Aprovado'
-                                  : 'Recusado'}
-                              </span>
-                            </button>
-                          </div>
-                        )}
-                    </div>
-
-                    <span className='top-0 right-0 absolute mt-3 font-regular text-xs'>
-                      {formatDistance(notification.created_at)}
-                    </span>
+                      </div>
+                    </button>
                   </motion.li>
                 ))}
             </ul>

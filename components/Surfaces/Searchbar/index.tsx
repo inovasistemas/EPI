@@ -67,7 +67,7 @@ const Searchbar: React.FC = () => {
 
     fetchNotifications()
 
-    const interval = setInterval(fetchNotifications, 30000)
+    const interval = setInterval(fetchNotifications, 15000)
 
     return () => clearInterval(interval)
   }, [])
@@ -139,31 +139,6 @@ const Searchbar: React.FC = () => {
             <MenuNotifications />
           </MenuCard>
         </div>
-
-        {/* <div className='relative'>
-          <NavAction
-            type='button'
-            desktop={true}
-            icon={
-              <BellIcon
-                size='size-5'
-                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-              />
-            }
-            mobile={true}
-            action={handleSettingsClick}
-          />
-
-          <MenuCard
-            handleClickOverlay={handleClickOverlay}
-            isMenuOpen={isCardOpen === SearchbarCards.Settings}
-            margin='mt-[115%]'
-            width='min-w-72'
-            zIndex='z-[60]'
-          >
-            <MenuSettings />
-          </MenuCard>
-        </div> */}
       </div>
     </div>
   )

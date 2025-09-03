@@ -18,11 +18,13 @@ import { updateUserMePassword } from '@/services/User'
 import { toast } from 'sonner'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
+import { BriefcaseIcon } from '@/components/Display/Icons/Briefcase'
 
 enum menus {
   personalDetails,
   permissionGroup,
   sector,
+  jobPosition,
   security,
 }
 
@@ -189,6 +191,23 @@ const Settings: FC = () => {
             </div>
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Setores e subsetores
+            </span>
+          </button>
+
+          <button
+            onClick={() => handleActiveMenu(menus.jobPosition)}
+            type='button'
+            data-active={activeMenu === menus.jobPosition}
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+          >
+            <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
+              <BriefcaseIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            </div>
+            <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
+              Cargos e Funções
             </span>
           </button>
 
