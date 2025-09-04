@@ -84,7 +84,6 @@ export async function updatePermissionGroup({
         withCredentials: true,
       }
     )
-    console.log(response)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -105,7 +104,6 @@ export async function createPermissionGroup({
         withCredentials: true,
       }
     )
-    console.log(response)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

@@ -72,7 +72,6 @@ export async function getUserMe() {
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me`,
       { withCredentials: true }
     )
-    console.log(response.data)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
@@ -141,6 +140,7 @@ export async function updateUser({
 
 export async function updateUserMePassword({
   code,
+  oldPassword,
   password,
 }: UpdateUserMePasswordType) {
   try {
@@ -148,7 +148,8 @@ export async function updateUserMePassword({
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me/password`,
       {
         code,
-        password: password ? password : undefined,
+        old_password: oldPassword,
+        password,
       },
       {
         withCredentials: true,

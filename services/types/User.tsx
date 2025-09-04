@@ -24,5 +24,6 @@ type UpdateUserType = {
 
 type UpdateUserMePasswordType = {
   code: string
+  oldPassword: string
   password: string
 }

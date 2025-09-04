@@ -18,6 +18,7 @@ type SearchSelectProps = {
   placeholder?: string
   value?: string | null
   onChange: (value: string) => void
+  background?: string
 }
 
 export function SearchSelect({
@@ -28,6 +29,7 @@ export function SearchSelect({
   placeholder,
   value = null,
   onChange,
+  background = 'bg-[--backgroundSecondary]',
 }: SearchSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SearchSelectOptionsProps | null>(null)
@@ -56,7 +58,8 @@ export function SearchSelect({
           'grid-cols-2 relative': icon,
         },
         [
-          'max-h-[54px] group relative flex items-center bg-[--backgroundSecondary] border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
+          background,
+          'max-h-[54px] group relative flex items-center border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
         ]
       )}
     >

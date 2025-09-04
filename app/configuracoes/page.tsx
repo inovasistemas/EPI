@@ -19,6 +19,7 @@ import { toast } from 'sonner'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { BriefcaseIcon } from '@/components/Display/Icons/Briefcase'
+import { JobPosition } from '@/components/Features/JobPosition'
 
 enum menus {
   personalDetails,
@@ -35,6 +36,7 @@ const Settings: FC = () => {
   const [modalAlertStatus, setModalAlertStatus] = useState(false)
   const [securityCode, setSecurityCode] = useState('')
   const [password, setPassword] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
   const [passwordReset, setPasswordReset] = useState(false)
   const [deleteAction, setDeleteAction] = useState(false)
 
@@ -46,9 +48,14 @@ const Settings: FC = () => {
     setPassword(value)
   }
 
+  const handleChangeOldPassword = (value: string) => {
+    setOldPassword(value)
+  }
+
   const handlePasswordChange = async () => {
     const response = await updateUserMePassword({
       code: securityCode,
+      oldPassword,
       password,
     })
 
@@ -56,6 +63,8 @@ const Settings: FC = () => {
       toast.custom(() => <ToastSuccess text='Senha atualizada com sucesso' />)
       setPasswordReset(prev => !prev)
       handleCloseModal()
+    } else if (response && response.status === 401) {
+      toast.custom(() => <ToastError text='Senha atual incorreta' />)
     } else {
       toast.custom(() => <ToastError text='Erro ao atualizar sua senha' />)
     }
@@ -232,11 +241,13 @@ const Settings: FC = () => {
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
           {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
           {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
+          {activeMenu === menus.jobPosition && <JobPosition />}
           {activeMenu === menus.sector && <Sector />}
           {activeMenu === menus.security && (
             <PasswordSettings
               key={passwordReset ? 'reset-1' : 'reset-0'}
               onChange={handleChangePassword}
+              oldPasswordChange={handleChangeOldPassword}
               actionModal={handleCloseModal}
             />
           )}

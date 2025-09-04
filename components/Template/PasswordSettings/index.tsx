@@ -4,11 +4,13 @@ import { ActionGroupSave } from '@/components/Surfaces/ActionGroupSave'
 
 type PasswordSettingsProps = {
   onChange: (value: string) => void
+  oldPasswordChange: (value: string) => void
   actionModal: () => void
 }
 
 export function PasswordSettings({
   onChange,
+  oldPasswordChange,
   actionModal,
 }: PasswordSettingsProps) {
   const [operatorData, setOperatorData] = useState({
@@ -25,12 +27,10 @@ export function PasswordSettings({
     }
 
     setOperatorData(newData)
+    oldPasswordChange(newData.currentPassword)
     onChange(newData.newPassword)
 
-    const changed =
-      newData.currentPassword !== '' &&
-      newData.newPassword !== '' &&
-      newData.currentPassword === newData.newPassword
+    const changed = newData.currentPassword !== '' && newData.newPassword !== ''
 
     setHasChanges(changed)
   }
