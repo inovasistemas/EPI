@@ -2,7 +2,7 @@
 import { getUnreadNotifications } from '@/services/Notification'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
-import { ToastSuccess } from '../Template/Toast/Success'
+import { ToastDefault } from '../Template/Toast/Default'
 
 export function NotificationPoller() {
   useEffect(() => {
@@ -11,13 +11,16 @@ export function NotificationPoller() {
       if (response && response.status === 200) {
         const data = response.data
         if (data.total > 0) {
-          toast.custom(() => <ToastSuccess text={`${data.data.message}`} />)
+          toast.custom(t => (
+            <ToastDefault
+              redirectTo='/notificacoes'
+              text={`${data.data.message}`}
+            />
+          ))
         }
       }
     }, 15000)
 
     return () => clearInterval(interval)
   }, [])
-
-  return null
 }
