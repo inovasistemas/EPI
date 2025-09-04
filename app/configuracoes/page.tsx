@@ -64,9 +64,11 @@ const Settings: FC = () => {
       setPasswordReset(prev => !prev)
       handleCloseModal()
     } else if (response && response.status === 401) {
-      toast.custom(() => <ToastError text='Senha atual incorreta' />)
+      toast.custom(() => (
+        <ToastError text='A senha atual informada está incorreta' />
+      ))
     } else {
-      toast.custom(() => <ToastError text='Erro ao atualizar sua senha' />)
+      toast.custom(() => <ToastError text='Erro ao atualizar a senha' />)
     }
   }
 
