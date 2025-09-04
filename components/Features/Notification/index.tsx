@@ -1,4 +1,3 @@
-import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
@@ -28,7 +27,7 @@ export function NotificationModal({
   }
 
   return (
-    <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
+    <div className='z-[200] flex flex-col justify-center items-center gap-6 w-full h-full'>
       <div className='flex flex-col items-start gap-3 w-full'>
         <h2 className='font-medium text-xl capitalize leading-none'>
           {notification.title.toLocaleLowerCase()}

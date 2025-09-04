@@ -10,7 +10,12 @@ import { MenuNotifications } from '@/components/Template/MenuNotifications'
 import { TakeoutModal } from '@/components/Template/TakeoutModal'
 import useSidebar from '@/lib/context/global'
 import { IdentificationIcon } from '@/components/Display/Icons/Identification'
-import { getNotifications } from '@/services/Notification'
+import {
+  getNotifications,
+  updateNotificationRead,
+} from '@/services/Notification'
+import { NotificationModal } from '@/components/Features/Notification'
+import { Modal } from '@/components/Display/Modal'
 
 enum SearchbarCards {
   Settings,
@@ -18,9 +23,32 @@ enum SearchbarCards {
   Default,
 }
 
+type Notification = {
+  uuid: string
+  title: string
+  message: string
+  status: string
+  answered_at: string
+  needs_approval: boolean
+  approved: boolean
+  created_at: string
+}
+
 const Searchbar: React.FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalNotificationStatus, setModalNotificationStatus] = useState(false)
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
+  const [selectedNotification, setSelectedNotification] =
+    useState<Notification>({
+      uuid: '',
+      title: '',
+      message: '',
+      status: '',
+      answered_at: '',
+      needs_approval: false,
+      approved: false,
+      created_at: '',
+    })
 
   const handleCloseModal = useCallback(() => {
     setCardOpen(SearchbarCards.Default)
@@ -36,14 +64,6 @@ const Searchbar: React.FC = () => {
     setCardOpen(SearchbarCards.Default)
   }, [])
 
-  const handleSettingsClick = useCallback(() => {
-    setCardOpen(
-      isCardOpen === SearchbarCards.Settings
-        ? SearchbarCards.Default
-        : SearchbarCards.Settings
-    )
-  }, [isCardOpen])
-
   const handleNotificationsClick = useCallback(() => {
     setCardOpen(
       isCardOpen === SearchbarCards.Notifications
@@ -52,19 +72,31 @@ const Searchbar: React.FC = () => {
     )
   }, [isCardOpen])
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
-      if (response && response.status === 200) {
-        const data = response.data
-        if (data.total > 0) {
-          setHasUnreadNotifications(true)
-        } else {
-          setHasUnreadNotifications(false)
-        }
+  const handleUpdateNotificationRead = async (notification: Notification) => {
+    setSelectedNotification(notification)
+    handleClickOverlay()
+    handleModalNotificationStatus()
+    await updateNotificationRead({ id: notification.uuid })
+    fetchNotifications()
+  }
+
+  const handleModalNotificationStatus = () => {
+    setModalNotificationStatus(prev => !prev)
+  }
+
+  const fetchNotifications = async () => {
+    const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
+    if (response && response.status === 200) {
+      const data = response.data
+      if (data.total > 0) {
+        setHasUnreadNotifications(true)
+      } else {
+        setHasUnreadNotifications(false)
       }
     }
+  }
 
+  useEffect(() => {
     fetchNotifications()
 
     const interval = setInterval(fetchNotifications, 15000)
@@ -79,6 +111,20 @@ const Searchbar: React.FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       />
+      <Modal
+        title=''
+        size='small'
+        isModalOpen={modalNotificationStatus}
+        handleClickOverlay={handleModalNotificationStatus}
+        showClose={false}
+        overflow={true}
+      >
+        <NotificationModal
+          notification={selectedNotification}
+          modalAction={handleModalNotificationStatus}
+          reload={fetchNotifications}
+        />
+      </Modal>
       <div className='flex items-center gap-3'>
         <NavAction
           type='button'
@@ -136,7 +182,7 @@ const Searchbar: React.FC = () => {
             width='min-w-72'
             zIndex='z-[60]'
           >
-            <MenuNotifications />
+            <MenuNotifications itemAction={handleUpdateNotificationRead} />
           </MenuCard>
         </div>
       </div>

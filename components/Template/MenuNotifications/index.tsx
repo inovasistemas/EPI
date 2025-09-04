@@ -5,17 +5,25 @@ import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
 import { getNotifications } from '@/services/Notification'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import cn from 'classnames'
 
-type Notification = {
+type NotificationParam = {
   uuid: string
   title: string
   message: string
   status: string
+  answered_at: string
+  needs_approval: boolean
+  approved: boolean
   created_at: string
 }
 
-export function MenuNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>()
+type MenuNotificationsProps = {
+  itemAction: (notification: NotificationParam) => void
+}
+
+export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
+  const [notifications, setNotifications] = useState<NotificationParam[]>()
   const [loading, setLoading] = useState(false)
   const fetchedNotifications = useRef(false)
 
@@ -80,20 +88,45 @@ export function MenuNotifications() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <SubNavLink
-                name={normalizeDescription(
-                  notification.message.toLocaleLowerCase()
+              <button
+                onClick={() => itemAction(notification)}
+                type='button'
+                className='relative flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--buttonHover] px-3 py-2 rounded-xl w-full font-normal whitespace-normal transition-all duration-300'
+              >
+                {notification.created_at && (
+                  <div className='top-0 right-0 absolute flex items-center gap-2 p-2 font-normal text-zinc-500 text-xs'>
+                    {formatDistance(notification.created_at)}
+                    {notification.status !== 'READ' &&
+                    notification.status !== 'REJECTED' &&
+                    notification.status !== 'APPROVED'
+                      ? true
+                      : false && (
+                          <div
+                            className='bg-[--primaryColor] rounded-full w-2 h-2'
+                            aria-hidden='true'
+                          ></div>
+                        )}
+                  </div>
                 )}
-                href='/notificacoes'
-                date={formatDistance(notification.created_at)}
-                read={
-                  notification.status !== 'READ' &&
-                  notification.status !== 'REJECTED' &&
-                  notification.status !== 'APPROVED'
-                    ? true
-                    : false
-                }
-              />
+
+                <span
+                  className={cn(
+                    'font-medium text-[--textSecondary] text-sm line-clamp-2',
+                    {
+                      'font-normal':
+                        notification.status !== 'READ' &&
+                        notification.status !== 'REJECTED' &&
+                        notification.status !== 'APPROVED'
+                          ? true
+                          : false === false,
+                    }
+                  )}
+                >
+                  {normalizeDescription(
+                    notification.message.toLocaleLowerCase()
+                  )}
+                </span>
+              </button>
             </motion.li>
           ))}
         </>
