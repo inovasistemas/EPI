@@ -103,6 +103,25 @@ const Operator: FC = () => {
     [orderBy.field, orderBy.order, setQueryParam]
   )
 
+  const fetchUsers = async () => {
+    const response = await getUsers({
+      q: debouncedSearch || undefined,
+      loading: setLoading,
+      sortField: orderBy.field || 'name',
+      sortOrder: orderBy.order || 'asc',
+      permissionGroup: permissionGroup || undefined,
+      page: Number(page) || undefined,
+    })
+
+    if (response && response.status === 200) {
+      handlePageSettings('numberOfDocuments', response.data.total)
+      handlePageSettings('numberPerPage', response.data.per_page)
+      setUsers(response.data.data)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar dados do usuário' />)
+    }
+  }
+
   useEffect(() => {
     const allChecked =
       checkboxRefs.current.length > 0 &&
@@ -111,52 +130,12 @@ const Operator: FC = () => {
   }, [])
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await getUsers({
-        loading: setLoading,
-        sortField: orderBy.field || 'name',
-        sortOrder: orderBy.order || 'asc',
-        permissionGroup: permissionGroup || undefined,
-        page: Number(page) || undefined,
-      })
-
-      if (response && response.status === 200) {
-        handlePageSettings('numberOfDocuments', response.data.total)
-        handlePageSettings('numberPerPage', response.data.per_page)
-        setUsers(response.data.data)
-      } else {
-        toast.custom(() => (
-          <ToastError text='Erro ao buscar dados do usuário' />
-        ))
-      }
-    }
-
     fetchUsers()
   }, [orderBy, permissionGroup, searchParams])
 
-  // useEffect(() => {
-  //   if (debouncedSearch) {
-  //     const fetchUsers = async () => {
-  //       const response = await getUsers({
-  //         loading: setLoading,
-  //         sortField: orderBy.field || 'name',
-  //         sortOrder: orderBy.order || 'asc',
-  //         permissionGroup: permissionGroup || undefined,
-  //         page: Number(page) || undefined,
-  //       })
-
-  //       if (response && response.status === 200) {
-  //         handlePageSettings('numberOfDocuments', response.data.total)
-  //         handlePageSettings('numberPerPage', response.data.per_page)
-  //         setUsers(response.data.data)
-  //       } else {
-  //         toast.custom(() => (
-  //           <ToastError text='Erro ao buscar dados do usuário' />
-  //         ))
-  //       }
-  //     }
-  //   }
-  // }, [debouncedSearch])
+  useEffect(() => {
+    fetchUsers()
+  }, [debouncedSearch])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -225,7 +204,9 @@ const Operator: FC = () => {
             </div>
             <input
               type='text'
-              placeholder=''
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder='Pesquisar usuário'
               spellCheck={false}
               className='bg-transparent pr-3 pl-1 rounded-xl focus:outline-none w-full h-full placeholder:font-normal font-medium text-sm'
             />
