@@ -27,6 +27,7 @@ import { timestampToDate } from '@/utils/timestamp-to-date'
 import { calcPages } from '@/utils/calc-pages'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
+import useDebounce from '@/lib/context/debounce'
 
 type Operator = {
   uuid: string
@@ -46,6 +47,8 @@ const Operator: FC = () => {
   const page = useMemo(() => {
     return searchParams.get('page')
   }, [searchParams])
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce({ value: search, delay: 500 })
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
@@ -131,6 +134,30 @@ const Operator: FC = () => {
     fetchUsers()
   }, [orderBy, permissionGroup, searchParams])
 
+  // useEffect(() => {
+  //   if (debouncedSearch) {
+  //     const fetchUsers = async () => {
+  //       const response = await getUsers({
+  //         loading: setLoading,
+  //         sortField: orderBy.field || 'name',
+  //         sortOrder: orderBy.order || 'asc',
+  //         permissionGroup: permissionGroup || undefined,
+  //         page: Number(page) || undefined,
+  //       })
+
+  //       if (response && response.status === 200) {
+  //         handlePageSettings('numberOfDocuments', response.data.total)
+  //         handlePageSettings('numberPerPage', response.data.per_page)
+  //         setUsers(response.data.data)
+  //       } else {
+  //         toast.custom(() => (
+  //           <ToastError text='Erro ao buscar dados do usuário' />
+  //         ))
+  //       }
+  //     }
+  //   }
+  // }, [debouncedSearch])
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
@@ -214,6 +241,12 @@ const Operator: FC = () => {
             }
             onClick={handleCloseModal}
           />
+          {/* <button
+            type='submit'
+            className='group z-[55] relative flex justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+          >
+            <span className='font-medium text-sm'>Buscar</span>
+          </button> */}
         </div>
 
         <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full'>
