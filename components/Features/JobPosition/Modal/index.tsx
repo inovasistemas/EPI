@@ -9,7 +9,7 @@ import {
   createJobPosition,
   getJobPosition,
   updateJobPosition,
-} from '@/services/JobPositions'
+} from '@/services/JobPosition'
 import { getSectors } from '@/services/Sector'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'

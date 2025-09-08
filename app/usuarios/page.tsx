@@ -54,7 +54,6 @@ const Operator: FC = () => {
   const [hasChecked, setHasChecked] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [loading, setLoading] = useState(false)
-  const fetchedSearch = useRef(false)
   const [orderBy, setOrderBy] = useState({
     field: searchParams.get('sortField') || '',
     order: searchParams.get('sortOrder') || '',
@@ -118,7 +117,7 @@ const Operator: FC = () => {
       handlePageSettings('numberPerPage', response.data.per_page)
       setUsers(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar dados do usuário' />)
+      toast.custom(() => <ToastError text='Erro ao buscar usuários' />)
     }
   }
 
@@ -222,12 +221,6 @@ const Operator: FC = () => {
             }
             onClick={handleCloseModal}
           />
-          {/* <button
-            type='submit'
-            className='group z-[55] relative flex justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-          >
-            <span className='font-medium text-sm'>Buscar</span>
-          </button> */}
         </div>
 
         <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full'>

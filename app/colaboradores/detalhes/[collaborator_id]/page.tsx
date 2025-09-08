@@ -1,41 +1,87 @@
 'use client'
 import { useParams } from 'next/navigation'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { toast } from 'sonner'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { getCollaborator } from '@/services/Collaborator'
+import { formatCPF } from '@/utils/format-cpf'
+import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
 
-const ColaboratorDetails: FC = () => {
+type Collaborator = {
+  name: string
+  birthdate: string
+  rg: string
+  cpf: string
+  gender: string
+  cargo: string
+  admission_date: string
+  zip_code: string
+  address: string
+  number: string
+  neighborhood: string
+  city: string
+  state: string
+  phone: string
+  observations: string
+  created_at: string
+}
+
+const CollaboratorDetails: FC = () => {
   const params = useParams()
-  const ColaboratorId = params?.colaborator_id
-
-  const [colaboratorData, setColaboratorData] = useState({
-    name: 'João Felipe Gomes',
-    birthdate: '05/04/1997',
-    rg: '37.349.666-7',
-    cpf: '447.866.598-27',
-    gender: 'male',
-    cargo: 'Auxiliar Produção',
-    admissionDate: '01/01/2023',
-    zipCode: '13031-390',
-    address: 'Avenida João Batista Morato do Canto',
-    number: '1400',
-    neighborhood: 'Parque Industrial',
-    city: 'Campinas',
-    state: 'SP',
-    phone: '(19) 98602-5363',
+  const CollaboratorId = params?.collaborator_id
+  const [loading, setLoading] = useState(false)
+  const [collaborator, setCollaborator] = useState<Collaborator>({
+    name: '',
+    birthdate: '',
+    rg: '',
+    cpf: '',
+    gender: '',
+    cargo: '',
+    admission_date: '',
+    zip_code: '',
+    address: '',
+    number: '',
+    neighborhood: '',
+    city: '',
+    state: '',
+    phone: '',
     observations: '',
+    created_at: '',
   })
+  const fetchedCollaborator = useRef(false)
 
   const handleChange = (name: string, value: string) => {
-    setColaboratorData(prev => ({
+    setCollaborator(prev => ({
       ...prev,
       [name]: value,
     }))
   }
+
+  const fetchCollaborator = async () => {
+    if (CollaboratorId && typeof CollaboratorId === 'string') {
+      const response = await getCollaborator({
+        loading: setLoading,
+        id: CollaboratorId,
+      })
+
+      if (response && response.status === 200) {
+        setCollaborator(response.data)
+      } else {
+        toast.custom(() => <ToastError text='Erro ao buscar colaborador' />)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!CollaboratorId || typeof CollaboratorId !== 'string') return
+    fetchCollaborator()
+  }, [CollaboratorId])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -44,9 +90,9 @@ const ColaboratorDetails: FC = () => {
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/colaboradores' />
 
-            <h2 className='font-medium text-xl leading-none select-none'>
-              {colaboratorData.name
-                ? colaboratorData.name
+            <h2 className='font-medium text-xl capitalize leading-none select-none'>
+              {collaborator?.name
+                ? collaborator?.name.toLocaleLowerCase()
                 : 'Detalhes do colaborador'}
             </h2>
           </div>
@@ -68,9 +114,10 @@ const ColaboratorDetails: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={colaboratorData.name}
+                value={collaborator?.name.toLocaleLowerCase()}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
+                textTransform='capitalize'
               />
             </div>
 
@@ -79,7 +126,7 @@ const ColaboratorDetails: FC = () => {
               label='Data de nascimento'
               required={false}
               type='text'
-              value={colaboratorData.birthdate}
+              value={collaborator?.birthdate}
               position='right'
               onChange={e => handleChange('birthdate', e.target.value)}
             />
@@ -89,7 +136,7 @@ const ColaboratorDetails: FC = () => {
               label='RG'
               required={false}
               type='text'
-              value={colaboratorData.rg}
+              value={collaborator?.rg}
               position='right'
               onChange={e => handleChange('rg', e.target.value)}
             />
@@ -99,14 +146,14 @@ const ColaboratorDetails: FC = () => {
               label='CPF'
               required={false}
               type='text'
-              value={colaboratorData.cpf}
+              value={collaborator?.cpf}
               position='right'
               onChange={e => handleChange('cpf', e.target.value)}
             />
 
             <SearchSelect
               name='gender'
-              value={colaboratorData.gender}
+              value={collaborator?.gender}
               options={[
                 { value: 'female', label: 'Feminino' },
                 { value: 'male', label: 'Masculino' },
@@ -127,7 +174,7 @@ const ColaboratorDetails: FC = () => {
             </div>
 
             <SearchSelect
-              value={colaboratorData.cargo}
+              value={collaborator?.cargo}
               name='cargo'
               options={[
                 {
@@ -144,7 +191,7 @@ const ColaboratorDetails: FC = () => {
               label='Data de admissão'
               required={false}
               type='text'
-              value={colaboratorData.admissionDate}
+              value={collaborator?.admissionDate}
               position='right'
               onChange={e => handleChange('admissionDate', e.target.value)}
             />
@@ -164,7 +211,7 @@ const ColaboratorDetails: FC = () => {
               label='CEP'
               required={false}
               type='text'
-              value={colaboratorData.zipCode}
+              value={collaborator?.zipCode}
               position='right'
               onChange={e => handleChange('zipCode', e.target.value)}
             />
@@ -176,7 +223,7 @@ const ColaboratorDetails: FC = () => {
                   label='Endereço'
                   required={false}
                   type='text'
-                  value={colaboratorData.address}
+                  value={collaborator?.address}
                   position='right'
                   onChange={e => handleChange('address', e.target.value)}
                 />
@@ -187,7 +234,7 @@ const ColaboratorDetails: FC = () => {
                 label='Número'
                 required={false}
                 type='text'
-                value={colaboratorData.number}
+                value={collaborator?.number}
                 position='right'
                 onChange={e => handleChange('number', e.target.value)}
               />
@@ -198,7 +245,7 @@ const ColaboratorDetails: FC = () => {
               label='Bairro'
               required={false}
               type='text'
-              value={colaboratorData.neighborhood}
+              value={collaborator?.neighborhood}
               position='right'
               onChange={e => handleChange('neighborhood', e.target.value)}
             />
@@ -210,7 +257,7 @@ const ColaboratorDetails: FC = () => {
                   label='Cidade'
                   required={false}
                   type='text'
-                  value={colaboratorData.city}
+                  value={collaborator?.city}
                   position='right'
                   onChange={e => handleChange('city', e.target.value)}
                 />
@@ -220,7 +267,7 @@ const ColaboratorDetails: FC = () => {
                 label='UF'
                 required={false}
                 type='text'
-                value={colaboratorData.state}
+                value={collaborator?.state}
                 position='right'
                 onChange={e => handleChange('state', e.target.value)}
               />
@@ -231,7 +278,7 @@ const ColaboratorDetails: FC = () => {
               label='Telefone'
               required={false}
               type='text'
-              value={colaboratorData.phone}
+              value={collaborator?.phone}
               position='right'
               onChange={e => handleChange('phone', e.target.value)}
             />
@@ -246,7 +293,7 @@ const ColaboratorDetails: FC = () => {
               />
             </div>
             <TextArea
-              value={colaboratorData.observations}
+              value={collaborator?.observations}
               onChange={e => handleChange('observations', e.target.value)}
               name='observations'
               required={false}
@@ -256,7 +303,7 @@ const ColaboratorDetails: FC = () => {
 
           <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
             <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
-              Criado em 01/01/2023 às 11:41
+              Criado em {timestampToDateTime(collaborator?.created_at)}
             </div>
           </div>
 
@@ -267,4 +314,4 @@ const ColaboratorDetails: FC = () => {
   )
 }
 
-export default ColaboratorDetails
+export default CollaboratorDetails

@@ -7,7 +7,7 @@ import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 
-const CreateColaborator: FC = () => {
+const CreateCollaborator: FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     birthdate: '',
@@ -253,4 +253,4 @@ const CreateColaborator: FC = () => {
   )
 }
 
-export default CreateColaborator
+export default CreateCollaborator

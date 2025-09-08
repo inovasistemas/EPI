@@ -2,7 +2,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  type FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { AddIcon } from '@/components/Display/Icons/Add'
@@ -13,47 +20,50 @@ import { Modal } from '@/components/Display/Modal'
 import { PrimaryLink } from '@/components/Links/PrimaryLink'
 import { Paginations } from '@/components/Navigation/Paginations'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
-import { FilterColaborator } from '@/components/Template/Filter/Colaborator'
+import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { toast } from 'sonner'
+import { ToastError } from '@/components/Template/Toast/Error'
+import useDebounce from '@/lib/context/debounce'
+import { JobPosition } from '@/components/Features/JobPosition'
+import { timestampToDate } from '@/utils/timestamp-to-date'
+import { calcPages } from '@/utils/calc-pages'
+import { getCollaborators } from '@/services/Collaborator'
+import { formatCPF } from '@/utils/format-cpf'
 
-type Colaborator = {
-  id: string
+type Collaborator = {
+  uuid: string
   name: string
-  code: string
-  document: string
+  cpf: string
   job_position: string
-  createdAt: string
+  created_at: string
 }
 
-const Colaborator: FC = () => {
+const Collaborator: FC = () => {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [modalStatus, setModalStatus] = useState(false)
+  const [collaborators, setCollaborators] = useState<Collaborator[]>([])
+  const [loading, setLoading] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: searchParams.get('sortField') || '',
     order: searchParams.get('sortOrder') || '',
   })
+  const page = useMemo(() => {
+    return searchParams.get('page')
+  }, [searchParams])
+  const jobPosition = useMemo(() => {
+    return searchParams.get('jobPosition')
+  }, [searchParams])
+  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce({ value: search, delay: 500 })
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
-  const colaborators: Colaborator[] = [
-    {
-      id: 'us_93d8a0d66ad2494f',
-      name: 'Inova Sistemas',
-      code: 'co_93d8a0d66ad2494f',
-      document: '447.866.598-17',
-      job_position: 'auxiliar produção',
-      createdAt: '10/06/2025',
-    },
-    {
-      id: 'us_93d8a0d66ad2494g',
-      name: 'João Gomes',
-      code: 'co_93d8a0d66ad2494g',
-      document: '447.866.598-17',
-      job_position: 'auxiliar produção',
-      createdAt: '10/06/2025',
-    },
-  ]
+  const [pageSettings, setPageSettings] = useState({
+    numberOfDocuments: 1,
+    numberPerPage: 1,
+  })
 
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
@@ -86,12 +96,42 @@ const Colaborator: FC = () => {
     setModalStatus(prev => !prev)
   }, [])
 
+  const handlePageSettings = (name: string, value: string) => {
+    setPageSettings(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const fetchCollaborators = async () => {
+    const response = await getCollaborators({
+      q: debouncedSearch || undefined,
+      loading: setLoading,
+      sortField: orderBy.field || 'name',
+      sortOrder: orderBy.order || 'asc',
+      jobPosition: jobPosition || undefined,
+      page: Number(page) || undefined,
+    })
+
+    if (response && response.status === 200) {
+      handlePageSettings('numberOfDocuments', response.data.total)
+      handlePageSettings('numberPerPage', response.data.per_page)
+      setCollaborators(response.data.data)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar colaboradores' />)
+    }
+  }
+
   useEffect(() => {
     const allChecked =
       checkboxRefs.current.length > 0 &&
       checkboxRefs.current.every(ref => ref?.checked)
     setCheckedAll(allChecked)
   }, [])
+
+  useEffect(() => {
+    fetchCollaborators()
+  }, [debouncedSearch, orderBy, jobPosition, searchParams])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -101,7 +141,7 @@ const Colaborator: FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       >
-        <FilterColaborator actionClose={handleCloseModal} />
+        <FilterCollaborator actionClose={handleCloseModal} />
       </Modal>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
@@ -160,6 +200,8 @@ const Colaborator: FC = () => {
             </div>
             <input
               type='text'
+              value={search}
+              onChange={e => setSearch(e.target.value)}
               placeholder=''
               spellCheck={false}
               className='bg-transparent pr-3 pl-1 rounded-xl focus:outline-none w-full h-full placeholder:font-normal font-medium text-sm'
@@ -178,16 +220,16 @@ const Colaborator: FC = () => {
           />
         </div>
 
-        <div className='flex flex-col justify-between pb-6 w-full h-full'>
-          <ul className='flex flex-col gap-2 px-3'>
-            <li className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
+        <div className='flex flex-col justify-between gap-6 pb-0 w-full h-full'>
+          <div className='flex flex-col gap-2 px-3 h-full'>
+            <div className='gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm'>
               <div className='grid col-span-5 py-3'>
                 <div className='group flex items-center gap-2 transition-all duration-300'>
                   <div className='flex items-center h-full'>
                     <input
                       id='checkboxAll'
                       type='checkbox'
-                      name='colaborator[]'
+                      name='collaborator[]'
                       className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={checkedAll}
                       onChange={() => {
@@ -219,14 +261,14 @@ const Colaborator: FC = () => {
               </div>
               <div className='flex items-center col-span-3 py-3'>
                 <button
-                  onClick={() => handleOrderBy('document')}
+                  onClick={() => handleOrderBy('cpf')}
                   type='button'
                   className='flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300'
                 >
                   <span>Documento</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='document'
+                    name='cpf'
                     order={orderBy.order}
                   />
                 </button>
@@ -254,59 +296,110 @@ const Colaborator: FC = () => {
                   <span>Criado em</span>
                   <CaretOrder
                     field={orderBy.field}
-                    name='createdAt'
+                    name='created_at'
                     order={orderBy.order}
                   />
                 </button>
               </div>
-            </li>
-            {colaborators.map((colaborator, i) => (
-              <li key={colaborator.id}>
-                <Link
-                  href={`/colaboradores/detalhes/${colaborator.code}`}
-                  className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
-                >
-                  <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
-                    <input
-                      ref={el => {
-                        if (el) {
-                          checkboxRefs.current[i] = el
-                        }
-                      }}
-                      type='checkbox'
-                      name='colaborator[]'
-                      onClick={e => {
-                        e.stopPropagation()
-                      }}
-                      onChange={() => {
-                        const allChecked =
-                          checkboxRefs.current.length > 0 &&
-                          checkboxRefs.current.every(ref => ref?.checked)
-                        setCheckedAll(allChecked)
-                        updateCheckedStatus()
-                      }}
-                      className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
+            </div>
+            {loading && (
+              <motion.div
+                key='loading'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className='flex justify-center items-start pt-10 w-full h-full'
+              >
+                <div role='status'>
+                  <svg
+                    aria-hidden='true'
+                    className='fill-[--primaryColor] w-8 h-8 text-[--buttonPrimary] animate-spin'
+                    viewBox='0 0 100 101'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
+                      fill='currentColor'
                     />
-                    <span>{colaborator.name}</span>
-                  </div>
-                  <div className='col-span-3 py-4 lowercase'>
-                    {colaborator.document}
-                  </div>
-                  <div className='col-span-2 py-4'>
-                    {colaborator.job_position}
-                  </div>
-                  <div className='col-span-2 py-4 pr-1 text-right lowercase'>
-                    10/06/2025
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Paginations numberOfPages={10} />
+                    <path
+                      d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
+                      fill='currentFill'
+                    />
+                  </svg>
+                  <span className='sr-only'>Carregando...</span>
+                </div>
+              </motion.div>
+            )}
+            {!loading && (
+              <motion.div
+                key='data'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className='flex flex-col gap-6 pb-6 h-full'
+              >
+                <ul className='flex flex-col gap-3'>
+                  {collaborators.map((collaborator, i) => (
+                    <li key={collaborator.uuid}>
+                      <Link
+                        href={`/colaboradores/detalhes/${collaborator.uuid}`}
+                        className='bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300'
+                      >
+                        <div className='flex items-center gap-3 col-span-5 py-4 font-medium'>
+                          <input
+                            ref={el => {
+                              if (el) {
+                                checkboxRefs.current[i] = el
+                              }
+                            }}
+                            type='checkbox'
+                            name='collaborator[]'
+                            onClick={e => {
+                              e.stopPropagation()
+                            }}
+                            onChange={() => {
+                              const allChecked =
+                                checkboxRefs.current.length > 0 &&
+                                checkboxRefs.current.every(ref => ref?.checked)
+                              setCheckedAll(allChecked)
+                              updateCheckedStatus()
+                            }}
+                            className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]'
+                          />
+                          <span className='capitalize'>
+                            {collaborator.name.toLocaleLowerCase()}
+                          </span>
+                        </div>
+                        <div className='col-span-3 py-4 lowercase'>
+                          {formatCPF(collaborator.cpf)}
+                        </div>
+                        <div className='col-span-2 py-4 capitalize'>
+                          {collaborator.job_position &&
+                            collaborator.job_position.toLocaleLowerCase()}
+                        </div>
+                        <div className='col-span-2 py-4 pr-1 text-right lowercase'>
+                          {timestampToDate(collaborator.created_at)}
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Paginations
+                  numberOfPages={calcPages(
+                    pageSettings.numberOfDocuments,
+                    pageSettings.numberPerPage
+                  )}
+                />
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default Colaborator
+export default Collaborator

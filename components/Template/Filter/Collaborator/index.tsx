@@ -1,20 +1,31 @@
 'use client'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { getJobPositions } from '@/services/JobPosition'
 
-type FilterColaboratorProps = {
+type FilterCollaboratorProps = {
   actionClose: () => void
 }
 
-export function FilterColaborator({ actionClose }: FilterColaboratorProps) {
+export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
+  const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState({
     jobPosition: searchParams.get('jobPosition') || '',
   })
+  const [jobPositionData, setJobPositionData] = useState([
+    {
+      uuid: '',
+      name: '',
+      sector: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ])
 
   const handleFiltersChange = (name: string, value: string) => {
     setFilters(prev => ({
@@ -32,6 +43,22 @@ export function FilterColaborator({ actionClose }: FilterColaboratorProps) {
     handleFiltersChange('jobPosition', '')
   }
 
+  const fetchJobPositions = async () => {
+    const response = await getJobPositions()
+
+    if (response && response.status === 200) {
+      const data = response.data
+
+      setJobPositionData(data.data)
+    }
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchJobPositions()
+  }, [])
+
   return (
     <div className='flex flex-col gap-8 -mt-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
@@ -46,9 +73,14 @@ export function FilterColaborator({ actionClose }: FilterColaboratorProps) {
             onChange={(value: string) =>
               handleFiltersChange('jobPosition', value)
             }
-            options={[
-              { value: 'production_assistant', label: 'Auxiliar Produção' },
-            ]}
+            options={
+              jobPositionData
+                ? jobPositionData.map(jobPosition => ({
+                    value: jobPosition.uuid,
+                    label: jobPosition.name,
+                  }))
+                : []
+            }
             placeholder=''
           />
         </div>

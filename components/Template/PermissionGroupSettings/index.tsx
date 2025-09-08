@@ -9,7 +9,7 @@ import { ToastError } from '../Toast/Error'
 import {
   deletePermissionGroup,
   getPermissionGroups,
-} from '@/services/PermissionGroups'
+} from '@/services/PermissionGroup'
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog } from '@/components/Dialog'

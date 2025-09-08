@@ -7,7 +7,7 @@ import {
   getPermissionGroup,
   getPermissionGroupTemplate,
   updatePermissionGroup,
-} from '@/services/PermissionGroups'
+} from '@/services/PermissionGroup'
 import { ToastError } from '../Toast/Error'
 import { toast } from 'sonner'
 import { ToastSuccess } from '../Toast/Success'
