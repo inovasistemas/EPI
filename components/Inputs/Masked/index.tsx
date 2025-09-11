@@ -45,14 +45,14 @@ export function MaskedInput({
 					/>
 					<label
 						htmlFor={name}
-						className="top-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 left-1 z-10 absolute bg-transparent px-2 peer-focus:px-2 text-[--labelPrimary] peer-focus:text-[--primaryColor] text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] transition-all -translate-y-1 peer-focus:-translate-y-1 peer-placeholder-shown:-translate-y-1/2 transform"
+						className="top-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 left-1 absolute bg-transparent px-2 peer-focus:px-2 text-[--labelPrimary] peer-focus:text-[--primaryColor] text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] transition-all -translate-y-1 peer-focus:-translate-y-1 peer-placeholder-shown:-translate-y-1/2 transform"
 					>
 						{label}
 					</label>
 					{required && (
 						<label
 							htmlFor={name}
-							className="hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 z-10 absolute px-2 text-red-500 text-base duration-300"
+							className="hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 absolute px-2 text-red-500 text-base duration-300"
 						>
 							*
 						</label>

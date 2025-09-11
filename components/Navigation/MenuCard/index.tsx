@@ -14,20 +14,20 @@ type MenuCardProps = {
 }
 
 export function MenuCard({
-  children,
-  isMenuOpen,
-  handleClickOverlay,
-  margin,
-  width,
-  zIndex,
-  position,
-  align = 'top',
-}: MenuCardProps) {
+                           children,
+                           isMenuOpen,
+                           handleClickOverlay,
+                           margin,
+                           width,
+                           zIndex,
+                           position,
+                           align = 'top',
+                         }: MenuCardProps) {
   return (
     <AnimatePresence>
       {isMenuOpen && (
         <motion.div
-          key='overlay'
+          key="overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -38,7 +38,7 @@ export function MenuCard({
       )}
       {isMenuOpen && (
         <motion.div
-          key='menu'
+          key="menu"
           initial={{ y: align === 'top' ? -20 : 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: align === 'top' ? -20 : 20, opacity: 0 }}
@@ -52,7 +52,7 @@ export function MenuCard({
               margin,
               width,
               ' z-[250] absolute bg-[--backgroundSecondary] shadow-xl border border-[--outlinePrimary] rounded-xl max-w-80',
-            ]
+            ],
           )}
         >
           {children}

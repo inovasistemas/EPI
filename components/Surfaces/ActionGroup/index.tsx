@@ -9,13 +9,15 @@ type ActionGroup = {
   onDelete?: () => void
   onClick?: () => void
   showDelete?: boolean
+  uriBack?: string
 }
 
 export function ActionGroup({
-  onDelete,
-  onClick,
-  showDelete = false,
-}: ActionGroup) {
+                              onDelete,
+                              onClick,
+                              showDelete = false,
+                              uriBack = '',
+                            }: ActionGroup) {
   const [modalStatus, setModalStatus] = useState(false)
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
@@ -28,44 +30,45 @@ export function ActionGroup({
     }
   }
   return (
-    <div className='bottom-0 z-[201] sticky inset-x-0 flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
+    <div
+      className="bottom-0 sticky inset-x-0 flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300">
       <Modal
-        title=''
-        size='extra-small'
+        title=""
+        size="extra-small"
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
         showClose={false}
       >
-        <div className='flex flex-col gap-2'>
-          <span className='font-medium text-xl text-center'>
+        <div className="flex flex-col gap-2">
+          <span className="font-medium text-xl text-center">
             Tem certeza que deseja excluir o usuário?
           </span>
-          <span className='px-6 text-base text-center'>
+          <span className="px-6 text-base text-center">
             Esta ação é irreversível e todos os dados associados serão
             permanentemente apagados.
           </span>
 
-          <div className='flex flex-row justify-center gap-3 pt-6'>
+          <div className="flex flex-row justify-center gap-3 pt-6">
             <button
-              type='button'
+              type="button"
               onClick={handleDelete}
               className={classNames(
-                'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-8'
+                'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-8',
               )}
             >
-              <span className='font-medium text-white text-sm transition-all duration-300'>
+              <span className="font-medium text-white text-sm transition-all duration-300">
                 Confirmar
               </span>
             </button>
 
             <button
-              type='button'
+              type="button"
               onClick={handleCloseModal}
               className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-8'
+                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-8',
               )}
             >
-              <span className='font-medium text-[--textSecondary] text-sm'>
+              <span className="font-medium text-[--textSecondary] text-sm">
                 Cancelar
               </span>
             </button>
@@ -74,48 +77,49 @@ export function ActionGroup({
       </Modal>
       {showDelete && (
         <button
-          type='button'
+          type="button"
           onClick={handleCloseModal}
           className={classNames(
-            'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5'
+            'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5',
           )}
         >
           <TrashIcon
-            size='size-4'
-            stroke='stroke-[--textSecondary] group-hover:stroke-white'
+            size="size-4"
+            stroke="stroke-[--textSecondary] group-hover:stroke-white"
             strokeWidth={2.5}
           />
 
-          <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
+          <span
+            className="font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300">
             Excluir
           </span>
         </button>
       )}
-      <div className='flex justify-end items-center gap-3 w-full'>
+      <div className="flex justify-end items-center gap-3 w-full">
         <Link
-          href='/usuarios'
+          href={uriBack}
           className={classNames(
-            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-4'
+            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-4',
           )}
         >
-          <span className='font-medium text-[--textSecondary] text-sm'>
+          <span className="font-medium text-[--textSecondary] text-sm">
             Cancelar
           </span>
         </Link>
 
         <button
           onClick={onClick}
-          type='button'
+          type="button"
           className={classNames(
-            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5'
+            'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--primaryColor] hover:bg-[--secondaryColor] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5',
           )}
         >
           <FloppyDiskIcon
-            size='size-4'
-            stroke='stroke-white'
+            size="size-4"
+            stroke="stroke-white"
             strokeWidth={2.5}
           />
-          <span className='font-medium text-white text-sm'>Salvar</span>
+          <span className="font-medium text-white text-sm">Salvar</span>
         </button>
       </div>
     </div>

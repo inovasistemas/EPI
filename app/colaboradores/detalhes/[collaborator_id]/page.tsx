@@ -1,6 +1,6 @@
 'use client'
 import { useParams } from 'next/navigation'
-import { type FC, useEffect, useRef, useState } from 'react'
+import { type FC, useEffect, useRef, useState, useCallback } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -12,6 +12,8 @@ import { ToastError } from '@/components/Template/Toast/Error'
 import { getCollaborator } from '@/services/Collaborator'
 import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
 import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
+import { Modal } from '@/components/Display/Modal'
 
 type Collaborator = {
   name: string
@@ -19,7 +21,7 @@ type Collaborator = {
   rg: string
   cpf: string
   gender: string
-  cargo: string
+  job_position: string
   admission_date: string
   zip_code: string
   address: string
@@ -42,7 +44,7 @@ const CollaboratorDetails: FC = () => {
     rg: '',
     cpf: '',
     gender: '',
-    cargo: '',
+    job_position: '',
     admission_date: '',
     zip_code: '',
     address: '',
@@ -75,17 +77,71 @@ const CollaboratorDetails: FC = () => {
       } else {
         toast.custom(() => <ToastError text="Erro ao buscar colaborador" />)
       }
+
+      fetchedCollaborator.current = true
     }
   }
 
+  const [modalStatus, setModalStatus] = useState(false)
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
+
+  const updateCollabroator = async () => {
+    console.log(collaborator)
+  }
+
+  const deleteCollaborator = async () => {
+    alert('deletar')
+  }
+
   useEffect(() => {
-    if (!CollaboratorId || typeof CollaboratorId !== 'string') return
-    fetchCollaborator()
-  }, [CollaboratorId])
+    if ((!CollaboratorId || typeof CollaboratorId !== 'string') && fetchedCollaborator) return
+    fetchCollaborator().then()
+  }, [CollaboratorId, fetchedCollaborator])
 
   return (
     <div
       className="flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto">
+      <Modal
+        title=""
+        size="extra-small"
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleCloseModal}
+        showClose={false}
+      >
+        <div className="flex flex-col gap-2">
+          <span className="font-medium text-xl text-center">
+            Tem certeza que deseja excluir o colaborador?
+          </span>
+          <span className="px-6 text-base text-center">
+            Esta ação é irreversível e todos os dados associados serão
+            permanentemente apagados.
+          </span>
+
+          <div className="flex flex-row justify-center gap-3 pt-6">
+            <button
+              type="button"
+              onClick={deleteCollaborator}
+              className="group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-8"
+            >
+              <span className="font-medium text-white text-sm transition-all duration-300">
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCloseModal}
+              className="select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-8"
+            >
+            <span className="font-medium text-[--textSecondary] text-sm">
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className="relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full">
         <div className="flex justify-between items-center gap-3 p-6 w-full">
           <div className="flex flex-row items-center gap-3">
@@ -174,18 +230,7 @@ const CollaboratorDetails: FC = () => {
               />
             </div>
 
-            <SearchSelect
-              value={collaborator?.cargo}
-              name="cargo"
-              options={[
-                {
-                  value: 'Auxiliar Produção',
-                  label: 'Auxiliar Produção',
-                },
-              ]}
-              placeholder="Cargo"
-              onChange={() => null}
-            />
+            <SelectJobPositions value={collaborator?.job_position} />
 
             <MaskedInput
               name="admission_date"
@@ -309,7 +354,10 @@ const CollaboratorDetails: FC = () => {
             </div>
           </div>
 
-          <ActionGroup showDelete={true} />
+          <ActionGroup uriBack="/colaboradores"
+                       onDelete={deleteCollaborator}
+                       onClick={updateCollabroator}
+                       showDelete={true} />
         </form>
       </div>
     </div>
