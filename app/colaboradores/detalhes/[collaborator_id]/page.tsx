@@ -187,13 +187,13 @@ const CollaboratorDetails: FC = () => {
             />
 
             <FormInput
-              name='admissionDate'
+              name='admission_date'
               label='Data de admissão'
               required={false}
               type='text'
-              value={collaborator?.admissionDate}
+              value={collaborator?.admission_date}
               position='right'
-              onChange={e => handleChange('admissionDate', e.target.value)}
+              onChange={e => handleChange('admission_date', e.target.value)}
             />
           </div>
 
@@ -207,13 +207,13 @@ const CollaboratorDetails: FC = () => {
             </div>
 
             <FormInput
-              name='zipCode'
+              name='zip_code'
               label='CEP'
               required={false}
               type='text'
-              value={collaborator?.zipCode}
+              value={collaborator?.zip_code}
               position='right'
-              onChange={e => handleChange('zipCode', e.target.value)}
+              onChange={e => handleChange('zip_code', e.target.value)}
             />
 
             <div className='gap-4 grid grid-cols-3 col-span-2 w-full'>

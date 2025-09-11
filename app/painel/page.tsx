@@ -1,6 +1,6 @@
 'use client'
 
-import { ChartAreaGradient } from '@/components/Chart/Small/Collaborator'
+import { ChartAreaGradient } from '@/components/Chart/Small/Colaborator'
 import { SmallChartIssues } from '@/components/Chart/Small/Issues'
 import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 
