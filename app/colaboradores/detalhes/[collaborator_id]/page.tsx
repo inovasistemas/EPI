@@ -10,8 +10,8 @@ import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { getCollaborator } from '@/services/Collaborator'
-import { formatCPF } from '@/utils/format-cpf'
 import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
+import { MaskedInput } from '@/components/Inputs/Masked'
 
 type Collaborator = {
   name: string
@@ -73,7 +73,7 @@ const CollaboratorDetails: FC = () => {
       if (response && response.status === 200) {
         setCollaborator(response.data)
       } else {
-        toast.custom(() => <ToastError text='Erro ao buscar colaborador' />)
+        toast.custom(() => <ToastError text="Erro ao buscar colaborador" />)
       }
     }
   }
@@ -84,13 +84,14 @@ const CollaboratorDetails: FC = () => {
   }, [CollaboratorId])
 
   return (
-    <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
-        <div className='flex justify-between items-center gap-3 p-6 w-full'>
-          <div className='flex flex-row items-center gap-3'>
-            <GoBackButton href='/colaboradores' />
+    <div
+      className="flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto">
+      <div className="relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full">
+        <div className="flex justify-between items-center gap-3 p-6 w-full">
+          <div className="flex flex-row items-center gap-3">
+            <GoBackButton href="/colaboradores" />
 
-            <h2 className='font-medium text-xl capitalize leading-none select-none'>
+            <h2 className="font-medium text-xl capitalize leading-none select-none">
               {collaborator?.name
                 ? collaborator?.name.toLocaleLowerCase()
                 : 'Detalhes do colaborador'}
@@ -98,9 +99,9 @@ const CollaboratorDetails: FC = () => {
           </div>
         </div>
 
-        <form className='gap-x-4 gap-y-10 grid sm:grid-cols-1 w-full overflow-y-auto'>
-          <div className='gap-4 grid sm:grid-cols-3 px-6 w-full'>
-            <div className='hidden sm:block relative col-span-full mb-4'>
+        <form className="gap-x-4 gap-y-10 grid sm:grid-cols-1 w-full overflow-y-auto">
+          <div className="gap-4 grid sm:grid-cols-3 px-6 w-full">
+            <div className="hidden sm:block relative col-span-full mb-4">
               <GroupLabel
                 isVisible={true}
                 label={'Dados do Colaborador'}
@@ -108,64 +109,64 @@ const CollaboratorDetails: FC = () => {
               />
             </div>
 
-            <div className='col-span-2'>
+            <div className="col-span-2">
               <FormInput
-                name='name'
-                label='Nome'
+                name="name"
+                label="Nome"
                 required={false}
-                type='text'
+                type="text"
                 value={collaborator?.name.toLocaleLowerCase()}
-                position='right'
+                position="right"
                 onChange={e => handleChange('name', e.target.value)}
-                textTransform='capitalize'
+                textTransform="capitalize"
               />
             </div>
 
-            <FormInput
-              name='birthdate'
-              label='Data de nascimento'
+            <MaskedInput
+              name="birthdate"
+              label="Data de nascimento"
               required={false}
-              type='text'
+              type="date"
               value={collaborator?.birthdate}
-              position='right'
+              position="right"
               onChange={e => handleChange('birthdate', e.target.value)}
             />
 
-            <FormInput
-              name='rg'
-              label='RG'
+            <MaskedInput
+              name="rg"
+              label="RG"
               required={false}
-              type='text'
+              type="rg"
               value={collaborator?.rg}
-              position='right'
+              position="right"
               onChange={e => handleChange('rg', e.target.value)}
             />
 
-            <FormInput
-              name='cpf'
-              label='CPF'
+            <MaskedInput
+              name="cpf"
+              label="CPF"
               required={false}
-              type='text'
+              type="cpf"
               value={collaborator?.cpf}
-              position='right'
+              position="right"
               onChange={e => handleChange('cpf', e.target.value)}
             />
 
             <SearchSelect
-              name='gender'
+              name="gender"
               value={collaborator?.gender}
               options={[
-                { value: 'female', label: 'Feminino' },
-                { value: 'male', label: 'Masculino' },
-                { value: 'other', label: 'Não informar' },
+                { value: 'FEMALE', label: 'Feminino' },
+                { value: 'MALE', label: 'Masculino' },
+                { value: 'NOTINFORMED', label: 'Não informado' },
               ]}
-              placeholder='Gênero'
+              placeholder="Gênero"
               onChange={() => null}
             />
           </div>
 
-          <div className='gap-4 grid grid-cols-2 px-6 w-full'>
-            <div className='hidden sm:block relative col-span-full mb-4'>
+          <div className="gap-4 grid grid-cols-2 px-6 w-full">
+            <div className="hidden sm:block relative col-span-full mb-4">
               <GroupLabel
                 isVisible={true}
                 label={'Dados sobre Cargo'}
@@ -175,30 +176,30 @@ const CollaboratorDetails: FC = () => {
 
             <SearchSelect
               value={collaborator?.cargo}
-              name='cargo'
+              name="cargo"
               options={[
                 {
                   value: 'Auxiliar Produção',
                   label: 'Auxiliar Produção',
                 },
               ]}
-              placeholder='Cargo'
+              placeholder="Cargo"
               onChange={() => null}
             />
 
-            <FormInput
-              name='admission_date'
-              label='Data de admissão'
+            <MaskedInput
+              name="admission_date"
+              label="Data de admissão"
               required={false}
-              type='text'
+              type="date"
               value={collaborator?.admission_date}
-              position='right'
+              position="right"
               onChange={e => handleChange('admission_date', e.target.value)}
             />
           </div>
 
-          <div className='gap-4 grid grid-cols-3 px-6 w-full'>
-            <div className='hidden sm:block relative col-span-full mb-4'>
+          <div className="gap-4 grid grid-cols-3 px-6 w-full">
+            <div className="hidden sm:block relative col-span-full mb-4">
               <GroupLabel
                 isVisible={true}
                 label={'Dados de Contato'}
@@ -206,86 +207,87 @@ const CollaboratorDetails: FC = () => {
               />
             </div>
 
-            <FormInput
-              name='zip_code'
-              label='CEP'
+            <MaskedInput
+              name="zip_code"
+              label="CEP"
               required={false}
-              type='text'
+              type="zipcode"
               value={collaborator?.zip_code}
-              position='right'
+              position="right"
               onChange={e => handleChange('zip_code', e.target.value)}
             />
 
-            <div className='gap-4 grid grid-cols-3 col-span-2 w-full'>
-              <div className='col-span-2'>
+            <div className="gap-4 grid grid-cols-3 col-span-2 w-full">
+              <div className="col-span-2">
                 <FormInput
-                  name='address'
-                  label='Endereço'
+                  name="address"
+                  label="Endereço"
                   required={false}
-                  type='text'
+                  type="text"
                   value={collaborator?.address}
-                  position='right'
+                  position="right"
                   onChange={e => handleChange('address', e.target.value)}
                 />
               </div>
 
               <FormInput
-                name='number'
-                label='Número'
+                name="number"
+                label="Número"
                 required={false}
-                type='text'
+                type="text"
                 value={collaborator?.number}
-                position='right'
+                position="right"
                 onChange={e => handleChange('number', e.target.value)}
               />
             </div>
 
             <FormInput
-              name='neighborhood'
-              label='Bairro'
+              name="neighborhood"
+              label="Bairro"
               required={false}
-              type='text'
+              type="text"
               value={collaborator?.neighborhood}
-              position='right'
+              position="right"
               onChange={e => handleChange('neighborhood', e.target.value)}
             />
 
-            <div className='gap-4 grid grid-cols-3 col-span-2 w-full'>
-              <div className='col-span-2'>
+            <div className="gap-4 grid grid-cols-3 col-span-2 w-full">
+              <div className="col-span-2">
                 <FormInput
-                  name='city'
-                  label='Cidade'
+                  name="city"
+                  label="Cidade"
                   required={false}
-                  type='text'
+                  type="text"
                   value={collaborator?.city}
-                  position='right'
+                  position="right"
                   onChange={e => handleChange('city', e.target.value)}
                 />
               </div>
               <FormInput
-                name='state'
-                label='UF'
+                name="state"
+                label="UF"
                 required={false}
-                type='text'
+                type="text"
                 value={collaborator?.state}
-                position='right'
+                position="right"
                 onChange={e => handleChange('state', e.target.value)}
+                maxLength={2}
               />
             </div>
 
-            <FormInput
-              name='phone'
-              label='Telefone'
+            <MaskedInput
+              name="phone"
+              label="Celular"
               required={false}
-              type='text'
+              type="phone"
               value={collaborator?.phone}
-              position='right'
+              position="right"
               onChange={e => handleChange('phone', e.target.value)}
             />
           </div>
 
-          <div className='gap-4 grid sm:grid-cols-2 px-6 w-full'>
-            <div className='hidden sm:block relative col-span-full mb-4'>
+          <div className="gap-4 grid sm:grid-cols-2 px-6 w-full">
+            <div className="hidden sm:block relative col-span-full mb-4">
               <GroupLabel
                 isVisible={true}
                 label={'Observações'}
@@ -295,14 +297,14 @@ const CollaboratorDetails: FC = () => {
             <TextArea
               value={collaborator?.observations}
               onChange={e => handleChange('observations', e.target.value)}
-              name='observations'
+              name="observations"
               required={false}
-              label='Observações'
+              label="Observações"
             />
           </div>
 
-          <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
-            <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
+          <div className="flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full">
+            <div className="flex font-semibold text-[--labelPrimary] text-[10px] uppercase">
               Criado em {timestampToDateTime(collaborator?.created_at)}
             </div>
           </div>

@@ -52,7 +52,7 @@ export function FormInput({
               textTransform
             )}
             placeholder=' '
-            value={value}
+            value={value ?? ""}
             onChange={onChange}
             onKeyDown={onKeyDown}
             spellCheck='false'

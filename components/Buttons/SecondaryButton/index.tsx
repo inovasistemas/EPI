@@ -20,7 +20,7 @@ export function SecondaryButton({
           'pl-4 pr-5': icon,
           'px-8': !icon,
         },
-        'group z-[55] relative flex justify-center items-center gap-3 bg-[#F0F4F8] hover:bg-[--buttonPrimary] px-4 rounded-xl h-10 text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
+        'group z-[55] relative flex justify-center items-center gap-3 bg-[--tableRow] hover:bg-[--buttonPrimary] px-4 rounded-xl h-10 text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
       )}
     >
       {icon ?? icon}
