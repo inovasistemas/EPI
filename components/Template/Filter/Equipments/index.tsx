@@ -1,15 +1,39 @@
 'use client'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { getCategories } from '@/services/Category'
+import { toast } from 'sonner'
+import { ToastError } from '../../Toast/Error'
+import { getManufacturers } from '@/services/Manufacturer'
 
 type FilterEquipmentsProps = {
   actionClose: () => void
 }
 
 export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
+  const fetchedCategories = useRef(false)
+  const fetchedManufacturers = useRef(false)
+  const [CategoriesData, setCategoriesData] = useState([
+    {
+      uuid: '',
+      name: '',
+      active_equipments: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ])
+  const [ManufacturersData, setManufacturersData] = useState([
+    {
+      uuid: '',
+      name: '',
+      active_equipments: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ])
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [filters, setFilters] = useState({
@@ -23,6 +47,38 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
       [name]: value,
     }))
   }
+
+  const fetchCategories = async () => {
+    const response = await getCategories()
+
+    if (response && response.status === 200) {
+      setCategoriesData(response.data.data)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar categorias' />)
+    }
+  }
+
+  const fetchManufacturers = async () => {
+    const response = await getManufacturers()
+
+    if (response && response.status === 200) {
+      setManufacturersData(response.data.data)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar fabricantes' />)
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedCategories.current) return
+    fetchedCategories.current = true
+    fetchCategories()
+  }, [])
+
+  useEffect(() => {
+    if (fetchedManufacturers.current) return
+    fetchedManufacturers.current = true
+    fetchManufacturers()
+  }, [])
 
   const handleFilter = () => {
     setQueryParam({
@@ -52,10 +108,14 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
               onChange={(value: string) =>
                 handleFiltersChange('manufacturer', value)
               }
-              options={[
-                { value: 'manufacturer1', label: 'Fabricante 1' },
-                { value: 'manufacturer2', label: 'Fabricante 2' },
-              ]}
+              options={
+                ManufacturersData
+                  ? ManufacturersData.map(jobPosition => ({
+                      value: jobPosition.uuid,
+                      label: jobPosition.name,
+                    }))
+                  : []
+              }
               placeholder=''
             />
           </div>
@@ -71,10 +131,14 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
               onChange={(value: string) =>
                 handleFiltersChange('category', value)
               }
-              options={[
-                { value: 'hard_hat', label: 'Capacete' },
-                { value: 'gloves', label: 'Luvas' },
-              ]}
+              options={
+                CategoriesData
+                  ? CategoriesData.map(jobPosition => ({
+                      value: jobPosition.uuid,
+                      label: jobPosition.name,
+                    }))
+                  : []
+              }
               placeholder=''
             />
           </div>
