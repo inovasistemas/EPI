@@ -1,3 +1,4 @@
 export type SelectJobPositionsProps = {
-	value: string
+  value: string
+  onChange: (event: string) => void
 }

@@ -2,8 +2,6 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
-import { Modal } from '@/components/Display/Modal'
-import { useCallback, useState } from 'react'
 
 type ActionGroup = {
   onDelete?: () => void
@@ -18,67 +16,13 @@ export function ActionGroup({
                               showDelete = false,
                               uriBack = '',
                             }: ActionGroup) {
-  const [modalStatus, setModalStatus] = useState(false)
-  const handleCloseModal = useCallback(() => {
-    setModalStatus(prev => !prev)
-  }, [])
-
-  const handleDelete = () => {
-    setModalStatus(prev => !prev)
-    if (onDelete) {
-      onDelete()
-    }
-  }
   return (
     <div
       className="bottom-0 sticky inset-x-0 flex justify-between items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300">
-      <Modal
-        title=""
-        size="extra-small"
-        isModalOpen={modalStatus}
-        handleClickOverlay={handleCloseModal}
-        showClose={false}
-      >
-        <div className="flex flex-col gap-2">
-          <span className="font-medium text-xl text-center">
-            Tem certeza que deseja excluir o usuário?
-          </span>
-          <span className="px-6 text-base text-center">
-            Esta ação é irreversível e todos os dados associados serão
-            permanentemente apagados.
-          </span>
-
-          <div className="flex flex-row justify-center gap-3 pt-6">
-            <button
-              type="button"
-              onClick={handleDelete}
-              className={classNames(
-                'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-8',
-              )}
-            >
-              <span className="font-medium text-white text-sm transition-all duration-300">
-                Confirmar
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleCloseModal}
-              className={classNames(
-                'select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl h-10 text-white transition-all duration-300 px-8',
-              )}
-            >
-              <span className="font-medium text-[--textSecondary] text-sm">
-                Cancelar
-              </span>
-            </button>
-          </div>
-        </div>
-      </Modal>
       {showDelete && (
         <button
           type="button"
-          onClick={handleCloseModal}
+          onClick={onDelete}
           className={classNames(
             'group select-none active:scale-95 z-[55] cursor-pointer flex gap-3 group relative justify-center items-center bg-transparent hover:bg-[--errorLoader] rounded-xl h-10 text-white transition-all duration-300 px-4 pr-5',
           )}

@@ -6,6 +6,13 @@ import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
+import { createCollaborator } from '@/services/Collaborator'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { toast } from 'sonner'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { useRouter } from 'next/navigation'
 
 const CreateCollaborator: FC = () => {
   const [formData, setFormData] = useState({
@@ -15,8 +22,9 @@ const CreateCollaborator: FC = () => {
     cpf: '',
     gender: '',
     cargo: '',
-    admissionDate: '',
-    zipCode: '',
+    admission_date: '',
+    job_position: '',
+    zip_code: '',
     address: '',
     number: '',
     neighborhood: '',
@@ -31,6 +39,34 @@ const CreateCollaborator: FC = () => {
       ...prev,
       [name]: value,
     }))
+  }
+
+  const handleCreateCollaborator = async () => {
+    const router = useRouter()
+    const response = await createCollaborator({
+      name: formData.name,
+      birthdate: formData.birthdate,
+      rg: formData.rg,
+      cpf: formData.cpf,
+      gender: formData.gender,
+      job_position: formData.job_position,
+      admission_date: formData.admission_date,
+      zip_code: formData.zip_code,
+      address: formData.address,
+      number: formData.number,
+      neighborhood: formData.neighborhood,
+      city: formData.city,
+      state: formData.state,
+      phone: formData.phone,
+      observations: formData.observations,
+    })
+
+    if (response && response.status === 201) {
+      toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
+      router.push('/colaboradores')
+    } else {
+      toast.custom(() => <ToastError text='Erro ao criar colaborador' />)
+    }
   }
 
   return (
@@ -68,32 +104,32 @@ const CreateCollaborator: FC = () => {
               />
             </div>
 
-            <FormInput
+            <MaskedInput
               name='birthdate'
               label='Data de nascimento'
               required={false}
-              type='text'
-              value={formData.birthdate}
+              type='date'
+              value={formData?.birthdate}
               position='right'
               onChange={e => handleChange('birthdate', e.target.value)}
             />
 
-            <FormInput
+            <MaskedInput
               name='rg'
               label='RG'
               required={false}
-              type='text'
-              value={formData.rg}
+              type='rg'
+              value={formData?.rg}
               position='right'
               onChange={e => handleChange('rg', e.target.value)}
             />
 
-            <FormInput
+            <MaskedInput
               name='cpf'
               label='CPF'
               required={false}
-              type='text'
-              value={formData.cpf}
+              type='cpf'
+              value={formData?.cpf}
               position='right'
               onChange={e => handleChange('cpf', e.target.value)}
             />
@@ -101,13 +137,13 @@ const CreateCollaborator: FC = () => {
             <SearchSelect
               name='gender'
               options={[
-                { value: 'female', label: 'Feminino' },
-                { value: 'male', label: 'Masculino' },
-                { value: 'other', label: 'Não informar' },
+                { value: 'FEMALE', label: 'Feminino' },
+                { value: 'MALE', label: 'Masculino' },
+                { value: 'NOTINFORMED', label: 'Não informar' },
               ]}
               placeholder='Gênero'
               value={formData.gender}
-              onChange={() => null}
+              onChange={(value: string) => handleChange('gender', value)}
             />
           </div>
 
@@ -120,25 +156,19 @@ const CreateCollaborator: FC = () => {
               />
             </div>
 
-            <SearchSelect
-              name='cargo'
-              options={[
-                { value: 'admin', label: 'Administrador' },
-                { value: 'operator', label: 'Operador' },
-              ]}
-              placeholder='Cargo'
-              value={formData.name}
-              onChange={() => null}
+            <SelectJobPositions
+              value={formData?.job_position}
+              onChange={(value: string) => handleChange('job_position', value)}
             />
 
-            <FormInput
-              name='admissionDate'
+            <MaskedInput
+              name='admission_date'
               label='Data de admissão'
               required={false}
-              type='text'
-              value={formData.admissionDate}
+              type='date'
+              value={formData.admission_date}
               position='right'
-              onChange={e => handleChange('admissionDate', e.target.value)}
+              onChange={e => handleChange('admission_date', e.target.value)}
             />
           </div>
 
@@ -151,14 +181,14 @@ const CreateCollaborator: FC = () => {
               />
             </div>
 
-            <FormInput
-              name='zipCode'
+            <MaskedInput
+              name='zip_code'
               label='CEP'
               required={false}
-              type='text'
-              value={formData.zipCode}
+              type='zipcode'
+              value={formData.zip_code}
               position='right'
-              onChange={e => handleChange('zipCode', e.target.value)}
+              onChange={e => handleChange('zip_code', e.target.value)}
             />
 
             <div className='gap-4 grid grid-cols-3 col-span-2 w-full'>
@@ -215,14 +245,15 @@ const CreateCollaborator: FC = () => {
                 value={formData.state}
                 position='right'
                 onChange={e => handleChange('state', e.target.value)}
+                maxLength={2}
               />
             </div>
 
-            <FormInput
+            <MaskedInput
               name='phone'
               label='Telefone'
               required={false}
-              type='text'
+              type='phone'
               value={formData.phone}
               position='right'
               onChange={e => handleChange('phone', e.target.value)}
@@ -246,7 +277,10 @@ const CreateCollaborator: FC = () => {
             />
           </div>
 
-          <ActionGroup />
+          <ActionGroup
+            uriBack='/colaboradores'
+            onClick={handleCreateCollaborator}
+          />
         </form>
       </div>
     </div>

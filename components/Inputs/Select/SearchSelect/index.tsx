@@ -22,15 +22,15 @@ type SearchSelectProps = {
 }
 
 export function SearchSelect({
-  name,
-  label,
-  icon,
-  options,
-  placeholder,
-  value = null,
-  onChange,
-  background = 'bg-[--backgroundSecondary]',
-}: SearchSelectProps) {
+                               name,
+                               label,
+                               icon,
+                               options,
+                               placeholder,
+                               value = null,
+                               onChange,
+                               background = 'bg-[--backgroundSecondary]',
+                             }: SearchSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SearchSelectOptionsProps | null>(null)
   const [isSelectMenuOpen, setSelectMenuOpen] = useState(false)
@@ -60,16 +60,16 @@ export function SearchSelect({
         [
           background,
           'max-h-[54px] group relative flex items-center border-box rounded-xl outline outline-transparent focus-within:outline-2 focus-within:outline-[--primaryColor] transition-all duration-300',
-        ]
+        ],
       )}
     >
       {icon && (
-        <span className='top-0 left-0 z-50 absolute flex items-center mr-1 ml-3 h-full'>
+        <span className="top-0 left-0 z-50 absolute flex items-center mr-1 ml-3 h-full">
           {icon}
         </span>
       )}
 
-      <div className='relative flex items-center w-full'>
+      <div className="relative flex items-center w-full">
         <Select
           value={selectedOption}
           onChange={option => onChange(option ? option.value : '')}
@@ -82,7 +82,7 @@ export function SearchSelect({
             {
               'mt-0': label,
             },
-            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
+            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer',
           )}
           placeholder={placeholder}
           components={{
@@ -164,7 +164,6 @@ export function SearchSelect({
               width: '100%',
               fontSize: '1rem',
               height: '100%',
-              zIndex: 1,
             }),
             singleValue: provided => ({
               ...provided,
@@ -176,7 +175,6 @@ export function SearchSelect({
               height: '100%',
               alignItems: 'center',
               display: 'flex',
-              zIndex: 1,
               boxSizing: 'border-box',
             }),
           }}
@@ -189,10 +187,10 @@ export function SearchSelect({
             },
             [
               'right-0 absolute flex items-center mr-3 h-full transition-all duration-300',
-            ]
+            ],
           )}
         >
-          <CaretDownIcon size='size-5' stroke='stroke-[--textSecondary]' />
+          <CaretDownIcon size="size-5" stroke="stroke-[--textSecondary]" />
         </span>
 
         {label && (
@@ -205,7 +203,7 @@ export function SearchSelect({
               },
               [
                 'peer-focus:px-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 top-2 z-10 absolute bg-white px-2 text-zinc-500 text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] -translate-y-1.5 peer-focus:-translate-y-1.5 peer-placeholder-shown:-translate-y-1/2 duration-300 transform',
-              ]
+              ],
             )}
           >
             {label}

@@ -5,7 +5,7 @@ import { getJobPositions } from '@/services/JobPosition'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 
-export function SelectJobPositions({ value }: SelectJobPositionsProps) {
+export function SelectJobPositions({ value, onChange }: SelectJobPositionsProps) {
 	const fetchedJobPositions = useRef(false)
 	const [jobPositionsData, setJobPositionsData] = useState([
 		{
@@ -46,7 +46,7 @@ export function SelectJobPositions({ value }: SelectJobPositionsProps) {
 					: []
 			}
 			placeholder="Cargo"
-			onChange={() => null}
+			onChange={onChange}
 		/>
 	)
 }
