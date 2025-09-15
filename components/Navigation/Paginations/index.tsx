@@ -137,7 +137,7 @@ export function Paginations({ numberOfPages }: Paginations) {
         <PaginationItem>
           <PaginationNext
             href='#'
-            aria-disabled={filters.page === numberOfPages}
+            aria-disabled={numberOfPages <= 1}
             tabIndex={filters.page === numberOfPages ? -1 : 0}
             onClick={e => {
               e.preventDefault()
@@ -146,7 +146,7 @@ export function Paginations({ numberOfPages }: Paginations) {
               }
             }}
             className={
-              filters.page === numberOfPages
+              numberOfPages <= 1
                 ? 'pointer-events-none text-[--buttonSecondary]'
                 : ''
             }
