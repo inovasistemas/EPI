@@ -38,3 +38,24 @@ export async function getEquipments({
     return null
   }
 }
+
+export async function getEquipment({ loading, id }: EquipmentService) {
+  try {
+    loading(true)
+
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}`,
+      { withCredentials: true }
+    )
+
+    loading(false)
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+
+    loading(false)
+    return null
+  }
+}

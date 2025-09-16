@@ -7,3 +7,8 @@ type EquipmentsService = {
   sortOrder?: string
   page?: number
 }
+
+type EquipmentService = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+  id: string
+}
