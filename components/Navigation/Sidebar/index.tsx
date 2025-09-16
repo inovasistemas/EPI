@@ -15,6 +15,7 @@ import { MenuCard } from '../MenuCard'
 import { MenuSettings } from '@/components/Template/MenuSettings'
 import { useCallback, useState } from 'react'
 import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
+import { MoneyIcon } from '@/components/Display/Icons/Money'
 
 enum SearchbarCards {
   Settings,
@@ -137,7 +138,7 @@ const Sidebar: React.FC = () => {
             <NavLink
               name='Recursos'
               icon={
-                <CalculatorIcon
+                <MoneyIcon
                   size='size-5'
                   stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
                 />
