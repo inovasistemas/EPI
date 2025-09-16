@@ -15,11 +15,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
-export const description = 'A bar chart with a custom label'
+type SmallChartIssuesProps = {
+  equipment: string
+  withdrawn: number
+  notwithdrawn: number
+}
 
-const chartData = [
-  { equipment: 'Equipamentos', withdrawn: 186, notwithdrawn: 50 },
-]
+export const description = 'A bar chart with a custom label'
 
 const chartConfig = {
   withdrawn: {
@@ -35,7 +37,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function SmallChartIssues() {
+export function SmallChartIssues({
+  equipment,
+  withdrawn,
+  notwithdrawn,
+}: SmallChartIssuesProps) {
+  const chartData = [{ equipment, withdrawn, notwithdrawn }]
+
   return (
     <ResponsiveContainer width='100%' height={60}>
       <CardContent className='p-0 w-full h-full'>
@@ -60,7 +68,7 @@ export function SmallChartIssues() {
               tickFormatter={value => value.slice(0, 3)}
               hide
             />
-            <XAxis type='number' hide />
+            <XAxis type='number' domain={[0, withdrawn + notwithdrawn]} hide />
             <ChartTooltip
               cursor={false}
               content={

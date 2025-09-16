@@ -11,28 +11,30 @@ import {
 
 export const description = 'An area chart with gradient fill'
 
-const chartData = [
-  { month: 'Domingo', desktop: 0, mobile: 0 },
-  { month: 'Segunda-feira', desktop: 186, mobile: 80 },
-  { month: 'Terça-feira', desktop: 305, mobile: 200 },
-  { month: 'Quarta-feira', desktop: 237, mobile: 120 },
-  { month: 'Quinta-feira', desktop: 73, mobile: 190 },
-  { month: 'Sexta-feira', desktop: 209, mobile: 130 },
-  { month: 'Sábado', desktop: 214, mobile: 140 },
-]
-
 const chartConfig = {
-  desktop: {
+  last_week: {
     label: 'Anterior',
     color: 'var(--chartGray)',
   },
-  mobile: {
+  this_week: {
     label: 'Atual',
     color: 'var(--primaryColor)',
   },
 } satisfies ChartConfig
 
-export function ChartAreaGradient() {
+type ChartProps = {
+  day: string
+  last_week: number
+  this_week: number
+}
+
+type ChartAreaGradientProps = {
+  chart: ChartProps[]
+}
+
+export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
+  const chartData = chart
+
   return (
     <Card className='bg-transparent shadow-none -ml-[2%] p-0 border-none w-[104%]'>
       <CardContent className='m-0 p-0 w-full h-44'>
@@ -61,7 +63,7 @@ export function ChartAreaGradient() {
             />
             <defs>
               <linearGradient
-                id='fillDesktop'
+                id='filllast_week'
                 x1='0'
                 y1='0'
                 x2='0'
@@ -70,43 +72,43 @@ export function ChartAreaGradient() {
               >
                 <stop
                   offset='5%'
-                  stopColor='var(--color-desktop)'
+                  stopColor='var(--color-last_week)'
                   stopOpacity={0.8}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-desktop)'
+                  stopColor='var(--color-last_week)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id='fillMobile' x1='0' y1='0' x2='0' y2='1'>
+              <linearGradient id='fillthis_week' x1='0' y1='0' x2='0' y2='1'>
                 <stop
                   offset='5%'
-                  stopColor='var(--color-mobile)'
+                  stopColor='var(--color-this_week)'
                   stopOpacity={0.8}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-mobile)'
+                  stopColor='var(--color-this_week)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey='mobile'
+              dataKey='this_week'
               type='natural'
-              fill='url(#fillMobile)'
+              fill='url(#fillthis_week)'
               fillOpacity={0.4}
-              stroke='var(--color-mobile)'
+              stroke='var(--color-this_week)'
               stackId='a'
               strokeWidth={2}
             />
             <Area
-              dataKey='desktop'
+              dataKey='last_week'
               type='natural'
-              fill='url(#fillDesktop)'
+              fill='url(#filllast_week)'
               fillOpacity={0.4}
-              stroke='var(--color-desktop)'
+              stroke='var(--color-last_week)'
               stackId='a'
               strokeWidth={2}
             />

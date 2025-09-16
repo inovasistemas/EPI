@@ -2,150 +2,114 @@
 
 import { ChartAreaGradient } from '@/components/Chart/Small/Colaborator'
 import { SmallChartIssues } from '@/components/Chart/Small/Issues'
+import { CollaboratorTemplate } from '@/components/Chart/Template/Collaborator'
+import { EquipmentTemplate } from '@/components/Chart/Template/Equipment'
+import { MovementTemplate } from '@/components/Chart/Template/Movement'
+import { PendingTemplate } from '@/components/Chart/Template/Pending'
+import { UserTemplate } from '@/components/Chart/Template/User'
 import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { getSummaryReports } from '@/services/Report'
+import { motion } from 'framer-motion'
+import { Move } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+
+type Report = {
+  code: string
+  title: string
+  graph: any
+}
 
 export default function Home() {
+  const [loading, setLoading] = useState(false)
+  const [reports, setReports] = useState<Report[]>([])
+
+  const fetchSummaryReports = async () => {
+    const response = await getSummaryReports({ loading: setLoading })
+
+    if (response && response.status === 200) {
+      setReports(response.data.data)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao buscar relatórios' />)
+    }
+  }
+
+  useEffect(() => {
+    fetchSummaryReports()
+  }, [])
+
+  const getReport = (code: string) => reports.find(r => r.code === code)
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:rounded-2xl w-full h-full'>
-        <div className='gap-6 grid sm:grid-cols-3'>
-          <div className='group flex flex-col justify-start items-start col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full overflow-hidden transition-all duration-300'>
-            <div className='flex justify-between items-start p-3 w-full'>
-              <h3 className='font-medium text-base select-none'>
-                Movimentação por semana
-              </h3>
-              <span className='-mr-1 rotate-90'>
-                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-              </span>
-            </div>
-            <div className='relative col-span-2 w-full'>
-              <ChartAreaGradient />
-            </div>
+      {loading && (
+        <motion.div
+          key='loading'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className='flex justify-center items-start pt-10 w-full h-full'
+        >
+          <div role='status'>
+            <svg
+              aria-hidden='true'
+              className='fill-[--primaryColor] w-8 h-8 text-[--buttonPrimary] animate-spin'
+              viewBox='0 0 100 101'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                d='M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z'
+                fill='currentColor'
+              />
+              <path
+                d='M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z'
+                fill='currentFill'
+              />
+            </svg>
+            <span className='sr-only'>Carregando...</span>
           </div>
-          <div className='group relative flex flex-col justify-between items-start bg-[--backgroundPrimary] p-3 rounded-2xl w-full transition-all duration-300'>
-            <div className='flex justify-between items-start px-1 w-full'>
-              <h3 className='font-medium text-base select-none'>
-                Taxa de pendências
-              </h3>
-              <span className='-mr-2 rotate-90'>
-                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-              </span>
-            </div>
-            <SmallChartIssues />
-            <div className='flex flex-col gap-4 px-1 w-full'>
-              <div className='flex justify-between items-center pr-1 w-full h-5 select-none'>
-                <div className='flex items-center gap-2 h-full'>
-                  <span className='bg-[--primaryColor] rounded-full w-1 h-full'></span>
-                  <span className='font-medium leading-none'>78,81%</span>
-                </div>
-                <span className='text-[--textSecondary] text-sm'>
-                  186 regularizados
-                </span>
-              </div>
-              <div className='flex justify-between items-center pr-1 w-full h-5 select-none'>
-                <div className='flex items-center gap-2 h-full'>
-                  <span className='bg-[--chartYellow] rounded-full w-1 h-full'></span>
-                  <span className='font-medium leading-none'>21,19%</span>
-                </div>
-                <span className='text-[--textSecondary] text-sm'>
-                  50 pendentes
-                </span>
-              </div>
-            </div>
+        </motion.div>
+      )}
+      {!loading && (
+        <motion.div
+          key='data'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+          className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:rounded-2xl w-full h-full'
+        >
+          <div className='gap-6 grid sm:grid-cols-3'>
+            <MovementTemplate chart={getReport('rp_001')?.graph ?? []} />
+            <PendingTemplate
+              equipment={getReport('rp_002')?.graph.equipment ?? ''}
+              withdrawn={getReport('rp_002')?.graph.withdrawn ?? ''}
+              notwithdrawn={getReport('rp_002')?.graph.notwithdrawn ?? ''}
+            />
           </div>
-        </div>
 
-        <div className='gap-6 grid grid-cols-2 sm:grid-cols-3'>
-          <button
-            type='button'
-            className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
-          >
-            <div className='flex flex-row justify-between items-start w-full'>
-              <div className='flex flex-col justify-start items-start w-full'>
-                <span className='text-[--textSecondary] text-xs'>
-                  Equipamentos
-                </span>
-                <span className='z-20 pb-3 w-full font-medium text-2xl text-left transition-all duration-300'>
-                  103
-                </span>
-              </div>
-              <span className='-mr-1 rotate-90'>
-                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-              </span>
-            </div>
-            <div className='flex flex-col gap-1 w-full'>
-              <div className='flex flex-row justify-start items-center gap-1 w-full'>
-                <span className='font-semibold text-sm'>1</span>
-                <span className='text-sm'>com validade expirada</span>
-              </div>
-              <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
-                <span className='font-semibold text-sm'>10</span>
-                <span className='text-sm'>devoluções pendentes</span>
-              </div>
-            </div>
-          </button>
-
-          <button
-            type='button'
-            className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
-          >
-            <div className='flex flex-row justify-between items-start w-full'>
-              <div className='flex flex-col justify-start items-start w-full'>
-                <span className='text-[--textSecondary] text-xs'>Usuários</span>
-                <span className='z-20 pb-3 w-full font-medium text-2xl text-left transition-all duration-300'>
-                  2
-                </span>
-              </div>
-              <span className='-mr-1 rotate-90'>
-                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-              </span>
-            </div>
-            <div className='flex flex-col gap-1 w-full'>
-              <div className='flex flex-row justify-start items-center gap-1 w-full'>
-                <span className='font-semibold text-sm'>23</span>
-                <span className='text-sm'>
-                  registros alterados pelo financeiro
-                </span>
-              </div>
-              <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
-                <span className='font-semibold text-sm'>2</span>
-                <span className='text-sm'>
-                  registros excluídos pelo administrador
-                </span>
-              </div>
-            </div>
-          </button>
-
-          <button
-            type='button'
-            className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
-          >
-            <div className='flex flex-row justify-between items-start w-full'>
-              <div className='flex flex-col justify-start items-start w-full'>
-                <span className='text-[--textSecondary] text-xs'>
-                  Colaboradores
-                </span>
-                <span className='z-20 pb-3 w-full font-medium text-2xl text-left transition-all duration-300'>
-                  52
-                </span>
-              </div>
-              <span className='-mr-1 rotate-90'>
-                <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-              </span>
-            </div>
-            <div className='flex flex-col gap-1 w-full'>
-              <div className='flex flex-row justify-start items-center gap-1 w-full'>
-                <span className='font-semibold text-sm'>49</span>
-                <span className='text-sm'>ativos</span>
-              </div>
-              <div className='flex flex-row justify-start items-center gap-1 w-full'>
-                <span className='font-semibold text-sm'>3</span>
-                <span className='text-sm'>afastados</span>
-              </div>
-            </div>
-          </button>
-        </div>
-      </div>
+          <div className='gap-6 grid grid-cols-2 sm:grid-cols-3'>
+            <EquipmentTemplate
+              count={getReport('rp_003')?.graph.equipments ?? ''}
+              expired={getReport('rp_003')?.graph.expired ?? ''}
+              pending={getReport('rp_003')?.graph.pending_return ?? ''}
+            />
+            <UserTemplate
+              count={getReport('rp_004')?.graph.users ?? ''}
+              updated={getReport('rp_004')?.graph.updated ?? ''}
+              deleted={getReport('rp_004')?.graph.deleted ?? ''}
+            />
+            <CollaboratorTemplate
+              count={getReport('rp_005')?.graph.collaborators ?? ''}
+              active={getReport('rp_005')?.graph.active ?? ''}
+              away={getReport('rp_005')?.graph.withdrawn ?? ''}
+            />
+          </div>
+        </motion.div>
+      )}
     </div>
   )
 }
