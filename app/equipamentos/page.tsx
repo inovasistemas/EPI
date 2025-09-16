@@ -24,11 +24,12 @@ import { Paginations } from '@/components/Navigation/Paginations'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterEquipments } from '@/components/Template/Filter/Equipments'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
-import { getEquipments } from '@/services/Equipment'
+import { deleteEquipment, getEquipments } from '@/services/Equipment'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { toast } from 'sonner'
 import useDebounce from '@/lib/context/debounce'
 import { calcPages } from '@/utils/calc-pages'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 
 type Equipment = {
   uuid: string
@@ -44,6 +45,7 @@ const Equipment: FC = () => {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalDeleteStatus, setModalDeleteStatus] = useState(false)
   const [loading, setLoading] = useState(false)
   const [orderBy, setOrderBy] = useState({
     field: searchParams.get('sortField') || '',
@@ -61,6 +63,7 @@ const Equipment: FC = () => {
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
+  const [checkedCount, setCheckedCount] = useState(0)
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce({ value: search, delay: 500 })
   const [pageSettings, setPageSettings] = useState({
@@ -72,6 +75,9 @@ const Equipment: FC = () => {
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
     setHasChecked(anyChecked)
+
+    const count = checkboxRefs.current.filter(ref => ref?.checked).length
+    setCheckedCount(count)
   }
 
   const handleOrderBy = useCallback(
@@ -99,6 +105,33 @@ const Equipment: FC = () => {
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
   }, [])
+
+  const handleCloseModalDelete = useCallback(() => {
+    setModalDeleteStatus(prev => !prev)
+  }, [])
+
+  const handleMultipleDelete = async () => {
+    const checkedValues = checkboxRefs.current
+      .filter(ref => ref?.checked)
+      .map(ref => ref?.value)
+
+    try {
+      await Promise.all(
+        checkedValues.map(uuid =>
+          deleteEquipment({ loading: setLoading, id: uuid })
+        )
+      )
+
+      toast.custom(() => (
+        <ToastSuccess text='Equipamentos excluídos com sucesso' />
+      ))
+      fetchEquipments()
+      handleCloseModalDelete()
+      setHasChecked(false)
+    } catch (error) {
+      toast.custom(() => <ToastError text='Erro ao excluir equipamentos' />)
+    }
+  }
 
   const handlePageSettings = (name: string, value: string) => {
     setPageSettings(prev => ({
@@ -141,6 +174,46 @@ const Equipment: FC = () => {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalDeleteStatus}
+        handleClickOverlay={handleCloseModalDelete}
+        showClose={false}
+      >
+        <div className='flex flex-col gap-2'>
+          <span className='font-medium text-xl text-center'>
+            Tem certeza que deseja excluir {checkedCount}{' '}
+            {checkedCount === 1 ? 'equipamento' : 'equipamentos'}?
+          </span>
+          <span className='px-6 text-base text-center'>
+            Esta ação é irreversível e todos os dados associados serão
+            permanentemente apagados.
+          </span>
+
+          <div className='z-[55] flex flex-row justify-center gap-3 pt-6'>
+            <button
+              type='button'
+              onClick={handleMultipleDelete}
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-white text-sm transition-all duration-300'>
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type='button'
+              onClick={handleCloseModalDelete}
+              className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-[--textSecondary] text-sm'>
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
         title='Filtros'
         size='small'
         isModalOpen={modalStatus}
@@ -148,7 +221,7 @@ const Equipment: FC = () => {
       >
         <FilterEquipments actionClose={handleCloseModal} />
       </Modal>
-      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
+      <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
             <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
@@ -176,7 +249,7 @@ const Equipment: FC = () => {
                         strokeWidth={2.5}
                       />
                     }
-                    onClick={() => null}
+                    onClick={handleCloseModalDelete}
                   />
                 </motion.div>
               )}
@@ -360,7 +433,7 @@ const Equipment: FC = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className='flex flex-col gap-6 pb-6 h-full'
+                className='flex flex-col gap-6 pb-6 h-full overflow-y-auto'
               >
                 <ul className='flex flex-col gap-3'>
                   {equipments.map((equipment, i) => (
@@ -381,6 +454,7 @@ const Equipment: FC = () => {
                             onClick={e => {
                               e.stopPropagation()
                             }}
+                            value={equipment.uuid}
                             onChange={() => {
                               const allChecked =
                                 checkboxRefs.current.length > 0 &&
@@ -406,10 +480,10 @@ const Equipment: FC = () => {
                           </span>
                         </div>
                         <div className='flex items-center col-span-3 py-4 capitalize'>
-                          {equipment.manufacturer.toLocaleLowerCase()}
+                          {equipment.manufacturer?.toLocaleLowerCase()}
                         </div>
                         <div className='flex items-center col-span-2 py-4 pr-1 capitalize'>
-                          {equipment.category.toLocaleLowerCase()}
+                          {equipment.category?.toLocaleLowerCase()}
                         </div>
                         <div className='flex justify-end items-center col-span-2 py-4 pr-1 lowercase'>
                           {equipment.stock}{' '}

@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useState } from 'react'
+import { type FC, useCallback, useEffect, useState } from 'react'
 import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
 import { ClockIcon } from '@/components/Display/Icons/Clock'
 import { ImageIcon } from '@/components/Display/Icons/Image'
@@ -10,77 +10,179 @@ import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { useParams, useRouter } from 'next/navigation'
+import {
+  deleteEquipment,
+  getEquipment,
+  updateEquipment,
+} from '@/services/Equipment'
+import { convertMoneyBRL } from '@/utils/convert-money-brl'
+import { convertNumberDB } from '@/utils/convert-number-db'
+import { Modal } from '@/components/Display/Modal'
+import { toast } from 'sonner'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 
 const CreateEquipment: FC = () => {
-  const [equipmentData, setEquipmentData] = useState({
-    abcClassification: 'A',
-    additionalCode: '',
-    approvalCertification: '',
+  const router = useRouter()
+  const params = useParams()
+  const EquipmentId = Array.isArray(params.equipment_id)
+    ? params.equipment_id[0]
+    : params.equipment_id
+  const [equipmentData, setEquipmentData] = useState<EquipmentServiceDetails>({
+    uuid: '',
+    abc_classification: '',
+    additional_code: '',
+    approval_certification: '',
     category: '',
     composition: '',
-    cost: '',
+    cost: 0,
     details: '',
     dimensions: '',
     disposable: false,
     ean: '',
-    expirationDate: '',
+    expiration_date: '',
     family: '',
     manufacturer: '',
-    measure: 'un',
-    name: 'Luva Nitrílica Sem Forro',
+    measure: '',
+    name: '',
     picture: '',
-    price: '',
-    stock: '',
-    stockControl: true,
-    stockLocation: '',
-    stockMaximum: '',
-    stockMinimum: '',
+    price: 0,
+    stock: 0,
+    stock_control: true,
+    stock_location: '',
+    stock_maximum: 0,
+    stock_minimum: 0,
     weight: '',
-    weightMeasure: 'kg',
+    weight_measure: '',
   })
+  const [loading, setLoading] = useState(false)
+  const [modalStatus, setModalStatus] = useState(false)
+  const handleCloseModal = useCallback(() => {
+    setModalStatus(prev => !prev)
+  }, [])
 
-  const handleChange = (name: string, value: string) => {
+  const handleChange = (name: string, value: string | number | boolean) => {
     setEquipmentData(prev => ({
       ...prev,
       [name]: value,
     }))
   }
 
-  const handleChangeBool = (name: string, value: boolean) => {
-    setEquipmentData(prev => ({
-      ...prev,
-      [name]: value,
-    }))
+  const fetchEquipment = async () => {
+    if (EquipmentId) {
+      const response = await getEquipment({
+        loading: setLoading,
+        id: EquipmentId,
+      })
+
+      if (response && response.status === 200) {
+        setEquipmentData(response.data[0])
+      }
+    }
   }
+
+  const handleUpdateEquipment = async () => {
+    const response = await updateEquipment({
+      loading: setLoading,
+      id: Array.isArray(EquipmentId) ? EquipmentId[0] : EquipmentId || '',
+      ...equipmentData,
+    })
+
+    if (response && response.status === 200) {
+      toast.custom(() => (
+        <ToastSuccess text='Equipamento atualizado com sucesso' />
+      ))
+    } else {
+      toast.custom(() => <ToastError text='Erro ao atualizar equipamento' />)
+    }
+  }
+
+  const handleDeleteEquipment = async () => {
+    const response = await deleteEquipment({
+      loading: setLoading,
+      id: Array.isArray(EquipmentId) ? EquipmentId[0] : EquipmentId || '',
+    })
+
+    if (response && response.status === 204) {
+      router.push('/equipamentos')
+    } else {
+      toast.custom(() => <ToastError text='Erro ao excluir o equipamento' />)
+    }
+  }
+
+  useEffect(() => {
+    fetchEquipment()
+  }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalStatus}
+        handleClickOverlay={handleCloseModal}
+        showClose={false}
+      >
+        <div className='flex flex-col gap-2'>
+          <span className='font-medium text-xl text-center'>
+            Tem certeza que deseja excluir o equipamento?
+          </span>
+          <span className='px-6 text-base text-center'>
+            Esta ação é irreversível e todos os dados associados serão
+            permanentemente apagados.
+          </span>
+
+          <div className='z-[55] flex flex-row justify-center gap-3 pt-6'>
+            <button
+              type='button'
+              onClick={handleDeleteEquipment}
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-white text-sm transition-all duration-300'>
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type='button'
+              onClick={handleCloseModal}
+              className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-[--textSecondary] text-sm'>
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/equipamentos' />
 
-            <h2 className='font-medium text-xl leading-none select-none'>
+            <h2 className='font-medium text-xl capitalize leading-none select-none'>
               {equipmentData.name
-                ? equipmentData.name
+                ? equipmentData.name.toLocaleLowerCase()
                 : 'Detalhes do equipamento'}
             </h2>
           </div>
 
-          <div className='flex items-center gap-3'>
+          {/* <div className='flex items-center gap-3'>
             <button
               type='button'
               className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl w-8 aspect-square font-medium text-[10px] transition-all duration-300'
             >
-              {equipmentData.abcClassification === 'A' ? (
+              {equipmentData.abc_classification === 'A' ? (
                 <span className='font-medium text-[--textSecondary] text-base'>
                   A
                 </span>
-              ) : equipmentData.abcClassification === 'B' ? (
+              ) : equipmentData.abc_classification === 'B' ? (
                 <span className='font-medium text-[--textSecondary] text-base'>
                   B
                 </span>
-              ) : equipmentData.abcClassification === 'C' ? (
+              ) : equipmentData.abc_classification === 'C' ? (
                 <span className='font-medium text-[--textSecondary] text-base'>
                   C
                 </span>
@@ -102,7 +204,7 @@ const CreateEquipment: FC = () => {
                 strokeWidth={2.5}
               />
             </button>
-          </div>
+          </div> */}
         </div>
 
         <form className='relative gap-y-10 grid w-full'>
@@ -126,8 +228,9 @@ const CreateEquipment: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={equipmentData.name}
+                value={equipmentData.name?.toLocaleLowerCase()}
                 position='right'
+                textTransform='capitalize'
                 onChange={e => handleChange('name', e.target.value)}
               />
 
@@ -142,14 +245,16 @@ const CreateEquipment: FC = () => {
               />
 
               <div className='gap-3 grid grid-cols-2'>
-                <FormInput
+                <MaskedInput
                   name='cost'
                   label='Valor de custo'
                   required={false}
-                  type='text'
-                  value={equipmentData.cost}
+                  type='money'
+                  value={convertMoneyBRL(equipmentData.cost ?? 0)}
                   position='right'
-                  onChange={e => handleChange('cost', e.target.value)}
+                  onChange={e =>
+                    handleChange('cost', convertNumberDB(e.target.value))
+                  }
                 />
 
                 <SearchSelect
@@ -159,6 +264,19 @@ const CreateEquipment: FC = () => {
                     { value: 'un', label: 'Unidade' },
                     { value: 'cx', label: 'Caixa' },
                     { value: 'pct', label: 'Pacote' },
+                  ]}
+                  placeholder='Unidade medida'
+                  onChange={(value: string) => handleChange('measure', value)}
+                />
+              </div>
+
+              <div className='block items-center w-full'>
+                <SearchSelect
+                  value={equipmentData.disposable ? 'true' : 'false'}
+                  name='measure'
+                  options={[
+                    { value: 'false', label: 'Reutilizável' },
+                    { value: 'true', label: 'Não reutilizável' },
                   ]}
                   placeholder='Unidade medida'
                   onChange={() => null}
@@ -176,9 +294,9 @@ const CreateEquipment: FC = () => {
                     type='checkbox'
                     name='stockControl'
                     className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                    checked={equipmentData.stockControl}
+                    checked={equipmentData.stock_control}
                     onChange={e =>
-                      handleChangeBool('stockControl', e.target.checked)
+                      handleChange('stock_control', e.target.checked)
                     }
                   />
                   <label
@@ -191,7 +309,7 @@ const CreateEquipment: FC = () => {
               </div>
               <div className='gap-4 grid sm:grid-cols-5 w-full'>
                 <AnimatePresence>
-                  {equipmentData.stockControl && (
+                  {equipmentData.stock_control && (
                     <motion.div
                       key='motion.div'
                       layout
@@ -202,37 +320,45 @@ const CreateEquipment: FC = () => {
                       onClick={() => null}
                       className='gap-4 grid sm:grid-cols-3 col-span-3 w-full'
                     >
-                      <FormInput
+                      <MaskedInput
                         name='stock'
                         label='Estoque'
                         required={false}
-                        type='text'
+                        type='number'
                         value={equipmentData.stock}
                         position='right'
-                        onChange={e => handleChange('stock', e.target.value)}
-                      />
-
-                      <FormInput
-                        name='stockMinimum'
-                        label='Estoque mínimo'
-                        required={false}
-                        type='text'
-                        value={equipmentData.stockMinimum}
-                        position='right'
                         onChange={e =>
-                          handleChange('stockMinimum', e.target.value)
+                          handleChange('stock', convertNumberDB(e.target.value))
                         }
                       />
 
-                      <FormInput
-                        name='stockMaximum'
-                        label='Estoque máximo'
+                      <MaskedInput
+                        name='stock_minimum'
+                        label='Estoque mínimo'
                         required={false}
-                        type='text'
-                        value={equipmentData.stockMaximum}
+                        type='number'
+                        value={equipmentData.stock_minimum}
                         position='right'
                         onChange={e =>
-                          handleChange('stockMaximum', e.target.value)
+                          handleChange(
+                            'stock_minimum',
+                            convertNumberDB(e.target.value)
+                          )
+                        }
+                      />
+
+                      <MaskedInput
+                        name='stock_maximum'
+                        label='Estoque máximo'
+                        required={false}
+                        type='number'
+                        value={equipmentData.stock_maximum}
+                        position='right'
+                        onChange={e =>
+                          handleChange(
+                            'stock_maximum',
+                            convertNumberDB(e.target.value)
+                          )
                         }
                       />
                     </motion.div>
@@ -246,14 +372,16 @@ const CreateEquipment: FC = () => {
                     className='col-span-2'
                   >
                     <SearchSelect
-                      value={equipmentData.stockLocation}
-                      name='stockLocation'
+                      value={equipmentData.stock_location}
+                      name='stock_location'
                       options={[
                         { value: 'lc1', label: 'Local 1' },
                         { value: 'lc2', label: 'Local 2' },
                       ]}
                       placeholder='Localização'
-                      onChange={() => null}
+                      onChange={(value: string) =>
+                        handleChange('stock_location', value)
+                      }
                     />
                   </motion.div>
 
@@ -300,14 +428,16 @@ const CreateEquipment: FC = () => {
                       </div>
 
                       <SearchSelect
-                        value={equipmentData.weightMeasure}
-                        name='weightMeasure'
+                        value={equipmentData.weight_measure}
+                        name='weight_measure'
                         options={[
                           { value: 'kg', label: 'Kg' },
                           { value: 'lb', label: 'Lb' },
                         ]}
-                        placeholder=''
-                        onChange={() => null}
+                        placeholder='Medida'
+                        onChange={(value: string) =>
+                          handleChange('weight_measure', value)
+                        }
                       />
                     </div>
                   </motion.div>
@@ -333,7 +463,7 @@ const CreateEquipment: FC = () => {
                 { value: 'category2', label: 'Categoria 2' },
               ]}
               placeholder='Categoria'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('category', value)}
             />
 
             <SearchSelect
@@ -344,7 +474,7 @@ const CreateEquipment: FC = () => {
                 { value: 'family2', label: 'Família 2' },
               ]}
               placeholder='Família'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('family', value)}
             />
 
             <SearchSelect
@@ -355,7 +485,7 @@ const CreateEquipment: FC = () => {
                 { value: 'manufacturer2', label: 'Fabricante 2' },
               ]}
               placeholder='Fabricante'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('manufacturer', value)}
             />
           </div>
 
@@ -369,7 +499,7 @@ const CreateEquipment: FC = () => {
             </div>
 
             <TextArea
-              value={equipmentData.details}
+              value={equipmentData.details || ''}
               onChange={e => handleChange('details', e.target.value)}
               name='details'
               required={false}
@@ -377,7 +507,7 @@ const CreateEquipment: FC = () => {
             />
 
             <TextArea
-              value={equipmentData.composition}
+              value={equipmentData.composition || ''}
               onChange={e => handleChange('composition', e.target.value)}
               name='composition'
               required={false}
@@ -385,41 +515,46 @@ const CreateEquipment: FC = () => {
             />
 
             <FormInput
-              name='approvalCertification'
+              name='approval_certification'
               label='Certificado aprovação'
               required={false}
               type='text'
-              value={equipmentData.approvalCertification}
+              value={equipmentData.approval_certification}
               position='right'
               onChange={e =>
-                handleChange('approvalCertification', e.target.value)
+                handleChange('approval_certification', e.target.value)
               }
             />
 
             <div className='gap-4 grid grid-cols-2'>
               <FormInput
-                name='additionalCode'
+                name='additional_code'
                 label='Código'
                 required={false}
                 type='text'
-                value={equipmentData.additionalCode}
+                value={equipmentData.additional_code}
                 position='right'
-                onChange={e => handleChange('additionalCode', e.target.value)}
+                onChange={e => handleChange('additional_code', e.target.value)}
               />
 
-              <FormInput
-                name='expirationDate'
+              <MaskedInput
+                name='expiration_date'
                 label='Data expiração'
                 required={false}
-                type='text'
-                value={equipmentData.expirationDate}
+                type='date'
+                value={equipmentData.expiration_date}
                 position='right'
-                onChange={e => handleChange('expirationDate', e.target.value)}
+                onChange={e => handleChange('expiration_date', e.target.value)}
               />
             </div>
           </div>
 
-          <ActionGroup showDelete={true} />
+          <ActionGroup
+            onDelete={handleCloseModal}
+            uriBack='/equipamentos'
+            showDelete={true}
+            onClick={handleUpdateEquipment}
+          />
         </form>
       </div>
     </div>

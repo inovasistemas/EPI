@@ -13,6 +13,11 @@ type EquipmentService = {
   id: string
 }
 
+type EquipmentServiceDetails = EquipmentServiceData & {
+  uuid: string
+  abc_classification?: string
+}
+
 type EquipmentServiceData = {
   additional_code?: string
   approval_certification?: string
@@ -33,8 +38,8 @@ type EquipmentServiceData = {
   stock?: number
   stock_control?: boolean
   stock_location?: string
-  stock_maximum?: string
-  stock_minimum?: string
+  stock_maximum?: number
+  stock_minimum?: number
   weight?: string
   weight_measure?: string
 }

@@ -9,43 +9,62 @@ import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { useParams, useRouter } from 'next/navigation'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { convertNumberDB } from '@/utils/convert-number-db'
+import { convertMoneyBRL } from '@/utils/convert-money-brl'
+import { createEquipment } from '@/services/Equipment'
+import { toast } from 'sonner'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { ToastError } from '@/components/Template/Toast/Error'
 
 const CreateEquipment: FC = () => {
-  const [equipmentData, setEquipmentData] = useState({
-    abcClassification: '',
-    additionalCode: '',
-    approvalCertification: '',
+  const router = useRouter()
+  const params = useParams()
+  const [loading, setLoading] = useState(false)
+  const [equipmentData, setEquipmentData] = useState<EquipmentServiceDetails>({
+    uuid: '',
+    abc_classification: '',
+    additional_code: '',
+    approval_certification: '',
     category: '',
     composition: '',
-    cost: '',
+    cost: 0,
     details: '',
     dimensions: '',
-    disposable: 'disposable',
+    disposable: false,
     ean: '',
-    expirationDate: '',
+    expiration_date: '',
     family: '',
     manufacturer: '',
-    measure: 'un',
+    measure: '',
     name: '',
     picture: '',
-    price: '',
-    stock: '',
-    stockControl: true,
-    stockLocation: '',
-    stockMaximum: '',
-    stockMinimum: '',
+    price: 0,
+    stock: 0,
+    stock_control: true,
+    stock_location: '',
+    stock_maximum: 0,
+    stock_minimum: 0,
     weight: '',
-    weightMeasure: 'kg',
+    weight_measure: '',
   })
 
-  const handleChange = (name: string, value: string) => {
-    setEquipmentData(prev => ({
-      ...prev,
-      [name]: value,
-    }))
+  const handleCreateEquipment = async () => {
+    const response = await createEquipment({
+      loading: setLoading,
+      ...equipmentData,
+    })
+
+    if (response && response.status === 201) {
+      toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
+      router.push('/equipamentos')
+    } else {
+      toast.custom(() => <ToastError text='Erro ao criar equipamento' />)
+    }
   }
 
-  const handleChangeBool = (name: string, value: boolean) => {
+  const handleChange = (name: string, value: string | number | boolean) => {
     setEquipmentData(prev => ({
       ...prev,
       [name]: value,
@@ -59,35 +78,11 @@ const CreateEquipment: FC = () => {
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/equipamentos' />
 
-            <h2 className='font-medium text-xl leading-none select-none'>
-              Adicionar equipamento
+            <h2 className='font-medium text-xl capitalize leading-none select-none'>
+              {equipmentData.name
+                ? equipmentData.name.toLocaleLowerCase()
+                : 'Detalhes do equipamento'}
             </h2>
-          </div>
-
-          <div>
-            <button
-              type='button'
-              className='flex justify-center items-center bg-[--buttonPrimary] hover:bg-[--buttonSecondary] rounded-xl w-8 aspect-square font-medium text-[10px] transition-all duration-300'
-            >
-              {equipmentData.abcClassification === 'A' ? (
-                <span className='font-medium text-[--textSecondary] text-base'>
-                  A
-                </span>
-              ) : equipmentData.abcClassification === 'B' ? (
-                <span className='font-medium text-[--textSecondary] text-base'>
-                  B
-                </span>
-              ) : equipmentData.abcClassification === 'C' ? (
-                <span className='font-medium text-[--textSecondary] text-base'>
-                  C
-                </span>
-              ) : (
-                <ChartLineIcon
-                  size='size-5'
-                  stroke='stroke-[--textSecondary]'
-                />
-              )}
-            </button>
           </div>
         </div>
 
@@ -112,8 +107,9 @@ const CreateEquipment: FC = () => {
                 label='Nome'
                 required={false}
                 type='text'
-                value={equipmentData.name}
+                value={equipmentData.name?.toLocaleLowerCase()}
                 position='right'
+                textTransform='capitalize'
                 onChange={e => handleChange('name', e.target.value)}
               />
 
@@ -128,14 +124,16 @@ const CreateEquipment: FC = () => {
               />
 
               <div className='gap-3 grid grid-cols-2'>
-                <FormInput
+                <MaskedInput
                   name='cost'
                   label='Valor de custo'
                   required={false}
-                  type='text'
-                  value={equipmentData.cost}
+                  type='money'
+                  value={convertMoneyBRL(equipmentData.cost ?? 0)}
                   position='right'
-                  onChange={e => handleChange('cost', e.target.value)}
+                  onChange={e =>
+                    handleChange('cost', convertNumberDB(e.target.value))
+                  }
                 />
 
                 <SearchSelect
@@ -147,17 +145,17 @@ const CreateEquipment: FC = () => {
                     { value: 'pct', label: 'Pacote' },
                   ]}
                   placeholder='Unidade medida'
-                  onChange={() => null}
+                  onChange={(value: string) => handleChange('measure', value)}
                 />
               </div>
 
               <div className='block items-center w-full'>
                 <SearchSelect
-                  value={equipmentData.disposable}
+                  value={equipmentData.disposable ? 'true' : 'false'}
                   name='measure'
                   options={[
-                    { value: 'notDisposable', label: 'Reutilizável' },
-                    { value: 'disposable', label: 'Não reutilizável' },
+                    { value: 'false', label: 'Reutilizável' },
+                    { value: 'true', label: 'Não reutilizável' },
                   ]}
                   placeholder='Unidade medida'
                   onChange={() => null}
@@ -175,9 +173,9 @@ const CreateEquipment: FC = () => {
                     type='checkbox'
                     name='stockControl'
                     className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                    checked={equipmentData.stockControl}
+                    checked={equipmentData.stock_control}
                     onChange={e =>
-                      handleChangeBool('stockControl', e.target.checked)
+                      handleChange('stock_control', e.target.checked)
                     }
                   />
                   <label
@@ -190,7 +188,7 @@ const CreateEquipment: FC = () => {
               </div>
               <div className='gap-4 grid sm:grid-cols-5 w-full'>
                 <AnimatePresence>
-                  {equipmentData.stockControl && (
+                  {equipmentData.stock_control && (
                     <motion.div
                       key='motion.div'
                       layout
@@ -201,37 +199,45 @@ const CreateEquipment: FC = () => {
                       onClick={() => null}
                       className='gap-4 grid sm:grid-cols-3 col-span-3 w-full'
                     >
-                      <FormInput
+                      <MaskedInput
                         name='stock'
                         label='Estoque'
                         required={false}
-                        type='text'
+                        type='number'
                         value={equipmentData.stock}
                         position='right'
-                        onChange={e => handleChange('stock', e.target.value)}
-                      />
-
-                      <FormInput
-                        name='stockMinimum'
-                        label='Estoque mínimo'
-                        required={false}
-                        type='text'
-                        value={equipmentData.stockMinimum}
-                        position='right'
                         onChange={e =>
-                          handleChange('stockMinimum', e.target.value)
+                          handleChange('stock', convertNumberDB(e.target.value))
                         }
                       />
 
-                      <FormInput
-                        name='stockMaximum'
-                        label='Estoque máximo'
+                      <MaskedInput
+                        name='stock_minimum'
+                        label='Estoque mínimo'
                         required={false}
-                        type='text'
-                        value={equipmentData.stockMaximum}
+                        type='number'
+                        value={equipmentData.stock_minimum}
                         position='right'
                         onChange={e =>
-                          handleChange('stockMaximum', e.target.value)
+                          handleChange(
+                            'stock_minimum',
+                            convertNumberDB(e.target.value)
+                          )
+                        }
+                      />
+
+                      <MaskedInput
+                        name='stock_maximum'
+                        label='Estoque máximo'
+                        required={false}
+                        type='number'
+                        value={equipmentData.stock_maximum}
+                        position='right'
+                        onChange={e =>
+                          handleChange(
+                            'stock_maximum',
+                            convertNumberDB(e.target.value)
+                          )
                         }
                       />
                     </motion.div>
@@ -245,14 +251,16 @@ const CreateEquipment: FC = () => {
                     className='col-span-2'
                   >
                     <SearchSelect
-                      value={equipmentData.stockLocation}
-                      name='stockLocation'
+                      value={equipmentData.stock_location}
+                      name='stock_location'
                       options={[
                         { value: 'lc1', label: 'Local 1' },
                         { value: 'lc2', label: 'Local 2' },
                       ]}
                       placeholder='Localização'
-                      onChange={() => null}
+                      onChange={(value: string) =>
+                        handleChange('stock_location', value)
+                      }
                     />
                   </motion.div>
 
@@ -299,14 +307,16 @@ const CreateEquipment: FC = () => {
                       </div>
 
                       <SearchSelect
-                        value={equipmentData.weightMeasure}
-                        name='weightMeasure'
+                        value={equipmentData.weight_measure}
+                        name='weight_measure'
                         options={[
                           { value: 'kg', label: 'Kg' },
                           { value: 'lb', label: 'Lb' },
                         ]}
-                        placeholder=''
-                        onChange={() => null}
+                        placeholder='Medida'
+                        onChange={(value: string) =>
+                          handleChange('weight_measure', value)
+                        }
                       />
                     </div>
                   </motion.div>
@@ -332,7 +342,7 @@ const CreateEquipment: FC = () => {
                 { value: 'category2', label: 'Categoria 2' },
               ]}
               placeholder='Categoria'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('category', value)}
             />
 
             <SearchSelect
@@ -343,7 +353,7 @@ const CreateEquipment: FC = () => {
                 { value: 'family2', label: 'Família 2' },
               ]}
               placeholder='Família'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('family', value)}
             />
 
             <SearchSelect
@@ -354,7 +364,7 @@ const CreateEquipment: FC = () => {
                 { value: 'manufacturer2', label: 'Fabricante 2' },
               ]}
               placeholder='Fabricante'
-              onChange={() => null}
+              onChange={(value: string) => handleChange('manufacturer', value)}
             />
           </div>
 
@@ -384,41 +394,45 @@ const CreateEquipment: FC = () => {
             />
 
             <FormInput
-              name='approvalCertification'
+              name='approval_certification'
               label='Certificado aprovação'
               required={false}
               type='text'
-              value={equipmentData.approvalCertification}
+              value={equipmentData.approval_certification}
               position='right'
               onChange={e =>
-                handleChange('approvalCertification', e.target.value)
+                handleChange('approval_certification', e.target.value)
               }
             />
 
             <div className='gap-4 grid grid-cols-2'>
               <FormInput
-                name='additionalCode'
+                name='additional_code'
                 label='Código'
                 required={false}
                 type='text'
-                value={equipmentData.additionalCode}
+                value={equipmentData.additional_code}
                 position='right'
-                onChange={e => handleChange('additionalCode', e.target.value)}
+                onChange={e => handleChange('additional_code', e.target.value)}
               />
 
-              <FormInput
-                name='expirationDate'
+              <MaskedInput
+                name='expiration_date'
                 label='Data expiração'
                 required={false}
-                type='text'
-                value={equipmentData.expirationDate}
+                type='date'
+                value={equipmentData.expiration_date}
                 position='right'
-                onChange={e => handleChange('expirationDate', e.target.value)}
+                onChange={e => handleChange('expiration_date', e.target.value)}
               />
             </div>
           </div>
 
-          <ActionGroup />
+          <ActionGroup
+            uriBack='/equipamentos'
+            showDelete={false}
+            onClick={handleCreateEquipment}
+          />
         </form>
       </div>
     </div>
