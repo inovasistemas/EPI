@@ -15,6 +15,7 @@ import { ToastError } from '@/components/Template/Toast/Error'
 import { useRouter } from 'next/navigation'
 
 const CreateCollaborator: FC = () => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     name: '',
     birthdate: '',
@@ -42,7 +43,6 @@ const CreateCollaborator: FC = () => {
   }
 
   const handleCreateCollaborator = async () => {
-    const router = useRouter()
     const response = await createCollaborator({
       name: formData.name,
       birthdate: formData.birthdate,

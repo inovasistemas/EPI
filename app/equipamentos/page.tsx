@@ -123,13 +123,27 @@ const Equipment: FC = () => {
       )
 
       toast.custom(() => (
-        <ToastSuccess text='Equipamentos excluídos com sucesso' />
+        <ToastSuccess
+          text={
+            checkedCount === 1
+              ? '1 equipamento excluído com sucesso'
+              : `${checkedCount} equipamentos excluídos com sucesso`
+          }
+        />
       ))
       fetchEquipments()
       handleCloseModalDelete()
       setHasChecked(false)
     } catch (error) {
-      toast.custom(() => <ToastError text='Erro ao excluir equipamentos' />)
+      toast.custom(() => (
+        <ToastError
+          text={
+            checkedCount === 1
+              ? `erro ao excluir ${checkedCount} equipamento`
+              : `erro ao excluir ${checkedCount} equipamentos`
+          }
+        />
+      ))
     }
   }
 

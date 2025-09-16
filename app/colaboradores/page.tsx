@@ -27,8 +27,9 @@ import { ToastError } from '@/components/Template/Toast/Error'
 import useDebounce from '@/lib/context/debounce'
 import { timestampToDate } from '@/utils/timestamp-to-date'
 import { calcPages } from '@/utils/calc-pages'
-import { getCollaborators } from '@/services/Collaborator'
+import { deleteCollaborator, getCollaborators } from '@/services/Collaborator'
 import { formatCPF } from '@/utils/format-cpf'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 
 type Collaborator = {
   uuid: string
@@ -42,6 +43,7 @@ const Collaborator: FC = () => {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalDeleteStatus, setModalDeleteStatus] = useState(false)
   const [collaborators, setCollaborators] = useState<Collaborator[]>([])
   const [loading, setLoading] = useState(false)
   const [orderBy, setOrderBy] = useState({
@@ -59,6 +61,7 @@ const Collaborator: FC = () => {
   const [checkedAll, setCheckedAll] = useState(false)
   const checkboxRefs = useRef<HTMLInputElement[]>([])
   const [hasChecked, setHasChecked] = useState(false)
+  const [checkedCount, setCheckedCount] = useState(0)
   const [pageSettings, setPageSettings] = useState({
     numberOfDocuments: 1,
     numberPerPage: 1,
@@ -67,6 +70,9 @@ const Collaborator: FC = () => {
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
     setHasChecked(anyChecked)
+
+    const count = checkboxRefs.current.filter(ref => ref?.checked).length
+    setCheckedCount(count)
   }
 
   const handleOrderBy = useCallback(
@@ -102,6 +108,47 @@ const Collaborator: FC = () => {
     }))
   }
 
+  const handleCloseModalDelete = useCallback(() => {
+    setModalDeleteStatus(prev => !prev)
+  }, [])
+
+  const handleMultipleDelete = async () => {
+    const checkedValues = checkboxRefs.current
+      .filter(ref => ref?.checked)
+      .map(ref => ref?.value)
+
+    try {
+      await Promise.all(
+        checkedValues.map(uuid =>
+          deleteCollaborator({ loading: setLoading, id: uuid })
+        )
+      )
+
+      toast.custom(() => (
+        <ToastSuccess
+          text={
+            checkedCount === 1
+              ? '1 colaborador excluído com sucesso'
+              : `${checkedCount} colaboradores excluídos com sucesso`
+          }
+        />
+      ))
+      fetchCollaborators()
+      handleCloseModalDelete()
+      setHasChecked(false)
+    } catch (error) {
+      toast.custom(() => (
+        <ToastError
+          text={
+            checkedCount === 1
+              ? `erro ao excluir ${checkedCount} colaborador`
+              : `erro ao excluir ${checkedCount} colaboradores`
+          }
+        />
+      ))
+    }
+  }
+
   const fetchCollaborators = async () => {
     const response = await getCollaborators({
       q: debouncedSearch || undefined,
@@ -134,6 +181,46 @@ const Collaborator: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalDeleteStatus}
+        handleClickOverlay={handleCloseModalDelete}
+        showClose={false}
+      >
+        <div className='flex flex-col gap-2'>
+          <span className='font-medium text-xl text-center'>
+            Tem certeza que deseja excluir {checkedCount}{' '}
+            {checkedCount === 1 ? 'colaborador' : 'colaboradores'}?
+          </span>
+          <span className='px-6 text-base text-center'>
+            Esta ação é irreversível e todos os dados associados serão
+            permanentemente apagados.
+          </span>
+
+          <div className='z-[55] flex flex-row justify-center gap-3 pt-6'>
+            <button
+              type='button'
+              onClick={handleMultipleDelete}
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-white text-sm transition-all duration-300'>
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type='button'
+              onClick={handleCloseModalDelete}
+              className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-[--textSecondary] text-sm'>
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
+      </Modal>
       <Modal
         title='Filtros'
         size='small'
@@ -168,7 +255,7 @@ const Collaborator: FC = () => {
                         strokeWidth={2.5}
                       />
                     }
-                    onClick={() => null}
+                    onClick={handleCloseModalDelete}
                   />
                 </motion.div>
               )}
@@ -356,6 +443,7 @@ const Collaborator: FC = () => {
                             }}
                             type='checkbox'
                             name='collaborator[]'
+                            value={collaborator.uuid}
                             onClick={e => {
                               e.stopPropagation()
                             }}
