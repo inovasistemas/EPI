@@ -28,7 +28,7 @@ const chartConfig = {
   },
   notwithdrawn: {
     label: 'Pendente',
-    color: 'var(--textPrimary)',
+    color: 'var(--chartGray)',
   },
   label: {
     color: 'var(--background)',
@@ -82,7 +82,7 @@ export function SmallChartIssues() {
             <Bar
               dataKey='notwithdrawn'
               stackId='a'
-              fill='var(--chartYellow)'
+              fill='var(--chartGray)'
               radius={[0, 4, 4, 0]}
             />
           </BarChart>

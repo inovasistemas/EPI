@@ -23,12 +23,12 @@ const chartData = [
 
 const chartConfig = {
   desktop: {
-    label: 'Passada',
-    color: 'var(--primaryColor)',
+    label: 'Anterior',
+    color: 'var(--chartGray)',
   },
   mobile: {
-    label: 'Esta semana',
-    color: 'var(--chartYellow)',
+    label: 'Atual',
+    color: 'var(--primaryColor)',
   },
 } satisfies ChartConfig
 

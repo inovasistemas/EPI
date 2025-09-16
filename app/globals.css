@@ -35,8 +35,10 @@
   --tableColor: #e2e7eb;
 
   --chartGreen: #3cb295;
-  --chartYellow: #f6b41f;
+  --chartYellow: #3280fc;
+  --chartGray: #dde3ea;
   --chartOrange: #ffa244;
+  --chartRed: #e13554;
 }
 
 .dark {
@@ -69,8 +71,10 @@
   --tableColor: #202223;
 
   --chartGreen: #3cb295;
-  --chartYellow: #f6b41f;
-  --chartOrange: #ffa244;
+  --chartYellow: #6b7280;
+  --chartGray: #3e3f42;
+  --chartOrange: #ffab70;
+  --chartRed: #f87683;
 }
 
 .ant-picker,
