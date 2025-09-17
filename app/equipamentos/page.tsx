@@ -30,6 +30,16 @@ import { toast } from 'sonner'
 import useDebounce from '@/lib/context/debounce'
 import { calcPages } from '@/utils/calc-pages'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+
+enum EquipmentModals {
+  Filter,
+  Deletion,
+  Category,
+  Manufacturer,
+  Default,
+}
 
 type Equipment = {
   uuid: string
@@ -71,6 +81,7 @@ const Equipment: FC = () => {
     numberPerPage: 1,
   })
   const [equipments, setEquipments] = useState<Equipment[]>([])
+  const [isCardOpen, setCardOpen] = useState(EquipmentModals.Default)
 
   const updateCheckedStatus = () => {
     const anyChecked = checkboxRefs.current.some(ref => ref?.checked)
@@ -268,18 +279,6 @@ const Equipment: FC = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-
-            {/* <SecondaryButton
-              label='Associar'
-              icon={
-                <ConnectedIcon
-                  size='size-4'
-                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
-                  strokeWidth={2.5}
-                />
-              }
-              onClick={handleCloseModal}
-            /> */}
 
             <PrimaryLink
               label='Adicionar'

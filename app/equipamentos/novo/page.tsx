@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useState } from 'react'
+import { type FC, useCallback, useState } from 'react'
 import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
 import { ImageIcon } from '@/components/Display/Icons/Image'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
@@ -17,11 +17,16 @@ import { createEquipment } from '@/services/Equipment'
 import { toast } from 'sonner'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
+import { Modal } from '@/components/Display/Modal'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 
 const CreateEquipment: FC = () => {
   const router = useRouter()
   const params = useParams()
   const [loading, setLoading] = useState(false)
+  const [createModalStatus, setCreateModalStatus] = useState(false)
   const [equipmentData, setEquipmentData] = useState<EquipmentServiceDetails>({
     uuid: '',
     abc_classification: '',
@@ -71,8 +76,21 @@ const CreateEquipment: FC = () => {
     }))
   }
 
+  const handleCloseCreateModal = useCallback(() => {
+    setCreateModalStatus(prev => !prev)
+  }, [])
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <Modal
+        title='Categorias e subcategorias'
+        size='default'
+        showClose={true}
+        isModalOpen={createModalStatus}
+        handleClickOverlay={handleCloseCreateModal}
+      >
+        <div className='w-full'></div>
+      </Modal>
       <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
@@ -81,8 +99,34 @@ const CreateEquipment: FC = () => {
             <h2 className='font-medium text-xl capitalize leading-none select-none'>
               {equipmentData.name
                 ? equipmentData.name.toLocaleLowerCase()
-                : 'Detalhes do equipamento'}
+                : 'Adicionar equipamento'}
             </h2>
+          </div>
+
+          <div className='flex flex-row items-center gap-2'>
+            <SecondaryButton
+              label='Fabricantes'
+              icon={
+                <FactoryIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseCreateModal}
+            />
+
+            <SecondaryButton
+              label='Categorias'
+              icon={
+                <WorkflowSquareIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseCreateModal}
+            />
           </div>
         </div>
 

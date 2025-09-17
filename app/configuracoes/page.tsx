@@ -20,6 +20,9 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { BriefcaseIcon } from '@/components/Display/Icons/Briefcase'
 import { JobPosition } from '@/components/Features/JobPosition'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { Manufacturer } from '@/components/Features/Manufacturer'
 
 enum menus {
   personalDetails,
@@ -27,6 +30,8 @@ enum menus {
   sector,
   jobPosition,
   security,
+  category,
+  manufacturer,
 }
 
 const Settings: FC = () => {
@@ -223,6 +228,40 @@ const Settings: FC = () => {
           </button>
 
           <button
+            onClick={() => handleActiveMenu(menus.category)}
+            type='button'
+            data-active={activeMenu === menus.category}
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+          >
+            <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
+              <WorkflowSquareIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            </div>
+            <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
+              Categorias e subcategorias
+            </span>
+          </button>
+
+          <button
+            onClick={() => handleActiveMenu(menus.manufacturer)}
+            type='button'
+            data-active={activeMenu === menus.manufacturer}
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+          >
+            <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
+              <FactoryIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            </div>
+            <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
+              Fabricantes
+            </span>
+          </button>
+
+          <button
             onClick={() => handleActiveMenu(menus.security)}
             type='button'
             data-active={activeMenu === menus.security}
@@ -245,6 +284,7 @@ const Settings: FC = () => {
           {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
           {activeMenu === menus.jobPosition && <JobPosition />}
           {activeMenu === menus.sector && <Sector />}
+          {activeMenu === menus.manufacturer && <Manufacturer />}
           {activeMenu === menus.security && (
             <PasswordSettings
               key={passwordReset ? 'reset-1' : 'reset-0'}

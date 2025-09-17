@@ -23,10 +23,14 @@ import { Modal } from '@/components/Display/Modal'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 
 const CreateEquipment: FC = () => {
   const router = useRouter()
   const params = useParams()
+  const [createModalStatus, setCreateModalStatus] = useState(false)
   const EquipmentId = Array.isArray(params.equipment_id)
     ? params.equipment_id[0]
     : params.equipment_id
@@ -112,12 +116,25 @@ const CreateEquipment: FC = () => {
     }
   }
 
+  const handleCloseCreateModal = useCallback(() => {
+    setCreateModalStatus(prev => !prev)
+  }, [])
+
   useEffect(() => {
     fetchEquipment()
   }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <Modal
+        title='Categorias e subcategorias'
+        size='default'
+        showClose={true}
+        isModalOpen={createModalStatus}
+        handleClickOverlay={handleCloseCreateModal}
+      >
+        <div className='w-full'></div>
+      </Modal>
       <Modal
         title=''
         size='extra-small'
@@ -167,6 +184,32 @@ const CreateEquipment: FC = () => {
                 ? equipmentData.name.toLocaleLowerCase()
                 : 'Detalhes do equipamento'}
             </h2>
+          </div>
+
+          <div className='flex flex-row items-center gap-2'>
+            <SecondaryButton
+              label='Fabricantes'
+              icon={
+                <FactoryIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseCreateModal}
+            />
+
+            <SecondaryButton
+              label='Categorias'
+              icon={
+                <WorkflowSquareIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseCreateModal}
+            />
           </div>
 
           {/* <div className='flex items-center gap-3'>
