@@ -8,6 +8,7 @@ import { getCategories } from '@/services/Category'
 import { toast } from 'sonner'
 import { ToastError } from '../../Toast/Error'
 import { getManufacturers } from '@/services/Manufacturer'
+import { sub } from 'date-fns'
 
 type FilterEquipmentsProps = {
   actionClose: () => void
@@ -23,6 +24,15 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
       active_equipments: '',
       created_at: '',
       updated_at: '',
+      subcategories: [
+        {
+          uuid: '',
+          name: '',
+          active_equipments: '',
+          created_at: '',
+          updated_at: '',
+        },
+      ],
     },
   ])
   const [ManufacturersData, setManufacturersData] = useState([
@@ -133,10 +143,13 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
               }
               options={
                 CategoriesData
-                  ? CategoriesData.map(jobPosition => ({
-                      value: jobPosition.uuid,
-                      label: jobPosition.name,
-                    }))
+                  ? CategoriesData.flatMap(category => [
+                      { value: category.uuid, label: category.name },
+                      ...(category.subcategories?.map(sub => ({
+                        value: sub.uuid,
+                        label: sub.name,
+                      })) ?? []),
+                    ])
                   : []
               }
               placeholder=''

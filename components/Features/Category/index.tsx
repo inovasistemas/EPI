@@ -2,35 +2,35 @@ import { EditIcon } from '@/components/Display/Icons/Edit'
 import { SubIcon } from '@/components/Display/Icons/Sub'
 import { Modal } from '@/components/Display/Modal'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
-import { Subsector } from '@/components/Inputs/Button/Subsector'
+import { Subcategory } from '@/components/Inputs/Button/Subcategory'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { deleteSector, getSectors } from '@/services/Sector'
+import { deleteCategory, getCategories } from '@/services/Category'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { SectorModal } from './Modal'
+import { CategoryModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 
-export function Sector() {
+export function Category() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [modalProps, setModalProps] = useState({
-    sector: '',
+    category: '',
     type: '',
   })
-  const fetchedSectors = useRef(false)
-  const [sectorsData, setSectorsData] = useState<SectorType[] | null>()
-  const [selectedSector, setSelectedSector] = useState('')
+  const fetchedCategories = useRef(false)
+  const [categoriesData, setCategoriesData] = useState<CategoryType[] | null>()
+  const [selectedCategory, setSelectedCategory] = useState('')
 
   const handleClick = (id?: string, type?: string) => {
     if (!id && !type) {
-      setSelectedSector('')
-      setModalProps({ sector: '', type: 'createSector' })
+      setSelectedCategory('')
+      setModalProps({ category: '', type: 'createCategory' })
     } else if (id && type) {
-      setSelectedSector(id)
-      setModalProps({ sector: id, type: type })
+      setSelectedCategory(id)
+      setModalProps({ category: id, type: type })
     }
 
     handleModalStatus()
@@ -40,13 +40,13 @@ export function Sector() {
     setModalStatus(prev => !prev)
   }
 
-  const fetchSectors = async () => {
-    const response = await getSectors()
+  const fetchCategories = async () => {
+    const response = await getCategories()
 
     if (response && response.status === 200) {
-      setSectorsData(response.data.data)
+      setCategoriesData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar setores' />)
+      toast.custom(() => <ToastError text='Erro ao buscar categorias' />)
     }
   }
 
@@ -54,23 +54,22 @@ export function Sector() {
     setModalConfirmationStatus(prev => !prev)
   }
 
-  const handleDeleteSector = async () => {
-    const response = await deleteSector(selectedSector || '')
-
+  const handleDeleteCategory = async () => {
+    const response = await deleteCategory(selectedCategory || '')
     if (response && response.status === 204) {
       toast.custom(() => <ToastSuccess text='Exclusão realizada com sucesso' />)
-      fetchSectors()
+      fetchCategories()
       handleCloseModalConfirmation()
       handleModalStatus()
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir o setor' />)
+      toast.custom(() => <ToastError text='Erro ao excluir categoria' />)
     }
   }
 
   useEffect(() => {
-    if (fetchedSectors.current) return
-    fetchedSectors.current = true
-    fetchSectors()
+    if (fetchedCategories.current) return
+    fetchedCategories.current = true
+    fetchCategories()
   }, [])
 
   return (
@@ -83,11 +82,11 @@ export function Sector() {
         showClose={false}
         overflow={true}
       >
-        <SectorModal
-          sector={modalProps.sector}
+        <CategoryModal
+          category={modalProps.category}
           type={modalProps.type}
           modalAction={handleModalStatus}
-          reload={fetchSectors}
+          reload={fetchCategories}
           confirmationModal={handleCloseModalConfirmation}
         />
       </Modal>
@@ -99,9 +98,9 @@ export function Sector() {
         showClose={false}
       >
         <Dialog
-          title={'Tem certeza que deseja excluir o setor?'}
+          title={'Tem certeza que deseja excluir a categoria?'}
           description='Esta ação é irreversível e todos os dados associados serão permanentemente apagados.'
-          handleDelete={handleDeleteSector}
+          handleDelete={handleDeleteCategory}
           handleCancel={handleCloseModalConfirmation}
         />
       </Modal>
@@ -109,28 +108,28 @@ export function Sector() {
         <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
           <div className='py-6 select-none'>
             <h2 className='font-medium text-xl leading-none'>
-              Setores e substores
+              Categorias e subcategorias
             </h2>
             <span className='opacity-60 text-[--textSecondary] text-sm'>
-              Monte a estrutura da sua empresa com setores e subsetores
-              personalizados.
+              Estruture equipamentos por categorias e subcategorias conforme sua
+              empresa.
             </span>
           </div>
 
-          {sectorsData?.map((sector, i) => (
+          {categoriesData?.map((category, i) => (
             <div
-              key={sector.uuid}
+              key={category.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
               <div className='flex flex-col'>
                 <div className='flex flex-row justify-between gap-2 itens-center'>
                   <span className='font-medium capitalize'>
-                    {sector.name.toLocaleLowerCase()}
+                    {category.name.toLocaleLowerCase()}
                   </span>
                   <div className='flex flex-row items-center gap-2'>
                     <button
                       onClick={() =>
-                        handleClick(sector.uuid, 'createSubsector')
+                        handleClick(category.uuid, 'createSubcategory')
                       }
                       type='button'
                       className='group z-[200] relative flex justify-center items-center gap-2 bg-[--backgroundSecondary] hover:bg-[--buttonHover] px-3 pr-4 rounded-xl h-8 text-zinc-200 active:scale-95 transition'
@@ -141,7 +140,7 @@ export function Sector() {
                         strokeWidth={2}
                       />
                       <span className='font-medium text-[--textSecondary] text-xs'>
-                        Adicionar Subsetor
+                        Adicionar Subcategoria
                       </span>
                     </button>
                     <NavAction
@@ -155,7 +154,7 @@ export function Sector() {
                         />
                       }
                       mobile={true}
-                      action={() => handleClick(sector.uuid, 'editSector')}
+                      action={() => handleClick(category.uuid, 'editCategory')}
                     />
                   </div>
                 </div>
@@ -164,18 +163,18 @@ export function Sector() {
                   <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
                     <GroupLabel
                       isVisible={true}
-                      label={`${sector.active_collaborators} colaborador${sector.active_collaborators > 1 || sector.active_collaborators === 0 ? 'es' : ''} nesse setor`}
+                      label={`${category.active_equipments} equipamento${category.active_equipments > 1 || category.active_equipments === 0 ? 'es' : ''} nessa categoria`}
                       showFixed={false}
                     />
                   </div>
                 </div>
 
-                {sector.subsectors.length > 0 && (
+                {category.subcategories.length > 0 && (
                   <div className='pt-6'>
                     <div className='block relative col-span-full mb-4 -ml-1'>
                       <GroupLabel
                         isVisible={true}
-                        label='Subsetores'
+                        label='Subcategorias'
                         showFixed={false}
                       />
                     </div>
@@ -183,13 +182,13 @@ export function Sector() {
                 )}
 
                 <div className='flex flex-wrap gap-2 pt-3'>
-                  {sector.subsectors.map((subsector, j) => (
-                    <Subsector
-                      key={subsector.uuid}
-                      id={subsector.uuid}
-                      label={subsector.name.toLocaleLowerCase()}
+                  {category.subcategories.map((subcategory, j) => (
+                    <Subcategory
+                      key={subcategory.uuid}
+                      id={subcategory.uuid}
+                      label={subcategory.name.toLocaleLowerCase()}
                       onClick={() =>
-                        handleClick(subsector.uuid, 'editSubsector')
+                        handleClick(subcategory.uuid, 'editSubcategory')
                       }
                     />
                   ))}

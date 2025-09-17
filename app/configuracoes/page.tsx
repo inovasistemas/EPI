@@ -23,6 +23,7 @@ import { JobPosition } from '@/components/Features/JobPosition'
 import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { Manufacturer } from '@/components/Features/Manufacturer'
+import { Category } from '@/components/Features/Category'
 
 enum menus {
   personalDetails,
@@ -285,6 +286,7 @@ const Settings: FC = () => {
           {activeMenu === menus.jobPosition && <JobPosition />}
           {activeMenu === menus.sector && <Sector />}
           {activeMenu === menus.manufacturer && <Manufacturer />}
+          {activeMenu === menus.category && <Category />}
           {activeMenu === menus.security && (
             <PasswordSettings
               key={passwordReset ? 'reset-1' : 'reset-0'}

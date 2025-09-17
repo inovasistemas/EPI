@@ -1,5 +1,5 @@
-type CategoryModalProps = {
-  category?: string
+type SectorModalProps = {
+  sector?: string
   type?: string
   modalAction: () => void
   reload: () => void
