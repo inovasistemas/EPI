@@ -88,7 +88,9 @@ export function ManufacturerModal({
         modalAction()
         reload()
       } else {
-        toast.custom(() => <ToastError text='Erro ao atualizar fabricante' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível atualizar o fabricante' />
+        ))
       }
     } else {
       if (type && type !== '') {
@@ -104,7 +106,9 @@ export function ManufacturerModal({
             modalAction()
             reload()
           } else {
-            toast.custom(() => <ToastError text='Erro ao criar fabricante' />)
+            toast.custom(() => (
+              <ToastError text='Não foi possível criar o fabricante. Verifique os campos obrigatórios e tente novamente' />
+            ))
           }
         }
       }

@@ -47,7 +47,7 @@ export function JobPosition() {
       handleCloseModalConfirmation()
       handleModalStatus()
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir o cargo' />)
+      toast.custom(() => <ToastError text='Não foi possível excluir o cargo' />)
     }
   }
 
@@ -57,7 +57,9 @@ export function JobPosition() {
     if (response && response.status === 200) {
       setJobPositionsData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar cargos' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os cargos' />
+      ))
     }
   }
 

@@ -58,7 +58,7 @@ export function PermissionGroup({
       setPermissionGroups(response.data.data)
     } else {
       toast.custom(() => (
-        <ToastError text='Erro ao buscar os grupos de permissões' />
+        <ToastError text='Não foi possível buscar os grupos de permissões' />
       ))
     }
   }
@@ -70,7 +70,7 @@ export function PermissionGroup({
       setPermissionGroups(response.data.data)
     } else {
       toast.custom(() => (
-        <ToastError text='Erro ao carregar os grupos de permissões' />
+        <ToastError text='Não foi possível carregar os grupos de permissões' />
       ))
     }
   }
@@ -89,7 +89,7 @@ export function PermissionGroup({
         ))
       } else {
         toast.custom(() => (
-          <ToastError text='Erro ao atualizar o grupo de permissões' />
+          <ToastError text='Não foi possível atualizar o grupo de permissões' />
         ))
       }
     } else {
@@ -105,7 +105,7 @@ export function PermissionGroup({
         modalStatus()
       } else {
         toast.custom(() => (
-          <ToastError text='Erro ao criar o grupo de permissões' />
+          <ToastError text='Não foi possível criar o grupo de permissões. Verifique os campos obrigatórios e tente novamente' />
         ))
       }
     }

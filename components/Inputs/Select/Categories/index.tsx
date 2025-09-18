@@ -32,7 +32,9 @@ export function SelectCategories({ value, onChange }: SelectCategoriesProps) {
     if (response && response.status === 200) {
       setCategoriesData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar categorias' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar as categorias' />
+      ))
     }
   }
 

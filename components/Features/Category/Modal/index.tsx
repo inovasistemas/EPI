@@ -116,7 +116,9 @@ export function CategoryModal({
         modalAction()
         reload()
       } else {
-        toast.custom(() => <ToastError text='Erro ao atualizar categoria' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível atualizar a categoria. Verifique os campos obrigatórios e tente novamente' />
+        ))
       }
     } else {
       if (type && type !== '') {
@@ -130,7 +132,9 @@ export function CategoryModal({
             modalAction()
             reload()
           } else {
-            toast.custom(() => <ToastError text='Erro ao criar categoria' />)
+            toast.custom(() => (
+              <ToastError text='Não foi possível criar a categoria. Verifique os campos obrigatórios e tente novamente' />
+            ))
           }
         }
 
@@ -149,7 +153,7 @@ export function CategoryModal({
               reload()
             } else {
               toast.custom(() => (
-                <ToastError text='Erro ao criar subcategoria' />
+                <ToastError text='Não foi possível criar a subcategoria. Verifique os campos obrigatórios e tente novamente' />
               ))
             }
           }

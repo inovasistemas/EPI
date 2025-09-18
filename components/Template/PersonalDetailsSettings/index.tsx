@@ -46,7 +46,9 @@ export function PersonalDetailsSettings() {
         <ToastSuccess text='Dados pessoais atualizados com sucesso' />
       ))
     } else {
-      toast.custom(() => <ToastError text='Erro ao atualizar dados pessoais' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível atualizar os dados pessoais' />
+      ))
     }
   }
 
@@ -74,7 +76,9 @@ export function PersonalDetailsSettings() {
       setCustomOperatorData(response.data[0])
       setIsOn(response.data[0].notifications_enabled ?? false)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar dados do usuário' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os dados do usuário' />
+      ))
     }
   }
 

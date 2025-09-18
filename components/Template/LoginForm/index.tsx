@@ -127,7 +127,9 @@ export function LoginForm() {
           <ToastError text='Os dados informados não são válidos' />
         ))
       } else {
-        toast.custom(() => <ToastError text='Erro ao autenticar o usuário' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível autenticar o usuário' />
+        ))
       }
     }
   }
@@ -201,7 +203,9 @@ export function LoginForm() {
 
           router.push('/painel')
         } else {
-          toast.custom(() => <ToastError text='Erro ao verificar o código' />)
+          toast.custom(() => (
+            <ToastError text='Não foi possível verificar o código de segurança. Por favor, tente novamente' />
+          ))
         }
       }
     }

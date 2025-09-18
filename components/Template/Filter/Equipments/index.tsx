@@ -64,7 +64,9 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
     if (response && response.status === 200) {
       setCategoriesData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar categorias' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar as categorias' />
+      ))
     }
   }
 
@@ -74,7 +76,9 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
     if (response && response.status === 200) {
       setManufacturersData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar fabricantes' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os fabricantes' />
+      ))
     }
   }
 

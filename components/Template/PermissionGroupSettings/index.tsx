@@ -44,7 +44,7 @@ export function PermissionGroupSettings() {
       setPermissionGroups(response.data.data)
     } else {
       toast.custom(() => (
-        <ToastError text='Erro ao buscar os grupos de permissões' />
+        <ToastError text='Não foi possível buscar os grupos de permissões' />
       ))
     }
   }
@@ -66,7 +66,7 @@ export function PermissionGroupSettings() {
       handleCloseModal()
     } else {
       toast.custom(() => (
-        <ToastError text='Erro ao excluir o grupo de permissões' />
+        <ToastError text='Não foi possível excluir o grupo de permissões' />
       ))
     }
   }

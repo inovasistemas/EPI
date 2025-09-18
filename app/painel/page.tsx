@@ -31,7 +31,9 @@ export default function Home() {
     if (response && response.status === 200) {
       setReports(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar relatórios' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os relatórios' />
+      ))
     }
   }
 

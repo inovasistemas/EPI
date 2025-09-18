@@ -150,8 +150,8 @@ const Equipment: FC = () => {
         <ToastError
           text={
             checkedCount === 1
-              ? `erro ao excluir ${checkedCount} equipamento`
-              : `erro ao excluir ${checkedCount} equipamentos`
+              ? `Não foi possível excluir ${checkedCount} equipamento`
+              : `Não foi possível excluir ${checkedCount} equipamentos`
           }
         />
       ))
@@ -181,7 +181,9 @@ const Equipment: FC = () => {
       handlePageSettings('numberPerPage', response.data.per_page)
       setEquipments(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar equipamentos' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os equipamentos' />
+      ))
     }
   }
 

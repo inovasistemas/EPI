@@ -58,16 +58,26 @@ export function FormInput({
             spellCheck='false'
             maxLength={maxLength}
           />
+
           <label
             htmlFor={name}
             className='top-2 peer-focus:top-2 peer-placeholder-shown:top-1/2 left-1 absolute bg-transparent px-2 peer-focus:px-2 text-[--labelPrimary] peer-focus:text-[--primaryColor] text-base scale-75 peer-focus:scale-75 peer-placeholder-shown:scale-100 origin-[0] transition-all -translate-y-1 peer-focus:-translate-y-1 peer-placeholder-shown:-translate-y-1/2 transform'
           >
             {label}
           </label>
+
           {required && (
             <label
               htmlFor={name}
-              className='hidden peer-focus:hidden peer-placeholder-shown:block top-4 right-1 absolute px-2 text-[--errorLoader] text-base duration-300'
+              className={classNames(
+                {
+                  hidden: value,
+                  'right-8': icon,
+                },
+                [
+                  'peer-focus:hidden peer-placeholder-shown:block top-4 right-0 absolute px-2 text-[--errorLoader] text-base duration-300',
+                ]
+              )}
             >
               *
             </label>

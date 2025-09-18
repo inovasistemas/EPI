@@ -74,7 +74,9 @@ const Settings: FC = () => {
         <ToastError text='A senha atual informada está incorreta' />
       ))
     } else {
-      toast.custom(() => <ToastError text='Erro ao atualizar a senha' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível atualizar a senha' />
+      ))
     }
   }
 

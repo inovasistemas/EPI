@@ -141,8 +141,8 @@ const Collaborator: FC = () => {
         <ToastError
           text={
             checkedCount === 1
-              ? `erro ao excluir ${checkedCount} colaborador`
-              : `erro ao excluir ${checkedCount} colaboradores`
+              ? `Não foi possível excluir ${checkedCount} colaborador`
+              : `Não foi possível excluir ${checkedCount} colaboradores`
           }
         />
       ))
@@ -164,7 +164,9 @@ const Collaborator: FC = () => {
       handlePageSettings('numberPerPage', response.data.per_page)
       setCollaborators(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar colaboradores' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os colaboradores' />
+      ))
     }
   }
 

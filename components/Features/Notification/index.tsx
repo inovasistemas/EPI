@@ -22,7 +22,9 @@ export function NotificationModal({
       modalAction()
       reload()
     } else {
-      toast.custom(() => <ToastError text='Erro ao atualizar Notificação' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível atualizar a notificação' />
+      ))
     }
   }
 

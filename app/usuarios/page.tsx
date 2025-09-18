@@ -123,7 +123,9 @@ const Operator: FC = () => {
       handlePageSettings('numberPerPage', response.data.per_page)
       setUsers(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar usuários' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os usuários' />
+      ))
     }
   }
 
@@ -156,8 +158,8 @@ const Operator: FC = () => {
         <ToastError
           text={
             checkedCount === 1
-              ? `erro ao excluir ${checkedCount} usuário`
-              : `erro ao excluir ${checkedCount} usuários`
+              ? `Não foi possível excluir ${checkedCount} usuário`
+              : `Não foi possível excluir ${checkedCount} usuários`
           }
         />
       ))

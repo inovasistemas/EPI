@@ -77,10 +77,8 @@ const CreateEquipment: FC = () => {
 
     const response = await uploadEquipmentImage({ id, file: fileData })
 
-    if (response?.status === 201) {
-      // toast.custom(() => <ToastSuccess text='Imagem salva com sucesso' />)
-    } else {
-      toast.custom(() => <ToastError text='Erro ao salvar imagem' />)
+    if (response?.status !== 201) {
+      toast.custom(() => <ToastError text='Não foi possível salvar a imagem' />)
     }
 
     setLoading(false)
@@ -100,7 +98,9 @@ const CreateEquipment: FC = () => {
       toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
       router.push('/equipamentos')
     } else {
-      toast.custom(() => <ToastError text='Erro ao criar equipamento' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível criar o equipamento. Verifique os campos obrigatórios e tente novamente' />
+      ))
     }
   }
 

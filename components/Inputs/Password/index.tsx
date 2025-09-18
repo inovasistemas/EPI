@@ -7,6 +7,7 @@ type PasswordInputProps = {
   name?: string
   label: string
   value: string
+  required?: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -15,6 +16,7 @@ export function PasswordInput({
   label,
   value,
   onChange,
+  required = false,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -26,7 +28,7 @@ export function PasswordInput({
     <FormInput
       name={name}
       label={label}
-      required={false}
+      required={required}
       type='password'
       reveal={showPassword}
       value={value}

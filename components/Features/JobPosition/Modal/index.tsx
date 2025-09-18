@@ -78,7 +78,9 @@ export function JobPositionModal({
     if (response && response.status === 200) {
       setSectorsData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar setores' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os setores' />
+      ))
     }
   }
 
@@ -90,7 +92,9 @@ export function JobPositionModal({
       reload()
       modalAction()
     } else {
-      toast.custom(() => <ToastError text='Erro ao criar o cargo' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível criar o cargo. Verifique os campos obrigatórios e tente novamente' />
+      ))
     }
   }
 
@@ -102,7 +106,9 @@ export function JobPositionModal({
         toast.custom(() => <ToastSuccess text='Cargo atualizado com sucesso' />)
         reload()
       } else {
-        toast.custom(() => <ToastError text='Erro ao atualizar o cargo' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível atualizar o cargo' />
+        ))
       }
     }
   }

@@ -46,7 +46,9 @@ export function Category() {
     if (response && response.status === 200) {
       setCategoriesData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar categorias' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar as categorias' />
+      ))
     }
   }
 
@@ -62,7 +64,9 @@ export function Category() {
       handleCloseModalConfirmation()
       handleModalStatus()
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir categoria' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível excluir a categoria' />
+      ))
     }
   }
 

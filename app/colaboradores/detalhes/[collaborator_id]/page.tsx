@@ -87,7 +87,9 @@ const CollaboratorDetails: FC = () => {
       if (response && response.status === 200) {
         setCollaborator(response.data)
       } else {
-        toast.custom(() => <ToastError text='Erro ao buscar colaborador' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar o colaborador' />
+        ))
       }
 
       fetchedCollaborator.current = true
@@ -122,7 +124,9 @@ const CollaboratorDetails: FC = () => {
         <ToastSuccess text='Colaborador atualizado com sucesso' />
       ))
     } else {
-      toast.custom(() => <ToastError text='Erro ao atualizar colaborador' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível atualizar o colaborador' />
+      ))
     }
   }
 
@@ -137,7 +141,9 @@ const CollaboratorDetails: FC = () => {
     if (response && response.status === 204) {
       router.push('/colaboradores')
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir colaborador' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível excluir o colaborador' />
+      ))
     }
   }
 
@@ -218,7 +224,7 @@ const CollaboratorDetails: FC = () => {
               <FormInput
                 name='name'
                 label='Nome'
-                required={false}
+                required={true}
                 type='text'
                 value={collaborator?.name.toLocaleLowerCase()}
                 position='right'

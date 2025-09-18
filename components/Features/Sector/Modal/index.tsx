@@ -120,7 +120,9 @@ export function SectorModal({
         modalAction()
         reload()
       } else {
-        toast.custom(() => <ToastError text='Erro ao atualizar setor' />)
+        toast.custom(() => (
+          <ToastError text='Não foi possível atualizar setor' />
+        ))
       }
     } else {
       if (type && type !== '') {
@@ -132,7 +134,9 @@ export function SectorModal({
             modalAction()
             reload()
           } else {
-            toast.custom(() => <ToastError text='Erro ao criar setor' />)
+            toast.custom(() => (
+              <ToastError text='Não foi possível criar setor. Verifique os campos obrigatórios e tente novamente' />
+            ))
           }
         }
 
@@ -151,7 +155,9 @@ export function SectorModal({
               modalAction()
               reload()
             } else {
-              toast.custom(() => <ToastError text='Erro ao criar subsetor' />)
+              toast.custom(() => (
+                <ToastError text='Não foi possível criar o subsetor. Verifique os campos obrigatórios e tente novamente' />
+              ))
             }
           }
         }

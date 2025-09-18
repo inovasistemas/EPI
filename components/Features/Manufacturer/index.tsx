@@ -51,7 +51,9 @@ export function Manufacturer() {
     if (response && response.status === 200) {
       setManufacturersData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar fabricantes' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os fabricantes' />
+      ))
     }
   }
 
@@ -70,7 +72,9 @@ export function Manufacturer() {
       handleCloseModalConfirmation()
       handleModalStatus()
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir o fabricante' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível excluir o fabricante' />
+      ))
     }
   }
 

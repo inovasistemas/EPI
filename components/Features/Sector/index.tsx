@@ -46,7 +46,7 @@ export function Sector() {
     if (response && response.status === 200) {
       setSectorsData(response.data.data)
     } else {
-      toast.custom(() => <ToastError text='Erro ao buscar setores' />)
+      toast.custom(() => <ToastError text='Não foi possível buscar setores' />)
     }
   }
 
@@ -63,7 +63,7 @@ export function Sector() {
       handleCloseModalConfirmation()
       handleModalStatus()
     } else {
-      toast.custom(() => <ToastError text='Erro ao excluir o setor' />)
+      toast.custom(() => <ToastError text='Não foi possível excluir o setor' />)
     }
   }
 

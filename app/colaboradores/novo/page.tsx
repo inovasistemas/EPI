@@ -65,7 +65,9 @@ const CreateCollaborator: FC = () => {
       toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
       router.push('/colaboradores')
     } else {
-      toast.custom(() => <ToastError text='Erro ao criar colaborador' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível criar o colaborador. Verifique os campos obrigatórios e tente novamente' />
+      ))
     }
   }
 
@@ -96,7 +98,7 @@ const CreateCollaborator: FC = () => {
               <FormInput
                 name='name'
                 label='Nome'
-                required={false}
+                required={true}
                 type='text'
                 value={formData.name}
                 position='right'

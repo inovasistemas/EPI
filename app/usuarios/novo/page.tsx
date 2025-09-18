@@ -10,6 +10,7 @@ import { createUser, getPermissionGroups } from '@/services/User'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 
 const CreateOperator: FC = () => {
   const router = useRouter()
@@ -38,9 +39,12 @@ const CreateOperator: FC = () => {
     })
 
     if (response && response.status === 201) {
+      toast.custom(() => <ToastSuccess text='Usuário criado com sucesso' />)
       router.push('/usuarios')
     } else {
-      toast.custom(() => <ToastError text='Erro ao criar o usuário' />)
+      toast.custom(() => (
+        <ToastError text='Não foi possível criar o usuário. Verifique os campos obrigatórios e tente novamente' />
+      ))
     }
   }
 
@@ -91,9 +95,9 @@ const CreateOperator: FC = () => {
               <FormInput
                 name='name'
                 label='Nome'
-                required={false}
+                required={true}
                 type='text'
-                value={formData.name}
+                value={formData.name.toLocaleLowerCase()}
                 position='right'
                 onChange={e => handleChange('name', e.target.value)}
                 textTransform='capitalize'
@@ -102,7 +106,7 @@ const CreateOperator: FC = () => {
               <FormInput
                 name='mail'
                 label='E-mail'
-                required={false}
+                required={true}
                 type='mail'
                 value={formData.email}
                 position='right'
@@ -112,6 +116,7 @@ const CreateOperator: FC = () => {
               <PasswordInput
                 label='Senha'
                 value={formData.password}
+                required={true}
                 onChange={e => handleChange('password', e.target.value)}
               />
             </div>
@@ -130,6 +135,7 @@ const CreateOperator: FC = () => {
                 name='permission-groups'
                 options={permissionGroups}
                 placeholder='Grupo'
+                required={true}
                 onChange={(value: string) =>
                   handleChange('permissionGroup', value)
                 }
