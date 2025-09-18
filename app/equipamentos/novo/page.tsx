@@ -13,7 +13,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { MaskedInput } from '@/components/Inputs/Masked'
 import { convertNumberDB } from '@/utils/convert-number-db'
 import { convertMoneyBRL } from '@/utils/convert-money-brl'
-import { createEquipment } from '@/services/Equipment'
+import { createEquipment, uploadEquipmentImage } from '@/services/Equipment'
 import { toast } from 'sonner'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
@@ -21,12 +21,23 @@ import { Modal } from '@/components/Display/Modal'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { Manufacturer } from '@/components/Features/Manufacturer'
+import { Category } from '@/components/Features/Category'
+import ImageUpload from '@/components/ImageUpload'
+
+enum menus {
+  Manufacturer,
+  Category,
+  Default,
+}
 
 const CreateEquipment: FC = () => {
   const router = useRouter()
   const params = useParams()
   const [loading, setLoading] = useState(false)
   const [createModalStatus, setCreateModalStatus] = useState(false)
+  const [activeRegisterModal, setActiveRegisterModal] = useState(menus.Default)
+  const [file, setFile] = useState<File | null>(null)
   const [equipmentData, setEquipmentData] = useState<EquipmentServiceDetails>({
     uuid: '',
     abc_classification: '',
@@ -34,10 +45,10 @@ const CreateEquipment: FC = () => {
     approval_certification: '',
     category: '',
     composition: '',
-    cost: 0,
+    cost: undefined,
     details: '',
     dimensions: '',
-    disposable: false,
+    disposable: true,
     ean: '',
     expiration_date: '',
     family: '',
@@ -46,14 +57,34 @@ const CreateEquipment: FC = () => {
     name: '',
     picture: '',
     price: 0,
-    stock: 0,
+    stock: undefined,
     stock_control: true,
     stock_location: '',
-    stock_maximum: 0,
-    stock_minimum: 0,
+    stock_maximum: undefined,
+    stock_minimum: undefined,
     weight: '',
     weight_measure: '',
   })
+
+  const handleUpload = async (id: string, fileToUpload?: File) => {
+    const fileData = fileToUpload || file
+
+    if (!fileData) {
+      toast.custom(() => <ToastError text='Selecione uma imagem' />)
+      return
+    }
+    setLoading(true)
+
+    const response = await uploadEquipmentImage({ id, file: fileData })
+
+    if (response?.status === 201) {
+      // toast.custom(() => <ToastSuccess text='Imagem salva com sucesso' />)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao salvar imagem' />)
+    }
+
+    setLoading(false)
+  }
 
   const handleCreateEquipment = async () => {
     const response = await createEquipment({
@@ -62,6 +93,10 @@ const CreateEquipment: FC = () => {
     })
 
     if (response && response.status === 201) {
+      if (response && response.data.uuid && file) {
+        await handleUpload(response.data.uuid, file)
+      }
+
       toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
       router.push('/equipamentos')
     } else {
@@ -80,16 +115,23 @@ const CreateEquipment: FC = () => {
     setCreateModalStatus(prev => !prev)
   }, [])
 
+  const handleActiveRegisterModal = (menu: menus) => {
+    setActiveRegisterModal(menu)
+    handleCloseCreateModal()
+  }
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
         title='Categorias e subcategorias'
-        size='default'
-        showClose={true}
         isModalOpen={createModalStatus}
+        padding={false}
         handleClickOverlay={handleCloseCreateModal}
       >
-        <div className='w-full'></div>
+        <div className='-mt-6 min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
+          {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
+          {activeRegisterModal === menus.Category && <Category />}
+        </div>
       </Modal>
       <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
@@ -113,7 +155,7 @@ const CreateEquipment: FC = () => {
                   strokeWidth={2.5}
                 />
               }
-              onClick={handleCloseCreateModal}
+              onClick={() => handleActiveRegisterModal(menus.Manufacturer)}
             />
 
             <SecondaryButton
@@ -125,31 +167,22 @@ const CreateEquipment: FC = () => {
                   strokeWidth={2.5}
                 />
               }
-              onClick={handleCloseCreateModal}
+              onClick={() => handleActiveRegisterModal(menus.Category)}
             />
           </div>
         </div>
 
-        <form className='relative gap-y-10 grid w-full'>
+        <div className='relative gap-y-10 grid w-full'>
           <div className='flex flex-row gap-4 px-6 w-full'>
             <div>
-              <button
-                type='button'
-                className='flex justify-center items-center bg-[--backgroundSecondary] hover:opacity-70 border-[--border] border-2 border-dashed rounded-2xl w-32 aspect-square transition-all duration-300'
-              >
-                <ImageIcon
-                  size='size-10'
-                  stroke='stroke-[--buttonSecondary]'
-                  strokeWidth={1.5}
-                />
-              </button>
+              <ImageUpload file={file} setFile={setFile} />
             </div>
 
             <div className='gap-4 grid grid-cols-2 w-full'>
               <FormInput
                 name='name'
                 label='Nome'
-                required={false}
+                required={true}
                 type='text'
                 value={equipmentData.name?.toLocaleLowerCase()}
                 position='right'
@@ -189,6 +222,7 @@ const CreateEquipment: FC = () => {
                     { value: 'pct', label: 'Pacote' },
                   ]}
                   placeholder='Unidade medida'
+                  required={true}
                   onChange={(value: string) => handleChange('measure', value)}
                 />
               </div>
@@ -246,7 +280,7 @@ const CreateEquipment: FC = () => {
                       <MaskedInput
                         name='stock'
                         label='Estoque'
-                        required={false}
+                        required={true}
                         type='number'
                         value={equipmentData.stock}
                         position='right'
@@ -477,7 +511,7 @@ const CreateEquipment: FC = () => {
             showDelete={false}
             onClick={handleCreateEquipment}
           />
-        </form>
+        </div>
       </div>
     </div>
   )

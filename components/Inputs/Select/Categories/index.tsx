@@ -14,6 +14,15 @@ export function SelectCategories({ value, onChange }: SelectCategoriesProps) {
       sector: '',
       created_at: '',
       updated_at: '',
+      subcategories: [
+        {
+          uuid: '',
+          name: '',
+          active_equipments: '',
+          created_at: '',
+          updated_at: '',
+        },
+      ],
     },
   ])
 
@@ -39,13 +48,16 @@ export function SelectCategories({ value, onChange }: SelectCategoriesProps) {
       name='category'
       options={
         CategoriesData
-          ? CategoriesData.map(jobPosition => ({
-              value: jobPosition.uuid,
-              label: jobPosition.name,
-            }))
+          ? CategoriesData.flatMap(category => [
+              { value: category.uuid, label: category.name },
+              ...(category.subcategories?.map(sub => ({
+                value: sub.uuid,
+                label: sub.name,
+              })) ?? []),
+            ])
           : []
       }
-      placeholder='Cargo'
+      placeholder='Categoria'
       onChange={onChange}
     />
   )

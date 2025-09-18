@@ -481,7 +481,7 @@ const Equipment: FC = () => {
                             {equipment.picture &&
                               equipment.picture.length > 3 && (
                                 <Image
-                                  src={equipment.picture}
+                                  src={`http://localhost:3333${equipment.picture}`}
                                   alt={equipment.name}
                                   fill
                                   className='w-full h-full object-cover'

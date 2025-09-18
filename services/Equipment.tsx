@@ -106,7 +106,7 @@ export async function updateEquipment({
     if (manufacturer) data.manufacturer = manufacturer
     if (measure) data.measure = measure
     if (name) data.name = name
-    if (picture) data.picture = picture
+    data.picture = picture
     if (price) data.price = price
     if (stock) data.stock = stock
     if (stock_control) data.stock_control = stock_control
@@ -224,6 +224,26 @@ export async function deleteEquipment({ loading, id }: EquipmentService) {
     }
 
     loading(false)
+    return null
+  }
+}
+
+export async function uploadEquipmentImage({ id, file }: EquipmentImageUpload) {
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}/image`,
+      formData,
+      { withCredentials: true }
+    )
+
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
     return null
   }
 }

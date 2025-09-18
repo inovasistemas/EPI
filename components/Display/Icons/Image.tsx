@@ -15,7 +15,6 @@ export function ImageIcon({ size, stroke, strokeWidth = 2 }: ImageIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>ImageIcon</title>
       <path
         d='M3 16l4.47-4.47a1.81 1.81 0 012.56 0L14 15.5m1.5 1.5L14 15.5m7 .5l-2.47-2.47a1.81 1.81 0 00-2.56 0L14 15.5M15.5 8a.5.5 0 000-1m0 1a.5.5 0 010-1m0 1V7'
         className={classNames(stroke, 'transition-all duration-300')}

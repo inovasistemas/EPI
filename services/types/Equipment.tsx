@@ -13,6 +13,11 @@ type EquipmentService = {
   id: string
 }
 
+type EquipmentImageUpload = {
+  id: string
+  file: File
+}
+
 type EquipmentServiceDetails = EquipmentServiceData & {
   uuid: string
   abc_classification?: string
@@ -33,7 +38,7 @@ type EquipmentServiceData = {
   manufacturer?: string
   measure?: string
   name?: string
-  picture?: string
+  picture?: string | null
   price?: number
   stock?: number
   stock_control?: boolean

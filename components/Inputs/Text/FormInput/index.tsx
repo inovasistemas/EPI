@@ -67,7 +67,7 @@ export function FormInput({
           {required && (
             <label
               htmlFor={name}
-              className='hidden peer-focus:hidden peer-placeholder-shown:block top-2 right-1 absolute px-2 text-red-500 text-base duration-300'
+              className='hidden peer-focus:hidden peer-placeholder-shown:block top-4 right-1 absolute px-2 text-[--errorLoader] text-base duration-300'
             >
               *
             </label>

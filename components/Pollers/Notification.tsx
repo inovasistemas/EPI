@@ -19,7 +19,7 @@ export function NotificationPoller() {
           ))
         }
       }
-    }, 15000)
+    }, 600000)
 
     return () => clearInterval(interval)
   }, [])

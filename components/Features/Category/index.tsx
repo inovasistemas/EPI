@@ -105,7 +105,7 @@ export function Category() {
         />
       </Modal>
       <div className='relative flex flex-col w-full h-full'>
-        <div className='flex flex-col px-6 divide-y divide-[--border] h-full overflow-y-auto'>
+        <div className='flex flex-col px-6 divide-y divide-[--border] h-full min-h-80 overflow-y-auto'>
           <div className='py-6 select-none'>
             <h2 className='font-medium text-xl leading-none'>
               Categorias e subcategorias

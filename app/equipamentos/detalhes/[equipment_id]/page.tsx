@@ -16,6 +16,7 @@ import {
   deleteEquipment,
   getEquipment,
   updateEquipment,
+  uploadEquipmentImage,
 } from '@/services/Equipment'
 import { convertMoneyBRL } from '@/utils/convert-money-brl'
 import { convertNumberDB } from '@/utils/convert-number-db'
@@ -26,11 +27,27 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { Manufacturer } from '@/components/Features/Manufacturer'
+import { Category } from '@/components/Features/Category'
+import { SelectCategories } from '@/components/Inputs/Select/Categories'
+import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
+import ImageUpload from '@/components/ImageUpload'
+
+enum menus {
+  Manufacturer,
+  Category,
+  Default,
+}
 
 const CreateEquipment: FC = () => {
+  const [categoryVersion, setCategoryVersion] = useState(0)
+  const [manufacturerVersion, setManufacturerVersion] = useState(9999)
+  const [file, setFile] = useState<File | null>(null)
+
   const router = useRouter()
   const params = useParams()
   const [createModalStatus, setCreateModalStatus] = useState(false)
+  const [activeRegisterModal, setActiveRegisterModal] = useState(menus.Default)
   const EquipmentId = Array.isArray(params.equipment_id)
     ? params.equipment_id[0]
     : params.equipment_id
@@ -41,23 +58,23 @@ const CreateEquipment: FC = () => {
     approval_certification: '',
     category: '',
     composition: '',
-    cost: 0,
+    cost: undefined,
     details: '',
     dimensions: '',
-    disposable: false,
+    disposable: true,
     ean: '',
     expiration_date: '',
     family: '',
     manufacturer: '',
     measure: '',
     name: '',
-    picture: '',
-    price: 0,
-    stock: 0,
+    picture: null,
+    price: undefined,
+    stock: undefined,
     stock_control: true,
     stock_location: '',
-    stock_maximum: 0,
-    stock_minimum: 0,
+    stock_maximum: undefined,
+    stock_minimum: undefined,
     weight: '',
     weight_measure: '',
   })
@@ -67,7 +84,35 @@ const CreateEquipment: FC = () => {
     setModalStatus(prev => !prev)
   }, [])
 
-  const handleChange = (name: string, value: string | number | boolean) => {
+  const handleActiveRegisterModal = (menu: menus) => {
+    setActiveRegisterModal(menu)
+    handleCloseCreateModal()
+  }
+
+  const handleUpload = async (id: string, fileToUpload?: File) => {
+    const fileData = fileToUpload || file
+
+    if (!fileData) {
+      toast.custom(() => <ToastError text='Selecione uma imagem' />)
+      return
+    }
+    setLoading(true)
+
+    const response = await uploadEquipmentImage({ id, file: fileData })
+
+    if (response?.status === 201) {
+      // toast.custom(() => <ToastSuccess text='Imagem salva com sucesso' />)
+    } else {
+      toast.custom(() => <ToastError text='Erro ao salvar imagem' />)
+    }
+
+    setLoading(false)
+  }
+
+  const handleChange = (
+    name: string,
+    value: string | number | boolean | null
+  ) => {
     setEquipmentData(prev => ({
       ...prev,
       [name]: value,
@@ -92,9 +137,14 @@ const CreateEquipment: FC = () => {
       loading: setLoading,
       id: Array.isArray(EquipmentId) ? EquipmentId[0] : EquipmentId || '',
       ...equipmentData,
+      picture: file ? equipmentData.picture : null,
     })
 
     if (response && response.status === 200) {
+      if (response && response.data.uuid && file) {
+        await handleUpload(response.data.uuid, file)
+      }
+
       toast.custom(() => (
         <ToastSuccess text='Equipamento atualizado com sucesso' />
       ))
@@ -118,7 +168,19 @@ const CreateEquipment: FC = () => {
 
   const handleCloseCreateModal = useCallback(() => {
     setCreateModalStatus(prev => !prev)
-  }, [])
+
+    if (createModalStatus) {
+      if (activeRegisterModal === menus.Category) {
+        setCategoryVersion(prev => prev + 1)
+      }
+
+      if (activeRegisterModal === menus.Manufacturer) {
+        setManufacturerVersion(prev => prev + 1)
+      }
+
+      setActiveRegisterModal(menus.Default)
+    }
+  }, [createModalStatus, activeRegisterModal])
 
   useEffect(() => {
     fetchEquipment()
@@ -128,12 +190,14 @@ const CreateEquipment: FC = () => {
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
         title='Categorias e subcategorias'
-        size='default'
-        showClose={true}
         isModalOpen={createModalStatus}
+        padding={false}
         handleClickOverlay={handleCloseCreateModal}
       >
-        <div className='w-full'></div>
+        <div className='-mt-6 min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
+          {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
+          {activeRegisterModal === menus.Category && <Category />}
+        </div>
       </Modal>
       <Modal
         title=''
@@ -196,7 +260,7 @@ const CreateEquipment: FC = () => {
                   strokeWidth={2.5}
                 />
               }
-              onClick={handleCloseCreateModal}
+              onClick={() => handleActiveRegisterModal(menus.Manufacturer)}
             />
 
             <SecondaryButton
@@ -208,7 +272,7 @@ const CreateEquipment: FC = () => {
                   strokeWidth={2.5}
                 />
               }
-              onClick={handleCloseCreateModal}
+              onClick={() => handleActiveRegisterModal(menus.Category)}
             />
           </div>
 
@@ -250,10 +314,18 @@ const CreateEquipment: FC = () => {
           </div> */}
         </div>
 
-        <form className='relative gap-y-10 grid w-full'>
+        <div className='relative gap-y-10 grid w-full'>
           <div className='flex flex-row gap-4 px-6 w-full'>
             <div>
-              <button
+              <ImageUpload
+                file={file}
+                setFile={setFile}
+                picture={
+                  equipmentData.picture &&
+                  `http://localhost:3333${equipmentData.picture}`
+                }
+              />
+              {/* <button
                 type='button'
                 className='flex justify-center items-center bg-[--backgroundSecondary] hover:opacity-70 border-[--border] border-2 border-dashed rounded-2xl w-32 aspect-square transition-all duration-300'
               >
@@ -262,14 +334,14 @@ const CreateEquipment: FC = () => {
                   stroke='stroke-[--buttonSecondary]'
                   strokeWidth={1.5}
                 />
-              </button>
+              </button> */}
             </div>
 
             <div className='gap-4 grid grid-cols-2 w-full'>
               <FormInput
                 name='name'
                 label='Nome'
-                required={false}
+                required={true}
                 type='text'
                 value={equipmentData.name?.toLocaleLowerCase()}
                 position='right'
@@ -309,6 +381,7 @@ const CreateEquipment: FC = () => {
                     { value: 'pct', label: 'Pacote' },
                   ]}
                   placeholder='Unidade medida'
+                  required={true}
                   onChange={(value: string) => handleChange('measure', value)}
                 />
               </div>
@@ -366,7 +439,7 @@ const CreateEquipment: FC = () => {
                       <MaskedInput
                         name='stock'
                         label='Estoque'
-                        required={false}
+                        required={true}
                         type='number'
                         value={equipmentData.stock}
                         position='right'
@@ -414,16 +487,15 @@ const CreateEquipment: FC = () => {
                     transition={{ duration: 0.3 }}
                     className='col-span-2'
                   >
-                    <SearchSelect
-                      value={equipmentData.stock_location}
+                    <FormInput
                       name='stock_location'
-                      options={[
-                        { value: 'lc1', label: 'Local 1' },
-                        { value: 'lc2', label: 'Local 2' },
-                      ]}
-                      placeholder='Localização'
-                      onChange={(value: string) =>
-                        handleChange('stock_location', value)
+                      label='Localização'
+                      required={false}
+                      type='text'
+                      value={equipmentData.stock_location}
+                      position='right'
+                      onChange={e =>
+                        handleChange('stock_location', e.target.value)
                       }
                     />
                   </motion.div>
@@ -498,36 +570,15 @@ const CreateEquipment: FC = () => {
               />
             </div>
 
-            <SearchSelect
-              value={equipmentData.category}
-              name='category'
-              options={[
-                { value: 'category1', label: 'Categoria 1' },
-                { value: 'category2', label: 'Categoria 2' },
-              ]}
-              placeholder='Categoria'
+            <SelectCategories
+              key={categoryVersion}
+              value={equipmentData.category ?? ''}
               onChange={(value: string) => handleChange('category', value)}
             />
 
-            <SearchSelect
-              value={equipmentData.family}
-              name='family'
-              options={[
-                { value: 'family1', label: 'Família 1' },
-                { value: 'family2', label: 'Família 2' },
-              ]}
-              placeholder='Família'
-              onChange={(value: string) => handleChange('family', value)}
-            />
-
-            <SearchSelect
-              value={equipmentData.manufacturer}
-              name='manufacturer'
-              options={[
-                { value: 'manufacturer1', label: 'Fabricante 1' },
-                { value: 'manufacturer2', label: 'Fabricante 2' },
-              ]}
-              placeholder='Fabricante'
+            <SelectManufacturers
+              key={manufacturerVersion}
+              value={equipmentData.manufacturer ?? ''}
               onChange={(value: string) => handleChange('manufacturer', value)}
             />
           </div>
@@ -598,7 +649,7 @@ const CreateEquipment: FC = () => {
             showDelete={true}
             onClick={handleUpdateEquipment}
           />
-        </form>
+        </div>
       </div>
     </div>
   )
