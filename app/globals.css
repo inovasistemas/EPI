@@ -438,3 +438,24 @@ input[type='number'] {
   background-color: var(--backgroundPrimary) !important;
   border: 1px solid var(--border) !important;
 }
+
+.progress-svg ellipse {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+  stroke-linecap: round;
+}
+
+@keyframes progress-ellipse {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.progress-svg ellipse {
+  animation: progress-ellipse 5s linear forwards;
+}

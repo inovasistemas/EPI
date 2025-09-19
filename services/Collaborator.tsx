@@ -190,3 +190,21 @@ export async function createCollaborator({
     return null
   }
 }
+
+export async function collaboratorFaceRecognition(image: string) {
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_HOST}/collaborators/face-recognition`,
+      { image: image },
+      { withCredentials: true }
+    )
+
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
+
+    return null
+  }
+}

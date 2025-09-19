@@ -1,6 +1,8 @@
 'use client'
 import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
 import { Modal } from '@/components/Display/Modal'
+import WebcamCapture from '@/components/FaceRecognition'
+import { useRef, useState } from 'react'
 
 type TakeoutModalProps = {
   title: string
@@ -13,36 +15,40 @@ export function TakeoutModal({
   isModalOpen,
   handleClickOverlay,
 }: TakeoutModalProps) {
+  const webcamRef = useRef<any>(null)
+
+  const handleBeforeClose = () => {
+    if (webcamRef.current?.stopWebcam) {
+      webcamRef.current.stopWebcam()
+    }
+    handleClickOverlay()
+  }
+
   return (
     <Modal
       title={title}
       isModalOpen={isModalOpen}
-      handleClickOverlay={handleClickOverlay}
+      handleClickOverlay={handleBeforeClose}
       showClose={false}
+      padding={false}
     >
-      <div>
-        <div className='relative flex justify-center items-center min-h-72'>
-          <div className='absolute'>
-            <FingerPrintIcon
-              size='size-40'
-              stroke='animate-stroke stroke-[--primaryColor] group-datta-[active=true]:stroke-[--primaryColor]'
-              strokeWidth={1}
-            />
-          </div>
-          <div className='absolute'>
-            <FingerPrintIcon
-              size='size-40'
-              stroke='stroke-[--iconPrimaryColor] group-datta-[active=true]:stroke-[--primaryColor] opacity-10'
-              strokeWidth={1}
-            />
-          </div>
-        </div>
-        <div className='flex justify-center items-center pb-6 w-full'>
-          <span className='opacity-40 text-[--iconPrimaryColor] text-lg'>
-            Aguarde a leitura da biometria...
+      <div className='flex flex-col justify-center items-center gap-3 pt-6 w-full'>
+        <h2 className='font-medium text-xl leading-none'>
+          Reconhecimento facial
+        </h2>
+        <div className='flex flex-col'>
+          <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+            Vamos utilizar uma ferramenta de reconhecimento facial para
+            confirmação da identidade.
+          </span>
+          <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+            Garanta que o rosto esteja iluminado, retire máscaras e óculos
+            escuros.
           </span>
         </div>
       </div>
+
+      <WebcamCapture ref={webcamRef} />
     </Modal>
   )
 }
