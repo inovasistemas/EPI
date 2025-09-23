@@ -14,7 +14,6 @@ import {
 import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { AddIcon } from '@/components/Display/Icons/Add'
-import { ConnectedIcon } from '@/components/Display/Icons/Connected'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { SearchIcon } from '@/components/Display/Icons/Search'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
@@ -30,9 +29,6 @@ import { toast } from 'sonner'
 import useDebounce from '@/lib/context/debounce'
 import { calcPages } from '@/utils/calc-pages'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
-import { FactoryIcon } from '@/components/Display/Icons/Factory'
-import { ConnectIcon } from '@/components/Display/Icons/Connect'
 import { CalendarIcon } from '@/components/Display/Icons/Calendar'
 
 enum EquipmentModals {

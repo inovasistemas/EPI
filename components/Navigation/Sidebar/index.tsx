@@ -1,7 +1,6 @@
 'use client'
 import { ProfilePicture } from '@/components/Display/Avatar'
 import { AlertIcon } from '@/components/Display/Icons/Alert'
-import { CalculatorIcon } from '@/components/Display/Icons/Calculator'
 import { HomeIcon } from '@/components/Display/Icons/Home'
 import { PackageIcon } from '@/components/Display/Icons/Package'
 import { UserIcon } from '@/components/Display/Icons/User'

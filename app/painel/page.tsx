@@ -1,7 +1,5 @@
 'use client'
 
-import { ChartAreaGradient } from '@/components/Chart/Small/Colaborator'
-import { SmallChartIssues } from '@/components/Chart/Small/Issues'
 import { CollaboratorTemplate } from '@/components/Chart/Template/Collaborator'
 import { EquipmentTemplate } from '@/components/Chart/Template/Equipment'
 import { MovementTemplate } from '@/components/Chart/Template/Movement'

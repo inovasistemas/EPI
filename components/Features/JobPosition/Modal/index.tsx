@@ -1,5 +1,4 @@
 import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
-import { LinkIcon } from '@/components/Display/Icons/Link'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'

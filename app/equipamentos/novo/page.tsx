@@ -1,8 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useCallback, useState } from 'react'
-import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
-import { ImageIcon } from '@/components/Display/Icons/Image'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
