@@ -32,6 +32,8 @@ import { calcPages } from '@/utils/calc-pages'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { ConnectIcon } from '@/components/Display/Icons/Connect'
+import { CalendarIcon } from '@/components/Display/Icons/Calendar'
 
 enum EquipmentModals {
   Filter,
@@ -281,6 +283,20 @@ const Equipment: FC = () => {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            <SecondaryButton
+              label='Planejar Retiradas'
+              onClick={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+              icon={
+                <CalendarIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+            />
 
             <PrimaryLink
               label='Adicionar'

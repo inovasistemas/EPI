@@ -100,9 +100,13 @@ export function LoginForm() {
         password: formData.password,
       })
 
-      setUser(formData.name, formData.permission_group)
-
       if (response && response.status === 200) {
+        setUser(
+          formData.name,
+          formData.permission_group,
+          response.data.enterprise
+        )
+
         handleChange('user_uuid', response.data.uuid)
         handleChange('permission_group', response.data.permission_group)
         handleChange(

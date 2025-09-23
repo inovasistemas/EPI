@@ -16,6 +16,7 @@ import { MenuSettings } from '@/components/Template/MenuSettings'
 import { useCallback, useState } from 'react'
 import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
 import { MoneyIcon } from '@/components/Display/Icons/Money'
+import { CalendarIcon } from '@/components/Display/Icons/Calendar'
 
 enum SearchbarCards {
   Settings,
@@ -26,6 +27,7 @@ enum SearchbarCards {
 const Sidebar: React.FC = () => {
   const isSidebarVisible = useSidebar(state => state.isSidebarVisible)
   const userName = useUser(state => state.user_name)
+  const userEnterprise = useUser(state => state.enterprise)
   const firstName = userName?.split(' ')[0]
 
   const [isCardOpen, setCardOpen] = useState(SearchbarCards.Default)
@@ -48,10 +50,10 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       data-show={isSidebarVisible}
-      className='bottom-0 z-50 fixed sm:relative flex flex-col justify-between gap-3 w-full sm:max-w-[200px] h-full font-medium transition-all duration-300'
+      className='bottom-0 z-50 fixed sm:relative sm:flex sm:flex-col justify-between gap-3 grid grid-cols-5 bg-[--backgroundSecondary] px-3 sm:px-0 w-full sm:max-w-[200px] h-full font-medium transition-all duration-300'
     >
-      <div className='flex flex-col justify-between gap-3 px-3 w-full h-full overflow-x-hidden font-medium transition-all duration-300'>
-        <div className='sm:flex sm:flex-col gap-3 sm:gap-0 grid grid-cols-2 w-full transition-all duration-300'>
+      <div className='sm:flex sm:flex-col justify-between gap-3 grid grid-cols-4 col-span-4 sm:px-3 w-full h-full overflow-x-hidden font-medium transition-all duration-300'>
+        <div className='sm:flex sm:flex-col gap-3 sm:gap-0 grid grid-cols-4 col-span-4 w-full transition-all duration-300'>
           <div
             className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
           >
@@ -71,9 +73,21 @@ const Sidebar: React.FC = () => {
               }
               href='/painel'
             />
+
+            <NavLink
+              name='Agenda'
+              icon={
+                <CalendarIcon
+                  size='size-5'
+                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                />
+              }
+              href='/agenda'
+            />
           </div>
+
           <div
-            className={`col-span-1 grid-cols-1 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+            className={`col-span-3 grid grid-cols-3 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
           >
             <GroupLabel
               isVisible={isSidebarVisible}
@@ -116,7 +130,7 @@ const Sidebar: React.FC = () => {
           </div>
 
           <div
-            className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
+            className={`col-span-1 hidden gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 ${isSidebarVisible ? 'mt-3 pt-3' : 'pt-0'}`}
           >
             <GroupLabel
               isVisible={isSidebarVisible}
@@ -148,26 +162,26 @@ const Sidebar: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className='px-3'>
+      <div className='col-span-1 sm:px-3'>
         <div
-          className={`col-span-1 grid grid-cols-1 gap-3 sm:gap-0 sm:flex sm:flex-col justify-between w-full relative transition-all duration-300 mb-3`}
+          className={`col-span-1 gap-3 sm:gap-0 justify-center max-sm:h-full max-sm:items-center flex sm:flex-col sm:justify-between w-full relative transition-all duration-300 sm:mb-3`}
         >
           <button
             onClick={handleSettingsClick}
             className={classNames(
               {
-                'bg-[--buttonPrimary]': isSidebarVisible && isCardOpen,
+                'sm:bg-[--buttonPrimary]': isSidebarVisible && isCardOpen,
                 'pl-0.5': !isSidebarVisible,
-                'bg-[--buttonSecondary]': isSidebarVisible && !isCardOpen,
+                'sm:bg-[--buttonSecondary]': isSidebarVisible && !isCardOpen,
               },
-              'overflow-x-hidden w-full flex items-center gap-2 rounded-2xl transition-all p-2'
+              'max-sm:ml-2 overflow-x-hidden sm:w-full flex items-center gap-2 rounded-2xl transition-all p-2 select-none'
             )}
           >
-            <div className='flex items-center gap-2 min-w-[152px]'>
-              <div className='w-8'>
+            <div className='flex items-center sm:gap-2 sm:min-w-[152px]'>
+              <div className='min-sm:w-8'>
                 <ProfilePicture />
               </div>
-              <div className='flex flex-col justify-start gap-1 w-full text-left'>
+              <div className='hidden sm:flex flex-col justify-start gap-1 w-full text-left'>
                 <span
                   className={classNames(
                     {
@@ -185,13 +199,13 @@ const Sidebar: React.FC = () => {
                       'opacity-50': isSidebarVisible,
                       'opacity-0': !isSidebarVisible,
                     },
-                    'font-normal text-xs leading-none transition-all'
+                    'font-normal text-xs leading-none transition-all capitalize line-clamp-1'
                   )}
                 >
-                  Inova Sistemas
+                  {userEnterprise.toLocaleLowerCase()}
                 </span>
               </div>
-              <div className='w-4'>
+              <div className='hidden sm:block w-4'>
                 <CaretUpDownIcon
                   size='size-4'
                   stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'

@@ -157,6 +157,12 @@
   user-select: none;
 }
 
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker
+  .ant-picker-input
+  > input {
+  font-size: 1rem !important;
+}
+
 .ant-picker-cell {
   padding: 1px 4px !important;
   user-select: none;

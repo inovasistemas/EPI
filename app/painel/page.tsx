@@ -82,7 +82,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
-          className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:rounded-2xl w-full h-full'
+          className='flex flex-col gap-6 bg-[--backgroundSecondary] max-sm:px-3 sm:rounded-2xl w-full h-full'
         >
           <div className='gap-6 grid sm:grid-cols-3'>
             <MovementTemplate chart={getReport('rp_001')?.graph ?? []} />

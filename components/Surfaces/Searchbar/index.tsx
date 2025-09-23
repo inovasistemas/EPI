@@ -126,18 +126,20 @@ const Searchbar: React.FC = () => {
         />
       </Modal>
       <div className='flex items-center gap-3'>
-        <NavAction
-          type='button'
-          desktop={true}
-          icon={
-            <SidebarIcon
-              size='size-5'
-              stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-            />
-          }
-          mobile={true}
-          action={toggleSidebarVisibility}
-        />
+        <div className='hidden sm:block'>
+          <NavAction
+            type='button'
+            desktop={true}
+            icon={
+              <SidebarIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            }
+            mobile={true}
+            action={toggleSidebarVisibility}
+          />
+        </div>
 
         <Logo width={70} />
       </div>

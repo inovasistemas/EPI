@@ -5,7 +5,7 @@ export function ProfilePicture() {
   const letterInitial = userName?.charAt(0).toUpperCase() || ''
 
   return (
-    <div className='hidden relative sm:flex justify-center items-center bg-[--primaryColor] bg-cover bg-no-repeat bg-center border border-[--border] rounded-full w-8 h-8 font-medium text-white select-none'>
+    <div className='relative flex justify-center items-center bg-[--primaryColor] bg-cover bg-no-repeat bg-center border border-[--border] rounded-full w-6 sm:w-8 h-6 sm:h-8 font-medium text-white select-none'>
       <span className='select-none'>{letterInitial}</span>
     </div>
   )
