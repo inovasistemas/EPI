@@ -10,6 +10,7 @@ import {
   getManufacturer,
   updateManufacturer,
 } from '@/services/Manufacturer'
+import { PermissionDeniedScreen } from '../../PermissionDenied'
 
 export function ManufacturerModal({
   manufacturer,
@@ -20,6 +21,7 @@ export function ManufacturerModal({
 }: ManufacturerModalProps) {
   const fetchedManufacturer = useRef(false)
   const [loading, setLoading] = useState(true)
+  const [hasPermission, setHasPermission] = useState(true)
   const [manufacturerData, setManufacturerData] = useState({
     id: manufacturer,
     name: '',
@@ -54,20 +56,32 @@ export function ManufacturerModal({
     if (manufacturer && manufacturer !== '') {
       const response = await getManufacturer({ id: manufacturer })
 
-      if (response && response.status === 200) {
-        const data = response.data
+      if (response) {
+        if (response.status === 200) {
+          const data = response.data
 
-        if (type === 'createManufacturer') {
-          setManufacturerData(prev => ({
-            ...prev,
-          }))
+          if (type === 'createManufacturer') {
+            setManufacturerData(prev => ({
+              ...prev,
+            }))
+          } else {
+            console.log(data)
+            setManufacturerData(prev => ({
+              ...prev,
+              name: data.name,
+            }))
+          }
+        } else if (response.status === 401) {
+          setHasPermission(false)
         } else {
-          console.log(data)
-          setManufacturerData(prev => ({
-            ...prev,
-            name: data.name,
-          }))
+          toast.custom(() => (
+            <ToastError text='Não foi possível buscar o fabricante' />
+          ))
         }
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar o fabricante' />
+        ))
       }
     }
 
@@ -81,12 +95,22 @@ export function ManufacturerModal({
         name: manufacturerData.name,
       })
 
-      if (response && response.status === 200) {
-        toast.custom(() => (
-          <ToastSuccess text='Fabricante atualizado com sucesso' />
-        ))
-        modalAction()
-        reload()
+      if (response) {
+        if (response.status === 200) {
+          toast.custom(() => (
+            <ToastSuccess text='Fabricante atualizado com sucesso' />
+          ))
+          modalAction()
+          reload()
+        } else if (response.status === 401) {
+          toast.custom(() => (
+            <ToastError text='Você não possui permissão para modificar este fabricante' />
+          )) 
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível atualizar o fabricante' />
+          ))
+        }
       } else {
         toast.custom(() => (
           <ToastError text='Não foi possível atualizar o fabricante' />
@@ -99,17 +123,28 @@ export function ManufacturerModal({
             name: manufacturerData.name,
           })
 
-          if (response && response.status === 201) {
-            toast.custom(() => (
-              <ToastSuccess text='Fabricante criado com sucesso' />
-            ))
-            modalAction()
-            reload()
+          if (response) {
+            if (response.status === 201) {
+              toast.custom(() => (
+                <ToastSuccess text='Fabricante criado com sucesso' />
+              ))
+              modalAction()
+              reload()
+            } else if (response.status === 401) {
+              toast.custom(() => (
+                <ToastError text='Você não possui permissão para criar fabricantes' />
+              )) 
+            } else {
+              toast.custom(() => (
+                <ToastError text='Não foi possível criar o fabricante. Verifique os campos obrigatórios e tente novamente' />
+              ))
+            }
           } else {
             toast.custom(() => (
               <ToastError text='Não foi possível criar o fabricante. Verifique os campos obrigatórios e tente novamente' />
             ))
           }
+          
         }
       }
     }
@@ -128,7 +163,7 @@ export function ManufacturerModal({
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      {!loading && (
+      {hasPermission && !loading && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
             <h2 className='font-medium text-xl leading-none'>{getTitle()}</h2>
@@ -190,6 +225,12 @@ export function ManufacturerModal({
             </div>
           </div>
         </>
+      )}
+      
+      {!hasPermission && (
+        <div className='mt-16'>
+          <PermissionDeniedScreen />
+        </div>
       )}
     </div>
   )

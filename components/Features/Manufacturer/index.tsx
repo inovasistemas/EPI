@@ -9,10 +9,13 @@ import { toast } from 'sonner'
 import { Dialog } from '@/components/Dialog'
 import { deleteManufacturer, getManufacturers } from '@/services/Manufacturer'
 import { ManufacturerModal } from './Modal'
+import { PermissionDeniedScreen } from '../PermissionDenied'
 
 export function Manufacturer() {
+  const [hasPermission, setHasPermission] = useState(true)
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [modalProps, setModalProps] = useState({
     manufacturer: '',
     type: '',
@@ -46,10 +49,18 @@ export function Manufacturer() {
   }
 
   const fetchManufacturers = async () => {
-    const response = await getManufacturers()
+    const response = await getManufacturers({loading: setLoading})
 
-    if (response && response.status === 200) {
-      setManufacturersData(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setManufacturersData(response.data.data)
+      } else if (response.status === 401) {
+        setHasPermission(false)
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar os fabricantes' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar os fabricantes' />
@@ -62,15 +73,24 @@ export function Manufacturer() {
   }
 
   const handleDeleteManufacturer = async () => {
-    console.log(selectedManufacturer)
     const response = await deleteManufacturer({
       id: selectedManufacturer || '',
     })
 
-    if (response && response.status === 204) {
-      fetchManufacturers()
-      handleCloseModalConfirmation()
-      handleModalStatus()
+    if (response) {
+      if (response.status === 204) {
+        fetchManufacturers()
+        handleCloseModalConfirmation()
+        handleModalStatus()
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para excluir este fabricante' />
+        )) 
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível excluir o fabricante' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível excluir o fabricante' />
@@ -125,7 +145,7 @@ export function Manufacturer() {
             </span>
           </div>
 
-          {ManufacturersData?.map((manufacturer, i) => (
+          {(hasPermission && !loading) && ManufacturersData?.map((manufacturer, i) => (
             <div
               key={manufacturer.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
@@ -166,6 +186,10 @@ export function Manufacturer() {
               </div>
             </div>
           ))}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={false} />
+          )}
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />
