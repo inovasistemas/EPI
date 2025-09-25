@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { CategoryModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { PermissionDeniedScreen } from '../PermissionDenied'
 
 export function Category() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
@@ -23,6 +24,7 @@ export function Category() {
   const fetchedCategories = useRef(false)
   const [categoriesData, setCategoriesData] = useState<CategoryType[] | null>()
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [hasPermission, setHasPermission] = useState(true)
 
   const handleClick = (id?: string, type?: string) => {
     if (!id && !type) {
@@ -43,8 +45,16 @@ export function Category() {
   const fetchCategories = async () => {
     const response = await getCategories()
 
-    if (response && response.status === 200) {
-      setCategoriesData(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setCategoriesData(response.data.data)
+      } else if (response.status === 401) {
+        setHasPermission(false)
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar as categorias' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar as categorias' />
@@ -58,11 +68,22 @@ export function Category() {
 
   const handleDeleteCategory = async () => {
     const response = await deleteCategory(selectedCategory || '')
-    if (response && response.status === 204) {
-      toast.custom(() => <ToastSuccess text='Exclusão realizada com sucesso' />)
-      fetchCategories()
-      handleCloseModalConfirmation()
-      handleModalStatus()
+
+    if (response) {
+      if (response.status === 204) {
+        toast.custom(() => <ToastSuccess text='Exclusão realizada com sucesso' />)
+        fetchCategories()
+        handleCloseModalConfirmation()
+        handleModalStatus()
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para excluir esta categoria' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível excluir a categoria' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível excluir a categoria' />
@@ -120,7 +141,7 @@ export function Category() {
             </span>
           </div>
 
-          {categoriesData?.map((category, i) => (
+          {hasPermission && categoriesData?.map((category, i) => (
             <div
               key={category.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
@@ -200,6 +221,10 @@ export function Category() {
               </div>
             </div>
           ))}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={false} />
+          )}
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />

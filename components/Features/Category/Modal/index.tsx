@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
+import { PermissionDeniedScreen } from '../../PermissionDenied'
 
 export function CategoryModal({
   category,
@@ -20,7 +21,8 @@ export function CategoryModal({
   confirmationModal,
 }: CategoryModalProps) {
   const fetchedCategory = useRef(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [hasPermission, setHasPermission] = useState(true)
   const [categoryData, setCategoryData] = useState({
     id: category,
     parentName: '',
@@ -75,29 +77,39 @@ export function CategoryModal({
 
   const fetchPermissionGroups = async () => {
     if (category && category !== '') {
-      const response = await getCategory(category)
+      const response = await getCategory({id: category, loading: setLoading})
 
-      if (response && response.status === 200) {
-        const data = response.data.data
+      if (response) {
+        if (response.status === 200) {
+          const data = response.data.data
 
-        if (type === 'createSubcategory') {
-          setCategoryData(prev => ({
-            ...prev,
-            parentName: data.name.toLocaleLowerCase(),
-          }))
+          if (type === 'createSubcategory') {
+            setCategoryData(prev => ({
+              ...prev,
+              parentName: data.name.toLocaleLowerCase(),
+            }))
+          } else {
+            setCategoryData(prev => ({
+              ...prev,
+              parentName: data.parentName
+                ? data.parentName.toLocaleLowerCase()
+                : '',
+              name: data.name,
+            }))
+          }
+        } else if (response.status === 401) {
+          setHasPermission(false)
         } else {
-          setCategoryData(prev => ({
-            ...prev,
-            parentName: data.parentName
-              ? data.parentName.toLocaleLowerCase()
-              : '',
-            name: data.name,
-          }))
+          toast.custom(() => (
+            <ToastError text='Não foi possível buscar a categoria' />
+          ))
         }
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar a categoria' />
+        ))
       }
     }
-
-    setLoading(false)
   }
 
   const handleUpdate = async () => {
@@ -109,12 +121,22 @@ export function CategoryModal({
     ) {
       const response = await updateCategory(category, categoryData.name)
 
-      if (response && response.status === 200) {
-        toast.custom(() => (
-          <ToastSuccess text='Categoria atualizada com sucesso' />
-        ))
-        modalAction()
-        reload()
+      if (response) {
+        if (response.status === 200) {
+          toast.custom(() => (
+            <ToastSuccess text='Categoria atualizada com sucesso' />
+          ))
+          modalAction()
+          reload()
+        } else if (response.status === 401) {
+          toast.custom(() => (
+            <ToastError text='Você não possui autorização para atualizar esta categoria' />
+          ))
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível atualizar a categoria. Verifique os campos obrigatórios e tente novamente' />
+          ))
+        }
       } else {
         toast.custom(() => (
           <ToastError text='Não foi possível atualizar a categoria. Verifique os campos obrigatórios e tente novamente' />
@@ -125,12 +147,22 @@ export function CategoryModal({
         if (type === 'createCategory') {
           const response = await createCategory(categoryData.name)
 
-          if (response && response.status === 201) {
-            toast.custom(() => (
-              <ToastSuccess text='Categoria criada com sucesso' />
-            ))
-            modalAction()
-            reload()
+          if (response) {
+            if (response.status === 201) {
+              toast.custom(() => (
+                <ToastSuccess text='Categoria criada com sucesso' />
+              ))
+              modalAction()
+              reload()
+            } else if (response.status === 401) {
+              toast.custom(() => (
+                <ToastError text='Você não possui autorização para excluir esta categoria' />
+              ))
+            } else {
+              toast.custom(() => (
+                <ToastError text='Não foi possível criar a categoria. Verifique os campos obrigatórios e tente novamente' />
+              ))
+            }
           } else {
             toast.custom(() => (
               <ToastError text='Não foi possível criar a categoria. Verifique os campos obrigatórios e tente novamente' />
@@ -145,12 +177,22 @@ export function CategoryModal({
               categoryData.name
             )
 
-            if (response && response.status === 201) {
-              toast.custom(() => (
-                <ToastSuccess text='Subcategoria criado com sucesso' />
-              ))
-              modalAction()
-              reload()
+            if (response) {
+              if (response.status === 201) {
+                toast.custom(() => (
+                  <ToastSuccess text='Subcategoria criado com sucesso' />
+                ))
+                modalAction()
+                reload()
+              } else if (response.status === 401) {
+                toast.custom(() => (
+                  <ToastError text='Você não possui autorização para criar esta subcategoria' />
+                ))
+              } else {
+                toast.custom(() => (
+                  <ToastError text='Não foi possível criar a subcategoria. Verifique os campos obrigatórios e tente novamente' />
+                ))
+              }
             } else {
               toast.custom(() => (
                 <ToastError text='Não foi possível criar a subcategoria. Verifique os campos obrigatórios e tente novamente' />
@@ -168,14 +210,12 @@ export function CategoryModal({
 
     if (category !== '') {
       fetchPermissionGroups()
-    } else {
-      setLoading(false)
     }
   }, [category])
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      {!loading && (
+      {hasPermission && !loading && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
             <h2 className='font-medium text-xl leading-none'>{getTitle()}</h2>
@@ -235,6 +275,12 @@ export function CategoryModal({
             </div>
           </div>
         </>
+      )}
+
+      {!hasPermission && (
+        <div className='mt-16'>
+          <PermissionDeniedScreen />
+        </div>
       )}
     </div>
   )

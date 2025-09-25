@@ -17,19 +17,23 @@ export async function getCategories() {
   }
 }
 
-export async function getCategory(id: string) {
+export async function getCategory({id, loading}: CategoryService) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/categories/${id}`,
       {
         withCredentials: true,
       }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }
