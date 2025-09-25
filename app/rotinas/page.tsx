@@ -4,7 +4,7 @@ import { LockIcon } from '@/components/Display/Icons/Lock'
 import '@leenguyen/react-flip-clock-countdown/dist/index.css';
 import { Countdown } from '@/components/Countdown';
 
-const Agenda: FC = () => {
+const Rotine: FC = () => {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
@@ -12,7 +12,7 @@ const Agenda: FC = () => {
           <div className='flex flex-row items-center gap-2'>
             <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
             <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
-              Agenda 
+              Rotinas 
             </h2>
           </div>
         </div>
@@ -22,7 +22,7 @@ const Agenda: FC = () => {
             
             <div>
               <div className="text-[--textSecondary] text-base select-none">
-                <Countdown date='2025-10-15 00:00:00' />
+                <Countdown date='2025-10-08 00:00:00' />
               </div>
             </div>
           </div>
@@ -32,4 +32,4 @@ const Agenda: FC = () => {
   )
 }
 
-export default Agenda
+export default Rotine

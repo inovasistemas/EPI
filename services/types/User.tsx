@@ -7,6 +7,11 @@ type GetUsersType = {
   page?: number
 }
 
+type GetUserType = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+  id: string
+}
+
 type CreateUserType = {
   name: string
   email: string

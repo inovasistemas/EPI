@@ -16,6 +16,7 @@ import { useCallback, useState } from 'react'
 import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
 import { MoneyIcon } from '@/components/Display/Icons/Money'
 import { CalendarIcon } from '@/components/Display/Icons/Calendar'
+import { OrbitIcon } from '@/components/Display/Icons/Orbit'
 
 enum SearchbarCards {
   Settings,
@@ -73,18 +74,17 @@ const Sidebar: React.FC = () => {
               href='/painel'
             />
 
-            <div className='hidden sm:block w-full'>
-              <NavLink
-                name='Agenda'
-                icon={
-                  <CalendarIcon
-                    size='size-5'
-                    stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                  />
-                }
-                href='/agenda'
-              />
-            </div>
+            <NavLink
+              name='Agenda'
+              icon={
+                <CalendarIcon
+                  size='size-5'
+                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                />
+              }
+              href='/agenda'
+              mobile={false}
+            />
           </div>
 
           <div
@@ -94,6 +94,18 @@ const Sidebar: React.FC = () => {
               isVisible={isSidebarVisible}
               label='Cadastro'
               showFixed={false}
+            />
+
+            <NavLink
+              name='Rotinas'
+              icon={
+                <OrbitIcon
+                  size='size-5'
+                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                />
+              }
+              href='/rotinas'
+              mobile={false}
             />
 
             <NavLink
@@ -117,6 +129,8 @@ const Sidebar: React.FC = () => {
               }
               href='/colaboradores'
             />
+
+            
 
             <NavLink
               name='Usuários'

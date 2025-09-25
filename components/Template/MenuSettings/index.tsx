@@ -13,7 +13,7 @@ export function MenuSettings() {
           icon={
             <SettingsIcon size='size-5' stroke='stroke-[--textSecondary]' />
           }
-          href='/configuracoes'
+          href='/configuracoes/dados'
         />
         <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--buttonHover] rounded-xl transition-all duration-300'>
           <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-xl font-normal whitespace-normal transition-all duration-300 select-none'>

@@ -1,5 +1,5 @@
 'use client'
-import { type FC, useCallback, useState } from 'react'
+import { type FC, useCallback, useEffect, useState } from 'react'
 import { GroupIcon } from '@/components/Display/Icons/Group'
 import { LaborIcon } from '@/components/Display/Icons/Labor'
 import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
@@ -24,6 +24,7 @@ import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { Manufacturer } from '@/components/Features/Manufacturer'
 import { Category } from '@/components/Features/Category'
+import { useParams } from 'next/navigation'
 
 enum menus {
   personalDetails,
@@ -36,6 +37,7 @@ enum menus {
 }
 
 const Settings: FC = () => {
+  const params = useParams()
   const setClearQueryParam = useClearQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
@@ -45,6 +47,10 @@ const Settings: FC = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [passwordReset, setPasswordReset] = useState(false)
   const [deleteAction, setDeleteAction] = useState(false)
+
+  const SettingsMenu = Array.isArray(params.menu_id)
+    ? params.menu_id[0]
+    : params.menu_id
 
   const handleChangeSecurityCode = (value: string) => {
     setSecurityCode(value)
@@ -103,6 +109,16 @@ const Settings: FC = () => {
       handleCloseModalAlert()
     }
   }
+
+  useEffect(()=>{
+    if (SettingsMenu === 'dados') setActiveMenu(menus.personalDetails)
+    if (SettingsMenu === 'grupo-permissões') setActiveMenu(menus.permissionGroup)
+    if (SettingsMenu === 'cargos') setActiveMenu(menus.jobPosition)
+    if (SettingsMenu === 'categorias') setActiveMenu(menus.category)
+    if (SettingsMenu === 'fabricantes') setActiveMenu(menus.manufacturer)
+    if (SettingsMenu === 'senhas') setActiveMenu(menus.security)
+    
+  }, [SettingsMenu])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>

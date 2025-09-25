@@ -38,9 +38,19 @@ const CreateOperator: FC = () => {
       permissionGroup: formData.permissionGroup,
     })
 
-    if (response && response.status === 201) {
-      toast.custom(() => <ToastSuccess text='Usuário criado com sucesso' />)
-      router.push('/usuarios')
+    if (response) {
+      if (response.status === 201) {
+        toast.custom(() => <ToastSuccess text='Usuário criado com sucesso' />)
+        router.push('/usuarios')
+      } else if (response.status === 401) { 
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para criar usuários' />
+        )) 
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível criar o usuário. Verifique os campos obrigatórios e tente novamente' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível criar o usuário. Verifique os campos obrigatórios e tente novamente' />
