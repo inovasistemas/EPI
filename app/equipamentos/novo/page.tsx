@@ -88,13 +88,23 @@ const CreateEquipment: FC = () => {
       ...equipmentData,
     })
 
-    if (response && response.status === 201) {
-      if (response && response.data.uuid && file) {
-        await handleUpload(response.data.uuid, file)
-      }
+    if (response) {
+      if (response.status === 201) {
+        if (response.data.uuid && file) {
+          await handleUpload(response.data.uuid, file)
+        }
 
-      toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
-      router.push('/equipamentos')
+        toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
+        router.push('/equipamentos')
+      } else if (response.status === 401) {
+         toast.custom(() => (
+          <ToastError text='Você não possui permissão para criar equipamentos' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível criar o equipamento. Verifique os campos obrigatórios e tente novamente' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível criar o equipamento. Verifique os campos obrigatórios e tente novamente' />

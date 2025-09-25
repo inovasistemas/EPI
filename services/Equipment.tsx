@@ -127,6 +127,7 @@ export async function updateEquipment({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
 
@@ -221,6 +222,7 @@ export async function deleteEquipment({ loading, id }: EquipmentService) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
 
