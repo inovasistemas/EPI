@@ -61,9 +61,19 @@ const CreateCollaborator: FC = () => {
       observations: formData.observations,
     })
 
-    if (response && response.status === 201) {
-      toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
-      router.push('/colaboradores')
+    if (response) {
+      if (response.status === 201) {
+        toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
+        router.push('/colaboradores')
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para criar coloboradores' />
+        )) 
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível criar o colaborador. Verifique os campos obrigatórios e tente novamente' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível criar o colaborador. Verifique os campos obrigatórios e tente novamente' />
