@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 export async function getEquipments({
-  loading,
-  q,
-  manufacturer,
-  category,
-  sortField,
-  sortOrder,
-  page = 1,
-}: EquipmentsService) {
+                                      loading,
+                                      q,
+                                      manufacturer,
+                                      category,
+                                      sortField,
+                                      sortOrder,
+                                      page = 1,
+                                    }: EquipmentsService) {
   try {
     loading(true)
 
@@ -24,13 +24,14 @@ export async function getEquipments({
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments`,
-      { params, withCredentials: true }
+      { params, withCredentials: true },
     )
 
     loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
 
@@ -45,7 +46,7 @@ export async function getEquipment({ loading, id }: EquipmentService) {
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
 
     loading(false)
@@ -61,32 +62,32 @@ export async function getEquipment({ loading, id }: EquipmentService) {
 }
 
 export async function updateEquipment({
-  loading,
-  id,
-  additional_code,
-  approval_certification,
-  category,
-  composition,
-  cost,
-  details,
-  dimensions,
-  disposable,
-  ean,
-  expiration_date,
-  family,
-  manufacturer,
-  measure,
-  name,
-  picture,
-  price,
-  stock,
-  stock_control,
-  stock_location,
-  stock_maximum,
-  stock_minimum,
-  weight,
-  weight_measure,
-}: UpdateEquipmentService) {
+                                        loading,
+                                        id,
+                                        additional_code,
+                                        approval_certification,
+                                        category,
+                                        composition,
+                                        cost,
+                                        details,
+                                        dimensions,
+                                        disposable,
+                                        ean,
+                                        expiration_date,
+                                        family,
+                                        manufacturer,
+                                        measure,
+                                        name,
+                                        picture,
+                                        price,
+                                        stock,
+                                        stock_control,
+                                        stock_location,
+                                        stock_maximum,
+                                        stock_minimum,
+                                        weight,
+                                        weight_measure,
+                                      }: UpdateEquipmentService) {
   try {
     loading(true)
     const data: EquipmentServiceData = {}
@@ -119,7 +120,7 @@ export async function updateEquipment({
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}`,
       data,
-      { withCredentials: true }
+      { withCredentials: true },
     )
 
     loading(false)
@@ -135,31 +136,31 @@ export async function updateEquipment({
 }
 
 export async function createEquipment({
-  loading,
-  additional_code,
-  approval_certification,
-  category,
-  composition,
-  cost,
-  details,
-  dimensions,
-  disposable,
-  ean,
-  expiration_date,
-  family,
-  manufacturer,
-  measure,
-  name,
-  picture,
-  price,
-  stock,
-  stock_control,
-  stock_location,
-  stock_maximum,
-  stock_minimum,
-  weight,
-  weight_measure,
-}: CreateEquipmentService) {
+                                        loading,
+                                        additional_code,
+                                        approval_certification,
+                                        category,
+                                        composition,
+                                        cost,
+                                        details,
+                                        dimensions,
+                                        disposable,
+                                        ean,
+                                        expiration_date,
+                                        family,
+                                        manufacturer,
+                                        measure,
+                                        name,
+                                        picture,
+                                        price,
+                                        stock,
+                                        stock_control,
+                                        stock_location,
+                                        stock_maximum,
+                                        stock_minimum,
+                                        weight,
+                                        weight_measure,
+                                      }: CreateEquipmentService) {
   try {
     loading(true)
     const data: EquipmentServiceData = {}
@@ -192,7 +193,7 @@ export async function createEquipment({
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments`,
       data,
-      { withCredentials: true }
+      { withCredentials: true },
     )
 
     loading(false)
@@ -213,7 +214,7 @@ export async function deleteEquipment({ loading, id }: EquipmentService) {
 
     const response = await axios.delete(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
 
     loading(false)
@@ -236,7 +237,7 @@ export async function uploadEquipmentImage({ id, file }: EquipmentImageUpload) {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}/image`,
       formData,
-      { withCredentials: true }
+      { withCredentials: true },
     )
 
     return response

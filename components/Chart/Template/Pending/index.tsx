@@ -1,16 +1,20 @@
 import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import { SmallChartIssues } from '../../Small/Issues'
+import classNames from 'classnames'
+import { LockIcon } from '@/components/Display/Icons/Lock'
 
 type PendingTemplateProps = {
   equipment: string
   withdrawn: number
   notwithdrawn: number
+  show: boolean
 }
 
 export function PendingTemplate({
   equipment,
   withdrawn,
   notwithdrawn,
+  show
 }: PendingTemplateProps) {
   const calcPercent = (a: number, total: number) => {
     if (total === 0) return '0%'
@@ -31,12 +35,30 @@ export function PendingTemplate({
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
         </span>
       </div>
-      <SmallChartIssues
-        equipment={equipment}
-        withdrawn={withdrawn}
-        notwithdrawn={notwithdrawn}
-      />
-      <div className='flex flex-col gap-4 px-1 w-full'>
+
+      {!show && 
+        <>
+        <div className="top-0 left-0 absolute flex justify-center items-center w-full h-full">
+          <div className="flex items-center gap-2">
+            <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
+            <div>
+              <div className="text-[--textSecondary] text-base select-none">Acesso não permitido
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='z-50 absolute w-full h-full'></div>
+        </>
+      }
+
+      <div className={classNames({ 'blur-sm select-none opacity-60': !show}, ['relative col-span-2 w-full'])}>
+        <SmallChartIssues
+          equipment={equipment}
+          withdrawn={withdrawn}
+          notwithdrawn={notwithdrawn}
+        />
+      </div>
+      <div className={classNames({ 'blur-sm select-none opacity-60': !show}, ['flex flex-col gap-4 px-1 w-full'])}>
         <div className='flex justify-between items-center pr-1 w-full h-5 select-none'>
           <div className='flex items-center gap-2 h-full'>
             <span className='bg-[--primaryColor] rounded-full w-1 h-full'></span>

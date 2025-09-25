@@ -73,16 +73,18 @@ const Sidebar: React.FC = () => {
               href='/painel'
             />
 
-            <NavLink
-              name='Agenda'
-              icon={
-                <CalendarIcon
-                  size='size-5'
-                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                />
-              }
-              href='/agenda'
-            />
+            <div className='hidden sm:block w-full'>
+              <NavLink
+                name='Agenda'
+                icon={
+                  <CalendarIcon
+                    size='size-5'
+                    stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                  />
+                }
+                href='/agenda'
+              />
+            </div>
           </div>
 
           <div
@@ -216,7 +218,7 @@ const Sidebar: React.FC = () => {
           <MenuCard
             handleClickOverlay={handleClickOverlay}
             isMenuOpen={isCardOpen === SearchbarCards.Settings}
-            position='bottom-full left-1/2'
+            position='bottom-full right-0 sm:left-1/2'
             margin='mb-2'
             width='min-w-72'
             zIndex='z-[60]'

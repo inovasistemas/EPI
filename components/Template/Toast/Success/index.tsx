@@ -7,10 +7,10 @@ type ToastSuccessType = {
 
 export function ToastSuccess({ text }: ToastSuccessType) {
   return (
-    <div className='flex items-center gap-2 bg-[--backgroundPrimary] shadow-lg p-4 border border-[--outlinePrimary] rounded-2xl'>
-      <CheckIcon size='size-5' stroke='stroke-[--chartGreen]' />
+    <div className='flex items-center gap-2 bg-[#008635] shadow-lg p-3 border border-[--outlinePrimary] rounded-2xl'>
+      <CheckIcon size='size-5' stroke='stroke-white' />
       <div>
-        <div className='text-[--textSecondary] text-sm select-none'>{text}</div>
+        <div className='text-white text-sm select-none'>{text}</div>
       </div>
     </div>
   )

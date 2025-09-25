@@ -6,7 +6,7 @@ export async function getPermissionGroups() {
       `${process.env.NEXT_PUBLIC_API_HOST}/permission-groups`,
       {
         withCredentials: true,
-      }
+      },
     )
     return response
   } catch (error: unknown) {
@@ -18,13 +18,13 @@ export async function getPermissionGroups() {
 }
 
 export async function getUsers({
-  loading,
-  q,
-  permissionGroup,
-  sortField,
-  sortOrder,
-  page = 1,
-}: GetUsersType) {
+                                 loading,
+                                 q,
+                                 permissionGroup,
+                                 sortField,
+                                 sortOrder,
+                                 page = 1,
+                               }: GetUsersType) {
   try {
     loading(true)
     const params: Record<string, any> = {
@@ -38,12 +38,13 @@ export async function getUsers({
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/users`,
-      { params, withCredentials: true }
+      { params, withCredentials: true },
     )
     loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
     loading(false)
@@ -55,7 +56,7 @@ export async function getUser(id: string) {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     return response
   } catch (error: unknown) {
@@ -70,7 +71,7 @@ export async function getUserMe() {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me`,
-      { withCredentials: true }
+      { withCredentials: true },
     )
     return response
   } catch (error: unknown) {
@@ -82,11 +83,11 @@ export async function getUserMe() {
 }
 
 export async function createUser({
-  name,
-  email,
-  password,
-  permissionGroup,
-}: CreateUserType) {
+                                   name,
+                                   email,
+                                   password,
+                                   permissionGroup,
+                                 }: CreateUserType) {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_HOST}/users`,
@@ -98,7 +99,7 @@ export async function createUser({
       },
       {
         withCredentials: true,
-      }
+      },
     )
     return response
   } catch (error: unknown) {
@@ -110,12 +111,12 @@ export async function createUser({
 }
 
 export async function updateUser({
-  id,
-  name,
-  email,
-  password,
-  permissionGroup,
-}: UpdateUserType) {
+                                   id,
+                                   name,
+                                   email,
+                                   password,
+                                   permissionGroup,
+                                 }: UpdateUserType) {
   try {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
@@ -127,7 +128,7 @@ export async function updateUser({
       },
       {
         withCredentials: true,
-      }
+      },
     )
     return response
   } catch (error: unknown) {
@@ -139,10 +140,10 @@ export async function updateUser({
 }
 
 export async function updateUserMePassword({
-  code,
-  oldPassword,
-  password,
-}: UpdateUserMePasswordType) {
+                                             code,
+                                             oldPassword,
+                                             password,
+                                           }: UpdateUserMePasswordType) {
   try {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me/password`,
@@ -153,7 +154,7 @@ export async function updateUserMePassword({
       },
       {
         withCredentials: true,
-      }
+      },
     )
     return response
   } catch (error: unknown) {
@@ -170,7 +171,7 @@ export async function deleteUser(id: string) {
       `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
       {
         withCredentials: true,
-      }
+      },
     )
     return response
   } catch (error: unknown) {

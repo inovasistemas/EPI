@@ -5,17 +5,16 @@ import { EquipmentTemplate } from '@/components/Chart/Template/Equipment'
 import { MovementTemplate } from '@/components/Chart/Template/Movement'
 import { PendingTemplate } from '@/components/Chart/Template/Pending'
 import { UserTemplate } from '@/components/Chart/Template/User'
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { getSummaryReports } from '@/services/Report'
 import { motion } from 'framer-motion'
-import { Move } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 type Report = {
   code: string
   title: string
+  show: boolean
   graph: any
 }
 
@@ -83,11 +82,12 @@ export default function Home() {
           className='flex flex-col gap-6 bg-[--backgroundSecondary] max-sm:px-3 sm:rounded-2xl w-full h-full'
         >
           <div className='gap-6 grid sm:grid-cols-3'>
-            <MovementTemplate chart={getReport('rp_001')?.graph ?? []} />
+            <MovementTemplate chart={getReport('rp_001')?.graph ?? []} show={getReport('rp_001')?.show ?? false} />
             <PendingTemplate
               equipment={getReport('rp_002')?.graph.equipment ?? ''}
               withdrawn={getReport('rp_002')?.graph.withdrawn ?? ''}
               notwithdrawn={getReport('rp_002')?.graph.notwithdrawn ?? ''}
+              show={getReport('rp_002')?.show ?? false}
             />
           </div>
 
