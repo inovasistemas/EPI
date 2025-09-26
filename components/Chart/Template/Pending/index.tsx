@@ -2,6 +2,7 @@ import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import { SmallChartIssues } from '../../Small/Issues'
 import classNames from 'classnames'
 import { LockIcon } from '@/components/Display/Icons/Lock'
+import { Countdown } from '@/components/Countdown'
 
 type PendingTemplateProps = {
   equipment: string
@@ -25,7 +26,7 @@ export function PendingTemplate({
   return (
     <button
       type='button'
-      className='group relative flex flex-col justify-between items-start bg-[--backgroundPrimary] p-3 rounded-2xl w-full transition-all duration-300'
+      className='group relative flex flex-col justify-between items-start bg-[--backgroundPrimary] p-3 rounded-2xl w-full transition-all duration-300 cursor-default'
     >
       <div className='flex justify-between items-start px-1 w-full'>
         <h3 className='font-medium text-base select-none'>
@@ -40,10 +41,8 @@ export function PendingTemplate({
         <>
         <div className="top-0 left-0 absolute flex justify-center items-center w-full h-full">
           <div className="flex items-center gap-2">
-            <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
-            <div>
-              <div className="text-[--textSecondary] text-base select-none">Acesso não permitido
-              </div>
+            <div className='mt-6 scale-[.60]'>
+              <Countdown date={'2025-10-22 00:00:00'} />
             </div>
           </div>
         </div>

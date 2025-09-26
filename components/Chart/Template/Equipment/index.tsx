@@ -18,7 +18,7 @@ export function EquipmentTemplate({
   return (
     <button
       type='button'
-      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
+      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-default select-none'
     >
       <div className='flex flex-row justify-between items-start w-full'>
         <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col justify-start items-start w-full'])}>
@@ -54,7 +54,7 @@ export function EquipmentTemplate({
         </div>
         <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
           <span className='font-semibold text-sm'>{pending}</span>
-          <span className='text-sm'>devoluções pendentes</span>
+          <span className='text-sm'>devoluç{pending !== 1 ? 'ões' : 'ão'} pendente{pending !== 1 ? 's' : ''}</span>
         </div>
       </div>
     </button>

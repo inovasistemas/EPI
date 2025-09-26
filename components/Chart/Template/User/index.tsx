@@ -13,7 +13,7 @@ export function UserTemplate({ count, updated, deleted, show }: UserTemplateProp
   return (
     <button
       type='button'
-      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
+      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-default select-none'
     >
       <div className='flex flex-row justify-between items-start w-full'>
         <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col justify-start items-start w-full'])}>
@@ -45,12 +45,12 @@ export function UserTemplate({ count, updated, deleted, show }: UserTemplateProp
       <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col gap-1 w-full'])}>
         <div className='flex flex-row justify-start items-center gap-1 w-full'>
           <span className='font-semibold text-sm'>{updated}</span>
-          <span className='text-sm'>registros alterados pelo financeiro</span>
+          <span className='text-sm'>registro{updated !== 1 ? 's' : ''} alterado{updated !== 1 ? 's' : ''}</span>
         </div>
         <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
           <span className='font-semibold text-sm'>{deleted}</span>
           <span className='text-sm'>
-            registros excluídos pelo administrador
+            registro{deleted !== 1 ? 's' : ''} excluído{deleted !== 1 ? 's' : ''}
           </span>
         </div>
       </div>
