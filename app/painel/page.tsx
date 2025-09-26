@@ -96,16 +96,19 @@ export default function Home() {
               count={getReport('rp_003')?.graph.equipments ?? ''}
               expired={getReport('rp_003')?.graph.expired ?? ''}
               pending={getReport('rp_003')?.graph.pending_return ?? ''}
+              show={getReport('rp_003')?.show ?? false}
             />
             <UserTemplate
               count={getReport('rp_004')?.graph.users ?? ''}
               updated={getReport('rp_004')?.graph.updated ?? ''}
               deleted={getReport('rp_004')?.graph.deleted ?? ''}
+              show={getReport('rp_004')?.show ?? false}
             />
             <CollaboratorTemplate
               count={getReport('rp_005')?.graph.collaborators ?? ''}
               active={getReport('rp_005')?.graph.active ?? ''}
               away={getReport('rp_005')?.graph.withdrawn ?? ''}
+              show={getReport('rp_005')?.show ?? false}
             />
           </div>
         </motion.div>
