@@ -421,6 +421,35 @@ const CreateEquipment: FC = () => {
                       { value: 'un', label: 'Unidade' },
                       { value: 'cx', label: 'Caixa' },
                       { value: 'pct', label: 'Pacote' },
+                      { value: 'kit', label: 'Kit' },
+                      { value: 'par', label: 'Par' },
+                      { value: 'dz', label: 'Dúzia' },
+                      { value: 'rl', label: 'Rolo' },
+                      { value: 'fr', label: 'Frasco' },
+                      { value: 'gl', label: 'Galão' },
+                      { value: 'lt', label: 'Lata' },
+                      { value: 'sc', label: 'Saco' },
+                      { value: 'amp', label: 'Ampola' },
+                      { value: 'tb', label: 'Tubete' },
+                      { value: 'bl', label: 'Blister' },
+                      { value: 'ctl', label: 'Cartela' },
+                      { value: 'md', label: 'Módulo' },
+                      { value: 'm', label: 'Metro' },
+                      { value: 'bob', label: 'Bobina' },
+                      { value: 'fl', label: 'Folha' },
+                      { value: 'ctn', label: 'Contentor' },
+                      { value: 'cxm', label: 'Caçamba' },
+                      { value: 'jg', label: 'Jogo' },
+                      { value: 'pç', label: 'Peça' },
+                      { value: 'sr', label: 'Seringa' },
+                      { value: 'cxk', label: 'Caixa (Kit)' },
+                      { value: 'bld', label: 'Balde' },
+                      { value: 'barr', label: 'Barrica' },
+                      { value: 'cp', label: 'Cápsula' },
+                      { value: 'en', label: 'Envelope' },
+                      { value: 'pa', label: 'Pallet' },
+                      { value: 'ct', label: 'Cartucho' },
+                      { value: 'ctg', label: 'Cartucho (Gás)' },
                     ]}
                     placeholder='Unidade medida'
                     required={true}
@@ -563,7 +592,7 @@ const CreateEquipment: FC = () => {
                     </motion.div>
 
                     <motion.div
-                      className='col-span-2'
+                      className='col-span-3'
                       key='weight'
                       layout
                       initial={{ opacity: 0, x: 0 }}
@@ -571,8 +600,8 @@ const CreateEquipment: FC = () => {
                       exit={{ opacity: 0, x: 50 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className='gap-4 grid grid-cols-3'>
-                        <div className='col-span-2'>
+                      <div className='gap-4 grid grid-cols-2'>
+                        <div className='col-span-1'>
                           <FormInput
                             name='weight'
                             label='Peso'
@@ -588,8 +617,21 @@ const CreateEquipment: FC = () => {
                           value={equipmentData.weight_measure}
                           name='weight_measure'
                           options={[
-                            { value: 'kg', label: 'Kg' },
-                            { value: 'lb', label: 'Lb' },
+                            { value: 'kg', label: 'Quilograma (kg)' },
+                            { value: 'g', label: 'Grama (g)' },
+                            { value: 'mg', label: 'Miligrama (mg)' },
+                            { value: 't', label: 'Tonelada (t)' },
+                            { value: 'lb', label: 'Libra (lb)' },
+                            { value: 'oz', label: 'Onça (oz)' },
+                            { value: 'ct', label: 'Quilate (ct)' },
+                            { value: 'ug', label: 'Micrograma (µg)' },
+                            { value: 'dg', label: 'Decigrama (dg)' },
+                            { value: 'hg', label: 'Hectograma (hg)' },
+                            { value: 'st', label: 'Stone (st)' },
+                            { value: 'mt', label: 'Métrica Tona (t)' },
+                            { value: 'lt', label: 'Long Ton (ton longa)' },
+                            { value: 'swt', label: 'Short Ton (ton curta)' },
+                            { value: 'dr', label: 'Dram (dr)' }
                           ]}
                           placeholder='Medida'
                           onChange={(value: string) =>
@@ -617,6 +659,17 @@ const CreateEquipment: FC = () => {
                 value={equipmentData.category ?? ''}
                 onChange={(value: string) => handleChange('category', value)}
               />
+
+              {/* <SearchSelect
+                value={equipmentData.family}
+                name='subcategory'
+                options={[
+                  { value: 'family1', label: 'Família 1' },
+                  { value: 'family2', label: 'Família 2' },
+                ]}
+                placeholder='Subcategoria'
+                onChange={(value: string) => handleChange('family', value)}
+              /> */}
 
               <SelectManufacturers
                 key={manufacturerVersion}

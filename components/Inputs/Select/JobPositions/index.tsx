@@ -10,6 +10,7 @@ export function SelectJobPositions({
   onChange,
 }: SelectJobPositionsProps) {
   const fetchedJobPositions = useRef(false)
+  const [loading, setLoading] = useState(false)
   const [jobPositionsData, setJobPositionsData] = useState([
     {
       uuid: '',
@@ -21,7 +22,7 @@ export function SelectJobPositions({
   ])
 
   const fetchJobPositions = async () => {
-    const response = await getJobPositions()
+    const response = await getJobPositions({loading: setLoading})
 
     if (response && response.status === 200) {
       setJobPositionsData(response.data.data)

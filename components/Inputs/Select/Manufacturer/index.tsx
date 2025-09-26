@@ -10,6 +10,7 @@ export function SelectManufacturers({
   onChange,
 }: SelectManufacturersProps) {
   const fetchedManufacturers = useRef(false)
+  const [loading, setLoading] = useState(false)
   const [ManufacturersData, setManufacturersData] = useState([
     {
       uuid: '',
@@ -21,7 +22,7 @@ export function SelectManufacturers({
   ])
 
   const fetchManufacturers = async () => {
-    const response = await getManufacturers()
+    const response = await getManufacturers({loading: setLoading})
 
     if (response && response.status === 200) {
       setManufacturersData(response.data.data)

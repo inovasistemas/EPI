@@ -44,7 +44,7 @@ export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
   }
 
   const fetchJobPositions = async () => {
-    const response = await getJobPositions()
+    const response = await getJobPositions({loading: setLoading})
 
     if (response && response.status === 200) {
       const data = response.data
