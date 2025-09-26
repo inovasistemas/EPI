@@ -129,7 +129,7 @@ const CreateEquipment: FC = () => {
       if (response) {
         if (response.status === 200) {
           setEquipmentData(response.data[0])
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           setHasPermission(false)
         } else {
           toast.custom(() => (
@@ -162,7 +162,7 @@ const CreateEquipment: FC = () => {
         toast.custom(() => (
           <ToastSuccess text='Equipamento atualizado com sucesso' />
         ))
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
@@ -189,7 +189,7 @@ const CreateEquipment: FC = () => {
     if (response) {
       if (response.status === 204) {
         router.push('/equipamentos')
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 

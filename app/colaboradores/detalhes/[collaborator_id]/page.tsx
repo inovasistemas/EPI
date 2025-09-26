@@ -91,7 +91,7 @@ const CollaboratorDetails: FC = () => {
       if (response) {
         if (response.status === 200) {
           setCollaborator(response.data)
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           setHasPermission(false)
         } else {
           toast.custom(() => (
@@ -137,7 +137,7 @@ const CollaboratorDetails: FC = () => {
         toast.custom(() => (
           <ToastSuccess text='Colaborador atualizado com sucesso' />
         ))
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
@@ -164,7 +164,7 @@ const CollaboratorDetails: FC = () => {
     if (response) {
       if (response.status === 204) {
         router.push('/colaboradores')
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 

@@ -72,7 +72,7 @@ const OperatorDetails: FC = () => {
     if (response) {
       if (response.status === 200) {
         toast.custom(() => <ToastSuccess text='Usuário atualizado com sucesso' />)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
@@ -94,7 +94,7 @@ const OperatorDetails: FC = () => {
     if (response) {
       if (response.status === 204) {
         router.push('/usuarios')
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
@@ -121,7 +121,7 @@ const OperatorDetails: FC = () => {
         if (response) {
           if (response.status === 200) {
             setOperatorData(response.data[0])
-          } else if (response.status === 401) {
+          } else if (response.status === 403) {
             setHasPermission(false)
           }
         } else {

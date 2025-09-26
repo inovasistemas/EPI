@@ -50,7 +50,7 @@ export function JobPosition() {
         fetchJobPositions()
         handleCloseModalConfirmation()
         handleModalStatus()
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         ))
@@ -68,7 +68,7 @@ export function JobPosition() {
     if (response) {
       if (response.status === 200) {
         setJobPositionsData(response.data.data)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         setHasPermission(false)
       } else {
         toast.custom(() => (

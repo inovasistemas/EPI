@@ -48,7 +48,7 @@ export function Category() {
     if (response) {
       if (response.status === 200) {
         setCategoriesData(response.data.data)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         setHasPermission(false)
       } else {
         toast.custom(() => (
@@ -75,7 +75,7 @@ export function Category() {
         fetchCategories()
         handleCloseModalConfirmation()
         handleModalStatus()
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         ))

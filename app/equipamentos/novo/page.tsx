@@ -99,7 +99,7 @@ const CreateEquipment: FC = () => {
 
         toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
         router.push('/equipamentos')
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
          toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         ))

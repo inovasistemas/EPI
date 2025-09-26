@@ -126,7 +126,7 @@ const Operator: FC = () => {
         handlePageSettings('numberOfDocuments', response.data.total)
         handlePageSettings('numberPerPage', response.data.per_page)
         setUsers(response.data.data)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         setHasPermission(false)
       } else {
         toast.custom(() => (

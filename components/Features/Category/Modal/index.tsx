@@ -97,7 +97,7 @@ export function CategoryModal({
               name: data.name,
             }))
           }
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           setHasPermission(false)
         } else {
           toast.custom(() => (
@@ -128,7 +128,7 @@ export function CategoryModal({
           ))
           modalAction()
           reload()
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           toast.custom(() => (
             <ToastError text='Você não possui permissão para esta ação' />
           ))
@@ -154,7 +154,7 @@ export function CategoryModal({
               ))
               modalAction()
               reload()
-            } else if (response.status === 401) {
+            } else if (response.status === 403) {
               toast.custom(() => (
                 <ToastError text='Você não possui permissão para esta ação' />
               ))
@@ -184,7 +184,7 @@ export function CategoryModal({
                 ))
                 modalAction()
                 reload()
-              } else if (response.status === 401) {
+              } else if (response.status === 403) {
                 toast.custom(() => (
                   <ToastError text='Você não possui permissão para esta ação' />
                 ))

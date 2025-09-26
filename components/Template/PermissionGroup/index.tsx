@@ -60,7 +60,7 @@ export function PermissionGroup({
     if (response) {
       if (response.status === 200) {
         setPermissionGroups(response.data.data)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         setHasPermission(false)
       } else {
         toast.custom(() => (
@@ -80,7 +80,7 @@ export function PermissionGroup({
     if (response) {
       if (response.status === 200) {
         setPermissionGroups(response.data.data)
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para buscar os grupos de permissões' />
         ))
@@ -109,7 +109,7 @@ export function PermissionGroup({
           toast.custom(() => (
             <ToastSuccess text='Grupo de permissões atualizado com sucesso' />
           ))
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           toast.custom(() => (
             <ToastError text='Você não possui permissão para esta ação' />
           ))
@@ -135,7 +135,7 @@ export function PermissionGroup({
             <ToastSuccess text='Grupo de permissões criado com sucesso' />
           ))
           modalStatus()
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           toast.custom(() => (
             <ToastError text='Você não possui permissão para esta ação' />
           ))

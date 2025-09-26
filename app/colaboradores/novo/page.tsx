@@ -67,7 +67,7 @@ const CreateCollaborator: FC = () => {
       if (response.status === 201) {
         toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
         router.push('/colaboradores')
-      } else if (response.status === 401) {
+      } else if (response.status === 403) {
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 

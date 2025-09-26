@@ -103,7 +103,7 @@ export function SectorModal({
             }))
             setIsOn(data.inherit)
           }
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           setHasPermission(false)
         } else {
           toast.custom(() => (
@@ -134,7 +134,7 @@ export function SectorModal({
           toast.custom(() => <ToastSuccess text='Setor atualizado com sucesso' />)
           modalAction()
           reload()
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
           toast.custom(() => (
             <ToastError text='Você não possui permissão para esta ação' />
           ))
@@ -158,7 +158,7 @@ export function SectorModal({
               toast.custom(() => <ToastSuccess text='Setor criado com sucesso' />)
               modalAction()
               reload()
-            } else if (response.status === 401) {
+            } else if (response.status === 403) {
               toast.custom(() => (
                 <ToastError text='Você não possui permissão para esta ação' />
               ))
@@ -189,7 +189,7 @@ export function SectorModal({
                 ))
                 modalAction()
                 reload()
-              } else if (response.status === 401) {
+              } else if (response.status === 403) {
                 toast.custom(() => (
                   <ToastError text='Você não possui permissão para esta ação' />
                 ))
