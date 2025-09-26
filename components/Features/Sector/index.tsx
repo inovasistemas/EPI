@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { SectorModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { PermissionDeniedScreen } from '../PermissionDenied'
 
 export function Sector() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
@@ -23,6 +24,8 @@ export function Sector() {
   const fetchedSectors = useRef(false)
   const [sectorsData, setSectorsData] = useState<SectorType[] | null>()
   const [selectedSector, setSelectedSector] = useState('')
+  const [hasPermission, setHasPermission] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const handleClick = (id?: string, type?: string) => {
     if (!id && !type) {
@@ -43,8 +46,14 @@ export function Sector() {
   const fetchSectors = async () => {
     const response = await getSectors()
 
-    if (response && response.status === 200) {
-      setSectorsData(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setSectorsData(response.data.data)
+      } else if (response.status === 401) {
+        setHasPermission(false)
+      } else {
+        toast.custom(() => <ToastError text='Não foi possível buscar setores' />)
+      }
     } else {
       toast.custom(() => <ToastError text='Não foi possível buscar setores' />)
     }
@@ -57,11 +66,19 @@ export function Sector() {
   const handleDeleteSector = async () => {
     const response = await deleteSector(selectedSector || '')
 
-    if (response && response.status === 204) {
-      toast.custom(() => <ToastSuccess text='Exclusão realizada com sucesso' />)
-      fetchSectors()
-      handleCloseModalConfirmation()
-      handleModalStatus()
+    if (response) {
+      if (response.status === 204) {
+        toast.custom(() => <ToastSuccess text='Exclusão realizada com sucesso' />)
+        fetchSectors()
+        handleCloseModalConfirmation()
+        handleModalStatus()
+      } else if (response.status === 401) { 
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para excluir este setor' />
+        ))
+      } else {
+        toast.custom(() => <ToastError text='Não foi possível excluir o setor' />)
+      }
     } else {
       toast.custom(() => <ToastError text='Não foi possível excluir o setor' />)
     }
@@ -117,7 +134,7 @@ export function Sector() {
             </span>
           </div>
 
-          {sectorsData?.map((sector, i) => (
+          {hasPermission && sectorsData?.map((sector, i) => (
             <div
               key={sector.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
@@ -197,6 +214,10 @@ export function Sector() {
               </div>
             </div>
           ))}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={false} />
+          )}
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />

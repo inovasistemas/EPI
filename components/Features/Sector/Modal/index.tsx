@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
+import { PermissionDeniedScreen } from '../../PermissionDenied'
 
 export function SectorModal({
   sector,
@@ -20,7 +21,8 @@ export function SectorModal({
   confirmationModal,
 }: SectorModalProps) {
   const fetchedSector = useRef(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [hasPermission, setHasPermission] = useState(true)
   const [sectorData, setSectorData] = useState({
     id: sector,
     parentName: '',
@@ -80,26 +82,38 @@ export function SectorModal({
     if (sector && sector !== '') {
       const response = await getSector(sector)
 
-      if (response && response.status === 200) {
-        const data = response.data.data
+      if (response) {
+        if (response.status === 200) {
+          const data = response.data.data
 
-        if (type === 'createSubsector') {
-          setSectorData(prev => ({
-            ...prev,
-            parentName: data.name.toLocaleLowerCase(),
-          }))
-          setIsOn(data.inherit)
+          if (type === 'createSubsector') {
+            setSectorData(prev => ({
+              ...prev,
+              parentName: data.name.toLocaleLowerCase(),
+            }))
+            setIsOn(data.inherit)
+          } else {
+            setSectorData(prev => ({
+              ...prev,
+              parentName: data.parentName
+                ? data.parentName.toLocaleLowerCase()
+                : '',
+              name: data.name,
+              inherit: data.inherit,
+            }))
+            setIsOn(data.inherit)
+          }
+        } else if (response.status === 401) {
+          setHasPermission(false)
         } else {
-          setSectorData(prev => ({
-            ...prev,
-            parentName: data.parentName
-              ? data.parentName.toLocaleLowerCase()
-              : '',
-            name: data.name,
-            inherit: data.inherit,
-          }))
-          setIsOn(data.inherit)
+          toast.custom(() => (
+            <ToastError text='Não foi possível buscar o setor' />
+          ))
         }
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar o setor' />
+        ))
       }
     }
 
@@ -115,10 +129,20 @@ export function SectorModal({
     ) {
       const response = await updateSector(sector, sectorData.name, isOn)
 
-      if (response && response.status === 200) {
-        toast.custom(() => <ToastSuccess text='Setor atualizado com sucesso' />)
-        modalAction()
-        reload()
+      if (response) {
+        if (response.status === 200) {
+          toast.custom(() => <ToastSuccess text='Setor atualizado com sucesso' />)
+          modalAction()
+          reload()
+        } else if (response.status === 401) {
+          toast.custom(() => (
+            <ToastError text='Você não possui permissão para modificar este setor' />
+          ))
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível atualizar setor' />
+          ))
+        }
       } else {
         toast.custom(() => (
           <ToastError text='Não foi possível atualizar setor' />
@@ -129,10 +153,20 @@ export function SectorModal({
         if (type === 'createSector') {
           const response = await createSector(sectorData.name)
 
-          if (response && response.status === 201) {
-            toast.custom(() => <ToastSuccess text='Setor criado com sucesso' />)
-            modalAction()
-            reload()
+          if (response) {
+            if (response.status === 201) {
+              toast.custom(() => <ToastSuccess text='Setor criado com sucesso' />)
+              modalAction()
+              reload()
+            } else if (response.status === 401) {
+              toast.custom(() => (
+                <ToastError text='Você não possui permissão para criar setores' />
+              ))
+            } else {
+              toast.custom(() => (
+                <ToastError text='Não foi possível criar setor. Verifique os campos obrigatórios e tente novamente' />
+              ))
+            }
           } else {
             toast.custom(() => (
               <ToastError text='Não foi possível criar setor. Verifique os campos obrigatórios e tente novamente' />
@@ -148,12 +182,22 @@ export function SectorModal({
               isOn
             )
 
-            if (response && response.status === 201) {
-              toast.custom(() => (
-                <ToastSuccess text='Subsetor criado com sucesso' />
-              ))
-              modalAction()
-              reload()
+            if (response) {
+              if (response.status === 201) {
+                toast.custom(() => (
+                  <ToastSuccess text='Subsetor criado com sucesso' />
+                ))
+                modalAction()
+                reload()
+              } else if (response.status === 401) {
+                toast.custom(() => (
+                  <ToastError text='Você não possui permissão para criar subsetores' />
+                ))
+              } else {
+                toast.custom(() => (
+                  <ToastError text='Não foi possível criar o subsetor. Verifique os campos obrigatórios e tente novamente' />
+                ))
+              }
             } else {
               toast.custom(() => (
                 <ToastError text='Não foi possível criar o subsetor. Verifique os campos obrigatórios e tente novamente' />
@@ -169,11 +213,7 @@ export function SectorModal({
     if (fetchedSector.current) return
     fetchedSector.current = true
 
-    if (sector !== '') {
-      fetchPermissionGroups()
-    } else {
-      setLoading(false)
-    }
+    if (sector !== '') fetchPermissionGroups()
   }, [sector])
 
   return (
@@ -280,6 +320,12 @@ export function SectorModal({
             </div>
           </div>
         </>
+      )}
+
+      {!hasPermission && (
+        <div className='mt-16'>
+          <PermissionDeniedScreen />
+        </div>
       )}
     </div>
   )
