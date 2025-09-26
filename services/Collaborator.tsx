@@ -100,6 +100,7 @@ export async function updateCollaborator({
 																					 phone,
 																					 observations,
 																					 id,
+																					 situation
 																				 }: UpdateCollaboratorService) {
 	try {
 		loading(true)
@@ -120,6 +121,7 @@ export async function updateCollaborator({
 			state,
 			phone: extractOnlyNumbers(phone ?? ''),
 			observations,
+			situation
 		}
 
 		const response = await axios.put(
@@ -156,6 +158,7 @@ export async function createCollaborator({
 																					 state,
 																					 phone,
 																					 observations,
+																					 situation
 																				 }: CreateCollaboratorService) {
 	try {
 		const params = {
@@ -174,6 +177,7 @@ export async function createCollaborator({
 			state,
 			phone: extractOnlyNumbers(phone ?? ''),
 			observations,
+			situation
 		}
 
 		const response = await axios.post(

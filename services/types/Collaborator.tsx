@@ -30,6 +30,7 @@ type UpdateCollaboratorService = {
   state: string
   phone: string
   observations: string
+  situation: string
 }
 
 type CreateCollaboratorService = {
@@ -48,4 +49,5 @@ type CreateCollaboratorService = {
   state: string
   phone: string
   observations: string
+  situation: string
 }

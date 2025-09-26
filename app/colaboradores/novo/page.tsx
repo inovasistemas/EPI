@@ -33,6 +33,7 @@ const CreateCollaborator: FC = () => {
     state: '',
     phone: '',
     observations: '',
+    situation: ''
   })
 
   const handleChange = (name: string, value: string) => {
@@ -59,6 +60,7 @@ const CreateCollaborator: FC = () => {
       state: formData.state,
       phone: formData.phone,
       observations: formData.observations,
+      situation: formData.situation
     })
 
     if (response) {
@@ -104,17 +106,15 @@ const CreateCollaborator: FC = () => {
               />
             </div>
 
-            <div className='col-span-2'>
-              <FormInput
-                name='name'
-                label='Nome'
-                required={true}
-                type='text'
-                value={formData.name}
-                position='right'
-                onChange={e => handleChange('name', e.target.value)}
-              />
-            </div>
+            <FormInput
+              name='name'
+              label='Nome'
+              required={true}
+              type='text'
+              value={formData.name}
+              position='right'
+              onChange={e => handleChange('name', e.target.value)}
+            />
 
             <MaskedInput
               name='birthdate'
@@ -124,6 +124,19 @@ const CreateCollaborator: FC = () => {
               value={formData?.birthdate}
               position='right'
               onChange={e => handleChange('birthdate', e.target.value)}
+            />
+
+            <SearchSelect
+              name='gender'
+              options={[
+                { value: 'ACTIVE', label: 'Ativo' },
+                { value: 'AWAY', label: 'Afastado' },
+                { value: 'SICKLEAVE', label: 'Atestado' },
+                { value: 'INACTIVE', label: 'Inativo' },
+              ]}
+              placeholder='Situação'
+              value={formData.situation}
+              onChange={(value: string) => handleChange('situation', value)}
             />
 
             <MaskedInput

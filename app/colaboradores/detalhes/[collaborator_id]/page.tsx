@@ -39,6 +39,7 @@ type Collaborator = {
   phone: string
   observations: string
   created_at: string
+  situation: string
 }
 
 const CollaboratorDetails: FC = () => {
@@ -63,6 +64,7 @@ const CollaboratorDetails: FC = () => {
     phone: '',
     observations: '',
     created_at: '',
+    situation: ''
   })
   const fetchedCollaborator = useRef(false)
   const [hasPermission, setHasPermission] = useState(true)
@@ -127,6 +129,7 @@ const CollaboratorDetails: FC = () => {
       state: collaborator.state,
       phone: collaborator.phone,
       observations: collaborator.observations,
+      situation: collaborator.situation
     })
 
     if (response) {
@@ -251,18 +254,16 @@ const CollaboratorDetails: FC = () => {
                 />
               </div>
 
-              <div className='col-span-2'>
-                <FormInput
-                  name='name'
-                  label='Nome'
-                  required={true}
-                  type='text'
-                  value={collaborator?.name.toLocaleLowerCase()}
-                  position='right'
-                  onChange={e => handleChange('name', e.target.value)}
-                  textTransform='capitalize'
-                />
-              </div>
+              <FormInput
+                name='name'
+                label='Nome'
+                required={true}
+                type='text'
+                value={collaborator?.name.toLocaleLowerCase()}
+                position='right'
+                onChange={e => handleChange('name', e.target.value)}
+                textTransform='capitalize'
+              />
 
               <MaskedInput
                 name='birthdate'
@@ -272,6 +273,19 @@ const CollaboratorDetails: FC = () => {
                 value={timestampToDate(collaborator?.birthdate ?? '')}
                 position='right'
                 onChange={e => handleChange('birthdate', e.target.value)}
+              />
+
+              <SearchSelect
+                name='gender'
+                options={[
+                  { value: 'ACTIVE', label: 'Ativo' },
+                  { value: 'AWAY', label: 'Afastado' },
+                  { value: 'SICKLEAVE', label: 'Atestado' },
+                  { value: 'INACTIVE', label: 'Inativo' },
+                ]}
+                placeholder='Situação'
+                value={collaborator?.situation ?? ''}
+                onChange={(value: string) => handleChange('situation', value)}
               />
 
               <MaskedInput
