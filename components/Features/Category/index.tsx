@@ -223,7 +223,9 @@ export function Category() {
           ))}
 
           {!hasPermission && (
-            <PermissionDeniedScreen margin={false} />
+            <div className='flex items-center h-full min-h-80'>
+              <PermissionDeniedScreen margin={false} />
+            </div>
           )}
         </div>
 

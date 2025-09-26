@@ -105,6 +105,8 @@ export function PermissionGroupSettings() {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
         overflow={true}
+        padding={false}
+        showClose={false}
       >
         <PermissionGroup
           permissionGroupId={permissionGroupModalProps}

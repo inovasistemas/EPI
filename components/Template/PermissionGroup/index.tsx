@@ -12,6 +12,7 @@ import { ToastError } from '../Toast/Error'
 import { toast } from 'sonner'
 import { ToastSuccess } from '../Toast/Success'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
 
 type Permissions = {
   id: string
@@ -174,7 +175,8 @@ export function PermissionGroup({
   }
 
   return (
-    <div className='flex flex-col justify-center items-center gap-6 px-0.5 w-full h-full overflow-auto'>
+    <div className='relative flex flex-col w-full h-full'>
+      <div className='flex flex-col gap-3 px-6 h-full overflow-y-auto'>
       {hasPermission && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
@@ -291,41 +293,6 @@ export function PermissionGroup({
               </div>
             ))}
           </div>
-
-          
-          <div className='flex flex-row justify-end w-full'>
-            <div className='flex flex-row gap-3'>
-              {permissionGroupId && (
-                <button
-                  type='button'
-                  onClick={confirmationModal}
-                  className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-                >
-                  <TrashIcon
-                    size='size-4'
-                    stroke='stroke-[--textSecondary] group-hover:stroke-white'
-                    strokeWidth={2.5}
-                  />
-
-                  <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
-                    Excluir
-                  </span>
-                </button>
-              )}
-              <button
-                onClick={handleUpdatePermissionGroup}
-                type='button'
-                className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-              >
-                <FloppyDiskIcon
-                  size='size-4'
-                  stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
-                  strokeWidth={2.5}
-                />
-                <span className='font-medium text-sm'>Salvar</span>
-              </button>
-            </div>
-          </div>
         </>
       )}
 
@@ -334,6 +301,42 @@ export function PermissionGroup({
           <PermissionDeniedScreen />
         </div>
       )}
+      </div>
+
+      <div className='bottom-0 z-[201] sticky inset-x-0 flex justify-end items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
+        <div className='flex justify-end items-center gap-3 w-full'>
+          {permissionGroupId && (
+            <button
+              type='button'
+              onClick={confirmationModal}
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <TrashIcon
+                size='size-4'
+                stroke='stroke-[--textSecondary] group-hover:stroke-white'
+                strokeWidth={2.5}
+              />
+
+              <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
+                Excluir
+              </span>
+            </button>
+          )}
+
+          <button
+            onClick={handleUpdatePermissionGroup}
+            type='button'
+            className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+          >
+            <FloppyDiskIcon
+              size='size-4'
+              stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
+              strokeWidth={2.5}
+            />
+            <span className='font-medium text-sm'>Salvar</span>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
