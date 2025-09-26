@@ -13,10 +13,12 @@ import {
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog } from '@/components/Dialog'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 
 export function PermissionGroupSettings() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [hasPermission, setHasPermission] = useState(true)
   const [permissionGroupModalProps, setPermissionGroupModalProps] = useState('')
   const [permissionGroups, setPermissionGroups] = useState<
     PermissionGroupsType[] | null
@@ -40,8 +42,16 @@ export function PermissionGroupSettings() {
   const fetchPermissionGroups = async () => {
     const response = await getPermissionGroups()
 
-    if (response && response.status === 200) {
-      setPermissionGroups(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setPermissionGroups(response.data.data)
+      } else if (response.status === 401) {
+        setHasPermission(false)
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar os grupos de permissões' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar os grupos de permissões' />
@@ -60,10 +70,20 @@ export function PermissionGroupSettings() {
   const handleDeletePermissionGroup = async () => {
     const response = await deletePermissionGroup(selectedPermissionGroup || '')
 
-    if (response && response.status === 204) {
-      fetchPermissionGroups()
-      handleCloseModalConfirmation()
-      handleCloseModal()
+    if (response) {
+      if (response.status === 204) {
+        fetchPermissionGroups()
+        handleCloseModalConfirmation()
+        handleCloseModal()
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para excluir este grupo de permissões' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível excluir o grupo de permissões' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível excluir o grupo de permissões' />
@@ -118,7 +138,7 @@ export function PermissionGroupSettings() {
             </span>
           </div>
 
-          {permissionGroups?.map((permissionGroup, i) => (
+          {hasPermission && permissionGroups?.map((permissionGroup, i) => (
             <div
               key={permissionGroup.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
@@ -203,6 +223,10 @@ export function PermissionGroupSettings() {
               </div>
             </div>
           ))}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={false} />
+          )}
         </div>
 
         <ActionGroupAdd onClick={handleClick} />
