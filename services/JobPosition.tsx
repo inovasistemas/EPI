@@ -1,35 +1,43 @@
 import axios from 'axios'
 
-export async function getJobPositions() {
+export async function getJobPositions({loading}: JobPositionsProps) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/job-positions`,
       {
         withCredentials: true,
       }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }
 
-export async function getJobPosition(id: string) {
+export async function getJobPosition({id, loading}: getJobPositionProps) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/job-positions/${id}`,
       {
         withCredentials: true,
       }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }

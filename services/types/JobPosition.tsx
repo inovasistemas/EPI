@@ -6,6 +6,15 @@ type JobPosition = {
   updated_at?: string
 }
 
+type JobPositionsProps = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+type getJobPositionProps = {
+  id: string,
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 type CreateJobPosition = {
   payload: JobPosition
 }

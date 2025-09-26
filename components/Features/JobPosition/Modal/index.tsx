@@ -12,6 +12,7 @@ import {
 import { getSectors } from '@/services/Sector'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { PermissionDeniedScreen } from '../../PermissionDenied'
 
 export function JobPositionModal({
   id,
@@ -21,7 +22,8 @@ export function JobPositionModal({
 }: JobPositionModalProps) {
   const fetchedJobPosition = useRef(false)
   const fetchedSectors = useRef(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [hasPermission, setHasPermission] = useState(true)
   const [jobPositionData, setJobPositionData] = useState({
     uuid: '',
     name: '',
@@ -57,14 +59,26 @@ export function JobPositionModal({
     }))
   }
 
-  const fetchJobPositions = async () => {
+  const fetchJobPosition = async () => {
     if (id) {
-      const response = await getJobPosition(id)
+      const response = await getJobPosition({id, loading: setLoading})
 
-      if (response && response.status === 200) {
-        const data = response.data
+      if (response) {
+        if (response.status === 200) {
+          const data = response.data
 
-        setJobPositionData(data)
+          setJobPositionData(data)
+        } else if (response.status === 401) {
+          setHasPermission(false)
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível buscar o cargo' />
+          ))
+        }
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar o cargo' />
+        ))
       }
     }
 
@@ -74,8 +88,18 @@ export function JobPositionModal({
   const fetchSectors = async () => {
     const response = await getSectors()
 
-    if (response && response.status === 200) {
-      setSectorsData(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setSectorsData(response.data.data)
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui autorização para buscar os setores' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar os setores' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar os setores' />
@@ -86,10 +110,20 @@ export function JobPositionModal({
   const handleCreateJobPosition = async () => {
     const response = await createJobPosition({ payload: jobPositionData })
 
-    if (response && response.status === 201) {
-      toast.custom(() => <ToastSuccess text='Cargo criado com sucesso' />)
-      reload()
-      modalAction()
+    if (response) {
+      if (response.status === 201) {
+        toast.custom(() => <ToastSuccess text='Cargo criado com sucesso' />)
+        reload()
+        modalAction()
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui autorização para criar cargos' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível criar o cargo. Verifique os campos obrigatórios e tente novamente' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível criar o cargo. Verifique os campos obrigatórios e tente novamente' />
@@ -101,9 +135,19 @@ export function JobPositionModal({
     if (id) {
       const response = await updateJobPosition({ id, payload: jobPositionData })
 
-      if (response && response.status === 200) {
-        toast.custom(() => <ToastSuccess text='Cargo atualizado com sucesso' />)
-        reload()
+      if (response) {
+        if (response.status === 200) {
+          toast.custom(() => <ToastSuccess text='Cargo atualizado com sucesso' />)
+          reload()
+        } else if (response.status === 401) { 
+          toast.custom(() => (
+            <ToastError text='Você não possui autorização para atualizar este cargo' />
+          ))
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível atualizar o cargo' />
+          ))
+        }
       } else {
         toast.custom(() => (
           <ToastError text='Não foi possível atualizar o cargo' />
@@ -121,7 +165,7 @@ export function JobPositionModal({
     fetchedJobPosition.current = true
 
     if (id) {
-      fetchJobPositions()
+      fetchJobPosition()
     } else {
       setLoading(false)
     }
@@ -129,7 +173,7 @@ export function JobPositionModal({
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      {!loading && (
+      {hasPermission && !loading && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
             <h2 className='font-medium text-xl leading-none'>{getTitle()}</h2>
@@ -234,6 +278,12 @@ export function JobPositionModal({
             </div>
           </div>
         </>
+      )}
+      
+      {!hasPermission && (
+        <div className='mt-16'>
+          <PermissionDeniedScreen />
+        </div>
       )}
     </div>
   )

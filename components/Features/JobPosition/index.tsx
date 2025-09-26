@@ -9,10 +9,13 @@ import { Modal } from '@/components/Display/Modal'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { JobPositionModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
+import { PermissionDeniedScreen } from '../PermissionDenied'
 
 export function JobPosition() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [hasPermission, setHasPermission] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [selectedJobPosition, setSelectedJobPosition] = useState('')
   const fetchedJobPositions = useRef(false)
   const [jobPositionsData, setJobPositionsData] = useState<
@@ -42,20 +45,36 @@ export function JobPosition() {
   const handleDeleteJobPosition = async () => {
     const response = await deleteJobPosition(selectedJobPosition || '')
 
-    if (response && response.status === 204) {
-      fetchJobPositions()
-      handleCloseModalConfirmation()
-      handleModalStatus()
+    if (response) {
+      if (response.status === 204) {
+        fetchJobPositions()
+        handleCloseModalConfirmation()
+        handleModalStatus()
+      } else if (response.status === 401) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para excluir este cargo' />
+        ))
+      } else {
+        toast.custom(() => <ToastError text='Não foi possível excluir o cargo' />)
+      }
     } else {
       toast.custom(() => <ToastError text='Não foi possível excluir o cargo' />)
     }
   }
 
   const fetchJobPositions = async () => {
-    const response = await getJobPositions()
+    const response = await getJobPositions({loading: setLoading})
 
-    if (response && response.status === 200) {
-      setJobPositionsData(response.data.data)
+    if (response) {
+      if (response.status === 200) {
+        setJobPositionsData(response.data.data)
+      } else if (response.status === 401) {
+        setHasPermission(false)
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar os cargos' />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar os cargos' />
@@ -110,7 +129,7 @@ export function JobPosition() {
             </span>
           </div>
 
-          {jobPositionsData?.map((jobPosition, i) => (
+          {hasPermission && jobPositionsData?.map((jobPosition, i) => (
             <div
               key={jobPosition.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
@@ -148,6 +167,10 @@ export function JobPosition() {
               </div>
             </div>
           ))}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={false} />
+          )}
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleModalStatus} />
