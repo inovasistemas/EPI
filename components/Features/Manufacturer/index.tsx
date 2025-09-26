@@ -84,7 +84,7 @@ export function Manufacturer() {
         handleModalStatus()
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para excluir este fabricante' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (

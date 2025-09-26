@@ -104,7 +104,7 @@ export function ManufacturerModal({
           reload()
         } else if (response.status === 401) {
           toast.custom(() => (
-            <ToastError text='Você não possui permissão para modificar este fabricante' />
+            <ToastError text='Você não possui permissão para esta ação' />
           )) 
         } else {
           toast.custom(() => (
@@ -132,7 +132,7 @@ export function ManufacturerModal({
               reload()
             } else if (response.status === 401) {
               toast.custom(() => (
-                <ToastError text='Você não possui permissão para criar fabricantes' />
+                <ToastError text='Você não possui permissão para esta ação' />
               )) 
             } else {
               toast.custom(() => (

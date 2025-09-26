@@ -136,7 +136,7 @@ export function SectorModal({
           reload()
         } else if (response.status === 401) {
           toast.custom(() => (
-            <ToastError text='Você não possui permissão para modificar este setor' />
+            <ToastError text='Você não possui permissão para esta ação' />
           ))
         } else {
           toast.custom(() => (
@@ -160,7 +160,7 @@ export function SectorModal({
               reload()
             } else if (response.status === 401) {
               toast.custom(() => (
-                <ToastError text='Você não possui permissão para criar setores' />
+                <ToastError text='Você não possui permissão para esta ação' />
               ))
             } else {
               toast.custom(() => (
@@ -191,7 +191,7 @@ export function SectorModal({
                 reload()
               } else if (response.status === 401) {
                 toast.custom(() => (
-                  <ToastError text='Você não possui permissão para criar subsetores' />
+                  <ToastError text='Você não possui permissão para esta ação' />
                 ))
               } else {
                 toast.custom(() => (

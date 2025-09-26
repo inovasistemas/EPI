@@ -44,7 +44,7 @@ const CreateOperator: FC = () => {
         router.push('/usuarios')
       } else if (response.status === 401) { 
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para criar usuários' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (

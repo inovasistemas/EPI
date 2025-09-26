@@ -43,6 +43,9 @@
   --fcc-background: #cfd3d9 !important;
   --fcc-digit-block-radius: 12px !important;
   --fcc-shadow: none !important;
+
+  --alertText: #0A0A0A;
+  --alertTextError: #E7000B;
 }
 
 .dark {
@@ -80,6 +83,9 @@
   --chartOrange: #ffab70;
   --chartRed: #f87683;
   --fcc-background: #4c4e51 !important;
+
+  --alertText: #FAFAFA;
+  --alertTextError: #FF6467;
 }
 
 .ant-picker,

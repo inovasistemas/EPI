@@ -93,7 +93,7 @@ export function JobPositionModal({
         setSectorsData(response.data.data)
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui autorização para buscar os setores' />
+          <ToastError text='Você não possui permissão para buscar os setores' />
         ))
       } else {
         toast.custom(() => (
@@ -117,7 +117,7 @@ export function JobPositionModal({
         modalAction()
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui autorização para criar cargos' />
+          <ToastError text='Você não possui permissão para esta ação' />
         ))
       } else {
         toast.custom(() => (
@@ -141,7 +141,7 @@ export function JobPositionModal({
           reload()
         } else if (response.status === 401) { 
           toast.custom(() => (
-            <ToastError text='Você não possui autorização para atualizar este cargo' />
+            <ToastError text='Você não possui permissão para esta ação' />
           ))
         } else {
           toast.custom(() => (

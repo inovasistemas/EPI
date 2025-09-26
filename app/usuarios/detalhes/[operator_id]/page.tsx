@@ -74,7 +74,7 @@ const OperatorDetails: FC = () => {
         toast.custom(() => <ToastSuccess text='Usuário atualizado com sucesso' />)
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para modificar este usuário' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (
@@ -96,7 +96,7 @@ const OperatorDetails: FC = () => {
         router.push('/usuarios')
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui autorização para excluir este usuário' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (

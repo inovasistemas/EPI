@@ -164,7 +164,7 @@ const CreateEquipment: FC = () => {
         ))
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para modificar este equipamento' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (
@@ -191,7 +191,7 @@ const CreateEquipment: FC = () => {
         router.push('/equipamentos')
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para excluir este equipamento' />
+          <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
         toast.custom(() => (

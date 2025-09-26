@@ -77,7 +77,7 @@ export function Category() {
         handleModalStatus()
       } else if (response.status === 401) {
         toast.custom(() => (
-          <ToastError text='Você não possui permissão para excluir esta categoria' />
+          <ToastError text='Você não possui permissão para esta ação' />
         ))
       } else {
         toast.custom(() => (

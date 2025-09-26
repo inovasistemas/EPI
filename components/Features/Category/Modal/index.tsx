@@ -130,7 +130,7 @@ export function CategoryModal({
           reload()
         } else if (response.status === 401) {
           toast.custom(() => (
-            <ToastError text='Você não possui autorização para atualizar esta categoria' />
+            <ToastError text='Você não possui permissão para esta ação' />
           ))
         } else {
           toast.custom(() => (
@@ -156,7 +156,7 @@ export function CategoryModal({
               reload()
             } else if (response.status === 401) {
               toast.custom(() => (
-                <ToastError text='Você não possui autorização para excluir esta categoria' />
+                <ToastError text='Você não possui permissão para esta ação' />
               ))
             } else {
               toast.custom(() => (
@@ -186,7 +186,7 @@ export function CategoryModal({
                 reload()
               } else if (response.status === 401) {
                 toast.custom(() => (
-                  <ToastError text='Você não possui autorização para criar esta subcategoria' />
+                  <ToastError text='Você não possui permissão para esta ação' />
                 ))
               } else {
                 toast.custom(() => (

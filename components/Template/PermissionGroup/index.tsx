@@ -111,7 +111,7 @@ export function PermissionGroup({
           ))
         } else if (response.status === 401) {
           toast.custom(() => (
-            <ToastError text='Você não possui permissão para modificar o grupo de permissões' />
+            <ToastError text='Você não possui permissão para esta ação' />
           ))
         } else {
           toast.custom(() => (
@@ -137,7 +137,7 @@ export function PermissionGroup({
           modalStatus()
         } else if (response.status === 401) {
           toast.custom(() => (
-            <ToastError text='Você não possui permissão para criar grupos de permissões' />
+            <ToastError text='Você não possui permissão para esta ação' />
           ))
         } else {
           toast.custom(() => (
