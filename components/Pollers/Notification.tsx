@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { ToastDefault } from '../Template/Toast/Default'
 
-export function NotificationPoller() {
+export default function NotificationPoller() {
   useEffect(() => {
     const interval = setInterval(async () => {
       const response = await getUnreadNotifications()

@@ -3,7 +3,7 @@ import './globals.css'
 import Theme from '@/components/Display/Theme'
 import { pageMetadata } from '@/lib/misc/metadata'
 import { Toaster } from 'sonner'
-import { NotificationPoller } from '@/components/Pollers/Notification'
+import NotificationPoller from '@/components/Pollers/Notification'
 
 const roboto = Ubuntu({
   weight: ['300', '400', '500', '700'],
