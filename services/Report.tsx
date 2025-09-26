@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getSummaryReports({ loading }: GetSummaryReports) {
@@ -14,6 +15,9 @@ export async function getSummaryReports({ loading }: GetSummaryReports) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
 

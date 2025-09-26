@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getUnreadNotifications() {
@@ -11,6 +12,9 @@ export async function getUnreadNotifications() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -31,6 +35,9 @@ export async function getNotifications({ status, limit }: NotificationProps) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -54,6 +61,9 @@ export async function updateNotification({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -72,6 +82,9 @@ export async function updateNotificationRead({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null

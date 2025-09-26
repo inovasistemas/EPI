@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getJobPositions({loading}: JobPositionsProps) {
@@ -13,6 +14,9 @@ export async function getJobPositions({loading}: JobPositionsProps) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       loading(false)
       return error.response || null
     }
@@ -34,6 +38,9 @@ export async function getJobPosition({id, loading}: getJobPositionProps) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       loading(false)
       return error.response || null
     }
@@ -54,6 +61,9 @@ export async function createJobPosition({ payload }: CreateJobPosition) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -72,6 +82,9 @@ export async function updateJobPosition({ id, payload }: UpdateJobPosition) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -89,6 +102,9 @@ export async function deleteJobPosition(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null

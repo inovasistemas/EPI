@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getManufacturers({loading}: GetManufacturers) {
@@ -13,6 +14,9 @@ export async function getManufacturers({loading}: GetManufacturers) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       loading(false)
       return error.response || null
     }
@@ -32,6 +36,9 @@ export async function getManufacturer({ id }: GetManufacturer) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -50,6 +57,9 @@ export async function updateManufacturer({ id, name }: UpdateManufacturer) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -68,6 +78,9 @@ export async function createManufacturer({ name }: CreateManufacturer) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -85,6 +98,9 @@ export async function deleteManufacturer({ id }: GetManufacturer) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null

@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getCategories() {
@@ -11,6 +12,9 @@ export async function getCategories() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -30,6 +34,9 @@ export async function getCategory({id, loading}: CategoryService) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       loading(false)
       return error.response || null
     }
@@ -52,6 +59,9 @@ export async function createCategory(name: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -73,6 +83,9 @@ export async function createSubcategory(id: string, name: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -93,6 +106,9 @@ export async function updateCategory(id: string, name: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -110,6 +126,9 @@ export async function deleteCategory(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null

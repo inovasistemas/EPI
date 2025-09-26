@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getSectors() {
@@ -11,6 +12,9 @@ export async function getSectors() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -28,6 +32,9 @@ export async function getSector(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -49,6 +56,9 @@ export async function updateSector(id: string, name: string, inherit: boolean) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -69,6 +79,9 @@ export async function createSector(name: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -95,6 +108,9 @@ export async function createSubsector(
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -112,6 +128,9 @@ export async function deleteSector(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null

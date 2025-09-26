@@ -3,6 +3,7 @@ import {
   CreatePermissionGroupType,
   UpdatePermissionGroupType,
 } from './types/PermissionGroup'
+import { logoutUserOn401 } from '@/utils/logout'
 
 export async function getPermissionGroups() {
   try {
@@ -15,6 +16,9 @@ export async function getPermissionGroups() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -32,6 +36,9 @@ export async function getPermissionGroup(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -49,6 +56,9 @@ export async function getPermissionGroupTemplate() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -66,6 +76,9 @@ export async function deletePermissionGroup(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -87,6 +100,9 @@ export async function updatePermissionGroup({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -107,6 +123,9 @@ export async function createPermissionGroup({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null

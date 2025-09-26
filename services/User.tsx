@@ -1,3 +1,4 @@
+import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
 export async function getPermissionGroups() {
@@ -11,6 +12,9 @@ export async function getPermissionGroups() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       return error.response || null
     }
     return null
@@ -18,13 +22,13 @@ export async function getPermissionGroups() {
 }
 
 export async function getUsers({
-                                 loading,
-                                 q,
-                                 permissionGroup,
-                                 sortField,
-                                 sortOrder,
-                                 page = 1,
-                               }: GetUsersType) {
+  loading,
+  q,
+  permissionGroup,
+  sortField,
+  sortOrder,
+  page = 1,
+}: GetUsersType) {
   try {
     loading(true)
     const params: Record<string, any> = {
@@ -44,6 +48,9 @@ export async function getUsers({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       loading(false)
       return error.response || null
     }
@@ -63,6 +70,9 @@ export async function getUser({id, loading}: GetUserType) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
       loading(false)
       return error.response || null
     }
@@ -80,6 +90,9 @@ export async function getUserMe() {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -87,11 +100,11 @@ export async function getUserMe() {
 }
 
 export async function createUser({
-                                   name,
-                                   email,
-                                   password,
-                                   permissionGroup,
-                                 }: CreateUserType) {
+  name,
+  email,
+  password,
+  permissionGroup,
+}: CreateUserType) {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_HOST}/users`,
@@ -108,6 +121,9 @@ export async function createUser({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -115,12 +131,12 @@ export async function createUser({
 }
 
 export async function updateUser({
-                                   id,
-                                   name,
-                                   email,
-                                   password,
-                                   permissionGroup,
-                                 }: UpdateUserType) {
+  id,
+  name,
+  email,
+  password,
+  permissionGroup,
+}: UpdateUserType) {
   try {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/${id}`,
@@ -137,6 +153,9 @@ export async function updateUser({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -144,10 +163,10 @@ export async function updateUser({
 }
 
 export async function updateUserMePassword({
-                                             code,
-                                             oldPassword,
-                                             password,
-                                           }: UpdateUserMePasswordType) {
+  code,
+  oldPassword,
+  password,
+}: UpdateUserMePasswordType) {
   try {
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me/password`,
@@ -163,6 +182,9 @@ export async function updateUserMePassword({
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null
@@ -180,6 +202,9 @@ export async function deleteUser(id: string) {
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
       return error.response || null
     }
     return null

@@ -1,15 +1,16 @@
 import axios from 'axios'
 import { dateToTimestamp } from '@/utils/date-to-timestamp'
 import { extractOnlyNumbers } from '@/utils/extract-only-numbers'
+import { logoutUserOn401 } from '@/utils/logout'
 
 export async function getCollaborators({
-																				 loading,
-																				 q,
-																				 jobPosition,
-																				 sortField,
-																				 sortOrder,
-																				 page = 1,
-																			 }: CollaboratorsService) {
+	loading,
+	q,
+	jobPosition,
+	sortField,
+	sortOrder,
+	page = 1,
+}: CollaboratorsService) {
 	try {
 		loading(true)
 
@@ -31,6 +32,9 @@ export async function getCollaborators({
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			loading(false)
 			return error.response || null
 		}
@@ -53,6 +57,9 @@ export async function getCollaborator({ loading, id }: CollaboratorService) {
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			return error.response || null
 		}
 
@@ -74,6 +81,9 @@ export async function deleteCollaborator({ loading, id }: CollaboratorService) {
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			return error.response || null
 		}
 
@@ -83,25 +93,25 @@ export async function deleteCollaborator({ loading, id }: CollaboratorService) {
 }
 
 export async function updateCollaborator({
-																					 loading,
-																					 name,
-																					 birthdate,
-																					 rg,
-																					 cpf,
-																					 gender,
-																					 job_position,
-																					 admission_date,
-																					 zip_code,
-																					 address,
-																					 number,
-																					 neighborhood,
-																					 city,
-																					 state,
-																					 phone,
-																					 observations,
-																					 id,
-																					 situation
-																				 }: UpdateCollaboratorService) {
+	loading,
+	name,
+	birthdate,
+	rg,
+	cpf,
+	gender,
+	job_position,
+	admission_date,
+	zip_code,
+	address,
+	number,
+	neighborhood,
+	city,
+	state,
+	phone,
+	observations,
+	id,
+	situation
+}: UpdateCollaboratorService) {
 	try {
 		loading(true)
 
@@ -134,6 +144,9 @@ export async function updateCollaborator({
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			return error.response || null
 		}
 
@@ -143,23 +156,23 @@ export async function updateCollaborator({
 }
 
 export async function createCollaborator({
-																					 name,
-																					 birthdate,
-																					 rg,
-																					 cpf,
-																					 gender,
-																					 job_position,
-																					 admission_date,
-																					 zip_code,
-																					 address,
-																					 number,
-																					 neighborhood,
-																					 city,
-																					 state,
-																					 phone,
-																					 observations,
-																					 situation
-																				 }: CreateCollaboratorService) {
+	name,
+	birthdate,
+	rg,
+	cpf,
+	gender,
+	job_position,
+	admission_date,
+	zip_code,
+	address,
+	number,
+	neighborhood,
+	city,
+	state,
+	phone,
+	observations,
+	situation
+}: CreateCollaboratorService) {
 	try {
 		const params = {
 			name: name,
@@ -189,6 +202,9 @@ export async function createCollaborator({
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			return error.response || null
 		}
 
@@ -207,6 +223,9 @@ export async function collaboratorFaceRecognition(image: string) {
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
 			return error.response || null
 		}
 
