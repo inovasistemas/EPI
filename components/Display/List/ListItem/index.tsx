@@ -1,5 +1,3 @@
-import { PenIcon } from '@/components/Display/Icons/Pen'
-
 type ItemProps = {
   id: number
   name: string

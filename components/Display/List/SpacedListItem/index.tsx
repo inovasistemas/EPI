@@ -1,5 +1,3 @@
-import { PenIcon } from '@/components/Display/Icons/Pen'
-
 type ListItemProps = {
   id: number
   name: string
@@ -33,7 +31,6 @@ export function SpacedListItem({ data }: SpacedListItemProps) {
       </div>
       <div className='flex justify-end items-center col-span-1 truncate'>
         <button className='hover:opacity-50 transition-all duration-300'>
-          <PenIcon fill='fill-black' height='h-4' width='w-4' />
         </button>
       </div>
     </div>
