@@ -364,7 +364,7 @@ const CreateEquipment: FC = () => {
                   setFile={setFile}
                   picture={
                     equipmentData.picture &&
-                    `http://localhost:3333${equipmentData.picture}`
+                    `https://epi-5d01.onrender.com${equipmentData.picture}`
                   }
                 />
                 {/* <button

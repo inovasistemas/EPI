@@ -2,7 +2,7 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'epi-5d01.onrender.com'],
     remotePatterns: [
       {
         protocol: 'https',

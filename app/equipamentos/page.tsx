@@ -511,7 +511,7 @@ const Equipment: FC = () => {
                                 {equipment.picture &&
                                   equipment.picture.length > 3 && (
                                     <Image
-                                      src={`http://localhost:3333${equipment.picture}`}
+                                      src={`https://epi-5d01.onrender.com${equipment.picture}`}
                                       alt={equipment.name}
                                       fill
                                       className="w-full h-full object-cover"
