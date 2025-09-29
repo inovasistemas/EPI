@@ -23,7 +23,7 @@ const Login: FC = () => {
       </Modal>
       <div className='flex justify-center gap-6 p-4 w-full h-full'>
         <div className='flex flex-col justify-center items-center gap-3 rounded-xl w-full h-full'>
-          <div className='flex justify-center items-center bg-[--backgroundPrimary] rounded-3xl w-full sm:w-[650px] h-full'>
+          <div className='flex justify-center items-center bg-[--backgroundPrimary] rounded-3xl w-full sm:w-[52%] sm:min-w-[650px] h-full'>
             <LoginForm />
           </div>
           <div className='flex justify-center items-center gap-2 p-3 w-full text-[--textSecondary] text-xs'>
