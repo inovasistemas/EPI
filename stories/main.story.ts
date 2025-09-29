@@ -1,7 +1,7 @@
-import { AccountIcon } from '../components/Display/Icons/Account'
+import { UserIcon } from '../components/Display/Icons/User'
 
 const meta = {
-  component: AccountIcon,
+  component: UserIcon,
 }
 
 export default meta
