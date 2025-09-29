@@ -364,7 +364,7 @@ const CreateEquipment: FC = () => {
                   setFile={setFile}
                   picture={
                     equipmentData.picture &&
-                    `https://epi-5d01.onrender.com${equipmentData.picture}`
+                    `https://api.inovasistemas.app${equipmentData.picture}`
                   }
                 />
                 {/* <button
