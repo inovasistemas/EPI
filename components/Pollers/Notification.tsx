@@ -23,4 +23,6 @@ export default function NotificationPoller() {
 
     return () => clearInterval(interval)
   }, [])
+
+  return null
 }
