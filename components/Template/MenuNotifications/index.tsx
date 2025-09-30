@@ -63,7 +63,7 @@ export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
           </div>
         </motion.div>
       )}
-      {!loading && (
+      {!loading && notifications && notifications.length > 0 && (
         <>
           {notifications?.map(notification => (
             <motion.li
@@ -123,9 +123,16 @@ export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
           ))}
         </>
       )}
-      <li className='pt-2'>
-        <SubNavLinkAction name='Ver tudo' href='/notificacoes' />
-      </li>
+      {!loading && notifications && notifications.length === 0 && (
+        <li className='flex justify-center items-center h-10'>
+          <span className='text-[--textSecondary] text-sm text-center'>Nenhuma notificação</span>
+        </li>
+      )}
+      {!loading && notifications && notifications.length > 0 && (
+        <li className='pt-2'>
+          <SubNavLinkAction name='Ver tudo' href='/notificacoes' />
+        </li>
+      )}
     </ul>
   )
 }
