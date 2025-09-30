@@ -15,7 +15,6 @@ export function FilterIcon({ size, stroke, strokeWidth = 2 }: FilterIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>FilterIcon</title>
       <path
         d='M3 7h3M3 17h6M18 17h3M15 7h6'
         className={classNames(stroke, 'transition-all duration-300')}

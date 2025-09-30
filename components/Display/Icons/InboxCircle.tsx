@@ -14,7 +14,6 @@ export function InboxCircleIcon({ size, fill }: InboxCircleIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>InboxCircleIcon</title>
       <path
         d='M14.25 5.5a4.25 4.25 0 118.5 0 4.25 4.25 0 01-8.5 0z'
         className={classNames(fill, 'transition-all duration-300')}

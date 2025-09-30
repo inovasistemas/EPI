@@ -15,7 +15,6 @@ export function SearchIcon({ size, stroke, strokeWidth = 2 }: SearchIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>SearchIcon</title>
       <path
         d='M17 17l4 4M19 11a8 8 0 10-16 0 8 8 0 0016 0z'
         className={classNames(stroke, 'transition-all duration-300')}

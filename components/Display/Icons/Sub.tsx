@@ -15,7 +15,6 @@ export function SubIcon({ size, stroke, strokeWidth = 2 }: SubIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>SubIcon</title>
       <path
         d='M14.5 19.5h-1c-2.828 0-4.243 0-5.121-.879C7.5 17.743 7.5 16.328 7.5 13.5v-2m0-3.5v3.5m0 0H12'
         className={classNames(stroke, 'transition-all duration-300')}

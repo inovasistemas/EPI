@@ -14,7 +14,6 @@ export function AccessIcon({ size, fill }: AccessIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>AccessIcon</title>
       <path
         fillRule='evenodd'
         clipRule='evenodd'

@@ -19,7 +19,6 @@ export function FingerPrintIcon({
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>FingerPrintIcon</title>
       <path
         d='M18 12a6 6 0 10-12 0c0 3.314 1 5.5 3 8'
         className={classNames(stroke, 'transition-all duration-300')}

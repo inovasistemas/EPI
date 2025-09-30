@@ -15,7 +15,6 @@ export function LockIcon({ size, stroke, strokeWidth = 2 }: LockIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>LockIcon</title>
       <path
         d='M12 16.5v-2'
         className={classNames(stroke, 'transition-all duration-300')}

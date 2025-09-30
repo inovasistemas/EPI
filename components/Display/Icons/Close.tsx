@@ -15,7 +15,6 @@ export function CloseIcon({ size, stroke, strokeWidth = 2 }: CloseIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>CloseIcon</title>
       <path
         d='M18 6L6 18m12 0L6 6'
         className={classNames(stroke, 'transition-all duration-300')}

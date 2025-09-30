@@ -15,7 +15,6 @@ export function LaborIcon({ size, stroke, strokeWidth = 2 }: LaborIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>LaborIcon</title>
       <path
         d='M6.5 9h-1m5 0h-1m-3-3h-1m5 0h-1M18.5 15h-1m1-4h-1'
         className={classNames(stroke, 'transition-all duration-300')}

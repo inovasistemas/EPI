@@ -19,7 +19,6 @@ export function ArrowMoveDownIcon({
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>ArrowMoveDownIcon</title>
       <path
         d='M4 3v2.077c0 2 0 3.001.145 3.838.8 4.609 4.762 8.223 9.812 8.952C14.875 18 16.807 18 19 18'
         className={classNames(stroke, 'transition-all duration-300')}

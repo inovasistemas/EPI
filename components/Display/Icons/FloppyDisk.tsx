@@ -19,7 +19,6 @@ export function FloppyDiskIcon({
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>FloppyDiskIcon</title>
       <path
         d='M8 22v-3c0-1.886 0-2.828.586-3.414C9.172 15 10.114 15 12 15c1.886 0 2.828 0 3.414.586C16 16.172 16 17.114 16 19v3'
         className={classNames(stroke, 'transition-all duration-300')}

@@ -14,8 +14,6 @@ export function UsersIcon({ size, stroke }: UsersIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>UsersIcon</title>
-
       <path
         d='M8.5 18c1.813-1.954 5.167-2.046 7 0m-1.56-6c0 1.105-.871 2-1.947 2-1.075 0-1.947-.895-1.947-2s.872-2 1.947-2c1.076 0 1.948.895 1.948 2z'
         className={classNames(stroke, 'transition-all duration-300')}

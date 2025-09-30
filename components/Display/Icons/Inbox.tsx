@@ -14,7 +14,6 @@ export function InboxIcon({ size, fill }: InboxIconProps) {
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>InboxIcon</title>
       <path
         fillRule='evenodd'
         clipRule='evenodd'

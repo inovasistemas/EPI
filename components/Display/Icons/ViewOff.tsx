@@ -19,7 +19,6 @@ export function ViewOffIcon({
       viewBox='0 0 24 24'
       className={classNames(size, 'fill-none transition-all duration-300')}
     >
-      <title>ViewOffIcon</title>
       <path
         d='M22 8s-4 6-10 6S2 8 2 8'
         className={classNames(stroke, 'transition-all duration-300')}
