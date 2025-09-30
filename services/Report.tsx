@@ -18,6 +18,7 @@ export async function getSummaryReports({ loading }: GetSummaryReports) {
       if (error.response?.status === 401) {
         logoutUserOn401()
       }
+      loading(false)
       return error.response || null
     }
 

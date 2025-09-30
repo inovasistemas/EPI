@@ -1,6 +1,6 @@
 'use client'
 import Cookies from 'cookies-js'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -21,6 +21,7 @@ import { SecurityIcon } from '@/components/Display/Icons/Security'
 import classNames from 'classnames'
 import { toast } from 'sonner'
 import { ToastError } from '../Toast/Error'
+import { LoadingIcon } from '@/components/Display/Icons/Loading'
 
 type OperatorEnterprise = {
   enterprise_uuid: string
@@ -52,6 +53,7 @@ export function LoginForm() {
   const [qrCodeUri, setQrCodeUri] = useState('')
   const containerRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const setUser = useUser(state => state.setUser)
 
@@ -78,7 +80,7 @@ export function LoginForm() {
   const handleNext = async () => {
     if (step === 0) {
       const response = await isUserRegistered({
-        email: formData.username,
+        email: formData.username, loading: setLoading
       })
       if (response && response.status === 200 && response.data.name) {
         handleChange('name', response.data.name)
@@ -98,6 +100,7 @@ export function LoginForm() {
       const response = await postAuth({
         email: formData.username,
         password: formData.password,
+        loading: setLoading
       })
 
       if (response && response.status === 200) {
@@ -115,7 +118,7 @@ export function LoginForm() {
         )
 
         if (response.data.required_2fa_configuration === true) {
-          const response = await setTwoFactorAuthentication()
+          const response = await setTwoFactorAuthentication({loading: setLoading})
 
           if (response && response.data && response.data.uri) {
             setQrCodeUri(response.data.uri)
@@ -156,6 +159,10 @@ export function LoginForm() {
   }
 
   const handleDisabled = () => {
+    if (loading) {
+      return true
+    }
+
     if (step === 0) {
       return !(formData.username.length > 2)
     }
@@ -188,6 +195,7 @@ export function LoginForm() {
       if (formData.security_code.length === 6) {
         const response = await checkTwoFactorAuthentication({
           code: formData.security_code,
+          loading: setLoading
         })
 
         if (response && response.status === 204) {
@@ -220,7 +228,7 @@ export function LoginForm() {
     <div className='flex justify-center items-center w-full h-full'>
       <motion.div
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className='relative flex flex-col justify-center gap-6 p-8 rounded-xl w-full lg:w-3/4 h-full'
+        className='relative flex flex-col justify-center gap-6 p-6 sm:p-8 rounded-xl w-full lg:w-3/4 h-full'
       >
         {step < 2 && (
           <div className='flex justify-center items-center'>
@@ -283,6 +291,7 @@ export function LoginForm() {
                 label='Sua senha'
                 value={formData.password}
                 onChange={e => handleChange('password', e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </motion.div>
           )}
@@ -378,8 +387,22 @@ export function LoginForm() {
         )}
 
         {step <= 1 && (
-          <div className='flex justify-end gap-3 w-full transition-all duration-300'>
-            <div className='w-full sm:w-auto sm:max-w-36'>
+          <div className='flex justify-end items-center gap-3 w-full transition-all duration-300'>
+              <AnimatePresence>
+                {loading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className='flex flex-col gap-3'
+                >
+                  <LoadingIcon size='size-6' stroke='stroke-[--textSecondary]' strokeWidth={2}  />
+                </motion.div>
+                )}
+              </AnimatePresence>
+            
+            <div className='flex w-full sm:max-w-36'>
               <PrimaryButton
                 name='primary'
                 action={handleNext}

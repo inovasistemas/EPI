@@ -9,6 +9,7 @@ type PasswordInputProps = {
   value: string
   required?: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 export function PasswordInput({
@@ -17,6 +18,7 @@ export function PasswordInput({
   value,
   onChange,
   required = false,
+  onKeyDown
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -42,6 +44,7 @@ export function PasswordInput({
         )
       }
       actionButton={handleShowPassword}
+      onKeyDown={onKeyDown}
     />
   )
 }

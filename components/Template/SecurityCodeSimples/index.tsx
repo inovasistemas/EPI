@@ -65,7 +65,7 @@ export function SecurityCodeSimple({ onChange }: SecurityCodeSimpleType) {
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      <div className='flex justify-between w-full'>
+      <div className='flex justify-center gap-3 w-full'>
         {values.map((val, i) => (
           <input
             // biome-ignore lint/suspicious/noArrayIndexKey: need this key to be the index
