@@ -9,7 +9,7 @@ type PasswordInputProps = {
   value: string
   required?: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 export function PasswordInput({
