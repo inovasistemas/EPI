@@ -60,7 +60,7 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
   }
 
   const fetchCategories = async () => {
-    const response = await getCategories()
+    const response = await getCategories({loading: setLoading})
 
     if (response && response.status === 200) {
       setCategoriesData(response.data.data)

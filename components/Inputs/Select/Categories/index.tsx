@@ -7,6 +7,7 @@ import { SelectCategoriesProps } from './types'
 
 export function SelectCategories({ value, onChange }: SelectCategoriesProps) {
   const fetchedCategories = useRef(false)
+  const [loading, setLoading] = useState(false)
   const [CategoriesData, setCategoriesData] = useState([
     {
       uuid: '',
@@ -27,7 +28,7 @@ export function SelectCategories({ value, onChange }: SelectCategoriesProps) {
   ])
 
   const fetchCategories = async () => {
-    const response = await getCategories()
+    const response = await getCategories({loading: setLoading})
 
     if (response && response.status === 200) {
       setCategoriesData(response.data.data)
