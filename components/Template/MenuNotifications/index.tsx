@@ -30,7 +30,7 @@ export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
 
   const fetchNotifications = async () => {
     setLoading(true)
-    const response = await getNotifications({})
+    const response = await getNotifications({loading: setLoading})
 
     if (response && response.status === 200) {
       const data = response.data

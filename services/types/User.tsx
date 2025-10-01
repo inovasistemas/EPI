@@ -31,4 +31,5 @@ type UpdateUserMePasswordType = {
   code: string
   oldPassword: string
   password: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
 }

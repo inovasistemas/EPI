@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type PrimaryButtonProps = {
   name: string
@@ -25,6 +25,7 @@ export function PrimaryButton({
       type={type}
       className='relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
     >
+      <AnimatePresence mode='wait'>
         {!icon && (
           <motion.span
           key="button-text"
@@ -48,6 +49,7 @@ export function PrimaryButton({
           {icon}
         </motion.div>
         )}
+      </AnimatePresence>
     </button>
   )
 }

@@ -25,6 +25,7 @@ import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { Manufacturer } from '@/components/Features/Manufacturer'
 import { Category } from '@/components/Features/Category'
 import { useParams } from 'next/navigation'
+import { LoadingIcon } from '@/components/Display/Icons/Loading'
 
 enum menus {
   personalDetails,
@@ -41,6 +42,7 @@ const Settings: FC = () => {
   const setClearQueryParam = useClearQueryParams()
   const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
   const [modalStatus, setModalStatus] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [modalAlertStatus, setModalAlertStatus] = useState(false)
   const [securityCode, setSecurityCode] = useState('')
   const [password, setPassword] = useState('')
@@ -69,6 +71,7 @@ const Settings: FC = () => {
       code: securityCode,
       oldPassword,
       password,
+      loading: setLoading
     })
 
     if (response && response.status === 204) {
@@ -134,6 +137,7 @@ const Settings: FC = () => {
             buttonLabel='Confirmar'
             onSuccess={handlePasswordChange}
             onChange={handleChangeSecurityCode}
+            icon={loading? <LoadingIcon size='size-5' stroke='stroke-[--textSecondary]' strokeWidth={2}  /> : null}
           />
         )}
       </Modal>

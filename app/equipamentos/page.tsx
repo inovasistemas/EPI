@@ -364,88 +364,92 @@ const Equipment: FC = () => {
 
         <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
           <div className="flex flex-col gap-2 px-3">
-            <div className="gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm">
-              <div className="grid col-span-5 py-3">
-                <div className="group flex justify-start items-center gap-2 transition-all duration-300">
-                  <div className="flex items-center h-full">
-                    <input
-                      id="checkboxAll"
-                      type="checkbox"
-                      name="equipment[]"
-                      className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary"
-                      checked={checkedAll}
-                      onChange={e => {
-                        const checkboxes = checkboxRefs.current
-                        const newValue = !checkedAll
-                        checkboxes.forEach(ref => {
-                          if (ref) ref.checked = newValue
-                        })
-                        setCheckedAll(newValue)
-                        updateCheckedStatus()
-                        e.stopPropagation()
-                      }}
-                    />
-                  </div>
+            <AnimatePresence mode='wait'>
+              {hasPermission && (
+                <motion.div className="gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm">
+                  <div className="grid col-span-5 py-3">
+                    <div className="group flex justify-start items-center gap-2 transition-all duration-300">
+                      <div className="flex items-center h-full">
+                        <input
+                          id="checkboxAll"
+                          type="checkbox"
+                          name="equipment[]"
+                          className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary"
+                          checked={checkedAll}
+                          onChange={e => {
+                            const checkboxes = checkboxRefs.current
+                            const newValue = !checkedAll
+                            checkboxes.forEach(ref => {
+                              if (ref) ref.checked = newValue
+                            })
+                            setCheckedAll(newValue)
+                            updateCheckedStatus()
+                            e.stopPropagation()
+                          }}
+                        />
+                      </div>
 
-                  <button
-                    onClick={() => handleOrderBy('name')}
-                    type="button"
-                    className="flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Nome</span>
-                    <div className="min-w-4">
+                      <button
+                        onClick={() => handleOrderBy('name')}
+                        type="button"
+                        className="flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300"
+                      >
+                        <span>Nome</span>
+                        <div className="min-w-4">
+                          <CaretOrder
+                            field={orderBy.field}
+                            name="name"
+                            order={orderBy.order}
+                          />
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center col-span-3 py-3">
+                    <button
+                      onClick={() => handleOrderBy('manufacturer')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Fabricante</span>
                       <CaretOrder
                         field={orderBy.field}
-                        name="name"
+                        name="manufacturer"
                         order={orderBy.order}
                       />
-                    </div>
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center col-span-3 py-3">
-                <button
-                  onClick={() => handleOrderBy('manufacturer')}
-                  type="button"
-                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                >
-                  <span>Fabricante</span>
-                  <CaretOrder
-                    field={orderBy.field}
-                    name="manufacturer"
-                    order={orderBy.order}
-                  />
-                </button>
-              </div>
-              <div className="flex items-center col-span-2 py-3">
-                <button
-                  onClick={() => handleOrderBy('category')}
-                  type="button"
-                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                >
-                  <span>Categoria</span>
-                  <CaretOrder
-                    field={orderBy.field}
-                    name="category"
-                    order={orderBy.order}
-                  />
-                </button>
-              </div>
-              <div className="flex justify-end items-center col-span-2 py-3">
-                <button
-                  onClick={() => handleOrderBy('stock')}
-                  type="button"
-                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                >
-                  <span>Estoque</span>
-                  <CaretOrder
-                    field={orderBy.field}
-                    name="stock"
-                    order={orderBy.order}
-                  />
-                </button>
-              </div>
-            </div>
+                    </button>
+                  </div>
+                  <div className="flex items-center col-span-2 py-3">
+                    <button
+                      onClick={() => handleOrderBy('category')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Categoria</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="category"
+                        order={orderBy.order}
+                      />
+                    </button>
+                  </div>
+                  <div className="flex justify-end items-center col-span-2 py-3">
+                    <button
+                      onClick={() => handleOrderBy('stock')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Estoque</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="stock"
+                        order={orderBy.order}
+                      />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             <AnimatePresence mode='wait'>
             {loading && (
               <motion.div
@@ -459,7 +463,15 @@ const Equipment: FC = () => {
                 <Skeleton className='rounded-xl w-full h-[88px]' />
                 <Skeleton className='rounded-xl w-full h-[88px]' />
                 <Skeleton className='rounded-xl w-full h-[88px]' />
-                <Skeleton className='rounded-xl w-full h-[88px]' />
+
+                <div className='flex justify-center items-center pt-3 w-full'>
+                  <Paginations
+                    numberOfPages={calcPages(
+                      1,
+                      1,
+                    )}
+                  />
+                </div>
               </motion.div>
             )}
 

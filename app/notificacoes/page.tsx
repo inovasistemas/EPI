@@ -3,6 +3,7 @@ import { Modal } from '@/components/Display/Modal'
 import { NotificationModal } from '@/components/Features/Notification'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { Skeleton } from '@/components/ui/skeleton'
 import { formatDistance } from '@/components/Utils/FormatDistance'
 import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
 import {
@@ -34,6 +35,7 @@ const Notification: FC = () => {
   const [bgStyle, setBgStyle] = useState({ x: 0, width: 0 })
   const [notificationsData, setNotificationsData] = useState<Notification[]>([])
   const [modalStatus, setModalStatus] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [selectedNotification, setSelectedNotification] =
     useState<Notification>({
       uuid: '',
@@ -66,7 +68,7 @@ const Notification: FC = () => {
   }, [filter])
 
   const fetchNotifications = async () => {
-    const response = await getNotifications({ status: 'ALL', limit: 100 })
+    const response = await getNotifications({ status: 'ALL', limit: 100, loading: setLoading })
     if (response && response.status === 200) {
       const data = response.data
       if (data.total > 0) {
@@ -140,7 +142,29 @@ const Notification: FC = () => {
           </div>
         </div>
         <AnimatePresence mode='popLayout'>
-          <div className='px-6 w-full'>
+          {loading && (
+            <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className='flex flex-col gap-1 px-6 py-4 w-full'
+            >
+              <Skeleton className='py-3 rounded-xl w-1/2' />
+              <Skeleton className='py-3 rounded-xl w-full' />
+              <Skeleton className='py-3 rounded-xl w-2/12' />
+            </motion.div>
+          )}
+
+          {!loading && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className='px-6 w-full'
+          >
             <ul className='divide-y divide-[--border] w-full'>
               {notificationsData
                 .filter(notification =>
@@ -206,7 +230,8 @@ const Notification: FC = () => {
                   </motion.li>
                 ))}
             </ul>
-          </div>
+          </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>

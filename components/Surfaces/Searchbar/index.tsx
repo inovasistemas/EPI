@@ -38,6 +38,7 @@ const Searchbar: React.FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
   const [modalNotificationStatus, setModalNotificationStatus] = useState(false)
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [selectedNotification, setSelectedNotification] =
     useState<Notification>({
       uuid: '',
@@ -85,7 +86,7 @@ const Searchbar: React.FC = () => {
   }
 
   const fetchNotifications = async () => {
-    const response = await getNotifications({ status: 'RECEIVED', limit: 3 })
+    const response = await getNotifications({ status: 'RECEIVED', limit: 3, loading: setLoading })
     if (response && response.status === 200) {
       const data = response.data
       if (data.total > 0) {

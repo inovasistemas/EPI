@@ -1,15 +1,18 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 
 type SecurityCodeType = {
   buttonLabel: string
   onSuccess: () => void
   onChange: (value: string) => void
+  icon?: React.ReactElement | null
 }
 
 export function SecurityCode({
   buttonLabel,
   onSuccess,
   onChange,
+  icon
 }: SecurityCodeType) {
   const length = 6
   const [values, setValues] = useState(Array(length).fill(''))
@@ -77,8 +80,7 @@ export function SecurityCode({
         </h2>
         <div className='flex flex-col'>
           <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-            Insira o código que foi enviado para confirmar sua identidade e
-            continuar.
+            Insira o código de 6 dígitos que você vê no seu aplicativo autenticador
           </span>
           <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
             Essa etapa ajuda a manter sua conta segura.
@@ -103,13 +105,38 @@ export function SecurityCode({
         ))}
       </div>
       <div className='flex flex-row justify-end mt-3 w-full'>
-        <div className='flex flex-row gap-3'>
+        <div className='flex flex-row gap-3 w-full sm:max-w-36'>
           <button
             onClick={onSuccess}
             type='button'
-            className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+            className='relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
           >
-            <span className='font-medium text-sm'>{buttonLabel}</span>
+            <AnimatePresence mode='wait'>
+              {!icon && (
+                <motion.span
+                key="button-text"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className='font-medium text-sm'
+              >
+                {buttonLabel}
+              </motion.span>
+            )}
+            {icon && (
+              <motion.div
+                key="button-icon"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className='flex flex-col gap-3 py-0.5'
+              >
+                {icon}
+              </motion.div>
+              )}
+            </AnimatePresence>
           </button>
         </div>
       </div>

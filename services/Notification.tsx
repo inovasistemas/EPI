@@ -21,8 +21,9 @@ export async function getUnreadNotifications() {
   }
 }
 
-export async function getNotifications({ status, limit }: NotificationProps) {
+export async function getNotifications({ status, limit, loading }: NotificationProps) {
   try {
+    loading(true)
     const params: Record<string, any> = {}
 
     params.status = status ? status : 'ALL'
@@ -32,14 +33,17 @@ export async function getNotifications({ status, limit }: NotificationProps) {
       `${process.env.NEXT_PUBLIC_API_HOST}/notifications`,
       { params, withCredentials: true }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }

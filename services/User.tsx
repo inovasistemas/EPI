@@ -166,8 +166,10 @@ export async function updateUserMePassword({
   code,
   oldPassword,
   password,
+  loading
 }: UpdateUserMePasswordType) {
   try {
+    loading(true)
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me/password`,
       {
@@ -179,14 +181,17 @@ export async function updateUserMePassword({
         withCredentials: true,
       },
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }
