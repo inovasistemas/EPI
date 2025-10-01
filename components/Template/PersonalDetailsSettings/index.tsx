@@ -113,7 +113,7 @@ export function PersonalDetailsSettings() {
               <Skeleton className='rounded-xl w-full h-[52px]' />
               <Skeleton className='rounded-xl w-full h-[52px]' />
 
-              <div className='col-span-full pt-6 w-full'>
+              <div className='col-span-full w-full'>
                 <Skeleton className='rounded-xl w-full h-[132px]' />
               </div>
 
@@ -149,7 +149,7 @@ export function PersonalDetailsSettings() {
               textTransform='lowercase'
             />
 
-            <div className='col-span-full pt-6'>
+            <div className='col-span-full'>
               <div className='flex flex-row justify-between items-center gap-1 bg-[--backgroundSecondary] p-3 rounded-2xl w-full'>
                 <div className='flex flex-col gap-1 p-3'>
                   <span className='font-medium text-sm'>
