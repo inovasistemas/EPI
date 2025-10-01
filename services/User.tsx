@@ -81,20 +81,25 @@ export async function getUser({id, loading}: GetUserType) {
   }
 }
 
-export async function getUserMe() {
+export async function getUserMe({loading}: GetUserMeType) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/users/me`,
       { withCredentials: true },
     )
-    return response
+    
+    loading(false)
+    return response;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }

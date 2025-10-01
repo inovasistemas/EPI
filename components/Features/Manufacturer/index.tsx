@@ -147,7 +147,7 @@ export function Manufacturer() {
             </span>
           </div>
 
-          <AnimatePresence>
+          <AnimatePresence mode='wait'>
           {loading && (
             <motion.div 
             initial={{ opacity: 0 }}

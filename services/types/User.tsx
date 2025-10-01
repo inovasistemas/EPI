@@ -7,6 +7,10 @@ type GetUsersType = {
   page?: number
 }
 
+type GetUserMeType = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 type GetUserType = {
   loading: React.Dispatch<React.SetStateAction<boolean>>
   id: string

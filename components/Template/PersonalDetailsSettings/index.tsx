@@ -73,7 +73,7 @@ export function PersonalDetailsSettings() {
   }
 
   const fetchUser = async () => {
-    const response = await getUserMe()
+    const response = await getUserMe({loading: setLoading})
 
     if (response && response.status === 200) {
       setOperatorData(response.data[0])
@@ -103,22 +103,22 @@ export function PersonalDetailsSettings() {
         </div>
 
         <AnimatePresence mode='wait'>
-        {loading && (
-          <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className='gap-3 grid grid-cols-2 pt-8'>
-            <Skeleton className='rounded-xl w-full h-[52px]' />
-            <Skeleton className='rounded-xl w-full h-[52px]' />
+          {loading && (
+            <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className='gap-3 grid grid-cols-2 pt-8'>
+              <Skeleton className='rounded-xl w-full h-[52px]' />
+              <Skeleton className='rounded-xl w-full h-[52px]' />
 
-            <div className='col-span-full pt-6 w-full'>
-              <Skeleton className='rounded-xl w-full h-[132px]' />
-            </div>
+              <div className='col-span-full pt-6 w-full'>
+                <Skeleton className='rounded-xl w-full h-[132px]' />
+              </div>
 
-          </motion.div>
-        )}
+            </motion.div>
+          )}
         
         {!loading && (
           <motion.div 

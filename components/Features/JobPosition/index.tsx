@@ -131,7 +131,7 @@ export function JobPosition() {
             </span>
           </div>
 
-          <AnimatePresence>
+          <AnimatePresence mode='wait'>
           {loading && (
             <motion.div 
               initial={{ opacity: 0 }}
