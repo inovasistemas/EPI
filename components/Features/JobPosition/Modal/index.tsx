@@ -86,7 +86,7 @@ export function JobPositionModal({
   }
 
   const fetchSectors = async () => {
-    const response = await getSectors()
+    const response = await getSectors({loading: setLoading})
 
     if (response) {
       if (response.status === 200) {
