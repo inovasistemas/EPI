@@ -26,6 +26,7 @@ import { Manufacturer } from '@/components/Features/Manufacturer'
 import { Category } from '@/components/Features/Category'
 import { useParams } from 'next/navigation'
 import { LoadingIcon } from '@/components/Display/Icons/Loading'
+import Link from 'next/link'
 
 enum menus {
   personalDetails,
@@ -35,12 +36,13 @@ enum menus {
   security,
   category,
   manufacturer,
+  default
 }
 
 const Settings: FC = () => {
   const params = useParams()
   const setClearQueryParam = useClearQueryParams()
-  const [activeMenu, setActiveMenu] = useState<menus>(menus.personalDetails)
+  const [activeMenu, setActiveMenu] = useState<menus>(menus.default)
   const [modalStatus, setModalStatus] = useState(false)
   const [loading, setLoading] = useState(false)
   const [modalAlertStatus, setModalAlertStatus] = useState(false)
@@ -115,8 +117,9 @@ const Settings: FC = () => {
 
   useEffect(()=>{
     if (SettingsMenu === 'dados') setActiveMenu(menus.personalDetails)
-    if (SettingsMenu === 'grupo-permissões') setActiveMenu(menus.permissionGroup)
+    if (SettingsMenu === 'grupo-permissoes') setActiveMenu(menus.permissionGroup)
     if (SettingsMenu === 'cargos') setActiveMenu(menus.jobPosition)
+    if (SettingsMenu === 'setores') setActiveMenu(menus.sector)
     if (SettingsMenu === 'categorias') setActiveMenu(menus.category)
     if (SettingsMenu === 'fabricantes') setActiveMenu(menus.manufacturer)
     if (SettingsMenu === 'senhas') setActiveMenu(menus.security)
@@ -182,9 +185,8 @@ const Settings: FC = () => {
       </Modal>
       <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
         <div className='flex flex-col gap-2 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
-          <button
-            onClick={() => handleActiveMenu(menus.personalDetails)}
-            type='button'
+          <Link
+            href="/configuracoes/dados"
             data-active={activeMenu === menus.personalDetails}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -197,11 +199,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Dados pessoais
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.permissionGroup)}
-            type='button'
+          <Link
+            href="/configuracoes/grupo-permissoes"
             data-active={activeMenu === menus.permissionGroup}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -214,11 +215,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Grupo de permissões
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.sector)}
-            type='button'
+          <Link
+            href="/configuracoes/setores"
             data-active={activeMenu === menus.sector}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -231,11 +231,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Setores e subsetores
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.jobPosition)}
-            type='button'
+          <Link
+            href="/configuracoes/cargos"
             data-active={activeMenu === menus.jobPosition}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -248,11 +247,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Cargos e Funções
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.category)}
-            type='button'
+          <Link
+            href="/configuracoes/categorias"
             data-active={activeMenu === menus.category}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -265,11 +263,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Categorias e subcategorias
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.manufacturer)}
-            type='button'
+          <Link
+            href="/configuracoes/fabricantes"
             data-active={activeMenu === menus.manufacturer}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -282,11 +279,10 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Fabricantes
             </span>
-          </button>
+          </Link>
 
-          <button
-            onClick={() => handleActiveMenu(menus.security)}
-            type='button'
+          <Link
+            href="/configuracoes/senhas"
             data-active={activeMenu === menus.security}
             className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
           >
@@ -299,7 +295,7 @@ const Settings: FC = () => {
             <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
               Senha e segurança
             </span>
-          </button>
+          </Link>
         </div>
 
         <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
