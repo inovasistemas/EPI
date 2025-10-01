@@ -1,6 +1,6 @@
 'use client'
 import Cookies from 'cookies-js'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -356,29 +356,38 @@ export function LoginForm() {
 
               {step === 2 && (
                 <div className='flex justify-end items-center gap-3 w-full transition-all duration-300'>
-                  <AnimatePresence>
-                    {loading && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className='flex flex-col gap-3'
-                    >
-                      <LoadingIcon size='size-6' stroke='stroke-[--textSecondary]' strokeWidth={2}  />
-                    </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   <button
                     type='button'
                     onClick={() => handleBack()}
                     disabled={handleDisabled()}
                     className={classNames(
-                      'px-8 py-2.5 group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] sm:w-auto w-full rounded-xl text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                      'px-8 py-2.5 group z-[55] relative flex justify-center items-center gap-2 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] w-full sm:max-w-36 rounded-xl text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
                     )}
                   >
-                    <span className='font-medium'>Voltar</span>
+                      {!loading && (
+                      <motion.span
+                        key="button-text"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.1 }}
+                        className='font-medium'
+                      >
+                        Voltar
+                      </motion.span>
+                      )}
+                      {loading && (
+                        <motion.div
+                          key="button-icon"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className='flex flex-col gap-3 py-0.5'
+                        >
+                          <LoadingIcon size='size-5' stroke='stroke-[--textSecondary]' strokeWidth={2}  />
+                        </motion.div>
+                        )}
                   </button>
                 </div>
               )}
@@ -403,20 +412,6 @@ export function LoginForm() {
 
         {step <= 1 && (
           <div className='flex justify-end items-center gap-3 w-full transition-all duration-300'>
-              <AnimatePresence>
-                {loading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className='flex flex-col gap-3'
-                >
-                  <LoadingIcon size='size-6' stroke='stroke-[--textSecondary]' strokeWidth={2}  />
-                </motion.div>
-                )}
-              </AnimatePresence>
-            
             <div className='flex w-full sm:max-w-36'>
               <PrimaryButton
                 name='primary'
@@ -426,6 +421,7 @@ export function LoginForm() {
                   step === 0 ? 'Continuar' : step === 1 ? 'Entrar' : 'Verificar'
                 }
                 disabled={handleDisabled()}
+                icon={loading? <LoadingIcon size='size-5' stroke='stroke-[--textSecondary]' strokeWidth={2}  /> : null}
               />
             </div>
           </div>

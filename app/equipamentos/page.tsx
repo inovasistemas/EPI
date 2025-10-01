@@ -31,6 +31,7 @@ import { calcPages } from '@/utils/calc-pages'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { CalendarIcon } from '@/components/Display/Icons/Calendar'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
 
 enum EquipmentModals {
   Filter,
@@ -320,9 +321,14 @@ const Equipment: FC = () => {
           </div>
         </div>
 
-        {(hasPermission && !loading) && (
-          <>
-            <div className="flex flex-row items-center gap-3 px-6 w-1/2">
+        <AnimatePresence>
+          {hasPermission && (
+            <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-row items-center gap-3 px-6 w-1/2">
               <div
                 className="bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
                 <div className="flex">
@@ -352,204 +358,192 @@ const Equipment: FC = () => {
                 }
                 onClick={handleCloseModal}
               />
-            </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-            <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
-              <div className="flex flex-col gap-2 px-3">
-                <div className="gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm">
-                  <div className="grid col-span-5 py-3">
-                    <div className="group flex justify-start items-center gap-2 transition-all duration-300">
-                      <div className="flex items-center h-full">
-                        <input
-                          id="checkboxAll"
-                          type="checkbox"
-                          name="equipment[]"
-                          className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary"
-                          checked={checkedAll}
-                          onChange={e => {
-                            const checkboxes = checkboxRefs.current
-                            const newValue = !checkedAll
-                            checkboxes.forEach(ref => {
-                              if (ref) ref.checked = newValue
-                            })
-                            setCheckedAll(newValue)
-                            updateCheckedStatus()
-                            e.stopPropagation()
-                          }}
-                        />
-                      </div>
-
-                      <button
-                        onClick={() => handleOrderBy('name')}
-                        type="button"
-                        className="flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300"
-                      >
-                        <span>Nome</span>
-                        <div className="min-w-4">
-                          <CaretOrder
-                            field={orderBy.field}
-                            name="name"
-                            order={orderBy.order}
-                          />
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex items-center col-span-3 py-3">
-                    <button
-                      onClick={() => handleOrderBy('manufacturer')}
-                      type="button"
-                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                    >
-                      <span>Fabricante</span>
-                      <CaretOrder
-                        field={orderBy.field}
-                        name="manufacturer"
-                        order={orderBy.order}
-                      />
-                    </button>
-                  </div>
-                  <div className="flex items-center col-span-2 py-3">
-                    <button
-                      onClick={() => handleOrderBy('category')}
-                      type="button"
-                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                    >
-                      <span>Categoria</span>
-                      <CaretOrder
-                        field={orderBy.field}
-                        name="category"
-                        order={orderBy.order}
-                      />
-                    </button>
-                  </div>
-                  <div className="flex justify-end items-center col-span-2 py-3">
-                    <button
-                      onClick={() => handleOrderBy('stock')}
-                      type="button"
-                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                    >
-                      <span>Estoque</span>
-                      <CaretOrder
-                        field={orderBy.field}
-                        name="stock"
-                        order={orderBy.order}
-                      />
-                    </button>
-                  </div>
-                </div>
-                {loading && (
-                  <motion.div
-                    key="loading"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="flex justify-center items-start pt-10 w-full h-full"
-                  >
-                    <div role="status">
-                      <svg
-                        aria-hidden="true"
-                        className="fill-[--primaryColor] w-8 h-8 text-[--buttonPrimary] animate-spin"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                          fill="currentFill"
-                        />
-                      </svg>
-                      <span className="sr-only">Carregando...</span>
-                    </div>
-                  </motion.div>
-                )}
-                {!loading && (
-                  <motion.div
-                    key="data"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="flex flex-col gap-6 pb-6 h-full overflow-y-auto"
-                  >
-                    <ul className="flex flex-col gap-3">
-                      {equipments.map((equipment, i) => (
-                        <li key={equipment.uuid}>
-                          <Link
-                            href={`/equipamentos/detalhes/${equipment.uuid}`}
-                            className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
-                          >
-                            <div className="flex items-center gap-3 col-span-5 py-3 font-medium">
-                              <input
-                                ref={el => {
-                                  if (el) {
-                                    checkboxRefs.current[i] = el
-                                  }
-                                }}
-                                type="checkbox"
-                                name="equipment[]"
-                                onClick={e => {
-                                  e.stopPropagation()
-                                }}
-                                value={equipment.uuid}
-                                onChange={() => {
-                                  const allChecked =
-                                    checkboxRefs.current.length > 0 &&
-                                    checkboxRefs.current.every(ref => ref?.checked)
-                                  setCheckedAll(allChecked)
-                                  updateCheckedStatus()
-                                }}
-                                className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]"
-                              />
-                              <div
-                                className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
-                                {equipment.picture &&
-                                  equipment.picture.length > 3 && (
-                                    <Image
-                                      src={`https://api.inovasistemas.app${equipment.picture}`}
-                                      alt={equipment.name}
-                                      fill
-                                      className="w-full h-full object-cover"
-                                    />
-                                  )}
-                              </div>
-                              <span
-                                className="inline-block overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
-                            {equipment.name.toLocaleLowerCase()}
-                          </span>
-                            </div>
-                            <div className="flex items-center col-span-3 py-4 capitalize">
-                              {equipment.manufacturer?.toLocaleLowerCase()}
-                            </div>
-                            <div className="flex items-center col-span-2 py-4 pr-1 capitalize">
-                              {equipment.category?.toLocaleLowerCase()}
-                            </div>
-                            <div className="flex justify-end items-center col-span-2 py-4 pr-1 lowercase">
-                              {equipment.stock}{' '}
-                              {equipment.stock != 1 ? 'unidades' : 'unidade'}
-                            </div>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <Paginations
-                      numberOfPages={calcPages(
-                        pageSettings.numberOfDocuments,
-                        pageSettings.numberPerPage,
-                      )}
+        <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
+          <div className="flex flex-col gap-2 px-3">
+            <div className="gap-3 grid grid-cols-12 px-3 font-medium text-[--textSecondary] text-sm">
+              <div className="grid col-span-5 py-3">
+                <div className="group flex justify-start items-center gap-2 transition-all duration-300">
+                  <div className="flex items-center h-full">
+                    <input
+                      id="checkboxAll"
+                      type="checkbox"
+                      name="equipment[]"
+                      className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary"
+                      checked={checkedAll}
+                      onChange={e => {
+                        const checkboxes = checkboxRefs.current
+                        const newValue = !checkedAll
+                        checkboxes.forEach(ref => {
+                          if (ref) ref.checked = newValue
+                        })
+                        setCheckedAll(newValue)
+                        updateCheckedStatus()
+                        e.stopPropagation()
+                      }}
                     />
-                  </motion.div>
-                )}
+                  </div>
+
+                  <button
+                    onClick={() => handleOrderBy('name')}
+                    type="button"
+                    className="flex items-center gap-2 group-hover:opacity-60 truncate transition-all duration-300"
+                  >
+                    <span>Nome</span>
+                    <div className="min-w-4">
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="name"
+                        order={orderBy.order}
+                      />
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div className="flex items-center col-span-3 py-3">
+                <button
+                  onClick={() => handleOrderBy('manufacturer')}
+                  type="button"
+                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                >
+                  <span>Fabricante</span>
+                  <CaretOrder
+                    field={orderBy.field}
+                    name="manufacturer"
+                    order={orderBy.order}
+                  />
+                </button>
+              </div>
+              <div className="flex items-center col-span-2 py-3">
+                <button
+                  onClick={() => handleOrderBy('category')}
+                  type="button"
+                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                >
+                  <span>Categoria</span>
+                  <CaretOrder
+                    field={orderBy.field}
+                    name="category"
+                    order={orderBy.order}
+                  />
+                </button>
+              </div>
+              <div className="flex justify-end items-center col-span-2 py-3">
+                <button
+                  onClick={() => handleOrderBy('stock')}
+                  type="button"
+                  className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                >
+                  <span>Estoque</span>
+                  <CaretOrder
+                    field={orderBy.field}
+                    name="stock"
+                    order={orderBy.order}
+                  />
+                </button>
               </div>
             </div>
-          </>
-        )}
+            <AnimatePresence mode='wait'>
+            {loading && (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col justify-center items-start gap-3 w-full h-full"
+              >
+                <Skeleton className='rounded-xl w-full h-[88px]' />
+                <Skeleton className='rounded-xl w-full h-[88px]' />
+                <Skeleton className='rounded-xl w-full h-[88px]' />
+                <Skeleton className='rounded-xl w-full h-[88px]' />
+              </motion.div>
+            )}
 
+            {!loading && (
+              <motion.div
+                key="data"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col gap-6 pb-6 h-full overflow-y-auto"
+              >
+                <ul className="flex flex-col gap-3">
+                  {equipments.map((equipment, i) => (
+                    <li key={equipment.uuid}>
+                      <Link
+                        href={`/equipamentos/detalhes/${equipment.uuid}`}
+                        className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
+                      >
+                        <div className="flex items-center gap-3 col-span-5 py-3 font-medium">
+                          <input
+                            ref={el => {
+                              if (el) {
+                                checkboxRefs.current[i] = el
+                              }
+                            }}
+                            type="checkbox"
+                            name="equipment[]"
+                            onClick={e => {
+                              e.stopPropagation()
+                            }}
+                            value={equipment.uuid}
+                            onChange={() => {
+                              const allChecked =
+                                checkboxRefs.current.length > 0 &&
+                                checkboxRefs.current.every(ref => ref?.checked)
+                              setCheckedAll(allChecked)
+                              updateCheckedStatus()
+                            }}
+                            className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor]"
+                          />
+                          <div
+                            className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
+                            {equipment.picture &&
+                              equipment.picture.length > 3 && (
+                                <Image
+                                  src={`https://api.inovasistemas.app${equipment.picture}`}
+                                  alt={equipment.name}
+                                  fill
+                                  className="w-full h-full object-cover"
+                                />
+                              )}
+                          </div>
+                          <span
+                            className="inline-block overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
+                        {equipment.name.toLocaleLowerCase()}
+                      </span>
+                        </div>
+                        <div className="flex items-center col-span-3 py-4 capitalize">
+                          {equipment.manufacturer?.toLocaleLowerCase()}
+                        </div>
+                        <div className="flex items-center col-span-2 py-4 pr-1 capitalize">
+                          {equipment.category?.toLocaleLowerCase()}
+                        </div>
+                        <div className="flex justify-end items-center col-span-2 py-4 pr-1 lowercase">
+                          {equipment.stock}{' '}
+                          {equipment.stock != 1 ? 'unidades' : 'unidade'}
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Paginations
+                  numberOfPages={calcPages(
+                    pageSettings.numberOfDocuments,
+                    pageSettings.numberPerPage,
+                  )}
+                />
+              </motion.div>
+            )}
+            </AnimatePresence>
+          </div>
+        </div>
+          
         {!hasPermission && (
           <PermissionDeniedScreen />
         )}
