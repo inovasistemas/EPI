@@ -67,6 +67,7 @@ const OperatorDetails: FC = () => {
       name: operatorData.name?.toLocaleUpperCase() || '',
       password: operatorData.password,
       permissionGroup: operatorData.permissionGroup,
+      loading: setLoading
     })
 
     if (response) {
