@@ -4,6 +4,7 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type SearchSelectOptionsProps = {
   value: string
@@ -54,6 +55,11 @@ export function SearchSelect({
   }
 
   return (
+    <>
+    {options.length === 0 && (
+      <Skeleton className='rounded-xl w-full h-[54px]' />
+    )}
+    {options.length > 0 && (
     <div
       className={cn(
         {
@@ -229,5 +235,7 @@ export function SearchSelect({
         )}
       </div>
     </div>
+    )}
+    </>
   )
 }
