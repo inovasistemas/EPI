@@ -25,6 +25,7 @@ type UpdateUserType = {
   email: string
   password?: string
   permissionGroup?: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type UpdateUserMePasswordType = {

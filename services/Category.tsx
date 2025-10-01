@@ -1,7 +1,7 @@
 import { logoutUserOn401 } from '@/utils/logout'
 import axios from 'axios'
 
-export async function getCategories() {
+export async function getCategories({loading}: GetCategoriesProps) {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/categories`,

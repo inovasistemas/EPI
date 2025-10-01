@@ -10,6 +10,8 @@ import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { JobPositionModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
 import { PermissionDeniedScreen } from '../PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function JobPosition() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
@@ -129,8 +131,24 @@ export function JobPosition() {
             </span>
           </div>
 
+          <AnimatePresence>
+          {loading && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className='flex flex-col gap-3 py-6 w-full'>
+              <Skeleton className='rounded-xl w-full h-11' />
+            </motion.div>
+          )}
+
           {hasPermission && jobPositionsData?.map((jobPosition, i) => (
-            <div
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               key={jobPosition.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
@@ -165,12 +183,13 @@ export function JobPosition() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {!hasPermission && (
             <PermissionDeniedScreen margin={false} />
           )}
+          </AnimatePresence>
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleModalStatus} />

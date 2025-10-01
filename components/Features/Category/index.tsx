@@ -13,10 +13,13 @@ import { CategoryModal } from './Modal'
 import { Dialog } from '@/components/Dialog'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { PermissionDeniedScreen } from '../PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function Category() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [modalProps, setModalProps] = useState({
     category: '',
     type: '',
@@ -43,7 +46,7 @@ export function Category() {
   }
 
   const fetchCategories = async () => {
-    const response = await getCategories()
+    const response = await getCategories({loading: setLoading})
 
     if (response) {
       if (response.status === 200) {
@@ -141,8 +144,46 @@ export function Category() {
             </span>
           </div>
 
-          {hasPermission && categoriesData?.map((category, i) => (
-            <div
+          <AnimatePresence mode='wait'>
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className='items-start gap-6 grid grid-cols-1 py-6 select-none'
+            >
+              <div className='flex flex-col gap-2'>
+                <div className='flex flex-row justify-between gap-2 itens-center'>
+                  <Skeleton className='rounded-xl w-1/2 h-7' />
+                  <div className='flex flex-row items-center gap-2'>
+                    <Skeleton className='rounded-xl w-44 h-7' />
+                    <Skeleton className='rounded-xl w-8 h-7' />
+                  </div>
+                </div>
+
+                <Skeleton className='rounded-xl w-1/2 h-4' />
+
+                <div className='pt-6'>
+                  <div className='block relative col-span-full'>
+                    <Skeleton className='rounded-xl w-1/2 h-4' />
+                  </div>
+                </div>
+
+                <div className='flex flex-wrap gap-2 pt-2'>
+                  <Skeleton className='rounded-xl w-20 h-7' />
+                  <Skeleton className='rounded-xl w-20 h-7' />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {hasPermission && !loading && categoriesData?.map((category, i) => (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               key={category.uuid}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
@@ -219,7 +260,7 @@ export function Category() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {!hasPermission && (
@@ -227,6 +268,7 @@ export function Category() {
               <PermissionDeniedScreen margin={false} />
             </div>
           )}
+          </AnimatePresence>
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />

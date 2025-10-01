@@ -5,6 +5,8 @@ import { getUserMe, updateUser } from '@/services/User'
 import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { ToastSuccess } from '../Toast/Success'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type UserMeType = {
   uuid: string
@@ -20,6 +22,7 @@ type UserMeType = {
 export function PersonalDetailsSettings() {
   const [operatorData, setOperatorData] = useState<UserMeType | null>(null)
   const [isOn, setIsOn] = useState(operatorData?.notifications_enabled ?? false)
+  const [loading, setLoading] = useState(false)
   const fetchedUserMe = useRef(false)
 
   const [customOperatorData, setCustomOperatorData] = useState({
@@ -35,6 +38,7 @@ export function PersonalDetailsSettings() {
       id: operatorData?.uuid || '',
       email: customOperatorData?.email.toLocaleUpperCase() || '',
       name: customOperatorData?.name.toLocaleUpperCase() || '',
+      loading: setLoading
     })
 
     if (response && response.status === 200) {
@@ -98,71 +102,97 @@ export function PersonalDetailsSettings() {
           </span>
         </div>
 
-        <div className='gap-3 grid grid-cols-2 pt-8'>
-          <FormInput
-            name='name'
-            label='Nome'
-            required={false}
-            type='text'
-            value={customOperatorData.name.toLocaleLowerCase()}
-            position='right'
-            onChange={e => handleChange('name', e.target.value)}
-            textTransform='capitalize'
-          />
+        <AnimatePresence mode='wait'>
+        {loading && (
+          <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className='gap-3 grid grid-cols-2 pt-8'>
+            <Skeleton className='rounded-xl w-full h-[52px]' />
+            <Skeleton className='rounded-xl w-full h-[52px]' />
 
-          <FormInput
-            name='email'
-            label='E-mail'
-            required={false}
-            type='text'
-            value={customOperatorData.email}
-            position='right'
-            onChange={e => handleChange('email', e.target.value)}
-            textTransform='lowercase'
-          />
+            <div className='col-span-full pt-6 w-full'>
+              <Skeleton className='rounded-xl w-full h-[132px]' />
+            </div>
 
-          <div className='col-span-full pt-6'>
-            <div className='flex flex-row justify-between items-center gap-1 bg-[--backgroundSecondary] p-3 rounded-2xl w-full'>
-              <div className='flex flex-col gap-1 p-3'>
-                <span className='font-medium text-sm'>
-                  Receber notificações no meu e-mail cadastrado
-                </span>
-                <span className='opacity-60 text-[--textSecondary] text-sm'>
-                  Escolha se deseja receber notificações importantes no e-mail
-                  que você cadastrou. Essa opção garante que você fique por
-                  dentro de atualizações e avisos diretamente na sua caixa de
-                  entrada.
-                </span>
-              </div>
+          </motion.div>
+        )}
+        
+        {!loading && (
+          <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className='gap-3 grid grid-cols-2 pt-8'>
+            <FormInput
+              name='name'
+              label='Nome'
+              required={false}
+              type='text'
+              value={customOperatorData.name.toLocaleLowerCase()}
+              position='right'
+              onChange={e => handleChange('name', e.target.value)}
+              textTransform='capitalize'
+            />
 
-              <div className='flex justify-end items-center min-w-16'>
-                <button
-                  type='button'
-                  onClick={() => {
-                    handleChange('notifications_enabled', !isOn)
-                    setIsOn(!isOn)
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+            <FormInput
+              name='email'
+              label='E-mail'
+              required={false}
+              type='text'
+              value={customOperatorData.email}
+              position='right'
+              onChange={e => handleChange('email', e.target.value)}
+              textTransform='lowercase'
+            />
+
+            <div className='col-span-full pt-6'>
+              <div className='flex flex-row justify-between items-center gap-1 bg-[--backgroundSecondary] p-3 rounded-2xl w-full'>
+                <div className='flex flex-col gap-1 p-3'>
+                  <span className='font-medium text-sm'>
+                    Receber notificações no meu e-mail cadastrado
+                  </span>
+                  <span className='opacity-60 text-[--textSecondary] text-sm'>
+                    Escolha se deseja receber notificações importantes no e-mail
+                    que você cadastrou. Essa opção garante que você fique por
+                    dentro de atualizações e avisos diretamente na sua caixa de
+                    entrada.
+                  </span>
+                </div>
+
+                <div className='flex justify-end items-center min-w-16'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      handleChange('notifications_enabled', !isOn)
                       setIsOn(!isOn)
-                    }
-                  }}
-                  aria-pressed={isOn}
-                  className={`w-10 h-6 flex items-center bg-[--buttonPrimary] rounded-full p-1 cursor-pointer transition-colors ${
-                    isOn ? '!bg-primary' : ''
-                  }`}
-                  tabIndex={0}
-                >
-                  <div
-                    className={`bg-[--backgroundPrimary] w-5 h-5 rounded-full shadow-md transform transition-transform ${
-                      isOn ? 'translate-x-[13px]' : '-translate-x-[1px]'
+                    }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setIsOn(!isOn)
+                      }
+                    }}
+                    aria-pressed={isOn}
+                    className={`w-10 h-6 flex items-center bg-[--buttonPrimary] rounded-full p-1 cursor-pointer transition-colors ${
+                      isOn ? '!bg-primary' : ''
                     }`}
-                  ></div>
-                </button>
+                    tabIndex={0}
+                  >
+                    <div
+                      className={`bg-[--backgroundPrimary] w-5 h-5 rounded-full shadow-md transform transition-transform ${
+                        isOn ? 'translate-x-[13px]' : '-translate-x-[1px]'
+                      }`}
+                    ></div>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
       </div>
 
       <ActionGroupSave

@@ -10,6 +10,8 @@ import { Dialog } from '@/components/Dialog'
 import { deleteManufacturer, getManufacturers } from '@/services/Manufacturer'
 import { ManufacturerModal } from './Modal'
 import { PermissionDeniedScreen } from '../PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function Manufacturer() {
   const [hasPermission, setHasPermission] = useState(true)
@@ -145,9 +147,25 @@ export function Manufacturer() {
             </span>
           </div>
 
+          <AnimatePresence>
+          {loading && (
+            <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className='flex flex-col gap-3 py-6 w-full'>
+              <Skeleton className='rounded-xl w-full h-11' />
+            </motion.div>
+          )}
+
           {(hasPermission && !loading) && ManufacturersData?.map((manufacturer, i) => (
-            <div
+            <motion.div
               key={manufacturer.uuid}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
               <div className='flex flex-col'>
@@ -184,7 +202,7 @@ export function Manufacturer() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {!hasPermission && (
@@ -192,6 +210,7 @@ export function Manufacturer() {
               <PermissionDeniedScreen margin={false} />
             </div>
           )}
+          </AnimatePresence>
         </div>
 
         <ActionGroupAdd addLabel='Adicionar' onClick={handleClick} />
