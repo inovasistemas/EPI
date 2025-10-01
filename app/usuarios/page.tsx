@@ -439,8 +439,6 @@ const Operator: FC = () => {
                 className="flex flex-col justify-center items-start gap-3 w-full"
               >
                 <Skeleton className='rounded-xl w-full h-11' />
-                <Skeleton className='rounded-xl w-full h-11' />
-                <Skeleton className='rounded-xl w-full h-11' />
 
                 <div className='flex justify-center items-center pt-3 w-full'>
                   <Paginations

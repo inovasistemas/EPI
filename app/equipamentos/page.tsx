@@ -461,8 +461,6 @@ const Equipment: FC = () => {
                 className="flex flex-col justify-center items-start gap-3 w-full h-full"
               >
                 <Skeleton className='rounded-xl w-full h-[88px]' />
-                <Skeleton className='rounded-xl w-full h-[88px]' />
-                <Skeleton className='rounded-xl w-full h-[88px]' />
 
                 <div className='flex justify-center items-center pt-3 w-full'>
                   <Paginations
