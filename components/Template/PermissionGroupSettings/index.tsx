@@ -169,11 +169,11 @@ export function PermissionGroupSettings() {
                 </div>
 
                 <div className='flex flex-wrap gap-2 pt-2'>
-                  <Skeleton className='rounded-lg w-24 h-5' />
-                  <Skeleton className='rounded-lg w-24 h-5' />
-                  <Skeleton className='rounded-lg w-24 h-5' />
-                  <Skeleton className='rounded-lg w-24 h-5' />
-                  <Skeleton className='rounded-lg w-24 h-5' />
+                  <Skeleton className='rounded-md w-24 h-5' />
+                  <Skeleton className='rounded-md w-24 h-5' />
+                  <Skeleton className='rounded-md w-24 h-5' />
+                  <Skeleton className='rounded-md w-24 h-5' />
+                  <Skeleton className='rounded-md w-24 h-5' />
                 </div>
               </div>
             </motion.div>

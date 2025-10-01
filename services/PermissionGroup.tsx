@@ -2,7 +2,9 @@ import axios from 'axios'
 import {
   CreatePermissionGroupType,
   UpdatePermissionGroupType,
+  type GetPermissionGroupProps,
   type GetPermissionGroupsType,
+  type GetPermissionGroupTemplateProps,
 } from './types/PermissionGroup'
 import { logoutUserOn401 } from '@/utils/logout'
 
@@ -30,42 +32,50 @@ export async function getPermissionGroups({loading}: GetPermissionGroupsType) {
   }
 }
 
-export async function getPermissionGroup(id: string) {
+export async function getPermissionGroup({id, loading}: GetPermissionGroupProps) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/permission-groups/${id}`,
       {
         withCredentials: true,
       }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }
 
-export async function getPermissionGroupTemplate() {
+export async function getPermissionGroupTemplate({loading}: GetPermissionGroupTemplateProps) {
   try {
+    loading(true)
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/template/permission-groups`,
       {
         withCredentials: true,
       }
     )
+    loading(false)
     return response
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
+      loading(false)
       return error.response || null
     }
+    loading(false)
     return null
   }
 }

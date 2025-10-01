@@ -12,6 +12,7 @@ import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { PermissionDeniedScreen } from '../../PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function SectorModal({
   sector,
@@ -80,7 +81,7 @@ export function SectorModal({
 
   const fetchPermissionGroups = async () => {
     if (sector && sector !== '') {
-      const response = await getSector(sector)
+      const response = await getSector({id: sector, loading: setLoading})
 
       if (response) {
         if (response.status === 200) {
@@ -218,7 +219,28 @@ export function SectorModal({
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
-      {!loading && (
+      {loading && (
+        <>
+          <div className='flex flex-col items-center gap-3 w-full'>
+            <Skeleton className='rounded-xl w-1/3 h-6' />
+            <div className='flex flex-col justify-center items-center w-full'>
+              <Skeleton className='rounded-xl w-2/3 h-3' />
+            </div>
+          </div>
+
+          <div className='gap-3 w-full'>
+            <Skeleton className='rounded-xl w-full h-[54px]' />
+          </div>
+
+          {sector !== '' && type !== 'editSector' && (
+            <div className='gap-3 w-full'>
+              <Skeleton className='rounded-xl w-full h-[92px]' />
+            </div>
+          )}
+        </>
+      )}
+
+      {hasPermission && !loading && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
             <h2 className='font-medium text-xl leading-none'>{getTitle()}</h2>
@@ -283,43 +305,45 @@ export function SectorModal({
               </div>
             )}
           </div>
-
-          <div className='flex flex-row justify-end w-full'>
-            <div className='flex flex-row gap-3'>
-              {sector &&
-                sector !== '' &&
-                (type === 'editSector' || type === 'editSubsector') && (
-                  <button
-                    onClick={confirmationModal}
-                    type='button'
-                    className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-                  >
-                    <TrashIcon
-                      size='size-4'
-                      stroke='stroke-[--textSecondary] group-hover:stroke-white'
-                      strokeWidth={2.5}
-                    />
-
-                    <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
-                      Excluir
-                    </span>
-                  </button>
-                )}
-              <button
-                onClick={handleUpdate}
-                type='button'
-                className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
-              >
-                <FloppyDiskIcon
-                  size='size-4'
-                  stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
-                  strokeWidth={2.5}
-                />
-                <span className='font-medium text-sm'>Salvar</span>
-              </button>
-            </div>
-          </div>
         </>
+      )}
+
+      {hasPermission && (
+        <div className='flex flex-row justify-end w-full'>
+          <div className='flex flex-row gap-3'>
+            {sector &&
+              sector !== '' &&
+              (type === 'editSector' || type === 'editSubsector') && (
+                <button
+                  onClick={confirmationModal}
+                  type='button'
+                  className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                >
+                  <TrashIcon
+                    size='size-4'
+                    stroke='stroke-[--textSecondary] group-hover:stroke-white'
+                    strokeWidth={2.5}
+                  />
+
+                  <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
+                    Excluir
+                  </span>
+                </button>
+              )}
+            <button
+              onClick={handleUpdate}
+              type='button'
+              className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+            >
+              <FloppyDiskIcon
+                size='size-4'
+                stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
+                strokeWidth={2.5}
+              />
+              <span className='font-medium text-sm'>Salvar</span>
+            </button>
+          </div>
+        </div>
       )}
 
       {!hasPermission && (

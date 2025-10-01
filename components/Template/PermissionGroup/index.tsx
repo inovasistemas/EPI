@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { ToastSuccess } from '../Toast/Success'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { ActionGroupAdd } from '@/components/Surfaces/ActionGroupAdd'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type Permissions = {
   id: string
@@ -51,11 +52,12 @@ export function PermissionGroup({
 }: PermissionGroupProps) {
   const fetchedPermissionGroup = useRef(false)
   const [hasChecked, setHasChecked] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [hasPermission, setHasPermission] = useState(true)
   const [permissionGroups, setPermissionGroups] = useState<PermissionGroup>()
 
   const fetchPermissionGroup = async (id: string) => {
-    const response = await getPermissionGroup(id)
+    const response = await getPermissionGroup({id, loading: setLoading})
 
     if (response) {
       if (response.status === 200) {
@@ -75,7 +77,7 @@ export function PermissionGroup({
   }
 
   const fetchPermissionGroupTemplate = async () => {
-    const response = await getPermissionGroupTemplate()
+    const response = await getPermissionGroupTemplate({loading: setLoading})
 
     if (response) {
       if (response.status === 200) {
@@ -177,130 +179,182 @@ export function PermissionGroup({
   return (
     <div className='relative flex flex-col w-full h-full'>
       <div className='flex flex-col gap-3 px-6 h-full overflow-y-auto'>
-      {hasPermission && (
-        <>
+        {loading && (
+          <>
           <div className='flex flex-col items-center gap-3 w-full'>
-            <h2 className='font-medium text-xl leading-none'>
-              {!permissionGroupId && 'Adicionar novo grupo de permissões'}
-              {permissionGroupId && 'Editar grupo de permissões'}
-            </h2>
-            <div className='flex flex-col'>
-              <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-                Adicione um novo setor para organizar as áreas principais da
-                empresa.
-              </span>
+            <Skeleton className='rounded-xl w-1/3 h-6' />
+            <div className='flex flex-col justify-center items-center w-full'>
+              <Skeleton className='rounded-xl w-2/3 h-3' />
             </div>
           </div>
 
           <div className='gap-3 w-full'>
-            <FormInput
-              name='name'
-              label='Nome'
-              required={false}
-              type='text'
-              value={permissionGroups?.name.toLocaleLowerCase()}
-              position='right'
-              onChange={e => handleGroupPermissionName(e.target.value)}
-              textTransform='capitalize'
-            />
+            <Skeleton className='rounded-xl w-full h-[54px]' />
           </div>
 
           <div className='flex flex-col gap-3 divide-y divide-[--border] w-full'>
-            {permissionGroups?.screens.map(permissionGroup => (
-              <div key={permissionGroup.screen} className='py-6 w-full'>
-                <div className='grid grid-cols-2'>
-                  <div className='flex justify-start items-start'>
-                    <div className='flex items-center gap-2'>
-                      <input
-                        id={permissionGroup.screen}
-                        type='checkbox'
-                        name={`${permissionGroup.screen}[]`}
-                        className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                        checked={permissionGroup.permissions.every(p => p.checked)}
-                        onChange={e => {
-                          const newValue = e.target.checked
-                          setPermissionGroups(prev => {
-                            if (!prev) return prev
-                            return {
-                              ...prev,
-                              screens: prev.screens.map(group =>
-                                group.screen === permissionGroup.screen
-                                  ? {
-                                      ...group,
-                                      permissions: group.permissions.map(p => ({
-                                        ...p,
-                                        checked: newValue,
-                                      })),
-                                    }
-                                  : group
-                              ),
-                            }
-                          })
-                        }}
-                      />
-                      <label
-                        htmlFor={permissionGroup.screen}
-                        className='font-medium text-sm select-none'
-                      >
-                        {permissionGroup.description}
-                      </label>
-                    </div>
-                  </div>
-                  <ul className='items-start gap-1 grid grid-cols-2'>
-                    {permissionGroup.permissions.map((permission, j) => (
-                      <li key={permission.id}>
-                        <div className='flex items-center gap-2 h-full'>
-                          <input
-                            id={permission.id}
-                            type='checkbox'
-                            name={`${permissionGroup.screen}[]`}
-                            checked={permission.checked}
-                            onChange={e => {
-                              const newValue = e.target.checked
-                              setPermissionGroups(prev => {
-                                if (!prev) return prev
-                                return {
-                                  ...prev,
-                                  screens: prev.screens.map(group =>
-                                    group.screen === permissionGroup.screen
-                                      ? {
-                                          ...group,
-                                          permissions: group.permissions.map(p =>
-                                            p.id === permission.id
-                                              ? { ...p, checked: newValue }
-                                              : p
-                                          ),
-                                        }
-                                      : group
-                                  ),
-                                }
-                              })
-                            }}
-                            className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                          />
-
-                          <label
-                            htmlFor={permission.id}
-                            className='font-regular text-sm select-none'
-                          >
-                            {permission.name}
-                          </label>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+            {Array.from({ length: 17 }).map((_, i) => (
+              <div key={`div-loader-${i}`} className='items-start grid grid-cols-2 py-6'>
+                <div className='flex items-center gap-2 w-full'>
+                  <Skeleton className='rounded-md w-5 min-w-5 h-5' />
+                  <Skeleton className='rounded-md w-36 h-5' />
                 </div>
+                <ul className='items-start gap-1 grid grid-cols-2'>
+                  <li>
+                    <div className='flex items-center gap-2 w-full'>
+                      <Skeleton className='rounded-md w-5 min-w-5 h-5' />
+                      <Skeleton className='rounded-md w-20 h-5' />
+                    </div>
+                  </li>
+                  <li>
+                    <div className='flex items-center gap-2 w-full'>
+                      <Skeleton className='rounded-md w-5 min-w-5 h-5' />
+                      <Skeleton className='rounded-md w-20 h-5' />
+                    </div>
+                  </li>
+                  <li>
+                    <div className='flex items-center gap-2 w-full'>
+                      <Skeleton className='rounded-md w-5 min-w-5 h-5' />
+                      <Skeleton className='rounded-md w-20 h-5' />
+                    </div>
+                  </li>
+                  <li>
+                    <div className='flex items-center gap-2 w-full'>
+                      <Skeleton className='rounded-md w-5 min-w-5 h-5' />
+                      <Skeleton className='rounded-md w-20 h-5' />
+                    </div>
+                  </li>
+                </ul>
               </div>
             ))}
           </div>
         </>
-      )}
+        )}
 
-      {!hasPermission && (
-        <div className='mt-10'>
-          <PermissionDeniedScreen />
-        </div>
-      )}
+        {hasPermission && !loading && (
+          <>
+            <div className='flex flex-col items-center gap-3 w-full'>
+              <h2 className='font-medium text-xl leading-none'>
+                {!permissionGroupId && 'Adicionar novo grupo de permissões'}
+                {permissionGroupId && 'Editar grupo de permissões'}
+              </h2>
+              <div className='flex flex-col'>
+                <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+                  Adicione um novo setor para organizar as áreas principais da
+                  empresa.
+                </span>
+              </div>
+            </div>
+
+            <div className='gap-3 w-full'>
+              <FormInput
+                name='name'
+                label='Nome'
+                required={false}
+                type='text'
+                value={permissionGroups?.name.toLocaleLowerCase()}
+                position='right'
+                onChange={e => handleGroupPermissionName(e.target.value)}
+                textTransform='capitalize'
+              />
+            </div>
+
+            <div className='flex flex-col gap-3 divide-y divide-[--border] w-full'>
+              {permissionGroups?.screens.map(permissionGroup => (
+                <div key={permissionGroup.screen} className='py-6 w-full'>
+                  <div className='grid grid-cols-2'>
+                    <div className='flex justify-start items-start'>
+                      <div className='flex items-center gap-2'>
+                        <input
+                          id={permissionGroup.screen}
+                          type='checkbox'
+                          name={`${permissionGroup.screen}[]`}
+                          className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                          checked={permissionGroup.permissions.every(p => p.checked)}
+                          onChange={e => {
+                            const newValue = e.target.checked
+                            setPermissionGroups(prev => {
+                              if (!prev) return prev
+                              return {
+                                ...prev,
+                                screens: prev.screens.map(group =>
+                                  group.screen === permissionGroup.screen
+                                    ? {
+                                        ...group,
+                                        permissions: group.permissions.map(p => ({
+                                          ...p,
+                                          checked: newValue,
+                                        })),
+                                      }
+                                    : group
+                                ),
+                              }
+                            })
+                          }}
+                        />
+                        <label
+                          htmlFor={permissionGroup.screen}
+                          className='font-medium text-sm select-none'
+                        >
+                          {permissionGroup.description}
+                        </label>
+                      </div>
+                    </div>
+                    <ul className='items-start gap-1 grid grid-cols-2'>
+                      {permissionGroup.permissions.map((permission, j) => (
+                        <li key={permission.id}>
+                          <div className='flex items-center gap-2 h-full'>
+                            <input
+                              id={permission.id}
+                              type='checkbox'
+                              name={`${permissionGroup.screen}[]`}
+                              checked={permission.checked}
+                              onChange={e => {
+                                const newValue = e.target.checked
+                                setPermissionGroups(prev => {
+                                  if (!prev) return prev
+                                  return {
+                                    ...prev,
+                                    screens: prev.screens.map(group =>
+                                      group.screen === permissionGroup.screen
+                                        ? {
+                                            ...group,
+                                            permissions: group.permissions.map(p =>
+                                              p.id === permission.id
+                                                ? { ...p, checked: newValue }
+                                                : p
+                                            ),
+                                          }
+                                        : group
+                                    ),
+                                  }
+                                })
+                              }}
+                              className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                            />
+
+                            <label
+                              htmlFor={permission.id}
+                              className='font-regular text-sm select-none'
+                            >
+                              {permission.name}
+                            </label>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {!hasPermission && (
+          <div className='mt-10'>
+            <PermissionDeniedScreen />
+          </div>
+        )}
       </div>
 
       <div className='bottom-0 z-[201] sticky inset-x-0 flex justify-end items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
