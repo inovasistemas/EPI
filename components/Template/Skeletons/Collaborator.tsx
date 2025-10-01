@@ -5,9 +5,9 @@ export function CollaboratorSkeleton() {
     <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
       <div className='flex justify-between items-center gap-3 p-6 w-full'>
         <div className='flex flex-row items-center gap-3 w-full'>
-          <Skeleton className="w-5 min-w-5 h-5" />
+          <Skeleton className="w-8 min-w-8 h-8" />
 
-          <Skeleton className="w-44 h-5" />
+          <Skeleton className="w-44 h-7" />
         </div>
       </div>
 
