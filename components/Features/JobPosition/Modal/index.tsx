@@ -13,6 +13,7 @@ import { getSectors } from '@/services/Sector'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { PermissionDeniedScreen } from '../../PermissionDenied'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function JobPositionModal({
   id,
@@ -173,6 +174,42 @@ export function JobPositionModal({
 
   return (
     <div className='flex flex-col justify-center items-center gap-6 w-full h-full'>
+      {loading && (
+        <>
+          <div className='flex flex-col items-center gap-3 w-full'>
+            <Skeleton className='rounded-xl w-1/3 h-6' />
+            <div className='flex flex-col justify-center items-center w-full'>
+              <Skeleton className='rounded-xl w-2/3 h-3' />
+            </div>
+          </div>
+
+          <div className='gap-3 w-full'>
+            <Skeleton className='rounded-xl w-full h-[54px]' />
+          </div>
+
+          <div className='w-full'>
+              <div className='flex flex-row items-center gap-1 bg-[--backgroundSecondary] p-3 rounded-2xl w-full'>
+                <div className='flex flex-col gap-1 p-3 w-full'>
+                  <div className='flex flex-row items-center gap-1'>
+                    <span className='font-medium text-sm'>
+                      Vincule este cargo a um setor específico
+                    </span>
+                  </div>
+
+                  <span className='opacity-60 text-[--textSecondary] text-sm'>
+                    Este subsetor terá acesso aos mesmos equipamentos do setor
+                    principal.
+                  </span>
+
+                  <div className='grid mt-1 rounded-xl w-full'>
+                    <Skeleton className='rounded-xl w-full h-[54px]' />
+                  </div>
+                </div>
+              </div>
+            </div>
+        </>
+      )}
+
       {hasPermission && !loading && (
         <>
           <div className='flex flex-col items-center gap-3 w-full'>
@@ -243,41 +280,43 @@ export function JobPositionModal({
               </div>
             </div>
           </div>
+        </>
+      )}
 
-          <div className='flex flex-row justify-end w-full'>
-            <div className='flex flex-row gap-3'>
-              {id && (
-                <button
-                  onClick={confirmationModal}
-                  type='button'
-                  className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-                >
-                  <TrashIcon
-                    size='size-4'
-                    stroke='stroke-[--textSecondary] group-hover:stroke-white'
-                    strokeWidth={2.5}
-                  />
-
-                  <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
-                    Excluir
-                  </span>
-                </button>
-              )}
+      {hasPermission && (
+        <div className='flex flex-row justify-end w-full'>
+          <div className='flex flex-row gap-3'>
+            {id && (
               <button
-                onClick={id ? handleUpdateJobPosition : handleCreateJobPosition}
+                onClick={confirmationModal}
                 type='button'
-                className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+                className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--errorLoader] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
               >
-                <FloppyDiskIcon
+                <TrashIcon
                   size='size-4'
-                  stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
+                  stroke='stroke-[--textSecondary] group-hover:stroke-white'
                   strokeWidth={2.5}
                 />
-                <span className='font-medium text-sm'>Salvar</span>
+
+                <span className='font-medium text-[--textSecondary] group-hover:text-white text-sm transition-all duration-300'>
+                  Excluir
+                </span>
               </button>
-            </div>
+            )}
+            <button
+              onClick={id ? handleUpdateJobPosition : handleCreateJobPosition}
+              type='button'
+              className='group relative flex flex-row justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-4 pr-5 rounded-xl h-10 font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+            >
+              <FloppyDiskIcon
+                size='size-4'
+                stroke='stroke-white group-data-[disabled=true]:stroke-zinc-500 group-data-[active=true]:stroke-[--primaryColor]'
+                strokeWidth={2.5}
+              />
+              <span className='font-medium text-sm'>Salvar</span>
+            </button>
           </div>
-        </>
+        </div>
       )}
       
       {!hasPermission && (
