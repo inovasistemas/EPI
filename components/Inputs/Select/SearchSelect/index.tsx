@@ -59,7 +59,7 @@ export function SearchSelect({
     {options.length <= 1 && options[0].label.length === 0 && (
       <Skeleton className='rounded-xl w-full h-[54px]' />
     )}
-    {options.length >= 1 && (
+    {options.length >= 1 && options[0].label.length >= 1 && (
     <div
       className={cn(
         {
