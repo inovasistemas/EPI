@@ -56,11 +56,9 @@ export function SearchSelect({
 
   return (
     <>
-    {options.length <= 1 && options[0].label.length === 0 && (
-      <Skeleton className='rounded-xl w-full h-[54px]' />
-    )}
-    {options.length >= 1 && options[0].label.length >= 1 && (
-    <div
+    {options.length === 0 || !options[0]?.label
+      ? <Skeleton className='rounded-xl w-full h-[54px]' />
+      : <div
       className={cn(
         {
           'grid-cols-2 relative': icon,
@@ -235,7 +233,7 @@ export function SearchSelect({
         )}
       </div>
     </div>
-    )}
+    }
     </>
   )
 }
