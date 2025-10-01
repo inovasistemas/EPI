@@ -1,5 +1,6 @@
 type GetManufacturer = {
   id: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type GetManufacturers = {

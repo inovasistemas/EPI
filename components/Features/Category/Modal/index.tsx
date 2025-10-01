@@ -221,7 +221,7 @@ export function CategoryModal({
           <div className='flex flex-col items-center gap-3 w-full'>
             <Skeleton className='rounded-xl w-1/3 h-6' />
             <div className='flex flex-col justify-center items-center w-full'>
-              <Skeleton className='rounded w-2/3 h-3' />
+              <Skeleton className='rounded-xl w-2/3 h-3' />
             </div>
           </div>
 
