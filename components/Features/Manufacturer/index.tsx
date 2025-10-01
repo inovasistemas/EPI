@@ -77,6 +77,7 @@ export function Manufacturer() {
   const handleDeleteManufacturer = async () => {
     const response = await deleteManufacturer({
       id: selectedManufacturer || '',
+      loading: setLoading
     })
 
     if (response) {
