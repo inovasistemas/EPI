@@ -78,7 +78,7 @@ export function Manufacturer() {
     const response = await deleteManufacturer({
       id: selectedManufacturer || '',
       loading: setLoading
-    })
+    }) 
 
     if (response) {
       if (response.status === 204) {
