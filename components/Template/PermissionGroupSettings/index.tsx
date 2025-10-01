@@ -14,11 +14,14 @@ import { toast } from 'sonner'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog } from '@/components/Dialog'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function PermissionGroupSettings() {
   const [modalConfirmationStatus, setModalConfirmationStatus] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [hasPermission, setHasPermission] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [permissionGroupModalProps, setPermissionGroupModalProps] = useState('')
   const [permissionGroups, setPermissionGroups] = useState<
     PermissionGroupsType[] | null
@@ -40,7 +43,7 @@ export function PermissionGroupSettings() {
   }
 
   const fetchPermissionGroups = async () => {
-    const response = await getPermissionGroups()
+    const response = await getPermissionGroups({loading: setLoading})
 
     if (response) {
       if (response.status === 200) {
@@ -140,95 +143,132 @@ export function PermissionGroupSettings() {
             </span>
           </div>
 
-          {hasPermission && permissionGroups?.map((permissionGroup, i) => (
-            <div
-              key={permissionGroup.uuid}
+          <AnimatePresence mode='wait'>
+            {loading && (
+              <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
-              <div className='flex flex-col'>
-                <div className='flex flex-row justify-between gap-2 itens-center'>
-                  <span className='font-medium capitalize'>
-                    {permissionGroup.name.toLocaleLowerCase()}
-                  </span>
-
-                  <NavAction
-                    type='button'
-                    desktop={true}
-                    icon={
-                      <EditIcon
-                        size='size-4'
-                        stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                        strokeWidth={2.5}
-                      />
-                    }
-                    mobile={true}
-                    action={() => handleClick(permissionGroup.uuid)}
-                  />
+              <div className='flex flex-col gap-1'>
+                <div className='flex flex-row justify-between itens-center'>
+                  <Skeleton className='rounded-xl w-1/2 h-7' />
+                  <div className='flex flex-row items-center gap-2'>
+                    <Skeleton className='rounded-xl w-8 h-8' />
+                  </div>
                 </div>
-                <div>
-                  <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
+
+                <Skeleton className='rounded-xl w-1/2 h-4' />
+
+                <div className='pt-3'>
+                  <div className='block relative col-span-full'>
+                    <Skeleton className='rounded-xl w-1/6 h-4' />
+                  </div>
+                </div>
+
+                <div className='flex flex-wrap gap-2 pt-2'>
+                  <Skeleton className='rounded-lg w-24 h-5' />
+                  <Skeleton className='rounded-lg w-24 h-5' />
+                  <Skeleton className='rounded-lg w-24 h-5' />
+                  <Skeleton className='rounded-lg w-24 h-5' />
+                  <Skeleton className='rounded-lg w-24 h-5' />
+                </div>
+              </div>
+            </motion.div>
+            )}
+
+            {hasPermission && !loading && permissionGroups?.map((permissionGroup, i) => (
+              <div
+                key={permissionGroup.uuid}
+                className='items-start gap-6 grid grid-cols-1 py-6 select-none'
+              >
+                <div className='flex flex-col'>
+                  <div className='flex flex-row justify-between gap-2 itens-center'>
+                    <span className='font-medium capitalize'>
+                      {permissionGroup.name.toLocaleLowerCase()}
+                    </span>
+
+                    <NavAction
+                      type='button'
+                      desktop={true}
+                      icon={
+                        <EditIcon
+                          size='size-4'
+                          stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+                          strokeWidth={2.5}
+                        />
+                      }
+                      mobile={true}
+                      action={() => handleClick(permissionGroup.uuid)}
+                    />
+                  </div>
+                  <div>
+                    <div className='block relative col-span-full -mt-1 mb-4 -ml-1'>
+                      <GroupLabel
+                        isVisible={true}
+                        label={`${permissionGroup.active_users} usuário${permissionGroup.active_users > 1 || permissionGroup.active_users === 0 ? 's' : ''} nesse grupo`}
+                        showFixed={false}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className='flex flex-col gap-3 w-full'>
+                  <div className='block relative col-span-full mb-4 -ml-1'>
                     <GroupLabel
                       isVisible={true}
-                      label={`${permissionGroup.active_users} usuário${permissionGroup.active_users > 1 || permissionGroup.active_users === 0 ? 's' : ''} nesse grupo`}
+                      label='Permissões'
                       showFixed={false}
                     />
                   </div>
+                  <div className='flex flex-wrap gap-2'>
+                    {permissionGroup.access.map((access, j) =>
+                      actions.map((action, i) => {
+                        if (action.key === 'insert' && access.insert) {
+                          return (
+                            <Tag
+                              key={`${j}-${action.key}`}
+                              label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                            />
+                          )
+                        }
+                        if (action.key === 'update' && access.update) {
+                          return (
+                            <Tag
+                              key={`${j}-${action.key}`}
+                              label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                            />
+                          )
+                        }
+                        if (action.key === 'delete' && access.delete) {
+                          return (
+                            <Tag
+                              key={`${j}-${action.key}`}
+                              label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                            />
+                          )
+                        }
+                        if (action.key === 'view' && access.show) {
+                          return (
+                            <Tag
+                              key={`${j}-${action.key}`}
+                              label={`${action.label} ${access.description.toLocaleLowerCase()}`}
+                            />
+                          )
+                        }
+                        return null
+                      })
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className='flex flex-col gap-3 w-full'>
-                <div className='block relative col-span-full mb-4 -ml-1'>
-                  <GroupLabel
-                    isVisible={true}
-                    label='Permissões'
-                    showFixed={false}
-                  />
-                </div>
-                <div className='flex flex-wrap gap-2'>
-                  {permissionGroup.access.map((access, j) =>
-                    actions.map((action, i) => {
-                      if (action.key === 'insert' && access.insert) {
-                        return (
-                          <Tag
-                            key={`${j}-${action.key}`}
-                            label={`${action.label} ${access.description.toLocaleLowerCase()}`}
-                          />
-                        )
-                      }
-                      if (action.key === 'update' && access.update) {
-                        return (
-                          <Tag
-                            key={`${j}-${action.key}`}
-                            label={`${action.label} ${access.description.toLocaleLowerCase()}`}
-                          />
-                        )
-                      }
-                      if (action.key === 'delete' && access.delete) {
-                        return (
-                          <Tag
-                            key={`${j}-${action.key}`}
-                            label={`${action.label} ${access.description.toLocaleLowerCase()}`}
-                          />
-                        )
-                      }
-                      if (action.key === 'view' && access.show) {
-                        return (
-                          <Tag
-                            key={`${j}-${action.key}`}
-                            label={`${action.label} ${access.description.toLocaleLowerCase()}`}
-                          />
-                        )
-                      }
-                      return null
-                    })
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
 
-          {!hasPermission && (
-            <PermissionDeniedScreen margin={false} />
-          )}
+            {!hasPermission && (
+              <PermissionDeniedScreen margin={false} />
+            )}
+          </AnimatePresence>
         </div>
 
         <ActionGroupAdd onClick={handleClick} />

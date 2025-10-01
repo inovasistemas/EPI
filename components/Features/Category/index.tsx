@@ -153,18 +153,18 @@ export function Category() {
               transition={{ duration: 0.3 }}
               className='items-start gap-6 grid grid-cols-1 py-6 select-none'
             >
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-col gap-1'>
                 <div className='flex flex-row justify-between gap-2 itens-center'>
                   <Skeleton className='rounded-xl w-1/2 h-7' />
                   <div className='flex flex-row items-center gap-2'>
                     <Skeleton className='rounded-xl w-44 h-7' />
-                    <Skeleton className='rounded-xl w-8 h-7' />
+                    <Skeleton className='rounded-xl w-8 h-8' />
                   </div>
                 </div>
 
                 <Skeleton className='rounded-xl w-1/2 h-4' />
 
-                <div className='pt-6'>
+                <div className='pt-3'>
                   <div className='block relative col-span-full'>
                     <Skeleton className='rounded-xl w-1/2 h-4' />
                   </div>

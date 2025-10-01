@@ -28,3 +28,7 @@ export type UpdatePermissionGroupType = {
 export type CreatePermissionGroupType = {
   payload?: PermissionGroup
 }
+
+export type GetPermissionGroupsType = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+}

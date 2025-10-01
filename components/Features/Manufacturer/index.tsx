@@ -154,8 +154,12 @@ export function Manufacturer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className='flex flex-col gap-3 py-6 w-full'>
-              <Skeleton className='rounded-xl w-full h-11' />
+            className='flex flex-row justify-between gap-3 py-6 w-full'>
+              <div className='flex flex-col gap-2 w-full'>
+              <Skeleton className='rounded-xl w-1/3 h-7' />
+              <Skeleton className='rounded-xl w-2/5 h-3' />
+              </div>
+              <Skeleton className='rounded-xl w-8 min-w-8 h-8' />
             </motion.div>
           )}
 
