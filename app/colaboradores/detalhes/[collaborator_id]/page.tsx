@@ -263,6 +263,7 @@ const CollaboratorDetails: FC = () => {
           </div>
         </div>
       </Modal>
+      <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
       <AnimatePresence mode='wait'>
       {loading || loadingJobPositions
       ? <CollaboratorSkeleton /> 
@@ -514,6 +515,7 @@ const CollaboratorDetails: FC = () => {
       </motion.div>
       }
       </AnimatePresence>
+      </div>
     </div>
   )
 }

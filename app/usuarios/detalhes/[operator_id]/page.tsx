@@ -199,6 +199,7 @@ const OperatorDetails: FC = () => {
             </div>
           </div>
         </Modal>
+        <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <AnimatePresence mode='wait'>
         {loading || loadingPermissionGroup
         ? <UserSkeleton/> 
@@ -307,6 +308,7 @@ const OperatorDetails: FC = () => {
         </motion.div>
         }
         </AnimatePresence>
+        </div>
     </div>
   )
 }

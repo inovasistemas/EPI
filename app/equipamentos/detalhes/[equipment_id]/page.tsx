@@ -346,6 +346,7 @@ const CreateEquipment: FC = () => {
           </div>
         </div>
       </Modal>
+      <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
       <AnimatePresence mode='wait'>
       {loading || loadingCategories || loadingManufacturers
         ? <EquipmentSkeleton/> 
@@ -832,6 +833,7 @@ const CreateEquipment: FC = () => {
       </motion.div>
       }
       </AnimatePresence>
+      </div>
     </div>
   )
 }
