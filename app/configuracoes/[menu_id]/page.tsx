@@ -127,7 +127,7 @@ const Settings: FC = () => {
   }, [SettingsMenu])
 
   return (
-    <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+    <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full h-[calc(100vh-65px)] lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
         title='Filtros'
         size='small'
@@ -183,12 +183,12 @@ const Settings: FC = () => {
           </div>
         </div>
       </Modal>
-      <div className='items-start gap-2 grid grid-cols-3 sm:rounded-2xl w-full h-full'>
-        <div className='flex flex-col gap-2 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
+      <div className='items-start gap-2 grid sm:grid-cols-3 grid-rows-12 sm:grid-rows-1 sm:rounded-2xl w-full h-full'>
+        <div className='flex flex-row sm:flex-col justify-between sm:justify-start items-center sm:items-start sm:gap-2 order-1 sm:order-1 sm:col-start-1 row-span-1 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
           <Link
             href="/configuracoes/dados"
             data-active={activeMenu === menus.personalDetails}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <PersonalDetailsIcon
@@ -204,7 +204,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/grupo-permissoes"
             data-active={activeMenu === menus.permissionGroup}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <GroupIcon
@@ -220,7 +220,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/setores"
             data-active={activeMenu === menus.sector}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <LaborIcon
@@ -236,7 +236,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/cargos"
             data-active={activeMenu === menus.jobPosition}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <BriefcaseIcon
@@ -252,7 +252,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/categorias"
             data-active={activeMenu === menus.category}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <WorkflowSquareIcon
@@ -268,7 +268,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/fabricantes"
             data-active={activeMenu === menus.manufacturer}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <FactoryIcon
@@ -284,7 +284,7 @@ const Settings: FC = () => {
           <Link
             href="/configuracoes/senhas"
             data-active={activeMenu === menus.security}
-            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-1 py-3 rounded-xl font-normal active:scale-95 transition-all duration-300'
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
           >
             <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
               <ShieldIcon
@@ -298,7 +298,7 @@ const Settings: FC = () => {
           </Link>
         </div>
 
-        <div className='col-span-2 bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
+        <div className='order-2 sm:order-2 sm:col-span-2 sm:col-start-2 row-span-full row-start-2 sm:row-start-auto bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
           {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
           {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
           {activeMenu === menus.jobPosition && <JobPosition />}
