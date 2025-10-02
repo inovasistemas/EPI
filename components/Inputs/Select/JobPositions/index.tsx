@@ -8,37 +8,8 @@ import { ToastError } from '@/components/Template/Toast/Error'
 export function SelectJobPositions({
   value,
   onChange,
+  jobPositionsData
 }: SelectJobPositionsProps) {
-  const fetchedJobPositions = useRef(false)
-  const [loading, setLoading] = useState(false)
-  const [jobPositionsData, setJobPositionsData] = useState([
-    {
-      uuid: '',
-      name: '',
-      sector: '',
-      created_at: '',
-      updated_at: '',
-    },
-  ])
-
-  const fetchJobPositions = async () => {
-    const response = await getJobPositions({loading: setLoading})
-
-    if (response && response.status === 200) {
-      setJobPositionsData(response.data.data)
-    } else {
-      toast.custom(() => (
-        <ToastError text='Não foi possível buscar os cargos' />
-      ))
-    }
-  }
-
-  useEffect(() => {
-    if (fetchedJobPositions.current) return
-    fetchedJobPositions.current = true
-    fetchJobPositions()
-  }, [])
-
   return (
     <SearchSelect
       value={value}

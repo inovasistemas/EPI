@@ -23,6 +23,7 @@ import { timestampToDate } from '@/utils/timestamp-to-date'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { CollaboratorSkeleton } from '@/components/Template/Skeletons/Collaborator'
 import { AnimatePresence, motion } from 'framer-motion'
+import { getJobPositions } from '@/services/JobPosition'
 
 type Collaborator = {
   name: string
@@ -49,6 +50,7 @@ const CollaboratorDetails: FC = () => {
   const params = useParams()
   const CollaboratorId = params?.collaborator_id
   const [loading, setLoading] = useState(false)
+  const [loadingJobPositions, setLoadingJobPositions] = useState(true)
   const [collaborator, setCollaborator] = useState<Collaborator>({
     name: '',
     birthdate: '',
@@ -70,6 +72,7 @@ const CollaboratorDetails: FC = () => {
   })
   const fetchedCollaborator = useRef(false)
   const [hasPermission, setHasPermission] = useState(true)
+  const fetchedJobPositions = useRef(false)
 
   const handleChange = (name: string, value: string) => {
     setCollaborator(prev => ({
@@ -82,6 +85,16 @@ const CollaboratorDetails: FC = () => {
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
   }, [])
+
+  const [jobPositionsData, setJobPositionsData] = useState([
+    {
+      uuid: '',
+      name: '',
+      sector: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ])
 
   const fetchCollaborator = async () => {
     if (CollaboratorId && typeof CollaboratorId === 'string') {
@@ -191,6 +204,24 @@ const CollaboratorDetails: FC = () => {
     fetchCollaborator()
   }, [CollaboratorId, fetchedCollaborator])
 
+  const fetchJobPositions = async () => {
+    const response = await getJobPositions({loading: setLoadingJobPositions})
+
+    if (response && response.status === 200) {
+      setJobPositionsData(response.data.data)
+    } else {
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os cargos' />
+      ))
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedJobPositions.current) return
+    fetchedJobPositions.current = true
+    fetchJobPositions()
+  }, [])
+
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
@@ -233,7 +264,7 @@ const CollaboratorDetails: FC = () => {
         </div>
       </Modal>
       <AnimatePresence mode='wait'>
-      {loading 
+      {loading || loadingJobPositions
       ? <CollaboratorSkeleton /> 
       : 
       <motion.div 
@@ -342,6 +373,7 @@ const CollaboratorDetails: FC = () => {
               </div>
 
               <SelectJobPositions
+                jobPositionsData={jobPositionsData}
                 value={collaborator?.job_position}
                 onChange={(value: string) => handleChange('job_position', value)}
               />

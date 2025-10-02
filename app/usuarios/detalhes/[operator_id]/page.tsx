@@ -49,6 +49,7 @@ const OperatorDetails: FC = () => {
   const [permissionGroups, setPermissionGroups] = useState([])
   const [hasPermission, setHasPermission] = useState(true)
   const [loading, setLoading] = useState(false)
+  const [loadingPermissionGroup, setLoadingPermissionGroup] = useState(false)
 
   const [modalStatus, setModalStatus] = useState(false)
   const handleCloseModal = useCallback(() => {
@@ -142,7 +143,7 @@ const OperatorDetails: FC = () => {
     fetchedPermissionGroups.current = true
 
     const fetchPermissionGroups = async () => {
-      const response = await getPermissionGroups()
+      const response = await getPermissionGroups({loading: setLoadingPermissionGroup})
 
       if (response && response.status === 200) {
         const filtered = response.data.data.map(
@@ -199,7 +200,7 @@ const OperatorDetails: FC = () => {
           </div>
         </Modal>
         <AnimatePresence mode='wait'>
-        {loading 
+        {loading || loadingPermissionGroup
         ? <UserSkeleton/> 
         : 
         <motion.div 

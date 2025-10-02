@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -31,6 +31,8 @@ import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
 import ImageUpload from '@/components/ImageUpload'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
+import { getCategories } from '@/services/Category'
+import { getManufacturers } from '@/services/Manufacturer'
 
 enum menus {
   Manufacturer,
@@ -174,8 +176,6 @@ const CreateEquipment: FC = () => {
         <ToastError text='Não foi possível atualizar o equipamento' />
       ))
     }
-
-    
   }
 
   const handleDeleteEquipment = async () => {
@@ -208,10 +208,12 @@ const CreateEquipment: FC = () => {
 
     if (createModalStatus) {
       if (activeRegisterModal === menus.Category) {
+        fetchCategories()
         setCategoryVersion(prev => prev + 1)
       }
 
       if (activeRegisterModal === menus.Manufacturer) {
+        fetchManufacturers()
         setManufacturerVersion(prev => prev + 1)
       }
 
@@ -221,6 +223,75 @@ const CreateEquipment: FC = () => {
 
   useEffect(() => {
     fetchEquipment()
+  }, [])
+
+  const fetchedCategories = useRef(false)
+  const [loadingCategories, setLoadingCategories] = useState(false)
+  const [CategoriesData, setCategoriesData] = useState([
+    {
+      uuid: '',
+      name: '',
+      sector: '',
+      created_at: '',
+      updated_at: '',
+      subcategories: [
+        {
+          uuid: '',
+          name: '',
+          active_equipments: '',
+          created_at: '',
+          updated_at: '',
+        },
+      ],
+    },
+  ])
+
+  const fetchCategories = async () => {
+    const response = await getCategories({loading: setLoadingCategories})
+
+    if (response && response.status === 200) {
+      setCategoriesData(response.data.data)
+    } else {
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar as categorias' />
+      ))
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedCategories.current) return
+    fetchedCategories.current = true
+    fetchCategories()
+  }, [])
+
+  const fetchedManufacturers = useRef(false)
+  const [loadingManufacturers, setLoadingManufacturers] = useState(false)
+  const [ManufacturersData, setManufacturersData] = useState([
+    {
+      uuid: '',
+      name: '',
+      active_equipments: '',
+      created_at: '',
+      updated_at: '',
+    },
+  ])
+
+  const fetchManufacturers = async () => {
+    const response = await getManufacturers({loading: setLoading})
+
+    if (response && response.status === 200) {
+      setManufacturersData(response.data.data)
+    } else {
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os fabricantes' />
+      ))
+    }
+  }
+
+  useEffect(() => {
+    if (fetchedManufacturers.current) return
+    fetchedManufacturers.current = true
+    fetchManufacturers()
   }, [])
 
   return (
@@ -276,7 +347,7 @@ const CreateEquipment: FC = () => {
         </div>
       </Modal>
       <AnimatePresence mode='wait'>
-      {loading 
+      {loading || loadingCategories || loadingManufacturers
         ? <EquipmentSkeleton/> 
         :
       <motion.div 
@@ -665,6 +736,7 @@ const CreateEquipment: FC = () => {
                 key={categoryVersion}
                 value={equipmentData.category ?? ''}
                 onChange={(value: string) => handleChange('category', value)}
+                CategoriesData={CategoriesData}
               />
 
               {/* <SearchSelect
@@ -682,6 +754,7 @@ const CreateEquipment: FC = () => {
                 key={manufacturerVersion}
                 value={equipmentData.manufacturer ?? ''}
                 onChange={(value: string) => handleChange('manufacturer', value)}
+                ManufacturersData={ManufacturersData}
               />
             </div>
 

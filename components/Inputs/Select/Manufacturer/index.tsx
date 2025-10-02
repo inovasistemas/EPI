@@ -8,37 +8,8 @@ import { SelectManufacturersProps } from './types'
 export function SelectManufacturers({
   value,
   onChange,
+  ManufacturersData
 }: SelectManufacturersProps) {
-  const fetchedManufacturers = useRef(false)
-  const [loading, setLoading] = useState(false)
-  const [ManufacturersData, setManufacturersData] = useState([
-    {
-      uuid: '',
-      name: '',
-      active_equipments: '',
-      created_at: '',
-      updated_at: '',
-    },
-  ])
-
-  const fetchManufacturers = async () => {
-    const response = await getManufacturers({loading: setLoading})
-
-    if (response && response.status === 200) {
-      setManufacturersData(response.data.data)
-    } else {
-      toast.custom(() => (
-        <ToastError text='Não foi possível buscar os fabricantes' />
-      ))
-    }
-  }
-
-  useEffect(() => {
-    if (fetchedManufacturers.current) return
-    fetchedManufacturers.current = true
-    fetchManufacturers()
-  }, [])
-
   return (
     <SearchSelect
       value={value}
