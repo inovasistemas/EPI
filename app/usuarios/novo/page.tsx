@@ -22,6 +22,7 @@ const CreateOperator: FC = () => {
   })
   const fetchedPermissionGroups = useRef(false)
   const [permissionGroups, setPermissionGroups] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (name: string, value: string) => {
     setFormData(prev => ({
@@ -63,7 +64,7 @@ const CreateOperator: FC = () => {
     fetchedPermissionGroups.current = true
 
     const fetchPermissionGroups = async () => {
-      const response = await getPermissionGroups()
+      const response = await getPermissionGroups({loading: setLoading})
 
       if (response && response.status === 200) {
         const filtered = response.data.data.map(

@@ -13,6 +13,7 @@ type FilterOperatorProps = {
 export function FilterOperator({ actionClose }: FilterOperatorProps) {
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
+  const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState({
     permissionGroup: searchParams.get('permissionGroup') || '',
   })
@@ -40,7 +41,7 @@ export function FilterOperator({ actionClose }: FilterOperatorProps) {
     fetchedPermissionGroups.current = true
 
     const fetchPermissionGroups = async () => {
-      const response = await getPermissionGroups()
+      const response = await getPermissionGroups({loading: setLoading})
 
       if (response && response.status === 200) {
         const filtered = response.data.data.map(
