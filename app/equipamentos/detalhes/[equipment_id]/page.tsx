@@ -1,9 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
 import { type FC, useCallback, useEffect, useState } from 'react'
-import { ChartLineIcon } from '@/components/Display/Icons/ChartLine'
-import { ClockIcon } from '@/components/Display/Icons/Clock'
-import { ImageIcon } from '@/components/Display/Icons/Image'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -33,6 +30,7 @@ import { SelectCategories } from '@/components/Inputs/Select/Categories'
 import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
 import ImageUpload from '@/components/ImageUpload'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
 
 enum menus {
   Manufacturer,
@@ -277,7 +275,16 @@ const CreateEquipment: FC = () => {
           </div>
         </div>
       </Modal>
-      <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full overflow-auto'>
+      <AnimatePresence mode='wait'>
+      {loading 
+        ? <EquipmentSkeleton/> 
+        :
+      <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/equipamentos' />
@@ -749,7 +756,9 @@ const CreateEquipment: FC = () => {
         {!hasPermission && (
           <PermissionDeniedScreen />
         )}
-      </div>
+      </motion.div>
+      }
+      </AnimatePresence>
     </div>
   )
 }

@@ -20,6 +20,8 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { Modal } from '@/components/Display/Modal'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { UserSkeleton } from '@/components/Template/Skeletons/User'
+import { AnimatePresence, motion } from 'framer-motion'
 
 const OperatorDetails: FC = () => {
   const router = useRouter()
@@ -157,7 +159,6 @@ const OperatorDetails: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-      
         <Modal
           title=''
           size='extra-small'
@@ -197,7 +198,16 @@ const OperatorDetails: FC = () => {
             </div>
           </div>
         </Modal>
-        <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
+        <AnimatePresence mode='wait'>
+        {loading 
+        ? <UserSkeleton/> 
+        : 
+        <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
           <div className='flex justify-between items-center gap-3 p-6 w-full'>
             <div className='flex flex-row items-center gap-3'>
               <GoBackButton href='/usuarios' />
@@ -293,7 +303,9 @@ const OperatorDetails: FC = () => {
           {!hasPermission && (
             <PermissionDeniedScreen />
           )}
-        </div>
+        </motion.div>
+        }
+        </AnimatePresence>
     </div>
   )
 }

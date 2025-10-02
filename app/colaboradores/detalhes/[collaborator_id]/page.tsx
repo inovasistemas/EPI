@@ -22,6 +22,7 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { timestampToDate } from '@/utils/timestamp-to-date'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { CollaboratorSkeleton } from '@/components/Template/Skeletons/Collaborator'
+import { AnimatePresence, motion } from 'framer-motion'
 
 type Collaborator = {
   name: string
@@ -231,10 +232,16 @@ const CollaboratorDetails: FC = () => {
           </div>
         </div>
       </Modal>
+      <AnimatePresence mode='wait'>
       {loading 
       ? <CollaboratorSkeleton /> 
       : 
-      <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
+      <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-3'>
             <GoBackButton href='/colaboradores' />
@@ -472,8 +479,9 @@ const CollaboratorDetails: FC = () => {
         {!hasPermission && (
           <PermissionDeniedScreen />
         )}
-      </div>
+      </motion.div>
       }
+      </AnimatePresence>
     </div>
   )
 }

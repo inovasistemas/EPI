@@ -1,8 +1,15 @@
+import { ActionGroup } from "@/components/Surfaces/ActionGroup";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 export function CollaboratorSkeleton() {
   return (
-    <div className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
+    <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.3 }}
+    className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
       <div className='flex justify-between items-center gap-3 p-6 w-full'>
         <div className='flex flex-row items-center gap-3 w-full'>
           <Skeleton className="rounded-xl w-8 min-w-8 h-8" />
@@ -14,7 +21,7 @@ export function CollaboratorSkeleton() {
       <form className='gap-x-4 gap-y-10 grid sm:grid-cols-1 w-full overflow-y-auto'>
         <div className='gap-4 grid sm:grid-cols-3 px-6 w-full'>
           <div className='hidden sm:block relative col-span-full mb-4'>
-            <Skeleton className="w-28 h-3" />
+            <Skeleton className="absolute w-28 h-3" />
           </div>
 
           <Skeleton className="rounded-xl w-full h-[54px]" />
@@ -27,7 +34,7 @@ export function CollaboratorSkeleton() {
 
         <div className='gap-4 grid grid-cols-2 px-6 w-full'>
           <div className='hidden sm:block relative col-span-full mb-4'>
-            <Skeleton className="w-28 h-3" />
+            <Skeleton className="absolute w-28 h-3" />
           </div>
 
           <Skeleton className="rounded-xl w-full h-[54px]" />
@@ -36,7 +43,7 @@ export function CollaboratorSkeleton() {
 
         <div className='gap-4 grid grid-cols-3 px-6 w-full'>
           <div className='hidden sm:block relative col-span-full mb-4'>
-            <Skeleton className="w-28 h-3" />
+            <Skeleton className="absolute w-28 h-3" />
           </div>
 
           <Skeleton className="rounded-xl w-full h-[54px]" />
@@ -63,11 +70,24 @@ export function CollaboratorSkeleton() {
 
         <div className='gap-4 grid sm:grid-cols-2 px-6 w-full'>
           <div className='hidden sm:block relative col-span-full mb-4'>
-            <Skeleton className="w-28 h-3" />
+            <Skeleton className="absolute w-28 h-3" />
           </div>
           <Skeleton className="rounded-xl w-full h-[78px]" />
         </div>
+
+        <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
+          <div className='flex font-semibold text-[--labelPrimary] text-[10px] uppercase'>
+            <Skeleton className="w-36 h-3" />
+          </div>
+        </div>
+
+        <ActionGroup
+          uriBack='/colaboradores'
+          onDelete={() => null}
+          onClick={() => null}
+          showDelete={true}
+        />
       </form>
-    </div>
+    </motion.div>
   )
 }
