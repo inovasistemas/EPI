@@ -1,5 +1,5 @@
 'use client'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -13,9 +13,21 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { useRouter } from 'next/navigation'
+import { getJobPositions } from '@/services/JobPosition'
 
 const CreateCollaborator: FC = () => {
   const router = useRouter()
+  const [loadingJobPositions, setLoadingJobPositions] = useState(true)
+  const fetchedJobPositions = useRef(false)
+  const [jobPositionsData, setJobPositionsData] = useState([
+      {
+        uuid: '',
+        name: '',
+        sector: '',
+        created_at: '',
+        updated_at: '',
+      },
+    ])
   const [formData, setFormData] = useState({
     name: '',
     birthdate: '',
@@ -82,6 +94,24 @@ const CreateCollaborator: FC = () => {
       ))
     }
   }
+
+  const fetchJobPositions = async () => {
+    const response = await getJobPositions({loading: setLoadingJobPositions})
+
+    if (response && response.status === 200) {
+      setJobPositionsData(response.data.data)
+    } else {
+      toast.custom(() => (
+        <ToastError text='Não foi possível buscar os cargos' />
+      ))
+    }
+  }
+  
+    useEffect(() => {
+      if (fetchedJobPositions.current) return
+      fetchedJobPositions.current = true
+      fetchJobPositions()
+    }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -182,6 +212,7 @@ const CreateCollaborator: FC = () => {
             </div>
 
             <SelectJobPositions
+              jobPositionsData={jobPositionsData}
               value={formData?.job_position}
               onChange={(value: string) => handleChange('job_position', value)}
             />

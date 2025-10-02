@@ -1,6 +1,6 @@
 'use client'
 import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useCallback, useState } from 'react'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
@@ -23,6 +23,7 @@ import { Manufacturer } from '@/components/Features/Manufacturer'
 import { Category } from '@/components/Features/Category'
 import ImageUpload from '@/components/ImageUpload'
 import { SelectCategories } from '@/components/Inputs/Select/Categories'
+import { getCategories } from '@/services/Category'
 
 enum menus {
   Manufacturer,
@@ -142,6 +143,45 @@ const CreateEquipment: FC = () => {
     setActiveRegisterModal(menu)
     handleCloseCreateModal()
   }
+
+  const fetchedCategories = useRef(false)
+    const [loadingCategories, setLoadingCategories] = useState(false)
+    const [CategoriesData, setCategoriesData] = useState([
+      {
+        uuid: '',
+        name: '',
+        sector: '',
+        created_at: '',
+        updated_at: '',
+        subcategories: [
+          {
+            uuid: '',
+            name: '',
+            active_equipments: '',
+            created_at: '',
+            updated_at: '',
+          },
+        ],
+      },
+    ])
+  
+    const fetchCategories = async () => {
+      const response = await getCategories({loading: setLoadingCategories})
+  
+      if (response && response.status === 200) {
+        setCategoriesData(response.data.data)
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar as categorias' />
+        ))
+      }
+    }
+  
+    useEffect(() => {
+      if (fetchedCategories.current) return
+      fetchedCategories.current = true
+      fetchCategories()
+    }, [])
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
@@ -477,6 +517,7 @@ const CreateEquipment: FC = () => {
             </div>
 
             <SelectCategories
+              CategoriesData={CategoriesData}
               key={categoryVersion}
               value={equipmentData.category ?? ''}
               onChange={(value: string) => handleChange('category', value)}
