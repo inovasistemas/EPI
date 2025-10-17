@@ -55,7 +55,7 @@ export function Paginations({ numberOfPages }: Paginations) {
 
   return (
     <Pagination>
-      <PaginationContent>
+      <PaginationContent className='min-h-9'>
         <PaginationItem>
           <PaginationPrevious
             href='#'

@@ -31,7 +31,7 @@ const Costs: FC = () => {
             
             <div>
               <div className="text-[--textSecondary] text-base select-none">
-                <Countdown date='2025-10-22 00:00:00' />
+                <Countdown date='2025-10-30 00:00:00' />
               </div>
             </div>
           </div>

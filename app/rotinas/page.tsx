@@ -22,7 +22,7 @@ const Rotine: FC = () => {
             
             <div>
               <div className="text-[--textSecondary] text-base select-none">
-                <Countdown date='2025-10-08 00:00:00' />
+                <Countdown date='2025-10-23 00:00:00' />
               </div>
             </div>
           </div>

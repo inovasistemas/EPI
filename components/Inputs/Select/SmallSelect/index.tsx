@@ -15,9 +15,12 @@ type SmallSelectProps = {
   label?: string
   icon?: React.ReactElement
   options: SmallSelectOptionsProps[]
+  background?: string
+  value?: string
+  onChange?: (value: string) => void
 }
 
-export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
+export function SmallSelect({ name, label, icon, options, value, onChange, background = 'bg-[--backgroundSecondary]' }: SmallSelectProps) {
   const [selectedOption, setSelectedOption] =
     useState<SmallSelectOptionsProps | null>(null)
   const [isSelectMenuOpen, setSelectMenuOpen] = useState(false)
@@ -25,12 +28,14 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
 
   useEffect(() => {
     setIsClient(true)
-    if (options?.length) {
-      setSelectedOption(options[0])
+
+    if (options?.length && value) {
+      const matchedOption = options.find(option => option.value === value)
+      setSelectedOption(matchedOption ?? null)
     } else {
       setSelectedOption(null)
     }
-  }, [options])
+  }, [options, value])
 
   if (!isClient) {
     return null
@@ -42,7 +47,10 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
         {
           'grid-cols-2 relative': icon,
         },
-        ['group flex items-center bg-[--buttonPrimary] rounded-xl']
+        [
+          background,
+          'group flex items-center rounded-xl'
+        ]
       )}
     >
       {icon && (
@@ -54,7 +62,7 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
       <div className='relative flex items-center w-full'>
         <Select
           value={selectedOption}
-          onChange={setSelectedOption}
+          onChange={option => onChange?.(option ? option.value : '')}
           noOptionsMessage={() => ''}
           id={name}
           onMenuOpen={() => setSelectMenuOpen(true)}
@@ -74,37 +82,42 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
               paddingLeft: '0.75rem',
               borderRadius: '0.75rem',
               marginTop: '0.5rem',
-              color: 'black',
+              color: 'var(--textSecondary)',
               fontSize: '0.875rem',
               backgroundColor: state.isSelected
-                ? '#f3f4f6'
+                ? 'var(--buttonHover)'
                 : state.isFocused
-                  ? '#fff'
+                  ? 'var(--backgroundSecondary)'
                   : 'transparent',
               ':hover': {
                 backgroundColor: state.isSelected
                   ? state.isFocused
-                    ? '#e5e7eb'
-                    : '#f3f4f6'
-                  : '#f3f4f6',
+                    ? 'var(--buttonHover)'
+                    : 'var(--buttonHover)'
+                  : 'var(--buttonHover)',
               },
             }),
             menu: (provided, state) => ({
               ...provided,
               borderRadius: '0.75rem',
-              boxShadow: 'none',
-              border: '1px solid #D9D9D9',
+              color: '#fff',
+              boxShadow:
+                '0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+              border: '1px solid var(--outlinePrimary)',
               paddingTop: '0',
               paddingBottom: '0.5rem',
               paddingLeft: '0.5rem',
               paddingRight: '0.5rem',
               fontSize: '0.875rem',
               zIndex: 50,
+              backgroundColor: 'var(--backgroundSecondary)',
             }),
             control: (provided, state) => ({
               ...provided,
-              border: state.isFocused ? '0px solid #fff' : '0px solid #fff',
-              backgroundColor: state.isFocused ? '#fff' : 'transparent',
+              border: state.isFocused
+                ? '0px solid var(--backgroundSecondary)'
+                : '0px solid var(--backgroundSecondary)',
+              backgroundColor: 'transparent',
               boxShadow: state.isFocused ? '0 0 0 0px #FB923C' : 'none',
               width: '100%',
               borderRadius: '0.75rem',
@@ -113,16 +126,28 @@ export function SmallSelect({ name, label, icon, options }: SmallSelectProps) {
             }),
             placeholder: provided => ({
               ...provided,
-              color: '#4B5563',
+              color: 'var(--labelPrimary)',
               width: '100%',
               fontSize: '0.875rem',
             }),
             input: provided => ({
               ...provided,
-              color: 'inherit',
+             color: 'var(--textSecondary)',
               fontFamily: 'inherit',
               width: '100%',
               fontSize: '0.875rem',
+            }),
+            singleValue: provided => ({
+              ...provided,
+              color: 'var(--textSecondary)',
+              fontSize: '1rem',
+              textAlign: 'start',
+              textTransform: 'capitalize',
+              paddingRight: '1.5rem',
+              height: '100%',
+              alignItems: 'center',
+              display: 'flex',
+              boxSizing: 'border-box',
             }),
           }}
         />

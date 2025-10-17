@@ -5,10 +5,12 @@ import type dayjs from 'dayjs'
 import { Ubuntu } from 'next/font/google'
 
 type DateInputProps = {
+  name?: string
   start: dayjs.Dayjs
   calendarType?: 'day' | 'week'
   label?: string
   background?: string
+  onChange?: (name: string, date: string) => void
 }
 
 const ubuntu = Ubuntu({
@@ -18,10 +20,12 @@ const ubuntu = Ubuntu({
 })
 
 export function DateInput({
+  name = 'date',
   start,
   calendarType = 'week',
   label,
   background = 'bg-[--backgroundSecondary]',
+  onChange = (name: string, date: string) => undefined
 }: DateInputProps) {
   const { WeekPicker } = DatePicker
 
@@ -73,6 +77,9 @@ export function DateInput({
                   !ubuntu.className,
                   'w-full peer placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
                 )}
+                onChange={(date, dateString) => {
+                  onChange(name, String(date))
+                }}
               />
             )}
           </ConfigProvider>
