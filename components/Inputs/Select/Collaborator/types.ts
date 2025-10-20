@@ -1,6 +1,9 @@
 export type SelectCollaboratorsProps = {
-  value: string
-  onChange: (event: string) => void
+  value: {
+    value: string
+    label: string
+  }[]
+  onChange: (value: { value: string; label: string }[]) => void
   CollaboratorsData: CollaboratorsDataType[]
   background?: string
 }

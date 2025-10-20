@@ -109,7 +109,7 @@ export function SmallSelect({ name, label, icon, options, value, onChange, backg
               paddingLeft: '0.5rem',
               paddingRight: '0.5rem',
               fontSize: '0.875rem',
-              zIndex: 50,
+              zIndex: 500,
               backgroundColor: 'var(--backgroundSecondary)',
             }),
             control: (provided, state) => ({

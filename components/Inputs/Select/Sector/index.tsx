@@ -1,9 +1,9 @@
-import { SearchSelect } from '../SearchSelect'
+import { MultiSelect } from '../MultiSelect'
 import { SelectSectorsProps } from './types'
 
 export function SelectSectors({ value, onChange, SectorsData, background }: SelectSectorsProps) {
   return (
-    <SearchSelect
+    <MultiSelect
       value={value}
       name='sector'
       options={
@@ -18,7 +18,12 @@ export function SelectSectors({ value, onChange, SectorsData, background }: Sele
           : []
       }
       placeholder='Setor'
-      onChange={onChange}
+      isMulti={true}
+      onChange={(selected) => {
+        if (Array.isArray(selected)) {
+          onChange?.(selected);
+        }
+      }}
       background={background}
     />
   )

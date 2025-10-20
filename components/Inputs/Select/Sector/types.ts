@@ -1,6 +1,9 @@
 export type SelectSectorsProps = {
-  value: string
-  onChange: (event: string) => void
+  value: {
+    value: string
+    label: string
+  }[]
+  onChange: (value: { value: string; label: string }[]) => void
   SectorsData: SectorsDataType[]
   background?: string
 }

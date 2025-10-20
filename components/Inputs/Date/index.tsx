@@ -71,14 +71,14 @@ export function DateInput({
                 superNextIcon={false}
                 superPrevIcon={false}
                 allowClear={false}
-                defaultValue={[start]}
+                defaultValue={start}
                 defaultOpen={false}
                 className={classNames(
                   !ubuntu.className,
                   'w-full peer placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
                 )}
                 onChange={(date, dateString) => {
-                  onChange(name, String(date))
+                  onChange(name, String(date.format('YYYY-MM-DD 00:00:00')))
                 }}
               />
             )}

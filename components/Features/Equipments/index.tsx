@@ -346,8 +346,12 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
                 <ul className="flex flex-col gap-3">
                   {equipments.map((equipment, i) => (
                     <li key={equipment.uuid}>
-                      <Link
-                        href={`/equipamentos/detalhes/${equipment.uuid}`}
+                      <div
+                        onClick={() => {
+                          if (checkboxRefs.current[i]) {
+                            checkboxRefs.current[i].click()
+                          }
+                        }}
                         className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
                       >
                         <div className="flex items-center gap-3 col-span-6 py-3 font-medium">
@@ -396,7 +400,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
                           {equipment.stock}{' '}
                           {equipment.stock != 1 ? 'unidades' : 'unidade'}
                         </div>
-                      </Link>
+                      </div>
                     </li>
                   ))}
                 </ul>

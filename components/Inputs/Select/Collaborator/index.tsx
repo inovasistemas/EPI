@@ -1,9 +1,9 @@
-import { SearchSelect } from '../SearchSelect'
+import { MultiSelect } from '../MultiSelect'
 import { SelectCollaboratorsProps } from './types'
 
 export function SelectCollaborators({ value, onChange, CollaboratorsData, background }: SelectCollaboratorsProps) {
   return (
-    <SearchSelect
+    <MultiSelect
       value={value}
       name='collaborator'
       options={
@@ -14,8 +14,13 @@ export function SelectCollaborators({ value, onChange, CollaboratorsData, backgr
           : []
       }
       placeholder='Colaborador'
-      onChange={onChange}
+      onChange={(selected) => {
+        if (Array.isArray(selected)) {
+          onChange?.(selected);
+        }
+      }}
       background={background}
+      isMulti={true}
     />
   )
 }

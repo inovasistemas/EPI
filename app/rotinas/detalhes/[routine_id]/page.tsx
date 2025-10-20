@@ -12,7 +12,7 @@ import { SelectSectors } from '@/components/Inputs/Select/Sector'
 import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
 import { getCollaborators } from '@/services/Collaborator'
 import { getSectors } from '@/services/Sector'
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { type FC, useCallback, useEffect, useState, useMemo } from 'react'
 import { Modal } from '@/components/Display/Modal'
 import { EquipmentsModal } from '@/components/Features/Equipments'
 import { TrashIcon } from '@/components/Display/Icons/Trash'
@@ -20,9 +20,10 @@ import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
-import { createRoutine, createRoutineEquipment } from '@/services/Routine'
-import { useRouter } from 'next/navigation'
+import { createRoutine, createRoutineEquipment, deleteRoutine, deleteRoutineEquipment, getRoutine, updateRoutine, updateRoutineEquipment } from '@/services/Routine'
+import { useParams, useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
+import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
 import { RoutineSkeleton } from '@/components/Template/Skeletons/Routine'
 
 type Collaborator = {
@@ -44,9 +45,9 @@ type Sector = {
 
 type formData = {
   name: string
-  cycleQuantity: number
-  cycleUnit: string
-  startedAt: string
+  cycle_quantity: number
+  cycle_period: string
+  started_at: string
   sectors: {
     value: string
     label: string
@@ -64,14 +65,18 @@ type formData = {
   }[]
 }
 
-const CreateOperator: FC = () => {
+const OperatorDetails: FC = () => {
   const router = useRouter()
+  const params = useParams()
+  const RoutineId = Array.isArray(params.routine_id)
+    ? params.routine_id[0]
+    : params.routine_id
   const [collaboratorsData, setCollaboratorsData] = useState<Collaborator[]>([])
   const [formData, setFormData] = useState<formData>({
     name: '',
-    cycleQuantity: 0,
-    cycleUnit: '',
-    startedAt: '',
+    cycle_quantity: 0,
+    cycle_period: '',
+    started_at: '',
     sectors: [],
     collaborators: [],
     equipments: [],
@@ -81,6 +86,68 @@ const CreateOperator: FC = () => {
   const [loadingSectors, setLoadingSectors] = useState(false)
   const [modalStatus, setModalStatus] = useState(false)
   const [sectorsData, setSectorsData] = useState<Sector[]>([])
+
+  const quantityOptions = useMemo(
+    () => Array.from({ length: 30 }, (_, i) => ({
+      value: String(i + 1),
+      label: String(i + 1),
+    })),
+    []
+  )
+
+  const selectedCollaborators = useMemo(() => {
+    if (!formData.collaborators?.length || !collaboratorsData?.length) return []
+    return formData.collaborators
+      .map(f => collaboratorsData.find(c => c.uuid === f.value))
+      .filter(Boolean)
+      .map(c => ({ value: c!.uuid, label: c!.name }))
+  }, [formData.collaborators, collaboratorsData])
+
+  const selectedSectors = useMemo(() => {
+    if (!formData.sectors?.length || !sectorsData?.length) return []
+    return formData.sectors
+      .map(f => sectorsData.find(c => c.uuid === f.value))
+      .filter(Boolean)
+      .map(c => ({ value: c!.uuid, label: c!.name }))
+  }, [formData.sectors, sectorsData])
+
+  const fetchRoutine = async () => {
+    if (!RoutineId) return
+
+    const response = await getRoutine({id: RoutineId, loading: setLoading})
+
+    if (response && response.status === 200) {
+      const data = response.data
+
+      const parsedData = {
+        ...data,
+        collaborators: (() => {
+          try {
+            return JSON.parse(data.collaborators).map((c: any) => ({
+              value: c.value,
+              label: c.label,
+            }))
+          } catch {
+            return []
+          }
+        })(),
+        sectors: (() => {
+          try {
+            return JSON.parse(data.sectors).map((s: any) => ({
+              value: s.value,
+              label: s.label,
+            }))
+          } catch {
+            return []
+          }
+        })(),
+      }
+
+      setFormData(parsedData)
+    }
+
+    setLoadingSectors(false)
+  }
 
   const fetchSectors = async () => {
     const response = await getSectors({loading: setLoadingSectors})
@@ -120,14 +187,43 @@ const CreateOperator: FC = () => {
     }))
   }
 
-  const handleAddEquipment = (uuid: string, name: string, quantity: number) => {
+  const handleAddEquipment = async (uuid: string, name: string, quantity: number) => {
+    if (!RoutineId) return
+
     const alreadyExists = formData.equipments.some(equipment => equipment.uuid === uuid)
 
     if (!alreadyExists) {
-      setFormData(prev => ({
-        ...prev,
-        ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
-      }))
+      const response = await createRoutineEquipment({
+        loading: setLoading,
+        equipment: uuid,
+        quantity: quantity,
+        routine: RoutineId,
+      })
+
+      if (response) {
+        if (response.status === 201) {
+          setFormData(prev => ({
+            ...prev,
+            ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
+          }))
+
+          toast.custom(() => (
+            <ToastSuccess text="Equipamento adicionado com sucesso" />
+          ))
+        } else if (response.status === 403) {
+          toast.custom(() => (
+            <ToastError text='Você não possui permissão para esta ação' />
+          ))
+        } else {
+          toast.custom(() => (
+            <ToastError text="Não foi possível adicionar o equipamento. Verifique os campos obrigatórios e tente novamente" />
+          ))
+        }
+      } else {
+        toast.custom(() => (
+          <ToastError text="Não foi possível adicionar o equipamento. Verifique os campos obrigatórios e tente novamente" />
+        ))
+      }
     } else {
       toast.custom(() => (
         <ToastError text="Equipamento já adicionado anteriormente" />
@@ -136,73 +232,121 @@ const CreateOperator: FC = () => {
     
   }
 
-  const handleDeleteEquipment = (uuid: string) => {
-    setFormData(prev => ({
-      ...prev,
-      equipments: prev.equipments.filter(equipment => equipment.uuid !== uuid),
-    }))
+  const handleDeleteEquipment = async (uuid: string) => {
+    if (!RoutineId) return
 
-    toast.custom(() => (
-      <ToastSuccess text="Equipamento removido com sucesso" />
-    ))
+    const response = await deleteRoutineEquipment({
+      loading: setLoading,
+      id: RoutineId,
+      equipmentId: uuid
+    });
+
+    if (response) {
+      if (response.status === 204) {
+        setFormData(prev => ({
+          ...prev,
+          equipments: prev.equipments.filter(equipment => equipment.uuid !== uuid),
+        }))
+
+        toast.custom(() => (
+          <ToastSuccess text="Equipamento removido com sucesso" />
+        ))
+      } else if (response.status === 403) {
+          toast.custom(() => (
+            <ToastError text='Você não possui permissão para esta ação' />
+          )) 
+      } else {
+        toast.custom(() => (
+          <ToastError text="Não foi possível remover o equipamento. Verifique os campos obrigatórios e tente novamente" />
+        ))
+      }
+    } else {
+      toast.custom(() => (
+        <ToastError text="Não foi possível remover o equipamento. Verifique os campos obrigatórios e tente novamente" />
+      ))
+    }
   }
 
   const handleModal = useCallback(() => {
       setModalStatus(prev => !prev)
     }, [])
 
-  const handleUpdateEquipmentQuantity = (uuid: string, newQuantity: number) => {
-    setFormData(prev => ({
-      ...prev,
-      equipments: prev.equipments.map(equipment =>
-        equipment.uuid === uuid
-          ? { ...equipment, quantity: newQuantity, updated_at: dayjs().toString() }
-          : equipment
-      ),
-    }))
+  const handleUpdateEquipmentQuantity = async (uuid: string, newQuantity: number) => {
+    if (!RoutineId) return
+
+    const response = await updateRoutineEquipment({
+      loading: setLoading,
+      id: RoutineId,
+      equipment: uuid,
+      quantity: newQuantity
+    })
+
+    if (response) {
+      if (response.status === 200) {
+        setFormData(prev => ({
+          ...prev,
+          equipments: prev.equipments.map(equipment =>
+            equipment.uuid === uuid
+              ? { ...equipment, quantity: newQuantity, updated_at: dayjs().toString() }
+              : equipment
+          ),
+        }))
+
+        toast.custom(() => (
+          <ToastSuccess text="Equipamento atualizado com sucesso" />
+        ))
+      } else if (response.status === 403) {
+        toast.custom(() => (
+          <ToastError text='Você não possui permissão para esta ação' />
+        ))
+      } else {
+        toast.custom(() => (
+          <ToastError text="Não foi possível alterar o equipamento. Verifique os campos obrigatórios e tente novamente" />
+        ))
+      }
+    } else {
+      toast.custom(() => (
+        <ToastError text="Não foi possível alterar o equipamento. Verifique os campos obrigatórios e tente novamente" />
+      ))
+    }
   }
 
-  const handleCreateRoutine = async () => {
-    const response = await createRoutine({
+  const handleUpdateRoutine = async () => {
+    if (!RoutineId) return
+
+    const response = await updateRoutine({
+      id: RoutineId,
       loading: setLoading,
       name: formData.name,
-      cycle_quantity: Number(formData.cycleQuantity),
-      cycle_period: formData.cycleUnit,
-      started_at: formData.startedAt,
+      cycle_quantity: Number(formData.cycle_quantity),
+      cycle_period: formData.cycle_period,
+      started_at: formData.started_at,
       collaborators: JSON.stringify(formData.collaborators),
       sectors: JSON.stringify(formData.sectors),
     })
 
     if (response) {
-      if (response.status === 201) {
-        if (formData.equipments.length > 0) {
-          for (const equipment of formData.equipments) {
-            await createRoutineEquipment({
-              loading: setLoading,
-              equipment: equipment.uuid,
-              quantity: equipment.quantity,
-              routine: response.data.uuid,
-            })
-          }
-        }
-
-        toast.custom(() => <ToastSuccess text='Rotina criada com sucesso' />)
-        router.push('/rotinas')
+      if (response.status === 200) {
+        toast.custom(() => <ToastSuccess text='Rotina atualizada com sucesso' />)
       } else if (response.status === 403) {
           toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         ))
       } else {
         toast.custom(() => (
-          <ToastError text='Não foi possível criar a rotina. Verifique os campos obrigatórios e tente novamente' />
+          <ToastError text='Não foi possível atualizar a rotina. Verifique os campos obrigatórios e tente novamente' />
         ))
       }
     } else {
       toast.custom(() => (
-        <ToastError text='Não foi possível criar a rotina. Verifique os campos obrigatórios e tente novamente' />
+        <ToastError text='Não foi possível atualizar a rotina. Verifique os campos obrigatórios e tente novamente' />
       ))
     }
   }
+
+  useEffect(() => {
+    fetchRoutine()
+  }, [RoutineId])
   
   useEffect(() => {
     fetchSectors()
@@ -237,7 +381,7 @@ const CreateOperator: FC = () => {
                   <h2 className='font-medium text-xl capitalize leading-none select-none'>
                     {formData.name
                       ? formData.name.toLocaleLowerCase()
-                      : 'Adicionar rota'}
+                      : 'Detalhes da rota'}
                   </h2>
                 </div>
               </div>
@@ -264,7 +408,7 @@ const CreateOperator: FC = () => {
                         </span>
                       </div>
                       <SelectCollaborators
-                        value={formData.collaborators} 
+                        value={selectedCollaborators} 
                         onChange={(selected) =>
                           handleChangeMulti(
                             'collaborators',
@@ -276,7 +420,7 @@ const CreateOperator: FC = () => {
                       />
 
                       <SelectSectors
-                        value={formData.sectors} 
+                        value={selectedSectors} 
                         onChange={(selected) =>
                           handleChangeMulti(
                             'sectors',
@@ -292,10 +436,10 @@ const CreateOperator: FC = () => {
                   <div className='flex flex-col gap-3 col-span-2'>
                     <div className='flex flex-col gap-4 py-1 rounded-2xl'>
                       <DateInput
-                        start={formData.startedAt ? dayjs(formData.startedAt) : dayjs()}
+                        start={formData.started_at ? dayjs(formData.started_at) : dayjs()}
                         calendarType='day'
                         label='Início'
-                        name='startedAt'
+                        name='started_at'
                         onChange={handleChange}
                       />
                     </div>
@@ -311,27 +455,27 @@ const CreateOperator: FC = () => {
                       </div>
                       <div className="gap-3 grid grid-cols-2 w-full">
                         <SearchSelect
-                          value={String(formData.cycleQuantity)}
+                          value={String(formData.cycle_quantity)}
                           name='cycleQuantity'
-                          options={Array.from({ length: 30 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))}
+                          options={quantityOptions}
                           placeholder='Quantidade'
-                          required={false}
-                          onChange={(value: string) => handleChange('cycleQuantity', value)}
+                          required={true}
+                          onChange={(value: string) => handleChange('cycle_auantity', value)}
                           background='bg-[--backgroundPrimary]'
                         />
 
                         <SearchSelect
-                          value={formData.cycleUnit}
+                          value={formData.cycle_period}
                           name='cycleUnit'
                           options={[
-                            { value: 'days', label: 'Dia' },
-                            { value: 'weeks', label: 'Semana' },
-                            { value: 'months', label: 'Mês' },
-                            { value: 'years', label: 'Ano' },
+                            { value: 'day', label: 'Dia' },
+                            { value: 'week', label: 'Semana' },
+                            { value: 'month', label: 'Mês' },
+                            { value: 'year', label: 'Ano' },
                           ]}
                           placeholder='Periodo'
-                          required={false}
-                          onChange={(value: string) => handleChange('cycleUnit', value)}
+                          required={true}
+                          onChange={(value: string) => handleChange('cycle_unit', value)}
                           background='bg-[--backgroundPrimary]'
                         />
                       </div>
@@ -360,7 +504,7 @@ const CreateOperator: FC = () => {
                   </div>
                   
                   <div className='flex flex-col gap-3 w-full'>
-                    {formData.equipments.map((equipment, i) => (
+                    {formData.equipments && formData.equipments.length > 0 && formData.equipments.map((equipment, i) => (
                       <div key={equipment.uuid} className="bg-[--tableRow] gap-3 grid grid-cols-2 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300">
                         <div className="flex items-center col-span-1 py-3 font-medium">
                           <button type='button' className='p-3'>
@@ -399,9 +543,9 @@ const CreateOperator: FC = () => {
                   </div>
                 </div>
 
-                <ActionGroup uriBack='/rotinas' onClick={handleCreateRoutine} showDelete={false} />
+                <ActionGroup uriBack='/rotinas' onClick={handleUpdateRoutine} showDelete={false} />
               </form>
-              </motion.div>
+            </motion.div>
           }
         </AnimatePresence>
       </div>
@@ -409,4 +553,4 @@ const CreateOperator: FC = () => {
   )
 }
 
-export default CreateOperator
+export default OperatorDetails
