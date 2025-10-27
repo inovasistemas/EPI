@@ -47,11 +47,11 @@ export function TakeoutModal({
         <div className='flex flex-row items-center gap-2 -mt-10'>
           <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
           <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
-            Reconhecimento facial
+            Biometria
           </h2>
         </div>
         <div className='flex justify-center items-center w-full h-full'>
-          <Countdown date='2025-10-15 00:00:00' />
+          <Countdown date='2025-11-10 00:00:00' />
           {/* {uuid('sc')} */}
         </div>
         
