@@ -10,20 +10,22 @@ const Agenda: FC = () => {
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
           <div className='flex flex-row items-center gap-2'>
-            <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
             <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
               Agenda 
             </h2>
           </div>
         </div>
         
-        <div className="flex justify-center items-center w-full h-full">
-          <div className="flex items-center gap-3 mb-20">
-            
-            <div>
-              <div className="text-[--textSecondary] text-base select-none">
-                <Countdown date='2025-10-30 00:00:00' />
+        <div className="flex justify-center w-full h-full">
+          <div className="flex gap-3 mb-20 px-6 w-full">
+            <div className='w-full'>
+              <div className='w-full'>
+                <h2 className='font-semibold text-xl'>Segunda, 20</h2>
               </div>
+              <ul>
+                <li>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

@@ -22,7 +22,7 @@ import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { createRoutine, createRoutineEquipment } from '@/services/Routine'
 import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, Reorder } from 'framer-motion'
 import { RoutineSkeleton } from '@/components/Template/Skeletons/Routine'
 
 type Collaborator = {
@@ -64,6 +64,14 @@ type formData = {
   }[]
 }
 
+type Equipment = {
+  uuid: string
+  name: string
+  quantity: number
+  created_at: string
+  updated_at: string
+}
+
 const CreateOperator: FC = () => {
   const router = useRouter()
   const [collaboratorsData, setCollaboratorsData] = useState<Collaborator[]>([])
@@ -76,6 +84,7 @@ const CreateOperator: FC = () => {
     collaborators: [],
     equipments: [],
   })
+  const [equipmentsData, setEquipmentsData] = useState<Equipment[]>([])
   const [loading, setLoading] = useState(false)
   const [loadingCollaborators, setLoadingCollaborators] = useState(false)
   const [loadingSectors, setLoadingSectors] = useState(false)
@@ -128,6 +137,10 @@ const CreateOperator: FC = () => {
         ...prev,
         ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
       }))
+      setEquipmentsData(prev => [
+        ...prev,
+        { uuid, name, quantity, created_at: dayjs().toString(), updated_at: '' }
+      ])
     } else {
       toast.custom(() => (
         <ToastError text="Equipamento já adicionado anteriormente" />
@@ -176,12 +189,13 @@ const CreateOperator: FC = () => {
     if (response) {
       if (response.status === 201) {
         if (formData.equipments.length > 0) {
-          for (const equipment of formData.equipments) {
+          for (const equipment of equipmentsData) {
             await createRoutineEquipment({
               loading: setLoading,
               equipment: equipment.uuid,
               quantity: equipment.quantity,
               routine: response.data.uuid,
+              order: equipmentsData.indexOf(equipment) + 1
             })
           }
         }
@@ -203,6 +217,10 @@ const CreateOperator: FC = () => {
       ))
     }
   }
+
+  useEffect(() => {
+   handleChange("startedAt", dayjs().toString()) 
+  }, [])
   
   useEffect(() => {
     fetchSectors()
@@ -217,6 +235,7 @@ const CreateOperator: FC = () => {
         handleClickOverlay={handleModal}
         showClose={false}
         padding={false}
+        overflowHidden={true}
       >
         <EquipmentsModal handleMainModal={handleModal} addEquipment={handleAddEquipment} />
       </Modal>
@@ -237,7 +256,7 @@ const CreateOperator: FC = () => {
                   <h2 className='font-medium text-xl capitalize leading-none select-none'>
                     {formData.name
                       ? formData.name.toLocaleLowerCase()
-                      : 'Adicionar rota'}
+                      : 'Adicionar rotina'}
                   </h2>
                 </div>
               </div>
@@ -292,7 +311,7 @@ const CreateOperator: FC = () => {
                   <div className='flex flex-col gap-3 col-span-2'>
                     <div className='flex flex-col gap-4 py-1 rounded-2xl'>
                       <DateInput
-                        start={formData.startedAt ? dayjs(formData.startedAt) : dayjs()}
+                        start={dayjs(formData.startedAt)}
                         calendarType='day'
                         label='Início'
                         name='startedAt'
@@ -324,10 +343,10 @@ const CreateOperator: FC = () => {
                           value={formData.cycleUnit}
                           name='cycleUnit'
                           options={[
-                            { value: 'days', label: 'Dia' },
-                            { value: 'weeks', label: 'Semana' },
-                            { value: 'months', label: 'Mês' },
-                            { value: 'years', label: 'Ano' },
+                            { value: 'day', label: 'Dia' },
+                            { value: 'week', label: 'Semana' },
+                            { value: 'month', label: 'Mês' },
+                            { value: 'year', label: 'Ano' },
                           ]}
                           placeholder='Periodo'
                           required={false}
@@ -359,9 +378,9 @@ const CreateOperator: FC = () => {
                     </div>
                   </div>
                   
-                  <div className='flex flex-col gap-3 w-full'>
-                    {formData.equipments.map((equipment, i) => (
-                      <div key={equipment.uuid} className="bg-[--tableRow] gap-3 grid grid-cols-2 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300">
+                  <Reorder.Group axis="y" values={equipmentsData} onReorder={setEquipmentsData} className='flex flex-col gap-3 w-full'>
+                    {equipmentsData.map((equipment, i) => (
+                      <Reorder.Item value={equipment} key={equipment.uuid} className="gap-3 grid grid-cols-2 bg-[--tableRow] rounded-xl font-normal text-[--textSecondary] text-sm capitalize">
                         <div className="flex items-center col-span-1 py-3 font-medium">
                           <button type='button' className='p-3'>
                             <DotsIcon size="size-3" fill="fill-[--textSecondary]" />
@@ -369,7 +388,7 @@ const CreateOperator: FC = () => {
                           <div className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
                           </div>
                           <span className="inline-block pl-3 overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
-                            Equipamento Teste
+                            {equipment.name.toLocaleLowerCase()}
                           </span>
                         </div>
                         <div className="flex justify-end items-center gap-3 col-span-1 p-4 lowercase">
@@ -385,7 +404,7 @@ const CreateOperator: FC = () => {
                           <button
                               type="button"
                               onClick={() => handleDeleteEquipment(equipment.uuid)}
-                              className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--backgroundPrimary] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                              className='group group relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--backgroundPrimary] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
                             >
                               <TrashIcon
                                 size="size-4"
@@ -394,9 +413,9 @@ const CreateOperator: FC = () => {
                               />
                             </button>
                         </div>
-                      </div>
+                      </Reorder.Item>
                     ))}
-                  </div>
+                  </Reorder.Group>
                 </div>
 
                 <ActionGroup uriBack='/rotinas' onClick={handleCreateRoutine} showDelete={false} />

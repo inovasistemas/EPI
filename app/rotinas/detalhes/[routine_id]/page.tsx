@@ -20,10 +20,9 @@ import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
-import { createRoutine, createRoutineEquipment, deleteRoutine, deleteRoutineEquipment, getRoutine, updateRoutine, updateRoutineEquipment } from '@/services/Routine'
+import { createRoutineEquipment, deleteRoutineEquipment, getRoutine, updateRoutine, updateRoutineEquipment } from '@/services/Routine'
 import { useParams, useRouter } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
-import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
+import { AnimatePresence, motion, Reorder } from 'framer-motion'
 import { RoutineSkeleton } from '@/components/Template/Skeletons/Routine'
 
 type Collaborator = {
@@ -56,13 +55,15 @@ type formData = {
     value: string
     label: string
   }[],
-  equipments: {
-    uuid: string
-    name: string
-    quantity: number
-    created_at: string
-    updated_at: string
-  }[]
+  equipments: Equipment[]
+}
+
+type Equipment = {
+  uuid: string
+  name: string
+  quantity: number
+  created_at: string
+  updated_at: string
 }
 
 const OperatorDetails: FC = () => {
@@ -81,6 +82,7 @@ const OperatorDetails: FC = () => {
     collaborators: [],
     equipments: [],
   })
+  const [equipmentsData, setEquipmentsData] = useState<Equipment[]>([])
   const [loading, setLoading] = useState(false)
   const [loadingCollaborators, setLoadingCollaborators] = useState(false)
   const [loadingSectors, setLoadingSectors] = useState(false)
@@ -144,6 +146,7 @@ const OperatorDetails: FC = () => {
       }
 
       setFormData(parsedData)
+      setEquipmentsData(parsedData.equipments)
     }
 
     setLoadingSectors(false)
@@ -204,7 +207,7 @@ const OperatorDetails: FC = () => {
         if (response.status === 201) {
           setFormData(prev => ({
             ...prev,
-            ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
+            ['equipments']: [...prev.equipments, { uuid: response.data.uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
           }))
 
           toast.custom(() => (
@@ -327,6 +330,16 @@ const OperatorDetails: FC = () => {
 
     if (response) {
       if (response.status === 200) {
+        for (const equipment of equipmentsData) {
+          await updateRoutineEquipment({
+            loading: setLoading,
+            id: RoutineId,
+            equipment: equipment.uuid,
+            quantity: Number(equipment.quantity),
+            order: equipmentsData.indexOf(equipment) + 1
+          })
+        }
+
         toast.custom(() => <ToastSuccess text='Rotina atualizada com sucesso' />)
       } else if (response.status === 403) {
           toast.custom(() => (
@@ -381,7 +394,7 @@ const OperatorDetails: FC = () => {
                   <h2 className='font-medium text-xl capitalize leading-none select-none'>
                     {formData.name
                       ? formData.name.toLocaleLowerCase()
-                      : 'Detalhes da rota'}
+                      : 'Detalhes da rotina'}
                   </h2>
                 </div>
               </div>
@@ -503,9 +516,9 @@ const OperatorDetails: FC = () => {
                     </div>
                   </div>
                   
-                  <div className='flex flex-col gap-3 w-full'>
-                    {formData.equipments && formData.equipments.length > 0 && formData.equipments.map((equipment, i) => (
-                      <div key={equipment.uuid} className="bg-[--tableRow] gap-3 grid grid-cols-2 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300">
+                  <Reorder.Group axis="y" values={equipmentsData} onReorder={setEquipmentsData} className='flex flex-col gap-3 w-full'>
+                    {equipmentsData && equipmentsData.map((equipment, i) => (
+                      <Reorder.Item value={equipment} key={equipment.uuid} className="gap-3 grid grid-cols-2 bg-[--tableRow] rounded-xl font-normal text-[--textSecondary] text-sm capitalize">
                         <div className="flex items-center col-span-1 py-3 font-medium">
                           <button type='button' className='p-3'>
                             <DotsIcon size="size-3" fill="fill-[--textSecondary]" />
@@ -513,7 +526,7 @@ const OperatorDetails: FC = () => {
                           <div className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
                           </div>
                           <span className="inline-block pl-3 overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
-                            Equipamento Teste
+                            {equipment.name.toLocaleLowerCase()}
                           </span>
                         </div>
                         <div className="flex justify-end items-center gap-3 col-span-1 p-4 lowercase">
@@ -529,7 +542,7 @@ const OperatorDetails: FC = () => {
                           <button
                               type="button"
                               onClick={() => handleDeleteEquipment(equipment.uuid)}
-                              className='group group z-[55] relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--backgroundPrimary] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                              className='group group relative flex justify-center items-center gap-3 bg-transparent hover:bg-[--backgroundPrimary] px-4 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
                             >
                               <TrashIcon
                                 size="size-4"
@@ -538,9 +551,9 @@ const OperatorDetails: FC = () => {
                               />
                             </button>
                         </div>
-                      </div>
+                      </Reorder.Item>
                     ))}
-                  </div>
+                  </Reorder.Group>
                 </div>
 
                 <ActionGroup uriBack='/rotinas' onClick={handleUpdateRoutine} showDelete={false} />

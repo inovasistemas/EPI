@@ -138,8 +138,8 @@ const Rotinas: FC = () => {
         <ToastSuccess
           text={
             checkedCount === 1
-              ? '1 rotina excluído com sucesso'
-              : `${checkedCount} rotinas excluídos com sucesso`
+              ? '1 rotina excluída com sucesso'
+              : `${checkedCount} rotinas excluídas com sucesso`
           }
         />
       ))
@@ -335,7 +335,7 @@ const Rotinas: FC = () => {
             transition={{ duration: 0.3 }}
             className="flex flex-row items-center gap-3 px-6 w-1/2">
               <div
-                className="bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
+                className="box-border flex flex-row items-center gap-2 bg-[--tableRow] focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
                 <div className="flex">
                   <SearchIcon
                     size="size-4"
@@ -492,7 +492,7 @@ const Rotinas: FC = () => {
                     <li key={routine.uuid}>
                       <Link
                         href={`/rotinas/detalhes/${routine.uuid}`}
-                        className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
+                        className="gap-3 grid grid-cols-12 bg-[--tableRow] px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
                       >
                         <div className="flex items-center gap-3 col-span-5 py-3 font-medium">
                           <input

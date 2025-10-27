@@ -118,15 +118,6 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
       addEquipment(equipment.uuid, equipment.name, 1)
     }
 
-    toast.custom(() => (
-      <ToastSuccess
-        text={
-          checkedCount === 1
-            ? '1 equipamento adicionado com sucesso'
-            : `${checkedCount} equipamentos adicionados com sucesso`
-        }
-      />
-    ))
     handleMainModal()
   }
 
@@ -185,6 +176,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
           size="small"
           isModalOpen={modalStatus}
           handleClickOverlay={handleCloseModal}
+          overflowHidden={true}
         >
           <FilterEquipments actionClose={handleCloseModal} />
         </Modal>
@@ -205,7 +197,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
             transition={{ duration: 0.3 }}
             className="flex flex-row items-center gap-3 px-6 w-full">
               <div
-                className="bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
+                className="box-border flex flex-row items-center gap-2 bg-[--tableRow] focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
                 <div className="flex">
                   <SearchIcon
                     size="size-4"
@@ -341,7 +333,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="flex flex-col gap-6 pb-6 sm:min-w-[50rem] h-full overflow-y-auto"
+                className="flex flex-col gap-6 pb-20 sm:min-w-[50rem] h-full overflow-y-auto"
               >
                 <ul className="flex flex-col gap-3">
                   {equipments.map((equipment, i) => (
@@ -352,7 +344,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
                             checkboxRefs.current[i].click()
                           }
                         }}
-                        className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
+                        className="gap-3 grid grid-cols-12 bg-[--tableRow] px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
                       >
                         <div className="flex items-center gap-3 col-span-6 py-3 font-medium">
                           <input
@@ -420,7 +412,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
           <PermissionDeniedScreen />
         )}
 
-        <div className='flex justify-end gap-3 w-full'>
+        <div className='bottom-0 absolute flex justify-end gap-3 w-full'>
           <ActionGroup 
             onClick={handleMultipleSave} 
             showDelete={false} 

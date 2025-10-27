@@ -13,6 +13,7 @@ type ModalProps = {
   overflow?: boolean
   showClose?: boolean
   padding?: boolean
+  overflowHidden?: boolean
 }
 
 export function Modal({
@@ -25,6 +26,7 @@ export function Modal({
   overflow = false,
   showClose = true,
   padding = true,
+  overflowHidden = false
 }: ModalProps) {
   const [hasScrolled, setHasScrolled] = useState(false)
   const divRef = useRef<HTMLDivElement>(null)
@@ -72,9 +74,11 @@ export function Modal({
                   'min-w-[50%] max-w-[50%] sm:max-w-[35%]': size === 'small',
                   'max-w-[40%]': size === 'extra-small',
                   'overflow-y-auto': overflow,
+                  'overflow-hidden': overflowHidden
                 }
               )}
             >
+              {showClose || title && (
               <div
                 className={`py-2 flex justify-center items-center bg-transparent rounded-t-xl w-full transition-all duration-300 border-b-[1.5px] border-transparent ${titleFixed ? 'absolute left-0 top-0' : ''} ${hasScrolled ? 'shadow-lg' : ''}`}
               >
@@ -97,6 +101,7 @@ export function Modal({
                   </button>
                 )}
               </div>
+              )}
               <div
                 ref={divRef}
                 className={classNames(
