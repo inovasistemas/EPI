@@ -30,5 +30,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/((?!_next/static|_next/image|lock.ico|unlock.ico|sair).*)"],
+	matcher: [
+		"/((?!_next/static|_next/image|lock.ico|unlock.ico|epi.ico|sair).*)",
+	],
 };
