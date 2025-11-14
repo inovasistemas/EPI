@@ -1,8 +1,7 @@
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
-import { SmallChartIssues } from '../../Small/Issues'
-import classNames from 'classnames'
-import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Countdown } from '@/components/Countdown'
+import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
+import classNames from 'classnames'
+import { SmallChartIssues } from '../../Small/Issues'
 
 type PendingTemplateProps = {
   equipment: string
@@ -42,7 +41,7 @@ export function PendingTemplate({
         <div className="top-0 left-0 absolute flex justify-center items-center w-full h-full">
           <div className="flex items-center gap-2">
             <div className='mt-6 scale-[.60]'>
-              <Countdown date={'2025-11-10 00:00:00'} />
+              <Countdown date={'2025-11-30 00:00:00'} />
             </div>
           </div>
         </div>

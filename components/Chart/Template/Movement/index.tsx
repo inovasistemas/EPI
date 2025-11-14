@@ -1,9 +1,7 @@
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
-import { ChartAreaGradient } from '../../Small/Colaborator'
-import classNames from 'classnames'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Countdown } from '@/components/Countdown'
+import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
+import classNames from 'classnames'
+import { ChartAreaGradient } from '../../Small/Colaborator'
 
 type ChartProps = {
   day: string
@@ -35,7 +33,7 @@ export function MovementTemplate({ chart, show }: MovementTemplateProps) {
         <div className="absolute flex justify-center items-center w-full h-full">
           <div className="flex items-center gap-2">
             <div className='mt-6 scale-[.60]'>
-              <Countdown date={'2025-11-10 00:00:00'} />
+              <Countdown date={'2025-11-30 00:00:00'} />
             </div>
           </div>
         </div>

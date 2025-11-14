@@ -1,7 +1,7 @@
 'use client'
-import { type FC } from 'react'
-import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Countdown } from '@/components/Countdown'
+import { LockIcon } from '@/components/Display/Icons/Lock'
+import { type FC } from 'react'
 
 const Costs: FC = () => {
   // const [modalStatus, setModalStatus] = useState(false)
@@ -31,7 +31,7 @@ const Costs: FC = () => {
             
             <div>
               <div className="text-[--textSecondary] text-base select-none">
-                <Countdown date='2025-11-10 00:00:00' />
+                <Countdown date='2025-11-30 00:00:00' />
               </div>
             </div>
           </div>
