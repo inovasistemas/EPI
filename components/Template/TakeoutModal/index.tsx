@@ -1,10 +1,8 @@
 'use client'
 import { Countdown } from '@/components/Countdown'
-import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
 import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Modal } from '@/components/Display/Modal'
-import WebcamCapture from '@/components/FaceRecognition'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 type TakeoutModalProps = {
   title: string
@@ -51,7 +49,7 @@ export function TakeoutModal({
           </h2>
         </div>
         <div className='flex justify-center items-center w-full h-full'>
-          <Countdown date='2025-11-10 00:00:00' />
+          <Countdown date='2025-11-30 00:00:00' />
           {/* {uuid('sc')} */}
         </div>
         
