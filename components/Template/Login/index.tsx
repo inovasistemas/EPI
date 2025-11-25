@@ -1,8 +1,8 @@
 'use client'
-import { type FC, useCallback, useState } from 'react'
 import { LockIcon } from '@/components/Display/Icons/Lock'
 import { Modal } from '@/components/Display/Modal'
 import { LoginForm } from '@/components/Template/LoginForm'
+import { type FC, useCallback, useState } from 'react'
 import { Privacy } from '../Terms/Privacy'
 
 const Login: FC = () => {
@@ -22,9 +22,11 @@ const Login: FC = () => {
         <Privacy />
       </Modal>
       <div className='flex justify-center gap-6 p-4 w-full h-full'>
-        <div className='flex flex-col justify-center items-center gap-3 rounded-xl w-full h-full'>
-          <div className='flex justify-center items-center bg-[--backgroundPrimary] rounded-3xl w-full sm:w-[650px] h-full'>
-            <LoginForm />
+        <div className='flex flex-col justify-between items-center gap-3 rounded-xl w-full h-full'>
+          <div className='w-full flex items-center justify-center h-full'>
+            <div className='flex justify-center items-center py-10 bg-[--backgroundPrimary] rounded-3xl w-full sm:w-[650px]'>
+              <LoginForm />
+            </div>
           </div>
           <div className='flex justify-center items-center gap-2 p-3 w-full text-[--textSecondary] text-xs'>
             <LockIcon

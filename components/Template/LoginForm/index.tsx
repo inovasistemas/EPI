@@ -1,9 +1,6 @@
 'use client'
-import Cookies from 'cookies-js'
-import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
-import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { LoadingIcon } from '@/components/Display/Icons/Loading'
+import { SecurityIcon } from '@/components/Display/Icons/Security'
 import { Logo } from '@/components/Display/Logo'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
 import { PasswordInput } from '@/components/Inputs/Password'
@@ -15,13 +12,16 @@ import {
   postAuth,
   setTwoFactorAuthentication,
 } from '@/services/Login'
-import QRCode from 'react-qr-code'
-import { SecurityCodeSimple } from '../SecurityCodeSimples'
-import { SecurityIcon } from '@/components/Display/Icons/Security'
 import classNames from 'classnames'
+import Cookies from 'cookies-js'
+import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import QRCode from 'react-qr-code'
 import { toast } from 'sonner'
+import { SecurityCodeSimple } from '../SecurityCodeSimples'
 import { ToastError } from '../Toast/Error'
-import { LoadingIcon } from '@/components/Display/Icons/Loading'
 
 type OperatorEnterprise = {
   enterprise_uuid: string
@@ -143,11 +143,17 @@ export function LoginForm() {
 
   const handleBack = () => {
     setStep(prev => Math.max(prev - 1, 0))
+    console.log(step)
 
     if (step === 1) {
       handleChange('password', '')
       handleChange('user_uuid', '')
       handleChange('permission_group', '')
+    }
+
+    if (step === 2) {
+      handleChange('security_code', '')
+      handleChange('security_code_secret', '')
     }
   }
 
@@ -358,8 +364,7 @@ export function LoginForm() {
                 <div className='flex justify-end items-center gap-3 w-full transition-all duration-300'>
                   <button
                     type='button'
-                    onClick={() => handleBack()}
-                    disabled={handleDisabled()}
+                    onClick={handleBack}
                     className={classNames(
                       'px-8 py-2.5 group z-[55] relative flex justify-center items-center gap-2 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] w-full sm:max-w-36 rounded-xl text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer select-none'
                     )}
