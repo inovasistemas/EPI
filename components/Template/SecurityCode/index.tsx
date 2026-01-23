@@ -87,7 +87,7 @@ export function SecurityCode({
           </span>
         </div>
       </div>
-      <div className='gap-3 grid grid-cols-6 w-full'>
+      <div className='gap-3 grid grid-cols-6 sm:max-w-[400px]'>
         {values.map((val, i) => (
           <input
             // biome-ignore lint/suspicious/noArrayIndexKey: need this key to be the index
@@ -96,7 +96,7 @@ export function SecurityCode({
             type='text'
             inputMode='numeric'
             maxLength={1}
-            className='bg-[--backgroundSecondary] border-2 focus:border-[--primaryColor] border-transparent rounded-xl outline-none w-full aspect-square font-medium text-xl text-center uppercase transition-all duration-300 select-none'
+            className='bg-[--backgroundSecondary] border-2 border-transparent focus:border-[--primaryColor] rounded-xl outline-none w-full aspect-square font-medium text-xl text-center uppercase transition-all duration-300 select-none'
             value={val}
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(e, i)}

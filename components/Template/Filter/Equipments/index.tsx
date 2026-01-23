@@ -1,14 +1,13 @@
 'use client'
-import classNames from 'classnames'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 import { getCategories } from '@/services/Category'
+import { getManufacturers } from '@/services/Manufacturer'
+import classNames from 'classnames'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { ToastError } from '../../Toast/Error'
-import { getManufacturers } from '@/services/Manufacturer'
-import { sub } from 'date-fns'
 
 type FilterEquipmentsProps = {
   actionClose: () => void
@@ -109,9 +108,9 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
   }
 
   return (
-    <div className='flex flex-col gap-8 -mt-8 w-full'>
+    <div className='flex flex-col gap-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
-      <div className='flex flex-col gap-6 divide-[--outlinePrimary] divide-y w-full'>
+      <div className='flex flex-col gap-6 divide-y divide-[--outlinePrimary] w-full'>
         <div className='items-center grid grid-cols-2 w-full select-none'>
           <div>
             <span className='font-medium'>Fabricante</span>

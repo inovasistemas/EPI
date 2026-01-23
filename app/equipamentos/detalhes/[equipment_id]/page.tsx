@@ -1,38 +1,38 @@
 'use client'
-import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { Modal } from '@/components/Display/Modal'
+import { Category } from '@/components/Features/Category'
+import { Manufacturer } from '@/components/Features/Manufacturer'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import ImageUpload from '@/components/ImageUpload'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectCategories } from '@/components/Inputs/Select/Categories'
+import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
+import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { MaskedInput } from '@/components/Inputs/Masked'
-import { useParams, useRouter } from 'next/navigation'
+import { getCategories } from '@/services/Category'
 import {
   deleteEquipment,
   getEquipment,
   updateEquipment,
   uploadEquipmentImage,
 } from '@/services/Equipment'
+import { getManufacturers } from '@/services/Manufacturer'
 import { convertMoneyBRL } from '@/utils/convert-money-brl'
 import { convertNumberDB } from '@/utils/convert-number-db'
-import { Modal } from '@/components/Display/Modal'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useParams, useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { ToastError } from '@/components/Template/Toast/Error'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { FactoryIcon } from '@/components/Display/Icons/Factory'
-import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
-import { Manufacturer } from '@/components/Features/Manufacturer'
-import { Category } from '@/components/Features/Category'
-import { SelectCategories } from '@/components/Inputs/Select/Categories'
-import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
-import ImageUpload from '@/components/ImageUpload'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
-import { getCategories } from '@/services/Category'
-import { getManufacturers } from '@/services/Manufacturer'
 
 enum menus {
   Manufacturer,
@@ -302,7 +302,7 @@ const CreateEquipment: FC = () => {
         padding={false}
         handleClickOverlay={handleCloseCreateModal}
       >
-        <div className='-mt-6 min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
+        <div className='min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
           {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
           {activeRegisterModal === menus.Category && <Category />}
         </div>

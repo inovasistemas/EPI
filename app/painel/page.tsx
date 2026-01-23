@@ -75,12 +75,12 @@ export default function Home() {
             className='flex flex-col gap-6 bg-[--backgroundSecondary] max-sm:px-3 sm:rounded-2xl w-full h-full'
           >
             <div className='gap-6 grid sm:grid-cols-3'>
-              <MovementTemplate chart={getReport('rp_001')?.graph ?? []} show={getReport('rp_001')?.show ?? false} />
+              <MovementTemplate chart={getReport('rp_001')?.graph ?? []} show={true} />
               <PendingTemplate
                 equipment={getReport('rp_002')?.graph.equipment ?? ''}
                 withdrawn={getReport('rp_002')?.graph.withdrawn ?? ''}
                 notwithdrawn={getReport('rp_002')?.graph.notwithdrawn ?? ''}
-                show={getReport('rp_002')?.show ?? false}
+                show={true}
               />
             </div>
 
@@ -89,19 +89,19 @@ export default function Home() {
                 count={getReport('rp_003')?.graph.equipments ?? ''}
                 expired={getReport('rp_003')?.graph.expired ?? ''}
                 pending={getReport('rp_003')?.graph.pending_return ?? ''}
-                show={false}
+                show={true}
               />
               <UserTemplate
                 count={getReport('rp_004')?.graph.users ?? ''}
                 updated={getReport('rp_004')?.graph.updated ?? ''}
                 deleted={getReport('rp_004')?.graph.deleted ?? ''}
-                show={false}
+                show={true}
               />
               <CollaboratorTemplate
                 count={getReport('rp_005')?.graph.collaborators ?? ''}
                 active={getReport('rp_005')?.graph.active ?? ''}
                 away={getReport('rp_005')?.graph.withdrawn ?? ''}
-                show={false}
+                show={true}
               />
             </div>
           </motion.div>

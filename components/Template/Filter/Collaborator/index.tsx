@@ -1,10 +1,10 @@
 'use client'
-import classNames from 'classnames'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 import { getJobPositions } from '@/services/JobPosition'
+import classNames from 'classnames'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 type FilterCollaboratorProps = {
   actionClose: () => void
@@ -60,7 +60,7 @@ export function FilterCollaborator({ actionClose }: FilterCollaboratorProps) {
   }, [])
 
   return (
-    <div className='flex flex-col gap-8 -mt-8 w-full'>
+    <div className='flex flex-col gap-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
       <div className='items-center grid grid-cols-2 w-full select-none'>
         <div>

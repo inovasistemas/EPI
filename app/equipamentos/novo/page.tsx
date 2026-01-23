@@ -1,29 +1,29 @@
 'use client'
-import { AnimatePresence, motion } from 'framer-motion'
-import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
+import { Modal } from '@/components/Display/Modal'
+import { Category } from '@/components/Features/Category'
+import { Manufacturer } from '@/components/Features/Manufacturer'
+import ImageUpload from '@/components/ImageUpload'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectCategories } from '@/components/Inputs/Select/Categories'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
-import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { useParams, useRouter } from 'next/navigation'
-import { MaskedInput } from '@/components/Inputs/Masked'
-import { convertNumberDB } from '@/utils/convert-number-db'
-import { convertMoneyBRL } from '@/utils/convert-money-brl'
-import { createEquipment, uploadEquipmentImage } from '@/services/Equipment'
-import { toast } from 'sonner'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { ToastError } from '@/components/Template/Toast/Error'
-import { Modal } from '@/components/Display/Modal'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { FactoryIcon } from '@/components/Display/Icons/Factory'
-import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
-import { Manufacturer } from '@/components/Features/Manufacturer'
-import { Category } from '@/components/Features/Category'
-import ImageUpload from '@/components/ImageUpload'
-import { SelectCategories } from '@/components/Inputs/Select/Categories'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { getCategories } from '@/services/Category'
+import { createEquipment, uploadEquipmentImage } from '@/services/Equipment'
+import { convertMoneyBRL } from '@/utils/convert-money-brl'
+import { convertNumberDB } from '@/utils/convert-number-db'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useParams, useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 enum menus {
   Manufacturer,
@@ -191,7 +191,7 @@ const CreateEquipment: FC = () => {
         padding={false}
         handleClickOverlay={handleCloseCreateModal}
       >
-        <div className='-mt-6 min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
+        <div className='min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
           {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
           {activeRegisterModal === menus.Category && <Category />}
         </div>

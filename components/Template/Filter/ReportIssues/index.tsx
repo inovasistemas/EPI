@@ -1,5 +1,5 @@
-import type dayjs from 'dayjs'
 import { DateInput } from '@/components/Inputs/Date'
+import type dayjs from 'dayjs'
 
 type FilterReportIssuesProps = {
   start: dayjs.Dayjs
@@ -7,9 +7,9 @@ type FilterReportIssuesProps = {
 
 export function FilterReportIssues({ start }: FilterReportIssuesProps) {
   return (
-    <div className='flex flex-col gap-8 -mt-8 w-full'>
+    <div className='flex flex-col gap-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
-      <div className='flex flex-col gap-6 divide-[--outlinePrimary] divide-y w-full'>
+      <div className='flex flex-col gap-6 divide-y divide-[--outlinePrimary] w-full'>
         <div className='items-center grid grid-cols-2 w-full select-none'>
           <div>
             <span className='font-medium'>Período</span>

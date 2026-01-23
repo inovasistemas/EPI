@@ -1,11 +1,11 @@
 'use client'
+import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import { getCollaborators } from '@/services/Collaborator'
+import { getSectors } from '@/services/Sector'
 import classNames from 'classnames'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
-import { getSectors } from '@/services/Sector'
-import { getCollaborators } from '@/services/Collaborator'
 
 type FilterRotinasProps = {
   actionClose: () => void
@@ -103,9 +103,9 @@ export function FilterRotinas({ actionClose }: FilterRotinasProps) {
   }
 
   return (
-    <div className='flex flex-col gap-8 -mt-8 w-full'>
+    <div className='flex flex-col gap-8 w-full'>
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
-      <div className='flex flex-col gap-6 divide-[--outlinePrimary] divide-y w-full'>
+      <div className='flex flex-col gap-6 divide-y divide-[--outlinePrimary] w-full'>
         <div className='items-center grid grid-cols-2 w-full select-none'>
           <div>
             <span className='font-medium'>Colaboradores</span>
