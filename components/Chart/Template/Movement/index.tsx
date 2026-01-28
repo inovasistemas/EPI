@@ -1,5 +1,4 @@
 import { Countdown } from '@/components/Countdown'
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import classNames from 'classnames'
 import { ChartAreaGradient } from '../../Small/Colaborator'
 
@@ -24,9 +23,9 @@ export function MovementTemplate({ chart, show }: MovementTemplateProps) {
         <h3 className='font-medium text-base select-none'>
           Movimentação por semana
         </h3>
-        <span className='-mr-1 rotate-90'>
+        {/* <span className='-mr-1 rotate-90'>
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-        </span>
+        </span> */}
       </div>
       {!show && 
         <>

@@ -1,5 +1,4 @@
 import { Countdown } from '@/components/Countdown'
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import classNames from 'classnames'
 import { SmallChartIssues } from '../../Small/Issues'
 
@@ -31,9 +30,9 @@ export function PendingTemplate({
         <h3 className='font-medium text-base select-none'>
           Taxa de pendências
         </h3>
-        <span className='-mr-2 rotate-90'>
+        {/* <span className='-mr-2 rotate-90'>
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-        </span>
+        </span> */}
       </div>
 
       {!show && 

@@ -1,5 +1,4 @@
 import { Countdown } from '@/components/Countdown'
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import classNames from 'classnames'
 
 type UserTemplateProps = {
@@ -22,9 +21,9 @@ export function UserTemplate({ count, updated, deleted, show }: UserTemplateProp
             {count}
           </span>
         </div>
-        <span className='-mr-1 rotate-90'>
+        {/* <span className='-mr-1 rotate-90'>
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-        </span>
+        </span> */}
       </div>
 
       {!show && 

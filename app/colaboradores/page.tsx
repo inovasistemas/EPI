@@ -1,4 +1,25 @@
 'use client'
+import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { AddIcon } from '@/components/Display/Icons/Add'
+import { FilterIcon } from '@/components/Display/Icons/Filter'
+import { SearchIcon } from '@/components/Display/Icons/Search'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
+import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { PrimaryLink } from '@/components/Links/PrimaryLink'
+import { Paginations } from '@/components/Navigation/Paginations'
+import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
+import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import useDebounce from '@/lib/context/debounce'
+import { deleteCollaborator, getCollaborators } from '@/services/Collaborator'
+import { calcPages } from '@/utils/calc-pages'
+import { formatCPF } from '@/utils/format-cpf'
+import { timestampToDate } from '@/utils/timestamp-to-date'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -10,28 +31,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { AddIcon } from '@/components/Display/Icons/Add'
-import { FilterIcon } from '@/components/Display/Icons/Filter'
-import { SearchIcon } from '@/components/Display/Icons/Search'
-import { TrashIcon } from '@/components/Display/Icons/Trash'
-import { Modal } from '@/components/Display/Modal'
-import { PrimaryLink } from '@/components/Links/PrimaryLink'
-import { Paginations } from '@/components/Navigation/Paginations'
-import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
-import { FilterCollaborator } from '@/components/Template/Filter/Collaborator'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
 import { toast } from 'sonner'
-import { ToastError } from '@/components/Template/Toast/Error'
-import useDebounce from '@/lib/context/debounce'
-import { timestampToDate } from '@/utils/timestamp-to-date'
-import { calcPages } from '@/utils/calc-pages'
-import { deleteCollaborator, getCollaborators } from '@/services/Collaborator'
-import { formatCPF } from '@/utils/format-cpf'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { Skeleton } from '@/components/ui/skeleton'
 
 type Collaborator = {
   uuid: string
@@ -243,7 +243,7 @@ const Collaborator: FC = () => {
       >
         <FilterCollaborator actionClose={handleCloseModal} />
       </Modal>
-      <div className="flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full">
+      <div className="flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto">
         <div className="flex justify-between items-center gap-3 p-6 w-full">
           <h2 className="font-medium text-xl leading-none select-none">
             Colaboradores

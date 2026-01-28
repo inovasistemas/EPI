@@ -1,5 +1,4 @@
 import { Countdown } from '@/components/Countdown'
-import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
 import classNames from 'classnames'
 
 type EquipmentTemplateProps = {
@@ -27,9 +26,9 @@ export function EquipmentTemplate({
             {count}
           </span>
         </div>
-        <span className='-mr-1 rotate-90'>
+        {/* <span className='-mr-1 rotate-90'>
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-        </span>
+        </span> */}
       </div>
 
       {!show && 
@@ -62,7 +61,7 @@ export function EquipmentTemplate({
 
       <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col gap-1 w-full'])}>
         <div className='flex flex-row justify-start items-center gap-1 w-full'>
-          <span className='font-semibold text-sm'>2</span>
+          <span className='font-semibold text-sm'>{count}</span>
           <span className='text-sm'>ativos</span>
         </div>
         <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
