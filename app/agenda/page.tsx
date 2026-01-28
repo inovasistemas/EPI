@@ -78,12 +78,12 @@ type Equipment = {
 	order: number | null;
 };
 
-const tabs = ["ALL", "WITHDRAWAL", "OVERDUE"] as const;
+const tabs = ["WITHDRAWAL", "OVERDUE", "ALL"] as const;
 
 const Agenda: FC = () => {
 	const setQueryParam = useQueryParams();
 	const searchParams = useSearchParams();
-	const [filter, setFilter] = useState<"ALL" | "WITHDRAWAL" | "OVERDUE">("ALL");
+	const [filter, setFilter] = useState<"ALL" | "WITHDRAWAL" | "OVERDUE">("WITHDRAWAL");
 	const tabRefs = useRef<Record<string, HTMLLabelElement | null>>({});
 	const [hasPermission, setHasPermission] = useState(true);
 	const [search, setSearch] = useState("");
