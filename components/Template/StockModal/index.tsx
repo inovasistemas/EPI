@@ -1,13 +1,19 @@
+import { DateInput } from '@/components/Inputs/Date';
 import { InputOptionsMap } from '@/components/Inputs/Masked/types';
 import { SearchSelect } from "@/components/Inputs/Select/SearchSelect";
 import { ActionGroupSave } from "@/components/Surfaces/ActionGroupSave";
 import 'cleave.js/dist/addons/cleave-phone.br';
 import Cleave from 'cleave.js/react';
+import dayjs from 'dayjs';
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from 'react';
 
 type StockModalProps = {
   action: () => void
+}
+
+type formData = {
+  startedAt: string
 }
 
 export function StockModal({ action }: StockModalProps) {
@@ -24,6 +30,10 @@ export function StockModal({ action }: StockModalProps) {
       label: 'Saída',
     },
   ]
+
+  const [formData, setFormData] = useState<formData>({
+      startedAt: dayjs().format('YYYY-MM-DD')
+    })
 
   return (
     <div className='relative flex flex-col w-full h-full'>
@@ -82,6 +92,19 @@ export function StockModal({ action }: StockModalProps) {
                     options={options}
                     className='peer block bg-[--backgroundSecondary] px-[12px] h-[54px] py-2 rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
                     placeholder=' '
+                    onChange={() => null}
+                  />
+                </div>
+              </div>
+              <div className='items-center grid grid-cols-2 w-full select-none pt-6'>
+                <div>
+                  <span className='font-medium'>Validade</span>
+                </div>
+                <div className='grid w-full flex flex-col gap-3'>
+                  <DateInput
+                    start={dayjs(formData.startedAt)}
+                    calendarType='day'
+                    name='startedAt'
                     onChange={() => null}
                   />
                 </div>
