@@ -3,7 +3,7 @@ import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
 import { Skeleton } from '@/components/ui/skeleton'
 import cn from 'classnames'
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Select from 'react-select'
 
 type SearchSelectOptionsProps = {
@@ -38,6 +38,21 @@ export function SearchSelect({
     useState<SearchSelectOptionsProps | null>(null)
   const [isSelectMenuOpen, setSelectMenuOpen] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const selectRef = useRef<any>(null)
+
+  const handleOpenMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isSelectMenuOpen) {
+      selectRef.current?.blur();
+    } else {
+      selectRef.current?.focus();
+      selectRef.current?.openMenu();
+    }
+
+    setSelectMenuOpen(!isSelectMenuOpen);
+  };
 
   useEffect(() => {
     setIsClient(true)
@@ -70,13 +85,14 @@ export function SearchSelect({
       )}
     >
       {icon && (
-        <span className='top-0 left-0 z-40 absolute flex items-center mr-1 ml-3 h-full'>
+        <span onMouseDown={handleOpenMenu} className='top-0 left-0 absolute flex items-center mr-1 ml-3 h-full'>
           {icon}
         </span>
       )}
 
       <div className='relative flex items-center w-full'>
         <Select
+          ref={selectRef}
           value={selectedOption}
           onChange={option => onChange(option ? option.value : '')}
           noOptionsMessage={() => ''}
@@ -88,7 +104,7 @@ export function SearchSelect({
             {
               'mt-0': label,
             },
-            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer z-[50]'
+            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
           )}
           placeholder={placeholder}
           components={{
@@ -104,6 +120,7 @@ export function SearchSelect({
             option: (provided, state) => ({
               ...provided,
               padding: '0.5rem',
+              zIndex: 100,
               paddingLeft: '0.75rem',
               borderRadius: '0.75rem',
               marginTop: '0.5rem',
@@ -203,12 +220,13 @@ export function SearchSelect({
         )}
 
         <span
+          onMouseDown={handleOpenMenu}
           className={cn(
             {
               'rotate-180': isSelectMenuOpen,
             },
             [
-              'mr-3 right-0 absolute flex items-center  h-full transition-all duration-300',
+              'cursor-pointer mr-3 right-0 absolute flex items-center  h-full transition-all duration-300',
             ]
           )}
         >

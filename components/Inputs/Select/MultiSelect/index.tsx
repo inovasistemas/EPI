@@ -49,11 +49,17 @@ export function MultiSelect({
         : []
 
   const handleOpenMenu = (e: React.MouseEvent) => {
-    e.preventDefault(); // 1. Impede que o ícone roube o foco do input
-    e.stopPropagation(); 
-    
-    selectRef.current?.focus(); // 2. Força o foco no Select (Isso ativa o listener de clique fora)
-    selectRef.current?.openMenu(); // 3. Abre o menu
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isSelectMenuOpen) {
+      selectRef.current?.blur();
+    } else {
+      selectRef.current?.focus();
+      selectRef.current?.openMenu();
+    }
+
+    setSelectMenuOpen(!isSelectMenuOpen);
   };
 
   useEffect(() => {
