@@ -1,5 +1,6 @@
 'use client'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { EditIcon } from '@/components/Display/Icons/Edit'
 import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 import { Modal } from '@/components/Display/Modal'
@@ -16,6 +17,7 @@ import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 import { EquipmentSkeleton } from '@/components/Template/Skeletons/Equipment'
+import { StockModal } from '@/components/Template/StockModal'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
@@ -37,6 +39,7 @@ import { toast } from 'sonner'
 enum menus {
   Manufacturer,
   Category,
+  Stock,
   Default,
 }
 
@@ -305,6 +308,7 @@ const CreateEquipment: FC = () => {
         <div className='min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
           {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
           {activeRegisterModal === menus.Category && <Category />}
+          {activeRegisterModal === menus.Stock && <StockModal action={handleCloseCreateModal} />}
         </div>
       </Modal>
       <Modal
@@ -586,17 +590,33 @@ const CreateEquipment: FC = () => {
                         onClick={() => null}
                         className='gap-4 grid sm:grid-cols-3 col-span-3 w-full'
                       >
-                        <MaskedInput
-                          name='stock'
-                          label='Estoque'
-                          required={true}
-                          type='number'
-                          value={equipmentData.stock}
-                          position='right'
-                          onChange={e =>
-                            handleChange('stock', convertNumberDB(e.target.value))
-                          }
-                        />
+                        <div className='h-[54px] border-box flex items-center justify-between gap-3 bg-[--backgroundSecondary] rounded-xl'>
+                          <div className="-mt-0.5">
+                            <MaskedInput
+                              disabled={true}
+                              name='stock'
+                              label='Estoque'
+                              required={true}
+                              type='number'
+                              value={equipmentData.stock}
+                              position='right'
+                              onChange={e =>
+                                handleChange('stock', convertNumberDB(e.target.value))
+                              }
+                            />
+                          </div>
+                          <button
+                            type='button'
+                            onClick={() => handleActiveRegisterModal(menus.Stock)}
+                            className='pr-3'
+                          >
+                            <EditIcon
+                              size="size-4"
+                              stroke="stroke-white group-data-[active=true]:stroke-[--primaryColor]"
+                              strokeWidth={2.5}
+                            />
+                          </button>
+                        </div>
 
                         <MaskedInput
                           name='stock_minimum'

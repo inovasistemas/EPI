@@ -1,10 +1,9 @@
 'use client'
 
 import classNames from 'classnames'
+import 'cleave.js/dist/addons/cleave-phone.br'
 import Cleave from 'cleave.js/react'
-import 'cleave.js/dist/addons/cleave-phone.br'
 import { InputOptionsMap, MaskedInputProps } from './types'
-import 'cleave.js/dist/addons/cleave-phone.br'
 
 export function MaskedInput({
   name,
@@ -18,6 +17,7 @@ export function MaskedInput({
   actionButton,
   onKeyDown,
   textTransform = '',
+  disabled = false,
 }: MaskedInputProps) {
   const options = InputOptionsMap[type]
 
@@ -41,6 +41,7 @@ export function MaskedInput({
             value={value ?? ''}
             onChange={onChange}
             onKeyDown={onKeyDown}
+            disabled={disabled}
           />
           <label
             htmlFor={name}

@@ -477,3 +477,7 @@ input[type='number'] {
 .progress-svg ellipse {
   animation: progress-ellipse 5s linear forwards;
 }
+
+:where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown .ant-picker-range-arrow::before {
+  background-color: var(--outlinePrimary);
+}

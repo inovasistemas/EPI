@@ -1,22 +1,22 @@
 'use client'
 import { ProfilePicture } from '@/components/Display/Avatar'
-import { AlertIcon } from '@/components/Display/Icons/Alert'
+import { CalendarIcon } from '@/components/Display/Icons/Calendar'
+import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
 import { HomeIcon } from '@/components/Display/Icons/Home'
+import { MoneyIcon } from '@/components/Display/Icons/Money'
+import { OrbitIcon } from '@/components/Display/Icons/Orbit'
 import { PackageIcon } from '@/components/Display/Icons/Package'
+import { TransactionHistoryIcon } from '@/components/Display/Icons/TransactionHistory'
 import { UserIcon } from '@/components/Display/Icons/User'
 import { UsersIcon } from '@/components/Display/Icons/Users'
 import { NavLink } from '@/components/Navigation/NavLink'
+import { MenuSettings } from '@/components/Template/MenuSettings'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import useSidebar from '@/lib/context/global'
 import useUser from '@/lib/context/user'
 import classNames from 'classnames'
-import { MenuCard } from '../MenuCard'
-import { MenuSettings } from '@/components/Template/MenuSettings'
 import { useCallback, useState } from 'react'
-import { CaretUpDownIcon } from '@/components/Display/Icons/CaretUpDown'
-import { MoneyIcon } from '@/components/Display/Icons/Money'
-import { CalendarIcon } from '@/components/Display/Icons/Calendar'
-import { OrbitIcon } from '@/components/Display/Icons/Orbit'
+import { MenuCard } from '../MenuCard'
 
 enum SearchbarCards {
   Settings,
@@ -154,14 +154,12 @@ const Sidebar: React.FC = () => {
             />
 
             <NavLink
-              name='Pendências'
+              name='Auditoria'
               icon={
-                <AlertIcon
-                  size='size-5'
-                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
-                />
+                <TransactionHistoryIcon size='size-5'
+                  stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]' />
               }
-              href='/relatorios/pendencias'
+              href='/relatorios/auditoria'
             />
 
             <NavLink

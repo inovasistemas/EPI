@@ -321,6 +321,111 @@ const Agenda: FC = () => {
 			));
 		}
 	};
+
+	const handleWithdrawnsEvent = async () => {
+  if (!selectedEquipment) return;
+
+  // 1. Identificar todos os equipamentos que precisam ser enviados
+  // (Filtramos apenas os que têm evento e ainda não foram retirados)
+  const itemsToWithdraw: { eventId: string; equipmentUuid: string }[] = [];
+
+  selectedEquipment.routines?.forEach((routine) => {
+    routine.equipments?.forEach((equip) => {
+      if (!equip.withdrawn && equip.event) {
+        itemsToWithdraw.push({
+          eventId: equip.event,
+          equipmentUuid: equip.uuid || "", // Precisamos do UUID para atualizar o estado local depois
+        });
+      }
+    });
+  });
+
+  if (itemsToWithdraw.length === 0) return;
+
+  // 2. Disparar todas as requisições em paralelo
+  // Isso é muito mais rápido do que esperar uma por uma
+  const promises = itemsToWithdraw.map(async (item) => {
+    try {
+      const response = await withdrawnEvent({
+        loading: setLoading, // Cuidado: setLoading num loop pode causar "flickering", ideal é controlar loading fora
+        id: item.eventId,
+      });
+      
+      return {
+        uuid: item.equipmentUuid,
+        status: response?.status,
+        success: response?.status === 204
+      };
+    } catch (error) {
+      return { uuid: item.equipmentUuid, status: 500, success: false };
+    }
+  });
+
+  const results = await Promise.all(promises);
+
+  // Filtramos quais UUIDs realmente tiveram sucesso (status 204)
+  const successfulUUIDs = results
+    .filter((res) => res.success)
+    .map((res) => res.uuid);
+
+  const hasAnySuccess = successfulUUIDs.length > 0;
+  const hasAnyForbidden = results.some((res) => res.status === 403);
+
+
+	if (successfulUUIDs.length === selectedEquipment.routines[0]?.equipments.length) {
+		setModalStatus(false)
+	}
+  // 3. Atualizar o estado visual APENAS UMA VEZ no final
+  if (hasAnySuccess) {
+    setSelectedEquipment((prev) => {
+      if (!prev) return undefined;
+
+      const updatedRoutines = prev.routines.map((routine) => {
+        // Verifica se essa rotina tem algum equipamento que foi atualizado
+        const hasUpdatesInRoutine = routine.equipments.some(e => successfulUUIDs.includes(e.uuid || ""));
+        
+        if (!hasUpdatesInRoutine) return routine;
+
+        const updatedEquipments = routine.equipments.map((equip) => {
+          if (successfulUUIDs.includes(equip.uuid || "")) {
+            return { ...equip, withdrawn: true };
+          }
+          return equip;
+        });
+
+        return { ...routine, equipments: updatedEquipments };
+      });
+
+      // Recalcula se TUDO foi entregue baseando-se no novo estado
+      const allEquipmentsWithdrawn = updatedRoutines.every((routine) =>
+        routine.equipments.every((equip) => equip.withdrawn)
+      );
+
+      return {
+        ...prev,
+        withdrawn: allEquipmentsWithdrawn,
+        routines: updatedRoutines,
+      };
+    });
+
+    toast.custom(() => (
+      <ToastSuccess text={`${successfulUUIDs.length} equipamentos entregues com sucesso!`} />
+    ));
+    
+    // Atualiza a lista global apenas uma vez
+    fetchEvents();
+  }
+
+  // Tratamento de erros
+  if (hasAnyForbidden) {
+    setHasPermission(false);
+  } else if (!hasAnySuccess) {
+    toast.custom(() => (
+      <ToastError text="Não foi possível atualizar os eventos." />
+    ));
+  }
+};
+
 	const totalEquipments =
 		selectedEquipment?.routines.reduce((sum, routine) => {
 			return sum + routine.equipments.length;
@@ -410,39 +515,35 @@ const Agenda: FC = () => {
 									</div>
 									<div className="flex justify-end items-center gap-3 -mt-0.5 w-full h-full">
 										<span className="pr-3 font-medium text-[--text]">
-											{equipment.quantity}
+											x{equipment.quantity}
 										</span>
-										<div className="max-w-[10ch]">
-											<button
-												disabled={equipment?.withdrawn}
-												name={`${equipment?.uuid}-action`}
-												onClick={() =>
-													handleWithdrawnEvent(
-														equipment?.event || "",
-														equipment.uuid || "",
-														equipment.order || 0,
-													)
-												}
-												type="button"
-												className="relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-6 py-2 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none"
-											>
-												<AnimatePresence mode="wait">
-													<motion.span
-														key="button-text"
-														initial={{ opacity: 0 }}
-														animate={{ opacity: 1 }}
-														exit={{ opacity: 0 }}
-														transition={{ duration: 0.3 }}
-														className="text-sm"
-													>
-														Entregar
-													</motion.span>
-												</AnimatePresence>
-											</button>
-										</div>
 									</div>
 								</li>
 							))}
+							<li>
+								<div className="flex w-full justify-end items-end">
+									<button
+										onClick={() =>
+											handleWithdrawnsEvent()
+										}
+										type="button"
+										className="relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-6 py-2 rounded-xl font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none"
+									>
+										<AnimatePresence mode="wait">
+											<motion.span
+												key="button-text"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+												transition={{ duration: 0.3 }}
+												className="text-sm"
+											>
+												Entregar tudo
+											</motion.span>
+										</AnimatePresence>
+									</button>
+								</div>
+							</li>
 						</ul>
 					))}
 				</div>

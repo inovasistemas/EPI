@@ -62,12 +62,12 @@ export function EquipmentTemplate({
 
       <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col gap-1 w-full'])}>
         <div className='flex flex-row justify-start items-center gap-1 w-full'>
-          <span className='font-semibold text-sm'>{expired}</span>
-          <span className='text-sm'>com validade expirada</span>
+          <span className='font-semibold text-sm'>2</span>
+          <span className='text-sm'>ativos</span>
         </div>
         <div className='flex flex-row justify-start items-center gap-1 w-full text-[--chartRed]'>
-          <span className='font-semibold text-sm'>{pending}</span>
-          <span className='text-sm'>devoluç{pending !== 1 ? 'ões' : 'ão'} pendente{pending !== 1 ? 's' : ''}</span>
+          <span className='font-semibold text-sm'>{expired}</span>
+          <span className='text-sm'>com validade expirada</span>
         </div>
       </div>
     </button>

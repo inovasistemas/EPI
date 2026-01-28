@@ -16,7 +16,7 @@ export function FilterReportCost({ start, end }: FilterReportCostProps) {
             <span className='font-medium'>Período</span>
           </div>
           <div>
-            <RangeDateInput start={start} end={end} />
+            <RangeDateInput start={start} end={end} onChange={() => null} />
           </div>
         </div>
       </div>

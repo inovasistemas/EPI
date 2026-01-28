@@ -22,6 +22,7 @@ export type MaskedInputProps = {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   actionButton?: () => void
   textTransform?: string
+  disabled?: boolean
 }
 
 interface InputOptions {

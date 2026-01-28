@@ -1,13 +1,14 @@
+import { TransferArrowIcon } from '@/components/Display/Icons/TransferArrow'
 import { ConfigProvider, DatePicker } from 'antd'
 import ptBR from 'antd/es/locale/pt_BR'
 import classNames from 'classnames'
 import type dayjs from 'dayjs'
 import { Ubuntu } from 'next/font/google'
-import { TransferArrowIcon } from '@/components/Display/Icons/TransferArrow'
 
 type RangeDateInputProps = {
   start: dayjs.Dayjs
   end: dayjs.Dayjs
+  onChange: (start: string, end: string) => void
 }
 
 const ubuntu = Ubuntu({
@@ -16,7 +17,7 @@ const ubuntu = Ubuntu({
   display: 'swap',
 })
 
-export function RangeDateInput({ start, end }: RangeDateInputProps) {
+export function RangeDateInput({ start, end, onChange }: RangeDateInputProps) {
   const { RangePicker } = DatePicker
 
   return (
@@ -45,6 +46,11 @@ export function RangeDateInput({ start, end }: RangeDateInputProps) {
                 !ubuntu.className,
                 'w-full peer text-[1rem] placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
               )}
+              onChange={(dates, dateStrings) => {
+                console.log(dateStrings)
+                onChange('start', dateStrings[0])
+                onChange('end', dateStrings[1])
+              }}
             />
           </ConfigProvider>
         </div>
