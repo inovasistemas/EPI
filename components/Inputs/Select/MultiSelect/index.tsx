@@ -1,10 +1,10 @@
 'use client'
-import cn from 'classnames'
-import type React from 'react'
-import { useEffect, useState } from 'react'
-import Select, { IndicatorsContainerProps } from 'react-select'
 import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
 import { Skeleton } from '@/components/ui/skeleton'
+import cn from 'classnames'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Select from 'react-select'
 
 type MultiSelectOptionsProps = {
   value: string
@@ -40,12 +40,21 @@ export function MultiSelect({
     useState<MultiSelectOptionsProps | null>(null)
   const [isSelectMenuOpen, setSelectMenuOpen] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const selectRef = useRef<any>(null)
 
   const multiValue = Array.isArray(value)
       ? value.map(v => typeof v === 'string' ? { value: v, label: v } : v)
       : value
         ? [typeof value === 'string' ? { value, label: value } : value]
         : []
+
+  const handleOpenMenu = (e: React.MouseEvent) => {
+    e.preventDefault(); // 1. Impede que o ícone roube o foco do input
+    e.stopPropagation(); 
+    
+    selectRef.current?.focus(); // 2. Força o foco no Select (Isso ativa o listener de clique fora)
+    selectRef.current?.openMenu(); // 3. Abre o menu
+  };
 
   useEffect(() => {
     setIsClient(true)
@@ -77,11 +86,6 @@ export function MultiSelect({
         ]
       )}
     >
-      {icon && (
-        <span className='top-0 left-0 z-50 absolute flex items-center mr-1 ml-3 h-full'>
-          {icon}
-        </span>
-      )}
 
       <div className='relative flex items-center w-full'>
         {!isMulti && (
@@ -102,7 +106,7 @@ export function MultiSelect({
               {
                 'mt-0': label,
               },
-              'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
+              'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer z-[50]'
             )}
             placeholder={placeholder}
             components={{
@@ -203,6 +207,7 @@ export function MultiSelect({
 
         {isMulti && (
           <Select
+            ref={selectRef}
             isMulti
             defaultValue={multiValue}
             noOptionsMessage={() => ''}
@@ -369,13 +374,13 @@ export function MultiSelect({
           </label>
         )}
 
-        <span
+        <span onMouseDown={handleOpenMenu}
           className={cn(
             {
               'rotate-180': isSelectMenuOpen,
             },
             [
-              'mr-3 right-0 absolute flex items-center  h-full transition-all duration-300',
+              'cursor-pointer mr-3 right-0 absolute flex items-center h-full transition-all duration-300',
             ]
           )}
         >

@@ -1,10 +1,10 @@
 'use client'
+import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
+import { Skeleton } from '@/components/ui/skeleton'
 import cn from 'classnames'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { CaretDownIcon } from '@/components/Display/Icons/CaretDownIcon'
-import { Skeleton } from '@/components/ui/skeleton'
 
 type SearchSelectOptionsProps = {
   value: string
@@ -70,7 +70,7 @@ export function SearchSelect({
       )}
     >
       {icon && (
-        <span className='top-0 left-0 z-50 absolute flex items-center mr-1 ml-3 h-full'>
+        <span className='top-0 left-0 z-40 absolute flex items-center mr-1 ml-3 h-full'>
           {icon}
         </span>
       )}
@@ -88,7 +88,7 @@ export function SearchSelect({
             {
               'mt-0': label,
             },
-            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer'
+            'h-[54px] flex justify-end rounded-xl w-full placeholder:text-white cursor-pointer z-[50]'
           )}
           placeholder={placeholder}
           components={{
