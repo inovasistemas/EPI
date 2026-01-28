@@ -132,6 +132,8 @@ const OperatorDetails: FC = () => {
 		if (response && response.status === 200) {
 			const data = response.data;
 
+			console.log(JSON.parse(data.sectors));
+
 			const parsedData = {
 				...data,
 				collaborators: (() => {
@@ -155,6 +157,8 @@ const OperatorDetails: FC = () => {
 					}
 				})(),
 			};
+
+			console.log(parsedData)
 
 			setFormData(parsedData);
 			const sortedEquipments = [...parsedData.equipments].sort((a, b) => {
@@ -484,7 +488,7 @@ const OperatorDetails: FC = () => {
 												</span>
 											</div>
 											<SelectCollaborators
-												value={selectedCollaborators}
+												value={formData.collaborators}
 												onChange={(selected) =>
 													handleChangeMulti(
 														"collaborators",
@@ -499,7 +503,7 @@ const OperatorDetails: FC = () => {
 											/>
 
 											<SelectSectors
-												value={selectedSectors}
+												value={formData.sectors}
 												onChange={(selected) =>
 													handleChangeMulti(
 														"sectors",
@@ -584,7 +588,7 @@ const OperatorDetails: FC = () => {
 												icon={
 													<AddIcon
 														size="size-4"
-														stroke="stroke-white group-data-[active=true]:stroke-[--primaryColor]"
+														stroke="stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]"
 														strokeWidth={2.5}
 													/>
 												}

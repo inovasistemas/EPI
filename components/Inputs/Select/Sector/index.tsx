@@ -2,6 +2,8 @@ import { MultiSelect } from '../MultiSelect'
 import { SelectSectorsProps } from './types'
 
 export function SelectSectors({ value, onChange, SectorsData, background }: SelectSectorsProps) {
+  console.log('value', value)
+  console.log('SectorsData', SectorsData)
   return (
     <MultiSelect
       value={value}
