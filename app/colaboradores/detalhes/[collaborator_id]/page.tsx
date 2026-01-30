@@ -1,29 +1,30 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation'
-import { type FC, useEffect, useRef, useState, useCallback } from 'react'
+import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
-import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { toast } from 'sonner'
+import { CollaboratorSkeleton } from '@/components/Template/Skeletons/Collaborator'
 import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import {
   deleteCollaborator,
   getCollaborator,
-  updateCollaborator,
+  updateCollaborator
 } from '@/services/Collaborator'
-import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
-import { MaskedInput } from '@/components/Inputs/Masked'
-import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
-import { Modal } from '@/components/Display/Modal'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { timestampToDate } from '@/utils/timestamp-to-date'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { CollaboratorSkeleton } from '@/components/Template/Skeletons/Collaborator'
-import { AnimatePresence, motion } from 'framer-motion'
 import { getJobPositions } from '@/services/JobPosition'
+import { simpleDateToTimestamp } from '@/utils/date-to-timestamp'
+import { timestampToDate } from '@/utils/timestamp-to-date'
+import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useParams, useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 type Collaborator = {
   name: string
@@ -123,7 +124,7 @@ const CollaboratorDetails: FC = () => {
     }
   }
 
-  const updateCollabroator = async () => {
+  const _updateCollaborator = async () => {
     const response = await updateCollaborator({
       loading: setLoading,
       id: Array.isArray(CollaboratorId)
@@ -315,15 +316,17 @@ const CollaboratorDetails: FC = () => {
                 type='date'
                 value={timestampToDate(collaborator?.birthdate ?? '')}
                 position='right'
-                onChange={e => handleChange('birthdate', e.target.value)}
+                onChange={e => handleChange('birthdate', simpleDateToTimestamp(e.target.value))}
               />
 
               <SearchSelect
                 name='gender'
                 options={[
                   { value: 'ACTIVE', label: 'Ativo' },
-                  { value: 'AWAY', label: 'Afastado' },
                   { value: 'SICKLEAVE', label: 'Atestado' },
+                  { value: 'AWAY', label: 'Afastado' },
+                  { value: 'DAYOFF', label: 'Folga' },
+                  { value: 'VACATION', label: 'Férias' },
                   { value: 'INACTIVE', label: 'Inativo' },
                 ]}
                 placeholder='Situação'
@@ -386,7 +389,7 @@ const CollaboratorDetails: FC = () => {
                 type='date'
                 value={timestampToDate(collaborator?.admission_date ?? '')}
                 position='right'
-                onChange={e => handleChange('admission_date', e.target.value)}
+                onChange={e => handleChange('admission_date', simpleDateToTimestamp(e.target.value))}
               />
             </div>
 
@@ -504,7 +507,7 @@ const CollaboratorDetails: FC = () => {
             <ActionGroup
               uriBack='/colaboradores'
               onDelete={handleCloseModal}
-              onClick={updateCollabroator}
+              onClick={_updateCollaborator}
               showDelete={true}
             />
           </form>

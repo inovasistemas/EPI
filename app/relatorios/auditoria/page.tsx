@@ -92,7 +92,7 @@ const Audit: FC = () => {
         size='small'
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
-        overflow={true}
+        overflow={false}
         padding={false}
       >
         <FilterReportAudit data={filters} onChange={handleFiltersChange} />

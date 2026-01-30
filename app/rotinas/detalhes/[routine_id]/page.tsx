@@ -93,6 +93,7 @@ const OperatorDetails: FC = () => {
 	});
 	const [equipmentsData, setEquipmentsData] = useState<Equipment[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [loadingEquipments, setLoadingEquipments] = useState(false);
 	const [loadingCollaborators, setLoadingCollaborators] = useState(false);
 	const [loadingSectors, setLoadingSectors] = useState(false);
 	const [modalStatus, setModalStatus] = useState(false);
@@ -132,7 +133,50 @@ const OperatorDetails: FC = () => {
 		if (response && response.status === 200) {
 			const data = response.data;
 
-			console.log(JSON.parse(data.sectors));
+			const parsedData = {
+				...data,
+				collaborators: (() => {
+					try {
+						return JSON.parse(data.collaborators).map((c: any) => ({
+							value: c.value,
+							label: c.label,
+						}));
+					} catch {
+						return [];
+					}
+				})(),
+				sectors: (() => {
+					try {
+						return JSON.parse(data.sectors).map((s: any) => ({
+							value: s.value,
+							label: s.label,
+						}));
+					} catch {
+						return [];
+					}
+				})(),
+			};
+
+			setFormData(parsedData);
+			const sortedEquipments = [...parsedData.equipments].sort((a, b) => {
+				const orderA = a.order ?? 0;
+				const orderB = b.order ?? 0;
+
+				return orderA - orderB;
+			});
+			setEquipmentsData(sortedEquipments);
+		}
+
+		setLoadingSectors(false);
+	};
+
+	const fetchRoutineEquipments = async () => {
+		if (!RoutineId) return;
+
+		const response = await getRoutine({ id: RoutineId, loading: setLoadingEquipments });
+
+		if (response && response.status === 200) {
+			const data = response.data;
 
 			const parsedData = {
 				...data,
@@ -158,9 +202,6 @@ const OperatorDetails: FC = () => {
 				})(),
 			};
 
-			console.log(parsedData)
-
-			setFormData(parsedData);
 			const sortedEquipments = [...parsedData.equipments].sort((a, b) => {
 				const orderA = a.order ?? 0;
 				const orderB = b.order ?? 0;
@@ -169,8 +210,6 @@ const OperatorDetails: FC = () => {
 			});
 			setEquipmentsData(sortedEquipments);
 		}
-
-		setLoadingSectors(false);
 	};
 
 	const fetchSectors = async () => {
@@ -252,7 +291,7 @@ const OperatorDetails: FC = () => {
 						],
 					}));
 
-					fetchRoutine();
+					fetchRoutineEquipments();
 
 					toast.custom(() => (
 						<ToastSuccess text="Equipamento adicionado com sucesso" />
@@ -296,7 +335,7 @@ const OperatorDetails: FC = () => {
 					),
 				}));
 
-				fetchRoutine();
+				fetchRoutineEquipments();
 
 				toast.custom(() => (
 					<ToastSuccess text="Equipamento removido com sucesso" />
@@ -327,8 +366,20 @@ const OperatorDetails: FC = () => {
 	) => {
 		if (!RoutineId) return;
 
+		setEquipmentsData((prev) =>
+			prev.map((equipment) =>
+				equipment.uuid === uuid
+					? {
+							...equipment,
+							quantity: newQuantity,
+							updated_at: dayjs().toString(),
+						}
+					: equipment,
+			),
+		);
+
 		const response = await updateRoutineEquipment({
-			loading: setLoading,
+			loading: setLoadingEquipments,
 			id: RoutineId,
 			equipment: uuid,
 			quantity: newQuantity,
@@ -336,21 +387,6 @@ const OperatorDetails: FC = () => {
 
 		if (response) {
 			if (response.status === 200) {
-				setFormData((prev) => ({
-					...prev,
-					equipments: prev.equipments.map((equipment) =>
-						equipment.uuid === uuid
-							? {
-									...equipment,
-									quantity: newQuantity,
-									updated_at: dayjs().toString(),
-								}
-							: equipment,
-					),
-				}));
-
-				fetchRoutine();
-
 				toast.custom(() => (
 					<ToastSuccess text="Equipamento atualizado com sucesso" />
 				));
@@ -368,6 +404,8 @@ const OperatorDetails: FC = () => {
 				<ToastError text="Não foi possível alterar o equipamento. Verifique os campos obrigatórios e tente novamente" />
 			));
 		}
+
+		fetchRoutineEquipments();
 	};
 
 	const handleUpdateRoutine = async () => {

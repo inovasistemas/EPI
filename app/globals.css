@@ -46,6 +46,8 @@
 
   --alertText: #0A0A0A;
   --alertTextError: #E7000B;
+
+  --disabledInput: #E8EAEE;
 }
 
 .dark {
@@ -86,6 +88,13 @@
 
   --alertText: #FAFAFA;
   --alertTextError: #FF6467;
+
+  --disabledInput: #1A1B1C;
+}
+
+.ant-picker.ant-picker-disabled .ant-picker-input > input {
+  color: var(--textSecondary) !important;
+  opacity: 0.5 !important;
 }
 
 .ant-picker,

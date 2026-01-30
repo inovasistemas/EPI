@@ -20,6 +20,7 @@ export function StockModal({ action }: StockModalProps) {
   const options = InputOptionsMap['number']
   const [stockZero, setStockZero] = useState(false)
   const [stockType, setStockType] = useState('true')
+  const [expirationDateControl, setExpirationDateControl] = useState(false)
   const stockOptions = [
     {
       value: 'true',
@@ -32,8 +33,8 @@ export function StockModal({ action }: StockModalProps) {
   ]
 
   const [formData, setFormData] = useState<formData>({
-      startedAt: dayjs().format('YYYY-MM-DD')
-    })
+    startedAt: dayjs().format('YYYY-MM-DD')
+  })
 
   return (
     <div className='relative flex flex-col w-full h-full'>
@@ -55,8 +56,8 @@ export function StockModal({ action }: StockModalProps) {
             transition={{ duration: 0.3 }}
             className='items-start gap-6 grid grid-cols-1 py-6 select-none'
           >
-            <div className='flex flex-col gap-6 divide-y divide-[--outlinePrimary] w-full'>
-              <div className='items-center grid grid-cols-2 w-full select-none pt-6'>
+            <div className='flex flex-col gap-3 w-full'>
+              <div className='items-center grid grid-cols-2 w-full select-none'>
                 <div>
                   <span className='font-medium'>Tipo</span>
                 </div>
@@ -80,7 +81,7 @@ export function StockModal({ action }: StockModalProps) {
                       id='stockControl'
                       type='checkbox'
                       name='stockControl'
-                      className='rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                      className='rounded focus:ring-2 focus:ring-[--primaryColor] focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={stockZero}
                       onChange={() => setStockZero(!stockZero)}
                   />
@@ -90,7 +91,7 @@ export function StockModal({ action }: StockModalProps) {
                     id='stock'
                     name='stock'
                     options={options}
-                    className='peer block bg-[--backgroundSecondary] px-[12px] h-[54px] py-2 rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
+                    className='peer block focus:ring-2 focus:ring-[--primaryColor] bg-[--backgroundSecondary] px-[12px] h-[54px] py-2 rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
                     placeholder=' '
                     onChange={() => null}
                   />
@@ -101,7 +102,19 @@ export function StockModal({ action }: StockModalProps) {
                   <span className='font-medium'>Validade</span>
                 </div>
                 <div className='grid w-full flex flex-col gap-3'>
+                  <div className='flex items-center gap-3'>
+                    <input
+                      id='expirationDateControl'
+                      type='checkbox'
+                      name='expirationDateControl'
+                      className='rounded focus:ring-2 focus:ring-[--primaryColor] focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                      checked={expirationDateControl}
+                      onChange={() => setExpirationDateControl(!expirationDateControl)}
+                  />
+                  <label htmlFor='expirationDateControl' className='font-semibold text-[--labelPrimary] text-[10px] uppercase'>Não informar validade</label>
+                  </div>
                   <DateInput
+                    disabled={expirationDateControl}
                     start={dayjs(formData.startedAt)}
                     calendarType='day'
                     name='startedAt'

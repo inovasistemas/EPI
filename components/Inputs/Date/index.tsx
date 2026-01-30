@@ -11,6 +11,7 @@ type DateInputProps = {
   label?: string
   background?: string
   onChange?: (name: string, date: string) => void
+  disabled?: boolean
 }
 
 const ubuntu = Ubuntu({
@@ -25,7 +26,8 @@ export function DateInput({
   calendarType = 'week',
   label,
   background = 'bg-[--backgroundSecondary]',
-  onChange = (name: string, date: string) => undefined
+  onChange = (name: string, date: string) => undefined,
+  disabled = false
 }: DateInputProps) {
   const { WeekPicker } = DatePicker
 
@@ -41,13 +43,14 @@ export function DateInput({
             {
               'pt-4': label,
             },
-            ['flex items-end w-full h-ful']
+            ['flex items-end w-full h-full']
           )}
         >
           <ConfigProvider locale={ptBR}>
             {calendarType === 'week' && (
               <WeekPicker
                 format='DD/MM/YYYY'
+                disabled={disabled}
                 nextIcon={false}
                 prevIcon={false}
                 suffixIcon={false}
@@ -58,13 +61,14 @@ export function DateInput({
                 defaultOpen={false}
                 className={classNames(
                   !ubuntu.className,
-                  'w-full peer text-[1rem] placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
+                  'w-full peer text-[1rem] placeholder:text-[--textSecondary] bg-transparent disabled:bg-transparent hover:bg-transparent rounded-xl focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
                 )}
               />
             )}
             {calendarType === 'day' && (
               <DatePicker
                 format='DD/MM/YYYY'
+                disabled={disabled}
                 nextIcon={false}
                 prevIcon={false}
                 suffixIcon={false}
@@ -75,7 +79,7 @@ export function DateInput({
                 defaultOpen={false}
                 className={classNames(
                   !ubuntu.className,
-                  'w-full peer placeholder:text-[--textSecondary] bg-transparent hover:bg-transparent focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
+                  'w-full peer placeholder:text-[--textSecondary] bg-transparent disabled:bg-transparent disabled:!text-[--textSecondary] hover:bg-transparent rounded-xl focus-within:bg-transparent active:bg-transparent border-none focus-within:outline-none focus-within:ring-0 h-full'
                 )}
                 onChange={(date, dateString) => {
                   onChange(name, String(date.format('YYYY-MM-DD 00:00:00')))

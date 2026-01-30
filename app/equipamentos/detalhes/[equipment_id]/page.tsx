@@ -612,7 +612,7 @@ const CreateEquipment: FC = () => {
                           >
                             <EditIcon
                               size="size-4"
-                              stroke="stroke-white group-data-[active=true]:stroke-[--primaryColor]"
+                              stroke="stroke-[--labelPrimary] group-data-[active=true]:stroke-[--primaryColor]"
                               strokeWidth={2.5}
                             />
                           </button>

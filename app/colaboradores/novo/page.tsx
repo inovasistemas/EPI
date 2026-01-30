@@ -1,19 +1,20 @@
 'use client'
-import { type FC, useEffect, useRef, useState } from 'react'
+import { MaskedInput } from '@/components/Inputs/Masked'
+import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
-import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { MaskedInput } from '@/components/Inputs/Masked'
-import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
-import { createCollaborator } from '@/services/Collaborator'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
-import { useRouter } from 'next/navigation'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { createCollaborator } from '@/services/Collaborator'
 import { getJobPositions } from '@/services/JobPosition'
+import { simpleDateToTimestamp } from '@/utils/date-to-timestamp'
+import { useRouter } from 'next/navigation'
+import { type FC, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 const CreateCollaborator: FC = () => {
   const router = useRouter()
@@ -56,14 +57,17 @@ const CreateCollaborator: FC = () => {
   }
 
   const handleCreateCollaborator = async () => {
+    const birthdate = simpleDateToTimestamp(formData.birthdate)
+    const admission_date = simpleDateToTimestamp(formData.admission_date)
+
     const response = await createCollaborator({
       name: formData.name,
-      birthdate: formData.birthdate,
+      birthdate: birthdate,
       rg: formData.rg,
       cpf: formData.cpf,
       gender: formData.gender,
       job_position: formData.job_position,
-      admission_date: formData.admission_date,
+      admission_date: admission_date,
       zip_code: formData.zip_code,
       address: formData.address,
       number: formData.number,
@@ -153,15 +157,17 @@ const CreateCollaborator: FC = () => {
               type='date'
               value={formData?.birthdate}
               position='right'
-              onChange={e => handleChange('birthdate', e.target.value)}
+              onChange={e => {handleChange('birthdate', e.target.value); console.log(e.target.value)}}
             />
 
             <SearchSelect
               name='gender'
               options={[
                 { value: 'ACTIVE', label: 'Ativo' },
-                { value: 'AWAY', label: 'Afastado' },
                 { value: 'SICKLEAVE', label: 'Atestado' },
+                { value: 'AWAY', label: 'Afastado' },
+                { value: 'DAYOFF', label: 'Folga' },
+                { value: 'VACATION', label: 'Férias' },
                 { value: 'INACTIVE', label: 'Inativo' },
               ]}
               placeholder='Situação'
