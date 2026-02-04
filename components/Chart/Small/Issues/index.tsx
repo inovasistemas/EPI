@@ -1,4 +1,11 @@
 'use client'
+import { CardContent } from '@/components/ui/card'
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
 import {
   Bar,
   BarChart,
@@ -7,18 +14,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { CardContent } from '@/components/ui/card'
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart'
 
 type SmallChartIssuesProps = {
   equipment: string
   withdrawn: number
-  notwithdrawn: number
+  not_withdrawn: number
 }
 
 export const description = 'A bar chart with a custom label'
@@ -28,7 +28,7 @@ const chartConfig = {
     label: 'Regular',
     color: 'var(--textPrimary)',
   },
-  notwithdrawn: {
+  not_withdrawn: {
     label: 'Pendente',
     color: 'var(--chartGray)',
   },
@@ -40,9 +40,10 @@ const chartConfig = {
 export function SmallChartIssues({
   equipment,
   withdrawn,
-  notwithdrawn,
+  not_withdrawn,
 }: SmallChartIssuesProps) {
-  const chartData = [{ equipment, withdrawn, notwithdrawn }]
+  const chartData = [{ equipment, withdrawn, not_withdrawn }]
+  const radius: [number, number, number, number] = not_withdrawn > 0 ? [4, 0, 0, 4] : [4, 4, 4, 4]
 
   return (
     <ResponsiveContainer width='100%' height={60}>
@@ -68,7 +69,7 @@ export function SmallChartIssues({
               tickFormatter={value => value.slice(0, 3)}
               hide
             />
-            <XAxis type='number' domain={[0, withdrawn + notwithdrawn]} hide />
+            <XAxis type='number' domain={[0, withdrawn + not_withdrawn]} hide />
             <ChartTooltip
               cursor={false}
               content={
@@ -85,12 +86,13 @@ export function SmallChartIssues({
               dataKey='withdrawn'
               stackId='a'
               fill='var(--primaryColor)'
-              radius={[4, 0, 0, 4]}
+              style={{ height: `${Math.max(chartData.length * 32, 60)}px` }}
+              radius={radius}
             />
             <Bar
-              dataKey='notwithdrawn'
+              dataKey='not_withdrawn'
               stackId='a'
-              fill='var(--chartGray)'
+              fill='var(--chartYellow)'
               radius={[0, 4, 4, 0]}
             />
           </BarChart>

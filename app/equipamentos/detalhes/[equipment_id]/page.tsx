@@ -488,6 +488,7 @@ const CreateEquipment: FC = () => {
                   <MaskedInput
                     name='cost'
                     label='Valor de custo'
+                    disabled={true}
                     required={false}
                     type='money'
                     value={convertMoneyBRL(equipmentData.cost ?? 0)}
@@ -590,7 +591,7 @@ const CreateEquipment: FC = () => {
                         onClick={() => null}
                         className='gap-4 grid sm:grid-cols-3 col-span-3 w-full'
                       >
-                        <div className='h-[54px] border-box flex items-center justify-between gap-3 bg-[--backgroundSecondary] rounded-xl'>
+                        <div className='flex justify-between items-center gap-3 bg-[--backgroundSecondary] border-box rounded-xl h-[54px]'>
                           <div className="-mt-0.5">
                             <MaskedInput
                               disabled={true}
@@ -612,7 +613,7 @@ const CreateEquipment: FC = () => {
                           >
                             <EditIcon
                               size="size-4"
-                              stroke="stroke-[--labelPrimary] group-data-[active=true]:stroke-[--primaryColor]"
+                              stroke="stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]"
                               strokeWidth={2.5}
                             />
                           </button>

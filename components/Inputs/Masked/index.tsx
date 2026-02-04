@@ -33,7 +33,7 @@ export function MaskedInput({
             id={name}
             name={name}
             className={classNames(
-              'peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none',
+              'disabled:text-[--labelPrimary] peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none',
               textTransform
             )}
             options={options}

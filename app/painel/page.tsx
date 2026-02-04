@@ -79,7 +79,7 @@ export default function Home() {
               <PendingTemplate
                 equipment={getReport('rp_002')?.graph.equipment ?? ''}
                 withdrawn={getReport('rp_002')?.graph.withdrawn ?? ''}
-                notwithdrawn={getReport('rp_002')?.graph.notwithdrawn ?? ''}
+                not_withdrawn={getReport('rp_002')?.graph.not_withdrawn ?? ''}
                 show={true}
               />
             </div>

@@ -1,5 +1,7 @@
-import { Countdown } from '@/components/Countdown'
+import { CaretUpIcon } from '@/components/Display/Icons/CaretUp'
+import { LockIcon } from '@/components/Display/Icons/Lock'
 import classNames from 'classnames'
+import Link from 'next/link'
 
 type CollaboratorTemplateProps = {
   count: number
@@ -15,10 +17,10 @@ export function CollaboratorTemplate({
   show
 }: CollaboratorTemplateProps) {
   return (
-    <button
-      type='button'
-      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-default select-none'
-    >
+    <Link
+      href={show ? '/colaboradores' : ''}
+      className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] hover:bg-[--backgroundTertiary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
+      >
       <div className='flex flex-row justify-between items-start w-full'>
         <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col justify-start items-start w-full'])}>
           <span className='text-[--textSecondary] text-xs'>Colaboradores</span>
@@ -26,25 +28,12 @@ export function CollaboratorTemplate({
             {count}
           </span>
         </div>
-        {/* <span className='-mr-1 rotate-90'>
+        <span className='-mr-1 rotate-90'>
           <CaretUpIcon size='size-5' stroke='stroke-[--textSecondary]' />
-        </span> */}
+        </span>
       </div>
 
       {!show && 
-          <>
-          <div className="top-0 left-0 absolute flex justify-center items-center w-full h-full">
-            <div className="flex items-center gap-2">
-              <div className='mt-6 scale-[.60]'>
-                <Countdown date={'2025-11-20 00:00:00'} />
-              </div>
-          </div>
-        </div>
-        <div className='z-50 absolute w-full h-full'></div>
-        </>
-      }
-
-      {/* {!show && 
         <>
         <div className="top-0 left-0 absolute flex justify-center items-center w-full h-full">
           <div className="flex items-center gap-2">
@@ -57,18 +46,18 @@ export function CollaboratorTemplate({
         </div>
         <div className='z-50 absolute w-full h-full'></div>
         </>
-      } */}
+      }
 
       <div className={classNames({'blur-sm select-none opacity-60': !show}, ['flex flex-col gap-1 w-full'])}>
         <div className='flex flex-row justify-start items-center gap-1 w-full'>
           <span className='font-semibold text-sm'>{active}</span>
-          <span className='text-sm'>ativo{active !== 1 ? 's' : ''}</span>
+          <span className='text-sm'>ativo{Number(active) !== 1 ? 's' : ''}</span>
         </div>
         <div className='flex flex-row justify-start items-center gap-1 w-full'>
           <span className='font-semibold text-sm'>{away}</span>
-          <span className='text-sm'>afastado{away !== 1 ? 's' : ''}</span>
+          <span className='text-sm'>ausente{Number(away) !== 1 ? 's' : ''}</span>
         </div>
       </div>
-    </button>
+    </Link>
   )
 }

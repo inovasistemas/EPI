@@ -12,20 +12,20 @@ import {
 export const description = 'An area chart with gradient fill'
 
 const chartConfig = {
-  last_week: {
-    label: 'Anterior',
-    color: 'var(--chartGray)',
+  expected: {
+    label: 'Esperado',
+    color: 'var(--chartYellow)',
   },
-  this_week: {
-    label: 'Atual',
+  exited: {
+    label: 'Realizado',
     color: 'var(--primaryColor)',
   },
 } satisfies ChartConfig
 
 type ChartProps = {
   day: string
-  last_week: number
-  this_week: number
+  expected: number
+  exited: number
 }
 
 type ChartAreaGradientProps = {
@@ -43,6 +43,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
             accessibilityLayer
             data={chartData}
             margin={{
+              top: 12,
               left: 12,
               right: 12,
             }}
@@ -63,7 +64,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
             />
             <defs>
               <linearGradient
-                id='filllast_week'
+                id='fillexpected'
                 x1='0'
                 y1='0'
                 x2='0'
@@ -72,44 +73,43 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
               >
                 <stop
                   offset='5%'
-                  stopColor='var(--color-last_week)'
+                  stopColor='var(--color-expected)'
                   stopOpacity={0.8}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-last_week)'
+                  stopColor='var(--color-expected)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id='fillthis_week' x1='0' y1='0' x2='0' y2='1'>
+              <linearGradient id='fillexited' x1='0' y1='0' x2='0' y2='1'>
                 <stop
                   offset='5%'
-                  stopColor='var(--color-this_week)'
+                  stopColor='var(--color-exited)'
                   stopOpacity={0.8}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-this_week)'
+                  stopColor='var(--color-exited)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey='this_week'
+              dataKey='expected'
               type='natural'
-              fill='url(#fillthis_week)'
+              fill='url(#fillexpected)'
               fillOpacity={0.4}
-              stroke='var(--color-this_week)'
-              stackId='a'
+              stroke='var(--color-expected)'
               strokeWidth={2}
             />
+
             <Area
-              dataKey='last_week'
+              dataKey='exited'
               type='natural'
-              fill='url(#filllast_week)'
+              fill='url(#fillexited)'
               fillOpacity={0.4}
-              stroke='var(--color-last_week)'
-              stackId='a'
+              stroke='var(--color-exited)'
               strokeWidth={2}
             />
           </AreaChart>

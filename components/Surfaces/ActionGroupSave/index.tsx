@@ -1,5 +1,5 @@
-import classNames from 'classnames'
 import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
+import classNames from 'classnames'
 
 type ActionGroupSaveProps = {
   actionDisabled?: boolean
@@ -11,7 +11,7 @@ export function ActionGroupSave({
   onClick,
 }: ActionGroupSaveProps) {
   return (
-    <div className='bottom-0 z-[201] sticky inset-x-0 flex justify-end items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
+    <div className='bottom-0 z-[201] inset-x-0 flex justify-end items-center gap-3 bg-[--backgroundPrimary] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-3 rounded-b-xl w-full text-sm transition-all duration-300'>
       <div className='flex justify-end items-center gap-3 w-full'>
         <button
           disabled={actionDisabled}

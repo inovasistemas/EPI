@@ -8,6 +8,7 @@
 
   --backgroundPrimary: #feffff;
   --backgroundSecondary: #f0f4f8;
+  --backgroundTertiary: #DDE3EA;
 
   --textPrimary: #3280fc;
   --textSecondary: #0a0a0a;
@@ -53,6 +54,7 @@
 .dark {
   --backgroundPrimary: #282a2c;
   --backgroundSecondary: #1b1c1d;
+  --backgroundTertiary: #3E3F42;
 
   --textPrimary: #3280fc;
   --textSecondary: #c4c4cc;
@@ -489,4 +491,9 @@ input[type='number'] {
 
 :where(.css-dev-only-do-not-override-1vjf2v5).ant-picker-dropdown .ant-picker-range-arrow::before {
   background-color: var(--outlinePrimary);
+}
+
+.ant-picker-input > input {
+  background-color: transparent !important;
+  color: inherit !important;
 }

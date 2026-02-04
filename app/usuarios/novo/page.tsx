@@ -1,16 +1,38 @@
 'use client'
-import { type FC, useEffect, useRef, useState } from 'react'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
+import { SelectSectors } from '@/components/Inputs/Select/Sector'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
-import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
-import { createUser, getPermissionGroups } from '@/services/User'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { getSectors } from '@/services/Sector'
+import { createUser, getPermissionGroups } from '@/services/User'
+import { useRouter } from 'next/navigation'
+import { type FC, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+
+type Sector = {
+  uuid: string
+  name: string
+  sector: string
+  created_at: string
+  updated_at: string
+  subsectors: [],
+}
+
+type formData = {
+  name: string
+  email: string
+  password: string
+  permissionGroup: string
+  sectors: {
+    value: string
+    label: string
+  }[]
+}
 
 const CreateOperator: FC = () => {
   const router = useRouter()
@@ -19,12 +41,34 @@ const CreateOperator: FC = () => {
     email: '',
     password: '',
     permissionGroup: '',
+    sectors: []
   })
   const fetchedPermissionGroups = useRef(false)
   const [permissionGroups, setPermissionGroups] = useState([])
   const [loading, setLoading] = useState(false)
+  const [loadingSectors, setLoadingSectors] = useState(false)
+  const [sectorsData, setSectorsData] = useState<Sector[]>([])
+  
+  const fetchSectors = async () => {
+    const response = await getSectors({loading: setLoadingSectors})
+
+    if (response && response.status === 200) {
+      const data = response.data
+
+      setSectorsData(data.data)
+    }
+
+    setLoadingSectors(false)
+  }
 
   const handleChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleChangeMulti = <T extends keyof formData>(name: T, value: formData[T]) => {
     setFormData(prev => ({
       ...prev,
       [name]: value,
@@ -60,6 +104,8 @@ const CreateOperator: FC = () => {
   }
 
   useEffect(() => {
+    fetchSectors()
+    
     if (fetchedPermissionGroups.current) return
     fetchedPermissionGroups.current = true
 
@@ -150,6 +196,26 @@ const CreateOperator: FC = () => {
                 onChange={(value: string) =>
                   handleChange('permissionGroup', value)
                 }
+              />
+
+              <div className='hidden sm:block relative mt-8 mb-4'>
+                <GroupLabel
+                  isVisible={true}
+                  label={'Responsável'}
+                  showFixed={true}
+                />
+              </div>
+
+              <SelectSectors
+                value={formData.sectors} 
+                onChange={(selected) =>
+                  handleChangeMulti(
+                    'sectors',
+                    selected.map(s => ({ value: s.value, label: s.label }))
+                  )
+                }
+                SectorsData={sectorsData}
+                background='bg-[--backgroundSecondary]'
               />
             </div>
           </div>

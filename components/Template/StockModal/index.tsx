@@ -37,8 +37,8 @@ export function StockModal({ action }: StockModalProps) {
   })
 
   return (
-    <div className='relative flex flex-col w-full h-full'>
-      <div className='flex flex-col px-6 divide-y divide-[--border] h-full min-h-80 overflow-y-auto'>
+    <div className='relative flex flex-col w-full max-h-[500px] overflow-y-hidden'>
+      <div className='flex flex-col px-6 divide-y divide-[--border] h-full min-h-80 overflow-auto'>
         <div className='py-6 select-none'>
           <h2 className='font-medium text-xl leading-none'>
             Movimentação de estoque
@@ -71,17 +71,17 @@ export function StockModal({ action }: StockModalProps) {
                   />
                 </div>
               </div>
-              <div className='items-center grid grid-cols-2 w-full select-none pt-6'>
+              <div className='items-center grid grid-cols-2 pt-6 w-full select-none'>
                 <div>
                   <span className='font-medium'>Quantidade</span>
                 </div>
-                <div className='grid w-full flex flex-col gap-3'>
+                <div className='flex flex-col gap-3 w-full'>
                   <div className='flex items-center gap-3'>
                     <input
                       id='stockControl'
                       type='checkbox'
                       name='stockControl'
-                      className='rounded focus:ring-2 focus:ring-[--primaryColor] focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                      className='rounded focus:ring-[--primaryColor] focus:ring-2 focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={stockZero}
                       onChange={() => setStockZero(!stockZero)}
                   />
@@ -91,23 +91,48 @@ export function StockModal({ action }: StockModalProps) {
                     id='stock'
                     name='stock'
                     options={options}
-                    className='peer block focus:ring-2 focus:ring-[--primaryColor] bg-[--backgroundSecondary] px-[12px] h-[54px] py-2 rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
+                    className='peer block bg-[--backgroundSecondary] px-[12px] py-2 rounded-xl outline-none focus:outline-none focus:ring-[--primaryColor] focus:ring-2 w-full h-[54px] font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
                     placeholder=' '
                     onChange={() => null}
                   />
                 </div>
               </div>
-              <div className='items-center grid grid-cols-2 w-full select-none pt-6'>
+              <AnimatePresence mode='wait'>
+              { stockType === 'true' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className='items-center grid grid-cols-2 pt-6 w-full select-none'
+                >
+                  <div>
+                    <span className='font-medium'>Custo</span>
+                  </div>
+                  <div className='flex flex-col gap-3 w-full'>
+                    <Cleave
+                      id='stock'
+                      name='stock'
+                      options={options}
+                      className='peer block bg-[--backgroundSecondary] px-[12px] py-2 rounded-xl outline-none focus:outline-none focus:ring-[--primaryColor] focus:ring-2 w-full h-[54px] font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
+                      placeholder=' '
+                      onChange={() => null}
+                    />
+                  </div>
+                </motion.div>
+              )}
+              </AnimatePresence>
+              <div className='items-center grid grid-cols-2 pt-6 w-full select-none'>
                 <div>
                   <span className='font-medium'>Validade</span>
                 </div>
-                <div className='grid w-full flex flex-col gap-3'>
+                <div className='flex flex-col gap-3 w-full'>
                   <div className='flex items-center gap-3'>
                     <input
                       id='expirationDateControl'
                       type='checkbox'
                       name='expirationDateControl'
-                      className='rounded focus:ring-2 focus:ring-[--primaryColor] focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
+                      className='rounded focus:ring-[--primaryColor] focus:ring-2 focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
                       checked={expirationDateControl}
                       onChange={() => setExpirationDateControl(!expirationDateControl)}
                   />

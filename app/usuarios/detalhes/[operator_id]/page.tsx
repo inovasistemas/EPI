@@ -1,12 +1,17 @@
 'use client'
-import { useParams, useRouter } from 'next/navigation'
-import { type FC, useEffect, useRef, useState, useCallback } from 'react'
+import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
+import { SelectSectors } from '@/components/Inputs/Select/Sector'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
+import { UserSkeleton } from '@/components/Template/Skeletons/User'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
+import { getSectors } from '@/services/Sector'
 import {
   deleteUser,
   getPermissionGroups,
@@ -15,13 +20,30 @@ import {
 } from '@/services/User'
 import { timestampToDateTime } from '@/utils/timestamp-to-datetime'
 import classNames from 'classnames'
-import { toast } from 'sonner'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { ToastError } from '@/components/Template/Toast/Error'
-import { Modal } from '@/components/Display/Modal'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { UserSkeleton } from '@/components/Template/Skeletons/User'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useParams, useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+
+type Sector = {
+  uuid: string
+  name: string
+  sector: string
+  created_at: string
+  updated_at: string
+  subsectors: [],
+}
+
+type formData = {
+  name: string
+  email: string
+  password: string
+  permissionGroup: string
+  sectors: {
+    value: string
+    label: string
+  }[]
+}
 
 const OperatorDetails: FC = () => {
   const router = useRouter()
@@ -43,6 +65,7 @@ const OperatorDetails: FC = () => {
     password: '',
     permission_group: '',
     created_at: '',
+    sectors: []
   })
   const fetchedUser = useRef(false)
   const fetchedPermissionGroups = useRef(false)
@@ -50,13 +73,33 @@ const OperatorDetails: FC = () => {
   const [hasPermission, setHasPermission] = useState(true)
   const [loading, setLoading] = useState(false)
   const [loadingPermissionGroup, setLoadingPermissionGroup] = useState(false)
-
   const [modalStatus, setModalStatus] = useState(false)
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
   }, [])
+  const [loadingSectors, setLoadingSectors] = useState(false)
+  const [sectorsData, setSectorsData] = useState<Sector[]>([])
+  
+  const fetchSectors = async () => {
+    const response = await getSectors({loading: setLoadingSectors})
+
+    if (response && response.status === 200) {
+      const data = response.data
+
+      setSectorsData(data.data)
+    }
+
+    setLoadingSectors(false)
+  }
 
   const handleChange = (name: string, value: string) => {
+    setOperatorData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleChangeMulti = <T extends keyof formData>(name: T, value: formData[T]) => {
     setOperatorData(prev => ({
       ...prev,
       [name]: value,
@@ -139,6 +182,8 @@ const OperatorDetails: FC = () => {
   }, [])
 
   useEffect(() => {
+    fetchSectors()
+
     if (fetchedPermissionGroups.current) return
     fetchedPermissionGroups.current = true
 
@@ -284,6 +329,26 @@ const OperatorDetails: FC = () => {
                     required={true}
                     placeholder='Grupo de permissão'
                     onChange={() => null}
+                  />
+
+                  <div className='hidden sm:block relative mt-8 mb-4'>
+                    <GroupLabel
+                      isVisible={true}
+                      label={'Responsável'}
+                      showFixed={true}
+                    />
+                  </div>
+    
+                  <SelectSectors
+                    value={operatorData.sectors} 
+                    onChange={(selected) =>
+                      handleChangeMulti(
+                        'sectors',
+                        selected.map(s => ({ value: s.value, label: s.label }))
+                      )
+                    }
+                    SectorsData={sectorsData}
+                    background='bg-[--backgroundSecondary]'
                   />
                 </div>
 

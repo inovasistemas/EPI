@@ -9,7 +9,7 @@ import { ToastSuccess } from "@/components/Template/Toast/Success";
 import { useQueryParams } from "@/components/Utils/UseQueryParams";
 import { Skeleton } from "@/components/ui/skeleton";
 import useDebounce from "@/lib/context/debounce";
-import { getEvents, withdrawnEvent } from "@/services/Event";
+import { getEvent, getEvents, withdrawnEvent } from "@/services/Event";
 import { calcDaysRemaining } from "@/utils/cal-days-remaining";
 import { calcPages } from "@/utils/calc-pages";
 import { timestampToDate } from "@/utils/timestamp-to-date";
@@ -89,6 +89,7 @@ const Agenda: FC = () => {
 	const [search, setSearch] = useState("");
 	const debouncedSearch = useDebounce({ value: search, delay: 500 });
 	const [loading, setLoading] = useState(false);
+	const [loadingEvent, setLoadingEvent] = useState(false);
 	const page = useMemo(() => {
 		return searchParams.get("page");
 	}, [searchParams]);
@@ -105,6 +106,7 @@ const Agenda: FC = () => {
 	});
 	const [modalStatus, setModalStatus] = useState(false);
 	const [modalDeleteStatus, setModalDeleteStatus] = useState(false);
+	const [needApproval, setNeedApproval] = useState(true);
 
 	const handleOrderBy = useCallback(
 		(field: string) => {
@@ -232,6 +234,34 @@ const Agenda: FC = () => {
 		}
 	};
 
+	const fetchEvent = async (id: string) => {
+		const response = await getEvent({
+			loading: setLoadingEvent,
+			id
+		});
+
+		if (response) {
+			if (response.status === 200) {
+				if (response.data.need_approval === true) {
+					setNeedApproval(true);
+					handleCloseModalDelete();
+				} else {
+					setNeedApproval(false);
+				}
+			} else if (response.status === 403) {
+				setHasPermission(false);
+			} else {
+				toast.custom(() => (
+					<ToastError text="Não foi possível buscar o evento" />
+				));
+			}
+		} else {
+			toast.custom(() => (
+				<ToastError text="Não foi possível buscar o evento" />
+			));
+		}
+	};
+
 	const handleWithdrawnEvent = async (
 		id: string,
 		equipment: string,
@@ -323,108 +353,99 @@ const Agenda: FC = () => {
 	};
 
 	const handleWithdrawnsEvent = async () => {
-  if (!selectedEquipment) return;
+  	if (!selectedEquipment) return;
 
-  // 1. Identificar todos os equipamentos que precisam ser enviados
-  // (Filtramos apenas os que têm evento e ainda não foram retirados)
-  const itemsToWithdraw: { eventId: string; equipmentUuid: string }[] = [];
+  	const itemsToWithdraw: { eventId: string; equipmentUuid: string }[] = [];
 
-  selectedEquipment.routines?.forEach((routine) => {
-    routine.equipments?.forEach((equip) => {
-      if (!equip.withdrawn && equip.event) {
-        itemsToWithdraw.push({
-          eventId: equip.event,
-          equipmentUuid: equip.uuid || "", // Precisamos do UUID para atualizar o estado local depois
-        });
-      }
-    });
-  });
+		selectedEquipment.routines?.forEach((routine) => {
+			routine.equipments?.forEach((equip) => {
+				if (!equip.withdrawn && equip.event) {
+					itemsToWithdraw.push({
+						eventId: equip.event,
+						equipmentUuid: equip.uuid || "",
+					});
+				}
+			});
+		});
 
-  if (itemsToWithdraw.length === 0) return;
+		if (itemsToWithdraw.length === 0) return;
 
-  // 2. Disparar todas as requisições em paralelo
-  // Isso é muito mais rápido do que esperar uma por uma
-  const promises = itemsToWithdraw.map(async (item) => {
-    try {
-      const response = await withdrawnEvent({
-        loading: setLoading, // Cuidado: setLoading num loop pode causar "flickering", ideal é controlar loading fora
-        id: item.eventId,
-      });
-      
-      return {
-        uuid: item.equipmentUuid,
-        status: response?.status,
-        success: response?.status === 204
-      };
-    } catch (error) {
-      return { uuid: item.equipmentUuid, status: 500, success: false };
-    }
-  });
+		const promises = itemsToWithdraw.map(async (item) => {
+			try {
+				const response = await withdrawnEvent({
+					loading: setLoading,
+					id: item.eventId,
+				});
+				
+				return {
+					uuid: item.equipmentUuid,
+					status: response?.status,
+					success: response?.status === 204
+				};
+			} catch (error) {
+				return { uuid: item.equipmentUuid, status: 500, success: false };
+			}
+		});
 
-  const results = await Promise.all(promises);
+		const results = await Promise.all(promises);
 
-  // Filtramos quais UUIDs realmente tiveram sucesso (status 204)
-  const successfulUUIDs = results
-    .filter((res) => res.success)
-    .map((res) => res.uuid);
+		const successfulUUIDs = results
+			.filter((res) => res.success)
+			.map((res) => res.uuid);
 
-  const hasAnySuccess = successfulUUIDs.length > 0;
-  const hasAnyForbidden = results.some((res) => res.status === 403);
+		const hasAnySuccess = successfulUUIDs.length > 0;
+		const hasAnyForbidden = results.some((res) => res.status === 403);
 
 
-	if (successfulUUIDs.length === selectedEquipment.routines[0]?.equipments.length) {
-		setModalStatus(false)
-	}
-  // 3. Atualizar o estado visual APENAS UMA VEZ no final
-  if (hasAnySuccess) {
-    setSelectedEquipment((prev) => {
-      if (!prev) return undefined;
+		if (successfulUUIDs.length === selectedEquipment.routines[0]?.equipments.length) {
+			setModalStatus(false)
+		}
 
-      const updatedRoutines = prev.routines.map((routine) => {
-        // Verifica se essa rotina tem algum equipamento que foi atualizado
-        const hasUpdatesInRoutine = routine.equipments.some(e => successfulUUIDs.includes(e.uuid || ""));
-        
-        if (!hasUpdatesInRoutine) return routine;
+		if (hasAnySuccess) {
+			setSelectedEquipment((prev) => {
+				if (!prev) return undefined;
 
-        const updatedEquipments = routine.equipments.map((equip) => {
-          if (successfulUUIDs.includes(equip.uuid || "")) {
-            return { ...equip, withdrawn: true };
-          }
-          return equip;
-        });
+				const updatedRoutines = prev.routines.map((routine) => {
+					const hasUpdatesInRoutine = routine.equipments.some(e => successfulUUIDs.includes(e.uuid || ""));
+					
+					if (!hasUpdatesInRoutine) return routine;
 
-        return { ...routine, equipments: updatedEquipments };
-      });
+					const updatedEquipments = routine.equipments.map((equip) => {
+						if (successfulUUIDs.includes(equip.uuid || "")) {
+							return { ...equip, withdrawn: true };
+						}
+						return equip;
+					});
 
-      // Recalcula se TUDO foi entregue baseando-se no novo estado
-      const allEquipmentsWithdrawn = updatedRoutines.every((routine) =>
-        routine.equipments.every((equip) => equip.withdrawn)
-      );
+					return { ...routine, equipments: updatedEquipments };
+				});
 
-      return {
-        ...prev,
-        withdrawn: allEquipmentsWithdrawn,
-        routines: updatedRoutines,
-      };
-    });
+				const allEquipmentsWithdrawn = updatedRoutines.every((routine) =>
+					routine.equipments.every((equip) => equip.withdrawn)
+				);
 
-    toast.custom(() => (
-      <ToastSuccess text={`${successfulUUIDs.length} equipamentos entregues com sucesso!`} />
-    ));
-    
-    // Atualiza a lista global apenas uma vez
-    fetchEvents();
-  }
+				return {
+					...prev,
+					withdrawn: allEquipmentsWithdrawn,
+					routines: updatedRoutines,
+				};
+			});
 
-  // Tratamento de erros
-  if (hasAnyForbidden) {
-    setHasPermission(false);
-  } else if (!hasAnySuccess) {
-    toast.custom(() => (
-      <ToastError text="Não foi possível atualizar os eventos." />
-    ));
-  }
-};
+			toast.custom(() => (
+				<ToastSuccess text={`${successfulUUIDs.length} equipamentos entregues com sucesso!`} />
+			));
+			
+			fetchEvents();
+		}
+
+		if (hasAnyForbidden) {
+			setHasPermission(false);
+		} else if (!hasAnySuccess) {
+			toast.custom(() => (
+				<ToastError text="Não foi possível atualizar os eventos." />
+			));
+		}
+	};
 
 	const totalEquipments =
 		selectedEquipment?.routines.reduce((sum, routine) => {
@@ -438,9 +459,14 @@ const Agenda: FC = () => {
 	const handleModal = async (equipment: Event) => {
 		const now = new Date();
 		setSelectedEquipment(equipment);
+		setNeedApproval(true);
 
 		if (new Date(equipment.expected_withdrawl_at) > now) {
-			handleCloseModalDelete();
+			if (equipment.uuid) {
+				await fetchEvent(equipment.uuid);
+			}
+		} else {
+			setNeedApproval(false);
 		}
 
 		handleCloseModal();
@@ -521,27 +547,29 @@ const Agenda: FC = () => {
 								</li>
 							))}
 							<li>
-								<div className="flex w-full justify-end items-end">
-									<button
-										onClick={() =>
-											handleWithdrawnsEvent()
-										}
-										type="button"
-										className="relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-6 py-2 rounded-xl font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none"
-									>
-										<AnimatePresence mode="wait">
-											<motion.span
-												key="button-text"
-												initial={{ opacity: 0 }}
-												animate={{ opacity: 1 }}
-												exit={{ opacity: 0 }}
-												transition={{ duration: 0.3 }}
-												className="text-sm"
+								<div className="flex justify-end items-end w-full">
+									<AnimatePresence mode="wait">
+										{needApproval === false && (
+											<button
+												onClick={() =>
+													handleWithdrawnsEvent()
+												}
+												type="button"
+												className="relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-6 py-2 rounded-xl font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none"
 											>
-												Entregar tudo
-											</motion.span>
-										</AnimatePresence>
-									</button>
+												<motion.span
+													key="button-text"
+													initial={{ opacity: 0 }}
+													animate={{ opacity: 1 }}
+													exit={{ opacity: 0 }}
+													transition={{ duration: 0.3 }}
+													className="text-sm"
+												>
+													Entregar tudo
+												</motion.span>
+											</button>
+										)}
+									</AnimatePresence>
 								</div>
 							</li>
 						</ul>
@@ -557,7 +585,7 @@ const Agenda: FC = () => {
 			>
 				<div className="flex flex-col gap-2">
 					<span className="font-medium text-xl text-center">
-						Tem certeza que deseja prosseguir?
+						Deseja solicitar entrega antecipada?
 					</span>
 					<span className="px-6 text-base text-center">
 						Os equipamentos estão previstos para entrega em{" "}
@@ -573,10 +601,10 @@ const Agenda: FC = () => {
 						<button
 							type="button"
 							onClick={handleCloseModalDelete}
-							className="group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none"
+							className="group group z-[55] relative flex justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none"
 						>
 							<span className="font-medium text-white text-sm transition-all duration-300">
-								Continuar
+								Solicitar
 							</span>
 						</button>
 

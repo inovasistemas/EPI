@@ -36,6 +36,12 @@ export function UserSkeleton() {
             </div>
 
             <Skeleton className="rounded-xl w-full h-[54px]" />
+
+            <div className='hidden sm:block relative mt-8 mb-4'>
+              <Skeleton className="absolute w-28 h-3" />
+            </div>
+
+            <Skeleton className="rounded-xl w-full h-[54px]" />
           </div>
 
           <div className='flex flex-col justify-end items-end gap-1 col-span-full px-6 w-full'>
