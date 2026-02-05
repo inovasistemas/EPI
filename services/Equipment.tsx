@@ -80,7 +80,7 @@ export async function updateEquipment({
   dimensions,
   disposable,
   ean,
-  expiration_date,
+  expiration_at,
   family,
   manufacturer,
   measure,
@@ -109,7 +109,7 @@ export async function updateEquipment({
     if (dimensions) data.dimensions = dimensions
     if (disposable) data.disposable = disposable
     if (ean) data.ean = ean
-    if (expiration_date) data.expiration_date = expiration_date
+    if (expiration_at) data.expiration_at = expiration_at
     if (family) data.family = family
     if (manufacturer) data.manufacturer = manufacturer
     if (measure) data.measure = measure
@@ -157,7 +157,7 @@ export async function createEquipment({
   dimensions,
   disposable,
   ean,
-  expiration_date,
+  expiration_at,
   family,
   manufacturer,
   measure,
@@ -186,7 +186,7 @@ export async function createEquipment({
     if (dimensions) data.dimensions = dimensions
     if (disposable) data.disposable = disposable
     if (ean) data.ean = ean
-    if (expiration_date) data.expiration_date = expiration_date
+    if (expiration_at) data.expiration_at = expiration_at
     if (family) data.family = family
     if (manufacturer) data.manufacturer = manufacturer
     if (measure) data.measure = measure
@@ -266,6 +266,49 @@ export async function uploadEquipmentImage({ id, file }: EquipmentImageUpload) {
       }
       return error.response || null
     }
+    return null
+  }
+}
+
+export async function createEquipmentInventory({
+  clear_inventory = false,
+  cost = 0,
+  expires_at,
+  id,
+  loading,
+  not_inform_expires_at = false,
+  quantity = 0,
+  type = true,
+}: CreateEquipmentInventoryService) {
+  try {
+    loading(true)
+    const data: CreateEquipmentInventoryServiceData = {}
+
+    if (clear_inventory === false || clear_inventory === true) data.clear_inventory = clear_inventory
+    if (expires_at)
+      data.expires_at = expires_at
+    if (not_inform_expires_at === false || not_inform_expires_at === true) data.not_inform_expires_at = not_inform_expires_at
+    if (quantity) data.quantity = quantity
+    if (cost) data.cost = cost
+    if (type === false || type === true) data.type = type
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_HOST}/equipments/${id}/inventory`,
+      data,
+      { withCredentials: true },
+    )
+
+    loading(false)
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
+      return error.response || null
+    }
+
+    loading(false)
     return null
   }
 }

@@ -6,6 +6,7 @@ import { Modal } from '@/components/Display/Modal'
 import { Category } from '@/components/Features/Category'
 import { Manufacturer } from '@/components/Features/Manufacturer'
 import ImageUpload from '@/components/ImageUpload'
+import { DateInput } from '@/components/Inputs/Date'
 import { MaskedInput } from '@/components/Inputs/Masked'
 import { SelectCategories } from '@/components/Inputs/Select/Categories'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
@@ -17,9 +18,11 @@ import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
 import { GroupLabel } from '@/components/Utils/Label/GroupLabel'
 import { getCategories } from '@/services/Category'
-import { createEquipment, uploadEquipmentImage } from '@/services/Equipment'
+import { createEquipment, createEquipmentInventory, uploadEquipmentImage } from '@/services/Equipment'
 import { convertMoneyBRL } from '@/utils/convert-money-brl'
 import { convertNumberDB } from '@/utils/convert-number-db'
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useParams, useRouter } from 'next/navigation'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
@@ -32,6 +35,7 @@ enum menus {
 }
 
 const CreateEquipment: FC = () => {
+  dayjs.locale('pt-br')
   const router = useRouter()
   const params = useParams()
   const [loading, setLoading] = useState(false)
@@ -52,7 +56,7 @@ const CreateEquipment: FC = () => {
     dimensions: '',
     disposable: true,
     ean: '',
-    expiration_date: '',
+    expiration_at: dayjs().format('YYYY-MM-DD'),
     family: '',
     manufacturer: '',
     measure: '',
@@ -98,8 +102,27 @@ const CreateEquipment: FC = () => {
           await handleUpload(response.data.uuid, file)
         }
 
-        toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
-        router.push('/equipamentos')
+        const inventoryResponse = await createEquipmentInventory({
+          id: response.data.uuid,
+          loading: setLoading,
+          clear_inventory: false,
+          cost: equipmentData.cost,
+          expires_at: equipmentData.expiration_at
+          ? dayjs(equipmentData.expiration_at).hour(12).toDate()
+          : undefined,
+          not_inform_expires_at: equipmentData.expiration_at && equipmentData.expiration_at.length > 0 ? true : false,
+          quantity: equipmentData.stock,
+          type: true
+        })
+
+        if (inventoryResponse && inventoryResponse.status === 201) {
+          toast.custom(() => <ToastSuccess text='Equipamento criado com sucesso' />)
+          router.push('/equipamentos')
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível criar a movimentação' />
+          ))
+        }
       } else if (response.status === 403) {
          toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
@@ -312,6 +335,7 @@ const CreateEquipment: FC = () => {
                     { value: 'pa', label: 'Pallet' },
                     { value: 'ct', label: 'Cartucho' },
                     { value: 'ctg', label: 'Cartucho (Gás)' },
+                    { value: 'empty', label: 'Não informado' },
                   ]}
                   placeholder='Unidade medida'
                   required={true}
@@ -454,7 +478,7 @@ const CreateEquipment: FC = () => {
                   </motion.div>
 
                   <motion.div
-                    className='col-span-3'
+                    className='col-span-4'
                     key='weight'
                     layout
                     initial={{ opacity: 0, x: 0 }}
@@ -462,7 +486,7 @@ const CreateEquipment: FC = () => {
                     exit={{ opacity: 0, x: 50 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className='gap-4 grid grid-cols-2'>
+                    <div className='gap-4 grid grid-cols-3'>
                       <div className='col-span-1'>
                         <FormInput
                           name='weight'
@@ -498,6 +522,18 @@ const CreateEquipment: FC = () => {
                         placeholder='Medida'
                         onChange={(value: string) =>
                           handleChange('weight_measure', value)
+                        }
+                      />
+
+                      <DateInput
+                        disabled={false}
+                        start={equipmentData.expiration_at 
+                          ? dayjs(equipmentData.expiration_at) 
+                          : dayjs()}
+                        calendarType='day'
+                        name='expiration_at'
+                        onChange={(name, value) =>
+                          handleChange(name, value ? dayjs(value).format('YYYY-MM-DD') : '')
                         }
                       />
                     </div>
@@ -592,16 +628,6 @@ const CreateEquipment: FC = () => {
                 value={equipmentData.additional_code}
                 position='right'
                 onChange={e => handleChange('additional_code', e.target.value)}
-              />
-
-              <MaskedInput
-                name='expiration_date'
-                label='Data expiração'
-                required={false}
-                type='date'
-                value={equipmentData.expiration_date}
-                position='right'
-                onChange={e => handleChange('expiration_date', e.target.value)}
               />
             </div>
           </div>

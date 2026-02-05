@@ -92,7 +92,7 @@ export function EquipmentSkeleton() {
                 </motion.div>
 
                 <motion.div
-                  className='col-span-3'
+                  className='col-span-4'
                   key='weight'
                   layout
                   initial={{ opacity: 0, x: 0 }}
@@ -100,11 +100,12 @@ export function EquipmentSkeleton() {
                   exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className='gap-4 grid grid-cols-2'>
+                  <div className='gap-4 grid grid-cols-3'>
                     <div className='col-span-1'>
                       <Skeleton className="rounded-xl w-full h-[54px]" />
                     </div>
 
+                    <Skeleton className="rounded-xl w-full h-[54px]" />
                     <Skeleton className="rounded-xl w-full h-[54px]" />
                   </div>
                 </motion.div>

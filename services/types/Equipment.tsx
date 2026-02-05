@@ -33,7 +33,7 @@ type EquipmentServiceData = {
   dimensions?: string
   disposable?: boolean
   ean?: string
-  expiration_date?: string
+  expiration_at?: string
   family?: string
   manufacturer?: string
   measure?: string
@@ -55,5 +55,19 @@ type UpdateEquipmentService = EquipmentServiceData & {
 }
 
 type CreateEquipmentService = EquipmentServiceData & {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+type CreateEquipmentInventoryServiceData = {
+  clear_inventory?: boolean
+  expires_at?: Date
+  not_inform_expires_at?: boolean
+  quantity?: number
+  type?: boolean
+  cost?: number
+}
+
+type CreateEquipmentInventoryService = CreateEquipmentInventoryServiceData & {
+  id: string,
   loading: React.Dispatch<React.SetStateAction<boolean>>
 }

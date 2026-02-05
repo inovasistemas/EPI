@@ -1,26 +1,40 @@
 import { DateInput } from '@/components/Inputs/Date';
+import { MaskedInput } from '@/components/Inputs/Masked';
 import { InputOptionsMap } from '@/components/Inputs/Masked/types';
 import { SearchSelect } from "@/components/Inputs/Select/SearchSelect";
 import { ActionGroupSave } from "@/components/Surfaces/ActionGroupSave";
+import { createEquipmentInventory } from '@/services/Equipment';
+import { convertMoneyBRL } from '@/utils/convert-money-brl';
+import { convertNumberDB } from '@/utils/convert-number-db';
+import { convertToBoolean } from '@/utils/convert-to-boolean';
 import 'cleave.js/dist/addons/cleave-phone.br';
 import Cleave from 'cleave.js/react';
 import dayjs from 'dayjs';
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { ToastError } from '../Toast/Error';
+import { ToastSuccess } from '../Toast/Success';
 
 type StockModalProps = {
   action: () => void
+  equipment: string
+  stock?: number
+  cost?: number
 }
 
 type formData = {
-  startedAt: string
+  cost: number
+  expiresAt: string
+  notInformExpiresAt: boolean
+  quantity: number
+  reset: boolean
+  type: boolean
 }
 
-export function StockModal({ action }: StockModalProps) {
+export function StockModal({ equipment, stock, cost, action }: StockModalProps) {
   const options = InputOptionsMap['number']
-  const [stockZero, setStockZero] = useState(false)
-  const [stockType, setStockType] = useState('true')
-  const [expirationDateControl, setExpirationDateControl] = useState(false)
+  const [loading, setLoading] = useState(false)
   const stockOptions = [
     {
       value: 'true',
@@ -33,8 +47,40 @@ export function StockModal({ action }: StockModalProps) {
   ]
 
   const [formData, setFormData] = useState<formData>({
-    startedAt: dayjs().format('YYYY-MM-DD')
+    cost: cost ?? 0,
+    expiresAt: dayjs().format('YYYY-MM-DD'),
+    notInformExpiresAt: false,
+    quantity: 0,
+    reset: false,
+    type: true
   })
+
+  const handleChange = (name: string, value: string | number | boolean) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleSaveAction = async () => {
+    const response = await createEquipmentInventory({
+      id: equipment,
+      loading: setLoading,
+      clear_inventory: formData.reset,
+      cost: formData.cost,
+      expires_at: formData.expiresAt ? new Date(formData.expiresAt) : undefined,
+      not_inform_expires_at: formData.notInformExpiresAt,
+      quantity: formData.quantity,
+      type: formData.type
+    })
+
+    if (response && response.status === 201) {
+      toast.custom(() => <ToastSuccess text='Movimentação criada com sucesso' />)
+      action()
+    } else {
+      toast.custom(() => <ToastError text='Não foi possível criar a movimentação' />)
+    }
+  }
 
   return (
     <div className='relative flex flex-col w-full max-h-[500px] overflow-y-hidden'>
@@ -63,9 +109,9 @@ export function StockModal({ action }: StockModalProps) {
                 </div>
                 <div className='grid w-full'>
                   <SearchSelect
-                    value={stockOptions.find(option => option.value === stockType)?.value}
-                    name='selectType'
-                    onChange={(value) => setStockType(value)}
+                    value={stockOptions.find(option => convertToBoolean(option.value) === formData.type)?.value}
+                    name='type'
+                    onChange={(value) => handleChange('type', convertToBoolean(value))}
                     options={stockOptions}
                     placeholder=''
                   />
@@ -78,27 +124,28 @@ export function StockModal({ action }: StockModalProps) {
                 <div className='flex flex-col gap-3 w-full'>
                   <div className='flex items-center gap-3'>
                     <input
-                      id='stockControl'
+                      id='reset'
                       type='checkbox'
-                      name='stockControl'
+                      name='reset'
                       className='rounded focus:ring-[--primaryColor] focus:ring-2 focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                      checked={stockZero}
-                      onChange={() => setStockZero(!stockZero)}
+                      onChange={(e) => handleChange('reset', e.currentTarget.checked)}
+                      checked={formData.reset}
                   />
-                  <label htmlFor='stockControl' className='font-semibold text-[--labelPrimary] text-[10px] uppercase'>Zerar estoque e movimentar</label>
+                  <label htmlFor='reset' className='font-semibold text-[--labelPrimary] text-[10px] uppercase'>Zerar estoque e movimentar</label>
                   </div>
                   <Cleave
                     id='stock'
                     name='stock'
+                    value={formData.quantity}
                     options={options}
                     className='peer block bg-[--backgroundSecondary] px-[12px] py-2 rounded-xl outline-none focus:outline-none focus:ring-[--primaryColor] focus:ring-2 w-full h-[54px] font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
                     placeholder=' '
-                    onChange={() => null}
+                    onChange={(e) => handleChange('quantity', Number(e.currentTarget.value))}
                   />
                 </div>
               </div>
               <AnimatePresence mode='wait'>
-              { stockType === 'true' && (
+              { formData.type === true && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -110,13 +157,14 @@ export function StockModal({ action }: StockModalProps) {
                     <span className='font-medium'>Custo</span>
                   </div>
                   <div className='flex flex-col gap-3 w-full'>
-                    <Cleave
-                      id='stock'
-                      name='stock'
-                      options={options}
-                      className='peer block bg-[--backgroundSecondary] px-[12px] py-2 rounded-xl outline-none focus:outline-none focus:ring-[--primaryColor] focus:ring-2 w-full h-[54px] font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none'
-                      placeholder=' '
-                      onChange={() => null}
+                    <MaskedInput
+                      name='cost'
+                      label='Valor de custo'
+                      required={false}
+                      type='money'
+                      value={convertMoneyBRL(formData.cost ?? 0)}
+                      position='right'
+                      onChange={(e) => handleChange('cost', convertNumberDB(e.target.value))}
                     />
                   </div>
                 </motion.div>
@@ -129,21 +177,21 @@ export function StockModal({ action }: StockModalProps) {
                 <div className='flex flex-col gap-3 w-full'>
                   <div className='flex items-center gap-3'>
                     <input
-                      id='expirationDateControl'
+                      id='notInformExpiresAt'
                       type='checkbox'
-                      name='expirationDateControl'
+                      name='notInformExpiresAt'
                       className='rounded focus:ring-[--primaryColor] focus:ring-2 focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary'
-                      checked={expirationDateControl}
-                      onChange={() => setExpirationDateControl(!expirationDateControl)}
+                      checked={formData.notInformExpiresAt === true || formData.type === false}
+                      onChange={() => handleChange("notInformExpiresAt", !formData.notInformExpiresAt)}
                   />
-                  <label htmlFor='expirationDateControl' className='font-semibold text-[--labelPrimary] text-[10px] uppercase'>Não informar validade</label>
+                  <label htmlFor='notInformExpiresAt' className='font-semibold text-[--labelPrimary] text-[10px] uppercase'>Não informar validade</label>
                   </div>
                   <DateInput
-                    disabled={expirationDateControl}
-                    start={dayjs(formData.startedAt)}
+                    disabled={formData.notInformExpiresAt === true || formData.type === false}
+                    start={dayjs(formData.expiresAt)}
                     calendarType='day'
-                    name='startedAt'
-                    onChange={() => null}
+                    name='expiresAt'
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -153,7 +201,7 @@ export function StockModal({ action }: StockModalProps) {
         </AnimatePresence>
       </div>
 
-      <ActionGroupSave onClick={action} />
+      <ActionGroupSave onClick={handleSaveAction} />
     </div>
   )
 }

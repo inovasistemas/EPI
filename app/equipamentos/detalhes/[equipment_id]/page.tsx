@@ -8,6 +8,7 @@ import { Category } from '@/components/Features/Category'
 import { Manufacturer } from '@/components/Features/Manufacturer'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import ImageUpload from '@/components/ImageUpload'
+import { DateInput } from '@/components/Inputs/Date'
 import { MaskedInput } from '@/components/Inputs/Masked'
 import { SelectCategories } from '@/components/Inputs/Select/Categories'
 import { SelectManufacturers } from '@/components/Inputs/Select/Manufacturer'
@@ -31,6 +32,7 @@ import {
 import { getManufacturers } from '@/services/Manufacturer'
 import { convertMoneyBRL } from '@/utils/convert-money-brl'
 import { convertNumberDB } from '@/utils/convert-number-db'
+import dayjs from 'dayjs'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useParams, useRouter } from 'next/navigation'
 import { type FC, useCallback, useEffect, useRef, useState } from 'react'
@@ -67,7 +69,7 @@ const CreateEquipment: FC = () => {
     dimensions: '',
     disposable: true,
     ean: '',
-    expiration_date: '',
+    expiration_at: '',
     family: '',
     manufacturer: '',
     measure: '',
@@ -291,6 +293,37 @@ const CreateEquipment: FC = () => {
     }
   }
 
+  const refetchEquipmentStockAndCost = async () => {
+    handleCloseCreateModal()
+
+    if (EquipmentId) {
+      const response = await getEquipment({
+        loading: setLoading,
+        id: EquipmentId,
+      })
+
+      if (response) {
+        if (response.status === 200) {
+          setEquipmentData(prev => ({
+            ...prev,
+            stock: response.data[0].stock,
+            cost: response.data[0].cost,
+          }))
+        } else if (response.status === 403) {
+          setHasPermission(false)
+        } else {
+          toast.custom(() => (
+            <ToastError text='Não foi possível atualizar o equipamento' />
+          ))
+        }
+      } else {
+        toast.custom(() => (
+          <ToastError text='Não foi possível atualizar o equipamento' />
+        ))
+      }
+    }
+  }
+
   useEffect(() => {
     if (fetchedManufacturers.current) return
     fetchedManufacturers.current = true
@@ -308,7 +341,7 @@ const CreateEquipment: FC = () => {
         <div className='min-w-[48rem] min-h-96 overflow-auto overflow-y-auto'>
           {activeRegisterModal === menus.Manufacturer && <Manufacturer />}
           {activeRegisterModal === menus.Category && <Category />}
-          {activeRegisterModal === menus.Stock && <StockModal action={handleCloseCreateModal} />}
+          {activeRegisterModal === menus.Stock && <StockModal equipment={equipmentData.uuid} stock={equipmentData.stock} cost={equipmentData.cost} action={refetchEquipmentStockAndCost} />}
         </div>
       </Modal>
       <Modal
@@ -692,7 +725,7 @@ const CreateEquipment: FC = () => {
                     </motion.div>
 
                     <motion.div
-                      className='col-span-3'
+                      className='col-span-4'
                       key='weight'
                       layout
                       initial={{ opacity: 0, x: 0 }}
@@ -700,7 +733,7 @@ const CreateEquipment: FC = () => {
                       exit={{ opacity: 0, x: 50 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className='gap-4 grid grid-cols-2'>
+                      <div className='gap-4 grid grid-cols-3'>
                         <div className='col-span-1'>
                           <FormInput
                             name='weight'
@@ -731,11 +764,24 @@ const CreateEquipment: FC = () => {
                             { value: 'mt', label: 'Métrica Tona (t)' },
                             { value: 'lt', label: 'Long Ton (ton longa)' },
                             { value: 'swt', label: 'Short Ton (ton curta)' },
-                            { value: 'dr', label: 'Dram (dr)' }
+                            { value: 'dr', label: 'Dram (dr)' },
+                            { value: 'empty', label: 'Não informado' },
                           ]}
                           placeholder='Medida'
                           onChange={(value: string) =>
                             handleChange('weight_measure', value)
+                          }
+                        />
+
+                        <DateInput
+                          disabled={true}
+                          start={equipmentData.expiration_at 
+                            ? dayjs(equipmentData.expiration_at) 
+                            : dayjs()}
+                          calendarType='day'
+                          name='expiration_at'
+                          onChange={(name, value) =>
+                            handleChange(name, value ? dayjs(value).format('YYYY-MM-DD') : '')
                           }
                         />
                       </div>
@@ -826,16 +872,6 @@ const CreateEquipment: FC = () => {
                   value={equipmentData.additional_code}
                   position='right'
                   onChange={e => handleChange('additional_code', e.target.value)}
-                />
-
-                <MaskedInput
-                  name='expiration_date'
-                  label='Data expiração'
-                  required={false}
-                  type='date'
-                  value={equipmentData.expiration_date}
-                  position='right'
-                  onChange={e => handleChange('expiration_date', e.target.value)}
                 />
               </div>
             </div>
