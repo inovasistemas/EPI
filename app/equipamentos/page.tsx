@@ -505,6 +505,7 @@ const Equipment: FC = () => {
 																		alt={equipment.name}
 																		fill
 																		className="w-full h-full object-cover"
+																		loading="lazy"
 																	/>
 																)}
 														</div>

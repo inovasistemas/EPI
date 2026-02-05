@@ -1,6 +1,6 @@
+import classNames from 'classnames'
 import React, { useRef, useState } from 'react'
 import { ImageIcon } from '../Display/Icons/Image'
-import classNames from 'classnames'
 import { TrashIcon } from '../Display/Icons/Trash'
 
 type ImageUploadProps = {
@@ -81,6 +81,7 @@ export default function ImageUpload({
           <img
             src={preview}
             alt='Preview'
+            loading="lazy"
             className='group-hover:opacity-30 w-full h-full object-cover transition-all'
             style={{ aspectRatio: '1 / 1' }}
           />

@@ -36,7 +36,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
   const chartData = chart
 
   return (
-    <Card className='bg-transparent shadow-none -ml-[2%] p-0 border-none w-[104%]'>
+    <Card className='bg-transparent shadow-none mb-6 -ml-[2%] p-0 border-none w-[104%]'>
       <CardContent className='m-0 p-0 w-full h-44'>
         <ChartContainer config={chartConfig} className='m-0 p-0 w-full h-44'>
           <AreaChart
@@ -46,6 +46,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
               top: 12,
               left: 12,
               right: 12,
+              bottom: 12
             }}
             className=''
           >
@@ -99,7 +100,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
               dataKey='expected'
               type='natural'
               fill='url(#fillexpected)'
-              fillOpacity={0.4}
+              fillOpacity={0}
               stroke='var(--color-expected)'
               strokeWidth={2}
             />
@@ -108,7 +109,7 @@ export function ChartAreaGradient({ chart }: ChartAreaGradientProps) {
               dataKey='exited'
               type='natural'
               fill='url(#fillexited)'
-              fillOpacity={0.4}
+              fillOpacity={0}
               stroke='var(--color-exited)'
               strokeWidth={2}
             />
