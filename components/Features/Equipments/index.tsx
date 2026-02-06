@@ -1,7 +1,21 @@
 'use client'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FilterIcon } from '@/components/Display/Icons/Filter'
+import { SearchIcon } from '@/components/Display/Icons/Search'
+import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { Paginations } from '@/components/Navigation/Paginations'
+import { ActionGroup } from '@/components/Surfaces/ActionGroup'
+import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
+import { FilterEquipments } from '@/components/Template/Filter/Equipments'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import useDebounce from '@/lib/context/debounce'
+import { getEquipments } from '@/services/Equipment'
+import { calcPages } from '@/utils/calc-pages'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import {
   useCallback,
@@ -10,23 +24,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { FilterIcon } from '@/components/Display/Icons/Filter'
-import { SearchIcon } from '@/components/Display/Icons/Search'
-import { Modal } from '@/components/Display/Modal'
-import { Paginations } from '@/components/Navigation/Paginations'
-import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
-import { FilterEquipments } from '@/components/Template/Filter/Equipments'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
-import { getEquipments } from '@/services/Equipment'
-import { ToastError } from '@/components/Template/Toast/Error'
 import { toast } from 'sonner'
-import useDebounce from '@/lib/context/debounce'
-import { calcPages } from '@/utils/calc-pages'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ActionGroup } from '@/components/Surfaces/ActionGroup'
 
 type Equipment = {
   uuid: string
@@ -40,7 +38,7 @@ type Equipment = {
 
 type EquipmentsModalProps = {
   handleMainModal: () => void
-  addEquipment: (uuid: string, name: string, quantity: number) => void
+  addEquipment: (uuid: string, name: string, quantity: number, picture?: string | null | undefined) => void
 }
 
 
@@ -115,7 +113,7 @@ export function EquipmentsModal({handleMainModal, addEquipment}: EquipmentsModal
     )
 
     for (const equipment of checkedEquipments) {
-      addEquipment(equipment.uuid, equipment.name, 1)
+      addEquipment(equipment.uuid, equipment.name, 1, equipment.picture)
     }
 
     handleMainModal()

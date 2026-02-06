@@ -1,29 +1,30 @@
 'use client'
-import dayjs from 'dayjs'
-import { ActionGroup } from '@/components/Surfaces/ActionGroup'
-import { AddIcon } from '@/components/Display/Icons/Add'
-import { DateInput } from '@/components/Inputs/Date'
-import { DotsIcon } from '@/components/Display/Icons/Dots'
-import { GoBackButton } from '@/components/Navigation/GoBackButton'
-import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { SelectCollaborators } from '@/components/Inputs/Select/Collaborator'
-import { SelectSectors } from '@/components/Inputs/Select/Sector'
-import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
-import { getCollaborators } from '@/services/Collaborator'
-import { getSectors } from '@/services/Sector'
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { AddIcon } from '@/components/Display/Icons/Add'
+import { DotsIcon } from '@/components/Display/Icons/Dots'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { Modal } from '@/components/Display/Modal'
 import { EquipmentsModal } from '@/components/Features/Equipments'
-import { TrashIcon } from '@/components/Display/Icons/Trash'
-import { toast } from 'sonner'
+import { DateInput } from '@/components/Inputs/Date'
+import { SelectCollaborators } from '@/components/Inputs/Select/Collaborator'
+import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
+import { SelectSectors } from '@/components/Inputs/Select/Sector'
+import { SmallSelect } from '@/components/Inputs/Select/SmallSelect'
+import { FormInput } from '@/components/Inputs/Text/FormInput'
+import { GoBackButton } from '@/components/Navigation/GoBackButton'
+import { ActionGroup } from '@/components/Surfaces/ActionGroup'
+import { RoutineSkeleton } from '@/components/Template/Skeletons/Routine'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { FormInput } from '@/components/Inputs/Text/FormInput'
+import { getCollaborators } from '@/services/Collaborator'
 import { createRoutine, createRoutineEquipment } from '@/services/Routine'
-import { useRouter } from 'next/navigation'
+import { getSectors } from '@/services/Sector'
+import dayjs from 'dayjs'
 import { AnimatePresence, motion, Reorder } from 'framer-motion'
-import { RoutineSkeleton } from '@/components/Template/Skeletons/Routine'
+import Image from "next/image"
+import { useRouter } from 'next/navigation'
+import { type FC, useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 type Collaborator = {
   uuid: string
@@ -70,6 +71,7 @@ type Equipment = {
   quantity: number
   created_at: string
   updated_at: string
+  picture?: string
 }
 
 const CreateOperator: FC = () => {
@@ -129,17 +131,17 @@ const CreateOperator: FC = () => {
     }))
   }
 
-  const handleAddEquipment = (uuid: string, name: string, quantity: number) => {
+  const handleAddEquipment = (uuid: string, name: string, quantity: number, picture: string | null | undefined) => {
     const alreadyExists = formData.equipments.some(equipment => equipment.uuid === uuid)
 
     if (!alreadyExists) {
       setFormData(prev => ({
         ...prev,
-        ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: ''  } ],
+        ['equipments']: [...prev.equipments, { uuid, name, quantity, created_at: dayjs().toString(), updated_at: '', picture  } ],
       }))
       setEquipmentsData(prev => [
         ...prev,
-        { uuid, name, quantity, created_at: dayjs().toString(), updated_at: '' }
+        { uuid, name, quantity, created_at: dayjs().toString(), updated_at: '', picture: picture || '' }
       ])
     } else {
       toast.custom(() => (
@@ -386,6 +388,13 @@ const CreateOperator: FC = () => {
                             <DotsIcon size="size-3" fill="fill-[--textSecondary]" />
                           </button>
                           <div className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
+                            {equipment.picture && (<Image
+                              src={`https://api.inovasistemas.app${equipment.picture}`}
+                              alt={equipment.name}
+                              fill
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />)}
                           </div>
                           <span className="inline-block pl-3 overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
                             {equipment.name.toLocaleLowerCase()}

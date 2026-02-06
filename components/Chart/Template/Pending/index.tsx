@@ -64,7 +64,7 @@ export function PendingTemplate({
           <div className='flex items-center gap-2 h-full'>
             <span className='bg-[--primaryColor] rounded-full w-1 h-full'></span>
             <span className='font-medium leading-none'>
-              {calcPercent(Number(withdrawn), Number(withdrawn) + Number(not_withdrawn))}
+              {Number(withdrawn) === 0 && Number(not_withdrawn) === 0 ? '100%' : calcPercent(Number(withdrawn), Number(withdrawn) + Number(not_withdrawn))}
             </span>
           </div>
           <span className='text-[--textSecondary] text-sm'>

@@ -45,6 +45,14 @@ export function SmallChartIssues({
   const chartData = [{ equipment, withdrawn, not_withdrawn }]
   const radius: [number, number, number, number] = not_withdrawn > 0 ? [4, 0, 0, 4] : [4, 4, 4, 4]
 
+  if (withdrawn == 0 && not_withdrawn == 0) {
+    return (
+      <div className='flex items-center w-full h-[60px]'>
+        <div className='bg-[--textPrimary] rounded w-full h-7'></div>
+      </div>
+    )
+  }
+
   return (
     <ResponsiveContainer width='100%' height={60}>
       <CardContent className='p-0 w-full h-full'>

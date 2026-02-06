@@ -74,7 +74,7 @@ export default function Home() {
             transition={{ duration: 0.3 }}
             className='flex flex-col gap-6 bg-[--backgroundSecondary] max-sm:px-3 sm:rounded-2xl w-full h-full'
           >
-            <div className='gap-6 grid sm:grid-cols-3'>
+            <div className='flex flex-col gap-6 sm:grid sm:grid-cols-3 w-full'>
               <MovementTemplate chart={getReport('rp_001')?.graph ?? []} show={true} />
               <PendingTemplate
                 equipment={getReport('rp_002')?.graph.equipment ?? ''}
@@ -92,9 +92,8 @@ export default function Home() {
                 show={true}
               />
               <UserTemplate
-                count={getReport('rp_004')?.graph.users ?? ''}
-                updated={getReport('rp_004')?.graph.updated ?? ''}
-                deleted={getReport('rp_004')?.graph.deleted ?? ''}
+                count={getReport('rp_004')?.graph.count ?? ''}
+                rows={getReport('rp_004')?.graph.rows ?? []}
                 show={true}
               />
               <CollaboratorTemplate

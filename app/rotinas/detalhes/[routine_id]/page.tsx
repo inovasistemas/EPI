@@ -27,6 +27,7 @@ import {
 import { getSectors } from "@/services/Sector";
 import dayjs from "dayjs";
 import { AnimatePresence, motion, Reorder } from "framer-motion";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { type FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -68,6 +69,7 @@ type Equipment = {
 	uuid: string;
 	name: string;
 	equipment: string;
+	picture: string;
 	quantity: number;
 	created_at: string;
 	updated_at: string;
@@ -259,6 +261,7 @@ const OperatorDetails: FC = () => {
 		uuid: string,
 		name: string,
 		quantity: number,
+		picture: string | null | undefined
 	) => {
 		if (!RoutineId) return;
 
@@ -283,6 +286,7 @@ const OperatorDetails: FC = () => {
 							{
 								uuid: response.data.uuid,
 								name,
+								picture: picture || '',
 								equipment: response.data.equipment,
 								quantity,
 								created_at: dayjs().toString(),
@@ -656,7 +660,15 @@ const OperatorDetails: FC = () => {
 																fill="fill-[--textSecondary]"
 															/>
 														</button>
-														<div className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden"></div>
+														<div className="relative bg-[--backgroundPrimary] rounded-xl w-16 aspect-square overflow-hidden">
+															{equipment.picture && (<Image
+																src={`https://api.inovasistemas.app${equipment.picture}`}
+																alt={equipment.name}
+																fill
+																className="w-full h-full object-cover"
+																loading="lazy"
+															/>)}
+														</div>
 														<span className="inline-block pl-3 overflow-hidden text-ellipsis capitalize leading-none whitespace-nowrap">
 															{equipment.name.toLocaleLowerCase()}
 														</span>

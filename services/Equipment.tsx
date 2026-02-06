@@ -288,7 +288,7 @@ export async function createEquipmentInventory({
     if (expires_at)
       data.expires_at = expires_at
     if (not_inform_expires_at === false || not_inform_expires_at === true) data.not_inform_expires_at = not_inform_expires_at
-    if (quantity) data.quantity = quantity
+    if (quantity >= 0) data.quantity = quantity
     if (cost) data.cost = cost
     if (type === false || type === true) data.type = type
 
