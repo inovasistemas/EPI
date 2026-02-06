@@ -55,7 +55,7 @@ export function StockModal({ equipment, stock, cost, action }: StockModalProps) 
     type: true
   })
 
-  const handleChange = (name: string, value: string | number | boolean) => {
+  const handleChange = (name: string, value: string | number | boolean | null) => {
     setFormData(prev => ({
       ...prev,
       [name]: value,

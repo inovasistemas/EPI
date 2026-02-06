@@ -215,7 +215,7 @@ export function MultiSelect({
           <Select
             ref={selectRef}
             isMulti
-            defaultValue={multiValue}
+            value={multiValue}
             noOptionsMessage={() => ''}
             id={name}
             onChange={(selected) => {

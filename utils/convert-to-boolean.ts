@@ -3,5 +3,9 @@ export const convertToBoolean = (data: string) => {
     return true
   }
 
-  return false
+  if (data === 'false') {
+    return false
+  }
+
+  return null
 }
