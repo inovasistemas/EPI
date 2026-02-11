@@ -50,8 +50,8 @@ type Event = {
 	withdrawn: boolean;
 	expected_withdrawl_at: Date;
 	withdrawl_at: Date | null;
-	returned: boolean;
-	returned_at: Date | null;
+	paused: boolean;
+	resumed_at: Date | null;
 	created_at: Date;
 	updated_at: Date | null;
 	routines: RoutineEquipment[];
@@ -71,8 +71,8 @@ type Equipment = {
 	withdrawn: boolean;
 	expected_withdrawl_at: Date;
 	withdrawl_at: Date | null;
-	returned: boolean;
-	returned_at: Date | null;
+	paused: boolean;
+	resumed_at: Date | null;
 	created_at: Date;
 	updated_at: Date | null;
 	order: number | null;
@@ -154,8 +154,8 @@ const Agenda: FC = () => {
 						uuid: item.uuid,
 						withdrawn: item.withdrawn,
 						withdrawl_at: item.withdrawl_at,
-						returned: item.returned,
-						returned_at: item.returned_at,
+						paused: item.paused,
+						resumed_at: item.resumed_at,
 						created_at: item.created_at,
 						updated_at: item.updated_at,
 						days_remaining: calcDaysRemaining(item.expected_withdrawl_at),

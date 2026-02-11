@@ -48,6 +48,7 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
   const searchParams = useSearchParams()
   const [filters, setFilters] = useState({
     category: searchParams.get('category') || '',
+    status: searchParams.get('status') || '',
     manufacturer: searchParams.get('manufacturer') || '',
   })
 
@@ -96,6 +97,7 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
 
   const handleFilter = () => {
     setQueryParam({
+      status: filters.status,
       category: filters.category,
       manufacturer: filters.manufacturer,
     })
@@ -103,6 +105,7 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
   }
 
   const handleFilterClean = () => {
+    handleFiltersChange('status', '')
     handleFiltersChange('category', '')
     handleFiltersChange('manufacturer', '')
   }
@@ -112,6 +115,27 @@ export function FilterEquipments({ actionClose }: FilterEquipmentsProps) {
       <h2 className='font-medium text-xl text-start'>Filtros</h2>
       <div className='flex flex-col gap-6 divide-y divide-[--outlinePrimary] w-full'>
         <div className='items-center grid grid-cols-2 w-full select-none'>
+          <div>
+            <span className='font-medium'>Equipamento</span>
+          </div>
+          <div className='flex flex-row items-center gap-3 w-full'>
+            <input
+              id="expired"
+              type="checkbox"
+              name="expired"
+              className="rounded focus:ring-2 focus:ring-primaryDarker focus:ring-offset-0 text-[--secondaryColor] checkboxSecondary"
+              checked={filters.status === 'expired'}
+              onChange={() => {
+                if (filters.status === 'expired') {
+                  handleFiltersChange('status', '')
+                } else {
+                  handleFiltersChange('status', 'expired')
+              }}}
+            />
+            <label htmlFor='expired' className='font-medium text-sm'>Vencidos</label>
+          </div>
+        </div>
+        <div className='items-center grid grid-cols-2 pt-6 w-full select-none'>
           <div>
             <span className='font-medium'>Fabricante</span>
           </div>

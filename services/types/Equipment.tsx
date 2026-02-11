@@ -6,6 +6,7 @@ type EquipmentsService = {
   sortField?: string
   sortOrder?: string
   page?: number
+  status?: string
 }
 
 type EquipmentService = {

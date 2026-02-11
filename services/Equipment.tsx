@@ -9,6 +9,7 @@ export async function getEquipments({
   sortField,
   sortOrder,
   page = 1,
+  status,
 }: EquipmentsService) {
   try {
     loading(true)
@@ -22,6 +23,7 @@ export async function getEquipments({
     if (sortOrder) params.sortOrder = sortOrder
     if (manufacturer) params.manufacturer = manufacturer
     if (category) params.category = category
+    if (status) params.status = status
 
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_HOST}/equipments`,

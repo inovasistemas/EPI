@@ -58,6 +58,9 @@ const Equipment: FC = () => {
 	const manufacturer = useMemo(() => {
 		return searchParams.get("manufacturer");
 	}, [searchParams]);
+	const status = useMemo(() => {
+		return searchParams.get("status");
+	}, [searchParams]);
 	const page = useMemo(() => {
 		return searchParams.get("page");
 	}, [searchParams]);
@@ -164,6 +167,7 @@ const Equipment: FC = () => {
 			sortOrder: orderBy.order || "asc",
 			category: category || undefined,
 			manufacturer: manufacturer || undefined,
+			status: status || undefined,
 			page: Number(page) || undefined,
 		});
 

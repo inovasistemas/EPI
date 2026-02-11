@@ -18,7 +18,7 @@ export function EquipmentTemplate({
 }: EquipmentTemplateProps) {
   return (
     <Link
-      href='/equipamentos'
+      href='/equipamentos?status=expired'
       className='group relative flex flex-col justify-start items-center bg-[--backgroundPrimary] hover:bg-[--backgroundTertiary] p-3 rounded-2xl w-full overflow-hidden transition-all duration-300 cursor-pointer select-none'
     >
       <div className='flex flex-row justify-between items-start w-full'>
