@@ -1,120 +1,170 @@
 'use client'
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from 'recharts'
+
 import { CardContent } from '@/components/ui/card'
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from '@/components/ui/chart'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
-export const description = 'A bar chart with a custom label'
+type ChartData = {
+  sector: string
+  name: string
+  cost: number
+  expected: number
+}
 
-const chartData = [
-  { month: 'Manutenção Máquinas', cost: 186 },
-  { month: 'Operação Máquinas', cost: 305 },
-  { month: 'Logística Interna', cost: 237 },
-]
+type ChartCostProps = {
+  chartData: ChartData[]
+}
 
-const chartConfig = {
-  cost: {
-    label: 'Recursos',
-    color: 'var(--textPrimary)',
-  },
-  mobile: {
-    label: 'Mobile',
-    color: 'var(--chart-2)',
-  },
-  label: {
-    color: 'var(--background)',
-  },
-} satisfies ChartConfig
+export function ChartCost({ chartData }: ChartCostProps) {
+  const chartConfig = {
+    cost: {
+      label: 'Recursos',
+      color: 'var(--textPrimary)',
+    },
+    expected: {
+      label: 'Esperado',
+      color: 'var(--chartYellow)',
+    },
+  } satisfies ChartConfig
 
-export function ChartCost() {
+  const dynamicHeight = chartData.length * 60 + 40
+
   return (
-    <ResponsiveContainer width='100%' height='100%'>
-      <CardContent className='p-0 w-full h-full'>
-        <ChartContainer
-          config={chartConfig}
-          className='w-full'
-          style={{ height: `${(chartData.length + 1) * 32}px` }}
+    <CardContent className="p-0 w-full">
+      <ChartContainer
+        config={chartConfig}
+        className="w-full"
+        style={{ height: `${dynamicHeight}px` }}
+      >
+        <BarChart
+          accessibilityLayer={false}
+          data={chartData}
+          layout="vertical"
+          margin={{
+            top: 20,
+            right: 80,
+            left: 10,
+            bottom: 20,
+          }}
+          barCategoryGap={10}
+          barGap={4}
         >
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout='vertical'
-            margin={{
-              right: 30,
+          <CartesianGrid
+            horizontal={false}
+            strokeDasharray="3 3"
+            opacity={0.5}
+          />
+
+          <XAxis type="number" hide domain={[0, 'dataMax + 50']} />
+
+          <YAxis dataKey="name" type="category" hide />
+
+          <ChartTooltip
+            cursor={false}
+            content={({ label, payload }) => {
+              if (!payload || !payload.length) return null
+
+              const labels: Record<string, string> = {
+                cost: 'Gasto',
+                expected: 'Previsto',
+              }
+
+              return (
+                <div className="bg-background shadow-xl p-3 rounded-lg">
+                  <p className="mb-2 font-medium text-sm">{label}</p>
+
+                  <div className="space-y-1">
+                    {payload.map((entry, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center gap-4 text-xs"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="rounded-full w-2.5 h-2.5"
+                            style={{ backgroundColor: entry.color }}
+                          />
+                          <span className="capitalize">
+                            {labels[entry.dataKey as string] ?? entry.name}
+                          </span>
+                        </div>
+
+                        <span className="font-medium">
+                          {Number(entry.value).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
             }}
-            barCategoryGap={2}
-            barSize={32}
+          />
+
+          <Bar
+            dataKey="cost"
+            activeBar={false}
+            isAnimationActive={false}
+            fill="var(--textPrimary)"
+            radius={[10, 10, 10, 10]}
+            barSize={24}
           >
-            <CartesianGrid horizontal={false} />
-            <YAxis
-              dataKey='month'
-              type='category'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={value => value.slice(0, 3)}
-              hide
+            <LabelList
+              dataKey="name"
+              position="insideLeft"
+              offset={10}
+              className="fill-white font-medium text-sm"
             />
-            <XAxis dataKey='cost' type='number' hide />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  indicator='line'
-                  className='shadow-xl border-[--border]'
-                  labelKey='month'
-                  labelFormatter={label => label}
-                  formatter={value =>
-                    value.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })
-                  }
-                />
+            <LabelList
+              dataKey="cost"
+              position="right"
+              offset={10}
+              className="fill-foreground font-medium text-sm"
+              formatter={(val: number) =>
+                val.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })
               }
             />
-            <Bar
-              dataKey='cost'
-              layout='vertical'
-              fill='var(--color-cost)'
-              radius={12}
-            >
-              <LabelList
-                dataKey='month'
-                position='insideLeft'
-                offset={8}
-                className='fill-white font-medium text-sm'
-                fontSize={12}
-              />
-              <LabelList
-                dataKey='cost'
-                position='right'
-                offset={8}
-                className='fill-foreground font-medium text-sm'
-                fontSize={12}
-                formatter={(value: number | string) =>
-                  value.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })
-                }
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </ResponsiveContainer>
+          </Bar>
+
+          <Bar
+            dataKey="expected"
+            activeBar={false}
+            isAnimationActive={false}
+            fill="var(--chartYellow)"
+            radius={[10, 10, 10, 10]}
+            barSize={10}
+          >
+            <LabelList
+              dataKey="expected"
+              position="right"
+              offset={10}
+              className="fill-muted-foreground font-medium text-xs"
+              formatter={(val: number) =>
+                val.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })
+              }
+            />
+          </Bar>
+        </BarChart>
+      </ChartContainer>
+    </CardContent>
   )
 }

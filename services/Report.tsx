@@ -75,3 +75,39 @@ export async function getAuditReport({
     return null
   }
 }
+
+export async function getResourcesReport({
+  end_date,
+  start_date,
+  loading
+}: getResourcesReportProps) {
+  try {
+    loading(true)
+
+    const params: Record<string, any> = {}
+
+    if (start_date) params.dateStart = start_date
+    if (end_date) params.dateEnd = end_date
+
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_HOST}/reports/resources`,
+      { params, withCredentials: true },
+    )
+
+    console.log('oi')
+
+    loading(false)
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+        logoutUserOn401()
+      }
+      loading(false)
+      return error.response || null
+    }
+
+    loading(false)
+    return null
+  }
+}

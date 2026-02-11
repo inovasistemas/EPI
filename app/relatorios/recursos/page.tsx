@@ -4,45 +4,70 @@ import { ChartCost } from '@/components/Chart/Cost'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { Modal } from '@/components/Display/Modal'
 import { FilterReportCost } from '@/components/Template/Filter/ReportCost'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { getResourcesReport } from '@/services/Report'
 import dayjs from 'dayjs'
-import { useCallback, useState, type FC } from 'react'
+import { useCallback, useEffect, useState, type FC } from 'react'
+import { toast } from 'sonner'
+
+type reportDataType = {
+  sector: string
+  name: string
+  cost: number
+  expected: number
+}
 
 const Costs: FC = () => {
   const [modalStatus, setModalStatus] = useState(false)
-  const [filter, setFilter] = useState({
-    dateStart: dayjs(),
-    dateEnd: dayjs(),
+  const [loading, setLoading] = useState(false);
+  const [hasPermission, setHasPermission] = useState(true);
+  const [filters, setFilters] = useState({
+    dateStart: dayjs().startOf('month'),
+    dateEnd: dayjs().endOf('month'),
   })
+  const [reportData, setReportData] = useState<[reportDataType]>()
+
+  const handleFiltersChange = (name: string, value: dayjs.Dayjs) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
 
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
   }, [])
 
-  return (
-    // <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
-    //   <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto'>
-    //     <div className='flex justify-between items-center gap-3 p-6 w-full'>
-    //       <div className='flex flex-row items-center gap-2'>
-    //         <LockIcon size="min-w-[1.5rem] size-5" stroke="stroke-[--textSecondary]" />
-    //         <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
-    //           Relatório de recursos 
-    //         </h2>
-    //       </div>
-    //     </div>
-        
-    //     <div className="flex justify-center items-center w-full h-full">
-    //       <div className="flex items-center gap-3 mb-20">
-            
-    //         <div>
-    //           <div className="text-[--textSecondary] text-base select-none">
-    //             <Countdown date='2025-11-30 00:00:00' />
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+  const fetchReport = async () => {
+    const response = await getResourcesReport({
+      loading: setLoading,
+      start_date: filters.dateStart.format('YYYY-MM-DD'),
+      end_date: filters.dateEnd.format('YYYY-MM-DD'),
+    })
 
+    if (response) {
+			if (response.status === 200) {
+				setReportData(response.data);
+			} else if (response.status === 403) {
+				setHasPermission(false);
+			} else {
+				toast.custom(() => (
+					<ToastError text="Não foi possível buscar os recursos" />
+				));
+			}
+		} else {
+			toast.custom(() => (
+				<ToastError text="Não foi possível buscar os recursos" />
+			));
+		}
+    handleCloseModal()
+  }
+
+  useEffect(() => {
+		fetchReport();
+	}, []);
+
+  return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <Modal
         title='Filtros'
@@ -50,7 +75,7 @@ const Costs: FC = () => {
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
       >
-        <FilterReportCost start={filter.dateStart} end={filter.dateEnd} />
+        <FilterReportCost start={filters.dateStart} end={filters.dateEnd} action={handleFiltersChange} saveAction={fetchReport} />
       </Modal>
       <div className='flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
@@ -71,7 +96,9 @@ const Costs: FC = () => {
         </div>
 
         <div className='flex flex-col gap-3 px-6 pb-6 w-full overflow-hidden'>
-          <ChartCost />
+          {hasPermission && reportData && (
+            <ChartCost chartData={reportData} />
+          )}
         </div>
       </div>
     </div>

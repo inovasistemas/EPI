@@ -14,3 +14,9 @@ type GetAuditReportProps = {
   start_date: string
   status?: boolean | null
 }
+
+type getResourcesReportProps = {
+  end_date: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+  start_date: string
+}
