@@ -16,7 +16,7 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <main className={`${ubuntu.className} antialiased bg-white text-black p-8 w-full min-h-screen`}>
+    <main className={`${ubuntu.className} antialiased bg-[--backgroundPrimary] print:bg-white text-black w-full min-h-screen`}>
       {children}
     </main>
   )

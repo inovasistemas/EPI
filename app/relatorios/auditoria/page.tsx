@@ -16,7 +16,7 @@ import { convertToBoolean } from '@/utils/convert-to-boolean'
 import { timestampToDate } from '@/utils/timestamp-to-date'
 import dayjs, { type Dayjs } from 'dayjs'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState, type FC } from 'react'
 import { toast } from 'sonner'
 
@@ -45,6 +45,7 @@ type filtersData = {
 }
 
 const Audit: FC = () => {
+  const router = useRouter()
   const setQueryParam = useQueryParams()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState("");
@@ -108,14 +109,9 @@ const Audit: FC = () => {
     }))
   }
 
-  const onButtonClick = () => {
-    const pdfUrl = "/pdf/auditoria-inova-sistemas-28012026.pdf";
-    const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = "auditoria-inova-sistemas-28012026.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const onButtonClick = async () => {
+    const uri = `/relatorios/auditoria/imprimir?q=${debouncedSearch || ''}&sortField=${orderBy.field || ''}&sortOrder=${orderBy.order || ''}&collaborator=${filters.collaborator.map(s => s.value).join(',')}&sector=${filters.sector.map(s => s.value).join(',')}&page=${Number(page) || 1}&start_date=${String(filters.start)}&end_date=${String(filters.end)}&status=${filters.status}`
+    window.open(uri, '_blank')
   };
 
   const [modalStatus, setModalStatus] = useState(false)
