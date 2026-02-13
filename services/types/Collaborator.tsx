@@ -51,3 +51,18 @@ type CreateCollaboratorService = {
   observations: string
   situation: string
 }
+
+type CollaboratorBiometricsService = {
+  id: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+  biometrics: string
+  message: string
+  status: string
+}
+
+type CollaboratorSearchBiometricsService = {
+  loading: React.Dispatch<React.SetStateAction<boolean>>
+  biometrics: string
+  found: boolean
+  status: string
+}

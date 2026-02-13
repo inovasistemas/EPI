@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { dateToTimestamp } from '@/utils/date-to-timestamp'
 import { extractOnlyNumbers } from '@/utils/extract-only-numbers'
 import { logoutUserOn401 } from '@/utils/logout'
+import axios from 'axios'
 
 export async function getCollaborators({
 	loading,
@@ -229,6 +229,60 @@ export async function collaboratorFaceRecognition(image: string) {
 			return error.response || null
 		}
 
+		return null
+	}
+}
+
+export async function collaboratorBiometrics({ id, loading, biometrics, status, message }: CollaboratorBiometricsService) {
+	try {
+		loading(true)
+
+		const response = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/${id}/biometrics`,
+			{ biometrics, message, status },
+			{ withCredentials: true },
+		)
+
+		loading(false)
+		return response
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
+
+			loading(false)
+			return error.response || null
+		}
+
+		loading(false)
+		return null
+	}
+}
+
+export async function collaboratorSearchBiometrics({ loading, biometrics, status, found }: CollaboratorSearchBiometricsService) {
+	try {
+		loading(true)
+
+		const response = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/biometrics/search`,
+			{ biometrics, found, status },
+			{ withCredentials: true },
+		)
+
+		loading(false)
+		return response
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
+
+			loading(false)
+			return error.response || null
+		}
+
+		loading(false)
 		return null
 	}
 }

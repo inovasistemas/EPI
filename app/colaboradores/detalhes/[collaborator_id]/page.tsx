@@ -1,4 +1,6 @@
 'use client'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
 import { Modal } from '@/components/Display/Modal'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { MaskedInput } from '@/components/Inputs/Masked'
@@ -8,6 +10,7 @@ import { FormInput } from '@/components/Inputs/Text/FormInput'
 import { TextArea } from '@/components/Inputs/Text/TextArea'
 import { GoBackButton } from '@/components/Navigation/GoBackButton'
 import { ActionGroup } from '@/components/Surfaces/ActionGroup'
+import { BiometricsCreate } from '@/components/Template/Biometrics/Create'
 import { CollaboratorSkeleton } from '@/components/Template/Skeletons/Collaborator'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { ToastSuccess } from '@/components/Template/Toast/Success'
@@ -44,6 +47,9 @@ type Collaborator = {
   observations: string
   created_at: string
   situation: string
+  biometrics: boolean
+  biometrics_collected_at: string
+  biometrics_updated_at: string
 }
 
 const CollaboratorDetails: FC = () => {
@@ -69,7 +75,10 @@ const CollaboratorDetails: FC = () => {
     phone: '',
     observations: '',
     created_at: '',
-    situation: ''
+    situation: '',
+    biometrics: false,
+    biometrics_collected_at: '',
+    biometrics_updated_at: '',
   })
   const fetchedCollaborator = useRef(false)
   const [hasPermission, setHasPermission] = useState(true)
@@ -83,8 +92,13 @@ const CollaboratorDetails: FC = () => {
   }
 
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalCreateBiometrics, setModalCreateBiometrics] = useState(false)
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
+  }, [])
+
+  const handleCreateBiometricsModal = useCallback(() => {
+    setModalCreateBiometrics(prev => !prev)
   }, [])
 
   const [jobPositionsData, setJobPositionsData] = useState([
@@ -225,6 +239,11 @@ const CollaboratorDetails: FC = () => {
 
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
+      <BiometricsCreate
+        title=''
+        isModalOpen={modalCreateBiometrics}
+        handleClickOverlay={handleCreateBiometricsModal}
+      />
       <Modal
         title=''
         size='extra-small'
@@ -276,14 +295,30 @@ const CollaboratorDetails: FC = () => {
       transition={{ duration: 0.3 }}
       className='relative flex flex-col items-start gap-6 bg-[--backgroundPrimary] sm:rounded-xl w-full h-full'>
         <div className='flex justify-between items-center gap-3 p-6 w-full'>
-          <div className='flex flex-row items-center gap-3'>
-            <GoBackButton href='/colaboradores' />
+          <div className='flex flex-row justify-between items-center gap-3 w-full'>
+            <div className='flex flex-row items-center gap-3'>
+              <GoBackButton href='/colaboradores' />
+  
+              <h2 className='font-medium text-xl capitalize leading-none select-none'>
+                {collaborator?.name
+                  ? collaborator?.name.toLocaleLowerCase()
+                  : 'Detalhes do colaborador'}
+              </h2>
+            </div>
 
-            <h2 className='font-medium text-xl capitalize leading-none select-none'>
-              {collaborator?.name
-                ? collaborator?.name.toLocaleLowerCase()
-                : 'Detalhes do colaborador'}
-            </h2>
+            <div className='flex flex-row items-center gap-2'>
+              <SecondaryButton
+                label={collaborator?.biometrics ? 'Atualizar Biometria' : 'Cadastrar Biometria'}
+                icon={
+                  <FingerPrintIcon
+                    size='size-5'
+                    stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                    strokeWidth={1.5}
+                  />
+                }
+                onClick={handleCreateBiometricsModal}
+              />
+            </div>
           </div>
         </div>
 

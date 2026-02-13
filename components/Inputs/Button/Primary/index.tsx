@@ -23,7 +23,7 @@ export function PrimaryButton({
       name={name}
       onClick={action}
       type={type}
-      className='relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 select-none'
+      className='relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] disabled:bg-[--buttonPrimary] px-8 py-2.5 rounded-xl w-full font-medium text-white disabled:text-zinc-500 text-base active:scale-95 transition-all duration-300 disabled:cursor-not-allowed select-none'
     >
       <AnimatePresence mode='wait'>
         {!icon && (

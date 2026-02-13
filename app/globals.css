@@ -510,3 +510,20 @@ input[type='number'] {
   background-color: transparent !important;
   color: inherit !important;
 }
+
+@keyframes fill-draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+.animate-fill {
+  stroke-dasharray: 100;
+  animation: fill-draw 3s linear infinite;
+}

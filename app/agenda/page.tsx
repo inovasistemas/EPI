@@ -246,6 +246,7 @@ const Agenda: FC = () => {
 					setNeedApproval(true);
 					handleCloseModalDelete();
 				} else {
+					handleCloseModal();
 					setNeedApproval(false);
 				}
 			} else if (response.status === 403) {
@@ -469,7 +470,7 @@ const Agenda: FC = () => {
 			setNeedApproval(false);
 		}
 
-		handleCloseModal();
+		//handleCloseModal();
 	};
 
 	const handleCloseModalDelete = useCallback(() => {
@@ -477,7 +478,7 @@ const Agenda: FC = () => {
 	}, []);
 
 	const handleCloseModalDeleteGetOut = useCallback(() => {
-		handleCloseModal();
+		//handleCloseModal();
 		setModalDeleteStatus((prev) => !prev);
 	}, []);
 

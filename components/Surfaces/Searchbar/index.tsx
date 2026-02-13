@@ -1,21 +1,21 @@
 'use client'
-import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
 import { BellIcon } from '@/components/Display/Icons/Bell'
+import { IdentificationIcon } from '@/components/Display/Icons/Identification'
 import { SidebarIcon } from '@/components/Display/Icons/Sidebar'
 import { Logo } from '@/components/Display/Logo'
+import { Modal } from '@/components/Display/Modal'
+import { NotificationModal } from '@/components/Features/Notification'
 import { NavAction } from '@/components/Inputs/Button/NavAction'
 import { MenuCard } from '@/components/Navigation/MenuCard'
+import { BiometricsTakeout } from '@/components/Template/Biometrics/Takeout'
 import { MenuNotifications } from '@/components/Template/MenuNotifications'
-import { TakeoutModal } from '@/components/Template/TakeoutModal'
 import useSidebar from '@/lib/context/global'
-import { IdentificationIcon } from '@/components/Display/Icons/Identification'
 import {
   getNotifications,
   updateNotificationRead,
 } from '@/services/Notification'
-import { NotificationModal } from '@/components/Features/Notification'
-import { Modal } from '@/components/Display/Modal'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 enum SearchbarCards {
   Settings,
@@ -107,7 +107,7 @@ const Searchbar: React.FC = () => {
 
   return (
     <div className='h-[calc(50px+(env(safe-area-inset-top)))] min-h-[calc(50px+(env(safe-area-inset-top)))] pt-[calc(env(safe-area-inset-top))] flex justify-between items-center col-span-full bg-[--backgroundSecondary] px-3 sm:pt-0 w-full sm:w-auto lg:h-[50px]'>
-      <TakeoutModal
+      <BiometricsTakeout
         title=''
         isModalOpen={modalStatus}
         handleClickOverlay={handleCloseModal}
