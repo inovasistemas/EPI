@@ -3,7 +3,9 @@ import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { ChartCost } from '@/components/Chart/Cost'
 import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { FilterReportCost } from '@/components/Template/Filter/ReportCost'
+import { ReportCostSkeleton } from '@/components/Template/Skeletons/ReportCost'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { getResourcesReport } from '@/services/Report'
 import dayjs from 'dayjs'
@@ -82,22 +84,34 @@ const Costs: FC = () => {
           <h2 className='font-medium text-xl leading-none select-none'>
             Relatório recursos
           </h2>
-          <SecondaryButton
-            label='Filtrar'
-            icon={
-              <FilterIcon
-                size='size-4'
-                stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
-                strokeWidth={2.5}
-              />
-            }
-            onClick={handleCloseModal}
-          />
+          {hasPermission && (
+            <SecondaryButton
+              label='Filtrar'
+              icon={
+                <FilterIcon
+                  size='size-4'
+                  stroke='stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]'
+                  strokeWidth={2.5}
+                />
+              }
+              onClick={handleCloseModal}
+            />
+          )}
         </div>
 
-        <div className='flex flex-col gap-3 px-6 pb-6 w-full overflow-hidden'>
-          {hasPermission && reportData && (
+        <div className='flex flex-col gap-3 px-6 pb-6 w-full h-full overflow-hidden'>
+          {hasPermission && loading && (
+            <ReportCostSkeleton />
+          )}
+          
+          {hasPermission && reportData && !loading && (
             <ChartCost chartData={reportData} />
+          )}
+
+          {!hasPermission && (
+            <div className='flex justify-center items-center w-full h-full'>
+              <PermissionDeniedScreen margin={true} />
+            </div>
           )}
         </div>
       </div>

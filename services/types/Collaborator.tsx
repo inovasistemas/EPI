@@ -61,8 +61,8 @@ type CollaboratorBiometricsService = {
 }
 
 type CollaboratorSearchBiometricsService = {
-  loading: React.Dispatch<React.SetStateAction<boolean>>
   biometrics: string
   found: boolean
+  loading: React.Dispatch<React.SetStateAction<boolean>>
   status: string
 }

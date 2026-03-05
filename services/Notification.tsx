@@ -94,3 +94,63 @@ export async function updateNotificationRead({
     return null
   }
 }
+
+export async function updateNotificationDelivered({
+  id,
+}: UpdateNotificationReadProps) {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_HOST}/notifications/${id}/delivered`,
+      {},
+      { withCredentials: true }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
+      return error.response || null
+    }
+    return null
+  }
+}
+
+export async function createNotification({
+  collaborator,
+  equipment,
+  message,
+  needs_approval,
+  status,
+  title,
+  withdrawal_at,
+  quantity,
+  event
+}: CreateNotificationProps) {
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_HOST}/notifications/approval`,
+      {
+        collaborator,
+        equipment,
+        message,
+        needs_approval,
+        status,
+        title,
+        withdrawal_at,
+        quantity,
+        event
+      },
+      { withCredentials: true }
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
+      return error.response || null
+    }
+    return null
+  }
+}

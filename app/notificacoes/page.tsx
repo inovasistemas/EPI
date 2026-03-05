@@ -21,6 +21,9 @@ type Notification = {
 	needs_approval: boolean;
 	approved: boolean;
 	created_at: string;
+	equipment_name: string;
+	equipment_picture: string;
+	equipment_quantity: number;
 };
 
 const tabs = ["ALL", "RECEIVED", "READ"] as const;
@@ -32,8 +35,10 @@ const Notification: FC = () => {
 	const [notificationsData, setNotificationsData] = useState<Notification[]>(
 		[],
 	);
+	const hasFetched = useRef(false);
 	const [modalStatus, setModalStatus] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [loadingQuietly, setLoadingQuietly] = useState(false);
 	const [selectedNotification, setSelectedNotification] =
 		useState<Notification>({
 			uuid: "",
@@ -44,6 +49,9 @@ const Notification: FC = () => {
 			needs_approval: false,
 			approved: false,
 			created_at: "",
+			equipment_name: "",
+			equipment_picture: "",
+			equipment_quantity: 0
 		});
 
 	const handleModalStatus = () => {
@@ -54,7 +62,7 @@ const Notification: FC = () => {
 		setSelectedNotification(notification);
 		handleModalStatus();
 		await updateNotificationRead({ id: notification.uuid });
-		fetchNotifications();
+		fetchNotificationsQuietly();
 	};
 
 	useEffect(() => {
@@ -79,13 +87,28 @@ const Notification: FC = () => {
 		}
 	};
 
+	const fetchNotificationsQuietly = async () => {
+		const response = await getNotifications({
+			status: "ALL",
+			limit: 100,
+			loading: setLoadingQuietly,
+		});
+		if (response && response.status === 200) {
+			const data = response.data;
+			if (data.total > 0) {
+				setNotificationsData(data.data);
+			}
+		}
+	};
+
 	useEffect(() => {
 		fetchNotifications();
 
-		//const interval = setInterval(fetchNotifications, 15000);
+		const interval = setInterval(() => {
+			fetchNotificationsQuietly();
+		}, 15000);
 
-		//return () => clearInterval(interval);
-		// biome-ignore lint/correctness/useExhaustiveDependencies: useExhaustiveDependencies
+		return () => clearInterval(interval);
 	}, []);
 
 	return (
@@ -102,6 +125,7 @@ const Notification: FC = () => {
 					notification={selectedNotification}
 					modalAction={handleModalStatus}
 					reload={fetchNotifications}
+					status={selectedNotification.approved}
 				/>
 			</Modal>
 			<div className="flex flex-col items-start bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-y-auto">
@@ -177,7 +201,7 @@ const Notification: FC = () => {
 										<motion.li
 											key={notification.uuid}
 											layout
-											className="flex hover:bg-[--tableRow] rounded-xl w-full transition-all duration-300 cursor-pointer"
+											className="flex w-full transition-all duration-300 cursor-pointer"
 											initial={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0 }}
@@ -189,12 +213,12 @@ const Notification: FC = () => {
 													handleUpdateNotificationRead(notification)
 												}
 												type="button"
-												className="relative flex flex-row justify-between px-3 py-4 w-full"
+												className="group relative flex flex-row justify-between hover:bg-[--tableRow] my-3 px-3 py-4 rounded-xl w-full"
 											>
 												<div
 													className={classNames(
 														{
-															"opacity-60 hover:opacity-100":
+															"opacity-60 group-hover:opacity-100":
 																notification.status === "READ",
 														},
 														"text-left flex flex-col transition-all duration-300 w-full",

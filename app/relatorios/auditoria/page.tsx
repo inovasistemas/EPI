@@ -4,9 +4,11 @@ import { FilterIcon } from '@/components/Display/Icons/Filter'
 import { PrinterIcon } from '@/components/Display/Icons/Printer'
 import { SearchIcon } from '@/components/Display/Icons/Search'
 import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { Paginations } from '@/components/Navigation/Paginations'
 import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
 import { FilterReportAudit } from '@/components/Template/Filter/ReportAudit'
+import { ReportAuditSkeleton } from '@/components/Template/Skeletons/ReportAudit'
 import { ToastError } from '@/components/Template/Toast/Error'
 import { useQueryParams } from '@/components/Utils/UseQueryParams'
 import useDebounce from '@/lib/context/debounce'
@@ -208,226 +210,240 @@ const Audit: FC = () => {
           <h2 className='font-medium text-xl leading-none select-none'>
             Auditoria
           </h2>
-          <div className='flex gap-3'>
-              <button
-                disabled={false}
-                name={'print'}
-                onClick={onButtonClick}
-                type={'button'}
-                className='group z-[55] relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
-              >
-                <AnimatePresence mode='wait'>
-                  <motion.div
-                    key="button-icon"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className='flex flex-col gap-3 py-0.5'
-                  >
-                    <PrinterIcon
-                      size="size-4"
-                      stroke="stroke-white group-data-[active=true]:stroke-[--primaryColor]"
-                      strokeWidth={2.5}
-                    />
-                  </motion.div>
+          {hasPermission && (
+            <div className='flex gap-3'>
+                <button
+                  disabled={false}
+                  name={'print'}
+                  onClick={onButtonClick}
+                  type={'button'}
+                  className='group z-[55] relative flex justify-center items-center gap-2 bg-[--primaryColor] hover:bg-[--secondaryColor] px-4 pr-5 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+                >
+                  <AnimatePresence mode='wait'>
+                    <motion.div
+                      key="button-icon"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className='flex flex-col gap-3 py-0.5'
+                    >
+                      <PrinterIcon
+                        size="size-4"
+                        stroke="stroke-white group-data-[active=true]:stroke-[--primaryColor]"
+                        strokeWidth={2.5}
+                      />
+                    </motion.div>
 
-                  <motion.span
-                    key="button-text"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className='font-medium text-sm'
-                  >
-                    Imprimir
-                  </motion.span>
-                </AnimatePresence>
-              </button>
-          </div>
+                    <motion.span
+                      key="button-text"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className='font-medium text-sm'
+                    >
+                      Imprimir
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+            </div>
+          )}
         </div>
 
         <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-row items-center gap-3 px-6 w-1/2"
-          >
-            <div className="box-border flex flex-row items-center gap-2 bg-[--tableRow] focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
-              <div className="flex">
-                <SearchIcon
-                  size="size-4"
-                  stroke="stroke-[--textSecondary]"
-                  strokeWidth={2.5}
+          {hasPermission && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-row items-center gap-3 px-6 w-1/2"
+            >
+              <div className="box-border flex flex-row items-center gap-2 bg-[--tableRow] focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
+                <div className="flex">
+                  <SearchIcon
+                    size="size-4"
+                    stroke="stroke-[--textSecondary]"
+                    strokeWidth={2.5}
+                  />
+                </div>
+                <input
+                  type="text"
+                  placeholder=""
+                  spellCheck={false}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="bg-transparent pr-3 pl-1 rounded-xl focus:outline-none w-full h-full placeholder:font-normal font-medium text-sm"
                 />
               </div>
-              <input
-                type="text"
-                placeholder=""
-                spellCheck={false}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="bg-transparent pr-3 pl-1 rounded-xl focus:outline-none w-full h-full placeholder:font-normal font-medium text-sm"
+              <SecondaryButton
+                label="Filtrar"
+                icon={
+                  <FilterIcon
+                    size="size-4"
+                    stroke="stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]"
+                    strokeWidth={2.5}
+                  />
+                }
+                onClick={handleCloseModal}
               />
-            </div>
-            <SecondaryButton
-              label="Filtrar"
-              icon={
-                <FilterIcon
-                  size="size-4"
-                  stroke="stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]"
-                  strokeWidth={2.5}
-                />
-              }
-              onClick={handleCloseModal}
-            />
-          </motion.div>
+            </motion.div>
+          )}
         </AnimatePresence>
         
         <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
-          <div className="flex flex-col gap-2 px-3 pb-3">
-            <table className="w-full text-[--textSecondary] text-sm border-separate border-spacing-y-2">
-              <thead>
-                <tr className="">
-                  <th className="px-3 py-3 rounded-l-xl font-medium text-left">
-                    <button
-                    onClick={() => handleOrderBy('id')}
-                    type="button"
-                    className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Registro</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="id"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="px-3 py-3 font-medium text-left">
-                    <button
-                    onClick={() => handleOrderBy('expected_withdrawl_at')}
-                    type="button"
-                    className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Previsão</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="expected_withdrawl_at"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="px-3 py-3 font-medium text-left">
-                    <button
-                    onClick={() => handleOrderBy('withdrawl_at')}
-                    type="button"
-                    className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Entrega</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="withdrawl_at"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="px-3 py-3 font-medium text-left">
-                    <button
-                    onClick={() => handleOrderBy('collaborator')}
-                    type="button"
-                    className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Colaborador</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="collaborator"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="px-3 py-3 font-medium text-left">
-                    <button
-                    onClick={() => handleOrderBy('equipment')}
-                    type="button"
-                    className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
-                  >
-                    <span>Equipamento</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="equipment"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="px-2 py-3 font-medium text-right">
-                    <button
-                    onClick={() => handleOrderBy('quantity')}
-                    type="button"
-                    className="flex justify-end items-center gap-2 hover:opacity-60 w-full truncate transition-all duration-300"
-                  >
-                    <span>Qtd</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="quantity"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                  <th className="items-end px-3 py-3 rounded-r-xl font-medium text-right">
-                    <button
-                    onClick={() => handleOrderBy('amount')}
-                    type="button"
-                    className="flex justify-end items-center gap-2 hover:opacity-60 w-full truncate transition-all duration-300"
-                  >
-                    <span>Valor</span>
-                    <CaretOrder
-                      field={orderBy.field}
-                      name="amount"
-                      order={orderBy.order}
-                    />
-                  </button>
-                  </th>
-                </tr>
-              </thead>
+          {hasPermission && loading && (
+            <ReportAuditSkeleton />
+          )}
 
-              <tbody>
-                {report.map((event, i) => (
-                  <tr key={event.uuid} className="bg-[--tableRow] rounded-xl">
-                    <td className="px-3 py-4 rounded-l-xl">
-                      <span className="block w-full overflow-hidden text-ellipsis lowercase whitespace-nowrap">
-                        {event.uuid}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                        {timestampToDate(String(event.expected_withdrawl_at))}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4 lowercase">
-                      {event.withdrawl_at ? timestampToDate(String(event.withdrawl_at)) : '–'}
-                    </td>
-                    <td className="px-3 py-4 capitalize">
-                      {event.collaborator?.toLocaleLowerCase()}
-                    </td>
-                    <td className="px-3 py-4 capitalize">
-                      {event.equipment?.toLocaleLowerCase()}
-                    </td>
-                    <td className="px-3 py-4 text-right">
-                      {event.quantity}
-                    </td>
-                    <td className="px-3 py-4 rounded-r-xl font-medium text-right">
-                      R$ {event.cost ? convertMoneyBRL(Number(event.cost)) : 0}
-                    </td>
+          {hasPermission && !loading && (
+            <div className="flex flex-col gap-2 px-3 pb-3">
+              <table className="w-full text-[--textSecondary] text-sm border-separate border-spacing-y-2">
+                <thead>
+                  <tr className="">
+                    <th className="px-3 py-3 rounded-l-xl font-medium text-left">
+                      <button
+                      onClick={() => handleOrderBy('id')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Registro</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="id"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="px-3 py-3 font-medium text-left">
+                      <button
+                      onClick={() => handleOrderBy('expected_withdrawl_at')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Previsão</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="expected_withdrawl_at"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="px-3 py-3 font-medium text-left">
+                      <button
+                      onClick={() => handleOrderBy('withdrawl_at')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Entrega</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="withdrawl_at"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="px-3 py-3 font-medium text-left">
+                      <button
+                      onClick={() => handleOrderBy('collaborator')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Colaborador</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="collaborator"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="px-3 py-3 font-medium text-left">
+                      <button
+                      onClick={() => handleOrderBy('equipment')}
+                      type="button"
+                      className="flex items-center gap-2 hover:opacity-60 truncate transition-all duration-300"
+                    >
+                      <span>Equipamento</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="equipment"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="px-2 py-3 font-medium text-right">
+                      <button
+                      onClick={() => handleOrderBy('quantity')}
+                      type="button"
+                      className="flex justify-end items-center gap-2 hover:opacity-60 w-full truncate transition-all duration-300"
+                    >
+                      <span>Qtd</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="quantity"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
+                    <th className="items-end px-3 py-3 rounded-r-xl font-medium text-right">
+                      <button
+                      onClick={() => handleOrderBy('amount')}
+                      type="button"
+                      className="flex justify-end items-center gap-2 hover:opacity-60 w-full truncate transition-all duration-300"
+                    >
+                      <span>Valor</span>
+                      <CaretOrder
+                        field={orderBy.field}
+                        name="amount"
+                        order={orderBy.order}
+                      />
+                    </button>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <Paginations
-              numberOfPages={1}
-            />
-          </div>
+                </thead>
+
+                <tbody>
+                  {report.map((event, i) => (
+                    <tr key={event.uuid} className="bg-[--tableRow] rounded-xl">
+                      <td className="px-3 py-4 rounded-l-xl">
+                        <span className="block w-full overflow-hidden text-ellipsis lowercase whitespace-nowrap">
+                          {event.uuid}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                          {timestampToDate(String(event.expected_withdrawl_at))}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4 lowercase">
+                        {event.withdrawl_at ? timestampToDate(String(event.withdrawl_at)) : '–'}
+                      </td>
+                      <td className="px-3 py-4 capitalize">
+                        {event.collaborator?.toLocaleLowerCase()}
+                      </td>
+                      <td className="px-3 py-4 capitalize">
+                        {event.equipment?.toLocaleLowerCase()}
+                      </td>
+                      <td className="px-3 py-4 text-right">
+                        {event.quantity}
+                      </td>
+                      <td className="px-3 py-4 rounded-r-xl font-medium text-right">
+                        R$ {event.cost ? convertMoneyBRL(Number(event.cost)) : 0}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Paginations
+                numberOfPages={1}
+              />
+            </div>
+          )}
+
+          {!hasPermission && (
+            <PermissionDeniedScreen margin={true} />
+          )}
         </div>
       </div>
     </div>

@@ -4,9 +4,9 @@ import { Modal } from '@/components/Display/Modal'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
 import { Paginations } from '@/components/Navigation/Paginations'
 import { Skeleton } from '@/components/ui/skeleton'
-import { IdentifyBiometrics } from '@/services/BioUSB'
 import { collaboratorSearchBiometrics } from '@/services/Collaborator'
 import { getEvent, getEventsByCollaborator, withdrawnEvent } from '@/services/Event'
+import { IdentifyBiometrics } from '@/services/iDBio'
 import { calcDaysRemaining } from '@/utils/cal-days-remaining'
 import { calcPages } from '@/utils/calc-pages'
 import { timestampToDate } from '@/utils/timestamp-to-date'
@@ -235,8 +235,8 @@ export function BiometricsTakeout({
         const responseSearch = await collaboratorSearchBiometrics({
           loading: setLoading,
           biometrics: String(response.data.id),
-          found: response.data.found,
-          status: response.data.status
+          found: true,
+          status: `${JSON.stringify(response.data)}`
         })
 
         if (!responseSearch || responseSearch.status !== 200) {

@@ -1,12 +1,11 @@
-import { SubNavLink } from '@/components/Navigation/SubNavLink'
 import { SubNavLinkAction } from '@/components/Navigation/SubNavLinkAction'
+import { Skeleton } from '@/components/ui/skeleton'
 import { formatDistance } from '@/components/Utils/FormatDistance'
 import { normalizeDescription } from '@/components/Utils/NormalizeDescription'
-import { getNotifications } from '@/services/Notification'
+import { getNotifications, updateNotificationDelivered } from '@/services/Notification'
+import cn from 'classnames'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import cn from 'classnames'
-import { Skeleton } from '@/components/ui/skeleton'
 
 type NotificationParam = {
   uuid: string
@@ -17,6 +16,9 @@ type NotificationParam = {
   needs_approval: boolean
   approved: boolean
   created_at: string
+  equipment_name: string
+  equipment_picture: string
+  equipment_quantity: number
 }
 
 type MenuNotificationsProps = {
@@ -30,11 +32,17 @@ export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
 
   const fetchNotifications = async () => {
     setLoading(true)
-    const response = await getNotifications({loading: setLoading})
+    const response = await getNotifications({loading: setLoading, limit: 3})
 
     if (response && response.status === 200) {
       const data = response.data
       setNotifications(data.data)
+
+      for (const current_notification of data.data) {
+        await updateNotificationDelivered({
+          id: current_notification.uuid
+        })
+      }
     }
 
     setLoading(false)
@@ -95,7 +103,13 @@ export function MenuNotifications({ itemAction }: MenuNotificationsProps) {
                   </div>
                 )}
 
-                <div className='flex flex-col w-full text-left'>
+                <div className={cn('flex flex-col w-full text-left', {
+                  'opacity-50': notification.status == 'READ' ||
+                    notification.status == 'REJECTED' ||
+                    notification.status == 'APPROVED'
+                      ? true
+                      : false,
+                })}>
                   <span className='capitalize'>
                     {notification.title.toLocaleLowerCase()}
                   </span>

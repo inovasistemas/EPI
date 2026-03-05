@@ -16,6 +16,10 @@ export function CollaboratorSkeleton() {
 
           <Skeleton className="w-44 h-7" />
         </div>
+
+        <div className='flex flex-row items-center gap-2'>
+          <Skeleton className="rounded-xl w-[138px] min-w-[199px] h-10" />
+        </div>
       </div>
 
       <form className='gap-x-4 gap-y-10 grid sm:grid-cols-1 w-full overflow-y-auto'>

@@ -143,8 +143,6 @@ export async function getResourcesReport({
       { params, withCredentials: true },
     )
 
-    console.log('oi')
-
     loading(false)
     return response
   } catch (error: unknown) {

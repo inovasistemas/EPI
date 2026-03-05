@@ -1,5 +1,5 @@
 'use client'
-import { getUnreadNotifications } from '@/services/Notification'
+import { getUnreadNotifications, updateNotificationDelivered } from '@/services/Notification'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { ToastDefault } from '../Template/Toast/Default'
@@ -10,16 +10,22 @@ export default function NotificationPoller() {
       const response = await getUnreadNotifications()
       if (response && response.status === 200) {
         const data = response.data
-        if (data.total > 0) {
-          toast.custom(t => (
-            <ToastDefault
-              redirectTo='/notificacoes'
-              text={`${data.data.message}`}
-            />
-          ))
+        if (data?.total > 0 && Array.isArray(data?.data)) {
+          for (const current_notification of data.data) {
+            toast.custom(() => (
+              <ToastDefault
+                redirectTo="/notificacoes"
+                text={current_notification.message}
+              />
+            ))
+
+            await updateNotificationDelivered({
+              id: current_notification.uuid
+            })
+          }
         }
       }
-    }, 600000)
+    }, 15000)
 
     return () => clearInterval(interval)
   }, [])

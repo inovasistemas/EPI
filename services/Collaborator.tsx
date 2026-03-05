@@ -260,7 +260,7 @@ export async function collaboratorBiometrics({ id, loading, biometrics, status, 
 	}
 }
 
-export async function collaboratorSearchBiometrics({ loading, biometrics, status, found }: CollaboratorSearchBiometricsService) {
+export async function collaboratorSearchBiometrics({ biometrics, found, loading, status }: CollaboratorSearchBiometricsService) {
 	try {
 		loading(true)
 

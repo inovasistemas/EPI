@@ -240,6 +240,7 @@ const CollaboratorDetails: FC = () => {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <BiometricsCreate
+        collaborator={String(CollaboratorId)}
         title=''
         isModalOpen={modalCreateBiometrics}
         handleClickOverlay={handleCreateBiometricsModal}

@@ -2,20 +2,22 @@
 import { FingerPrintAnimationIcon } from '@/components/Display/Icons/FingerPrintAnimation'
 import { Modal } from '@/components/Display/Modal'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
-import { EnrollBiometrics } from '@/services/BioUSB'
 import { collaboratorBiometrics } from '@/services/Collaborator'
+import { EnrollBiometrics } from '@/services/iDBio'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { ToastError } from '../../Toast/Error'
 import { ToastSuccess } from '../../Toast/Success'
 
 type BiometricsCreateProps = {
+  collaborator: string
   title: string
   isModalOpen: boolean
   handleClickOverlay: () => void
 }
 
 export function BiometricsCreate({
+  collaborator,
   title,
   isModalOpen,
   handleClickOverlay,
@@ -23,18 +25,18 @@ export function BiometricsCreate({
   const [loading, setLoading] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
 
-  const handleCreateBiometrics = async () => {
+  const handleCreateBiometrics = async (id: string) => {
     setHasStarted(true)
-    const response = await EnrollBiometrics({ loading: setLoading })
+    const response = await EnrollBiometrics({ id, loading: setLoading })
 
     if (response) {
       if (response.status === 200 || response.status === 201) {
         const responseCreate = await collaboratorBiometrics({
-          id: response.data.id,
+          id,
           loading: setLoading,
-          biometrics: response.data,
+          biometrics: '',
           message: response.data.message,
-          status: response.data.status
+          status: 'successful'
         })
 
         if (!responseCreate || responseCreate.status !== 200) {
@@ -78,12 +80,12 @@ export function BiometricsCreate({
         </div>
 
         <div className='flex flex-col'>
-          <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-            Peça ao colaborador para posicionar o dedo indicador da mão direita
-          </span>
-          <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-            corretamente no leitor e aguarde a captura da digital.
-          </span>
+          <p className='opacity-60 text-[--textSecondary] text-sm text-center'>
+            Peça ao colaborador para posicionar o dedo indicador da mão direita,
+          </p>
+          <p className='opacity-60 text-[--textSecondary] text-sm text-center'>
+            posicionando novamente o dedo <span className='font-semibold'>3 vezes</span> para completar a captura da digital.
+          </p>
         </div>
       </div>
 
@@ -93,7 +95,7 @@ export function BiometricsCreate({
 
       <div className='flex justify-center items-center pb-8'>
         <div className='max-w-48 scale-95'>
-          <PrimaryButton name='capture' action={handleCreateBiometrics} text='Iniciar captura' type='button' disabled={hasStarted} />
+          <PrimaryButton name='capture' action={() => handleCreateBiometrics(collaborator)} text='Iniciar captura' type='button' disabled={hasStarted} />
         </div>
       </div>
     </Modal>

@@ -14,6 +14,7 @@ import {
   getNotifications,
   updateNotificationRead,
 } from '@/services/Notification'
+import { usePathname, useRouter } from 'next/navigation'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -32,9 +33,18 @@ type Notification = {
   needs_approval: boolean
   approved: boolean
   created_at: string
+  equipment_name: string,
+  equipment_picture: string,
+  equipment_quantity: number
+}
+
+type NotificationSearchBar = Notification & {
+  delivered: boolean
 }
 
 const Searchbar: React.FC = () => {
+  const router = useRouter()
+  const pathname = usePathname()
   const [modalStatus, setModalStatus] = useState(false)
   const [modalNotificationStatus, setModalNotificationStatus] = useState(false)
   const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false)
@@ -49,6 +59,9 @@ const Searchbar: React.FC = () => {
       needs_approval: false,
       approved: false,
       created_at: '',
+      equipment_name: '',
+      equipment_picture: '',
+      equipment_quantity: 0
     })
 
   const handleCloseModal = useCallback(() => {
@@ -71,12 +84,18 @@ const Searchbar: React.FC = () => {
         ? SearchbarCards.Default
         : SearchbarCards.Notifications
     )
+    setHasUnreadNotifications(false)
   }, [isCardOpen])
 
   const handleUpdateNotificationRead = async (notification: Notification) => {
+   
     setSelectedNotification(notification)
     handleClickOverlay()
-    handleModalNotificationStatus()
+    if (notification.needs_approval) {
+      handleModalNotificationStatus()
+    } else {
+      router.push('/notificacoes')
+    }
     await updateNotificationRead({ id: notification.uuid })
     fetchNotifications()
   }
@@ -90,7 +109,8 @@ const Searchbar: React.FC = () => {
     if (response && response.status === 200) {
       const data = response.data
       if (data.total > 0) {
-        setHasUnreadNotifications(true)
+        const hasDelivered = Array.isArray(data?.data) && data.data.some((item: NotificationSearchBar) => item.delivered === false)
+        setHasUnreadNotifications(hasDelivered)
       } else {
         setHasUnreadNotifications(false)
       }
@@ -98,12 +118,16 @@ const Searchbar: React.FC = () => {
   }
 
   useEffect(() => {
+    if (pathname === '/notificacoes') return
+
     fetchNotifications()
 
-    const interval = setInterval(fetchNotifications, 15000)
+    const interval = setInterval(() => {
+      fetchNotifications()
+    }, 15000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [pathname])
 
   return (
     <div className='h-[calc(50px+(env(safe-area-inset-top)))] min-h-[calc(50px+(env(safe-area-inset-top)))] pt-[calc(env(safe-area-inset-top))] flex justify-between items-center col-span-full bg-[--backgroundSecondary] px-3 sm:pt-0 w-full sm:w-auto lg:h-[50px]'>
@@ -124,6 +148,7 @@ const Searchbar: React.FC = () => {
           notification={selectedNotification}
           modalAction={handleModalNotificationStatus}
           reload={fetchNotifications}
+          status={selectedNotification.approved}
         />
       </Modal>
       <div className='flex items-center gap-3'>

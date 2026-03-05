@@ -12,6 +12,11 @@ export function formatDistance(dateString: string) {
     return match ? match[0] + 'h' : distance
   }
   if (distance.includes('minuto')) {
+    if (distance.includes('menos')) {
+      match = distance.match(/\d+/)
+      return '0m'
+    }
+
     match = distance.match(/\d+/)
     return match ? match[0] + 'm' : distance
   }
@@ -31,5 +36,6 @@ export function formatDistance(dateString: string) {
     match = distance.match(/\d+/)
     return match ? match[0] + 'a' : distance
   }
+  
   return distance
 }

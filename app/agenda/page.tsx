@@ -10,6 +10,7 @@ import { useQueryParams } from "@/components/Utils/UseQueryParams";
 import { Skeleton } from "@/components/ui/skeleton";
 import useDebounce from "@/lib/context/debounce";
 import { getEvent, getEvents, withdrawnEvent } from "@/services/Event";
+import { createNotification } from "@/services/Notification";
 import { calcDaysRemaining } from "@/utils/cal-days-remaining";
 import { calcPages } from "@/utils/calc-pages";
 import { timestampToDate } from "@/utils/timestamp-to-date";
@@ -235,6 +236,7 @@ const Agenda: FC = () => {
 	};
 
 	const fetchEvent = async (id: string) => {
+		const now = new Date().setHours(0, 0, 0, 0);
 		const response = await getEvent({
 			loading: setLoadingEvent,
 			id
@@ -242,7 +244,7 @@ const Agenda: FC = () => {
 
 		if (response) {
 			if (response.status === 200) {
-				if (response.data.need_approval === true) {
+				if (response.data.need_approval === true && (now < new Date(response.data.expected_withdrawl_at).setHours(0, 0, 0, 0))) {
 					setNeedApproval(true);
 					handleCloseModalDelete();
 				} else {
@@ -458,16 +460,21 @@ const Agenda: FC = () => {
 	}, []);
 
 	const handleModal = async (equipment: Event) => {
-		const now = new Date();
+		const now = new Date().setHours(0, 0, 0, 0);
 		setSelectedEquipment(equipment);
 		setNeedApproval(true);
 
-		if (new Date(equipment.expected_withdrawl_at) > now) {
+		console.log(now >= new Date(equipment.expected_withdrawl_at).setHours(0, 0, 0, 0))
+		if (now >= new Date(equipment.expected_withdrawl_at).setHours(0, 0, 0, 0)) {
 			if (equipment.uuid) {
 				await fetchEvent(equipment.uuid);
 			}
 		} else {
 			setNeedApproval(false);
+
+			if (equipment.uuid) {
+				await fetchEvent(equipment.uuid);
+			}
 		}
 
 		//handleCloseModal();
@@ -476,6 +483,38 @@ const Agenda: FC = () => {
 	const handleCloseModalDelete = useCallback(() => {
 		setModalDeleteStatus((prev) => !prev);
 	}, []);
+
+	const handleRequestApproval = async () => {
+		handleCloseModalDelete()
+
+		if (selectedEquipment) {
+			for (const routine of selectedEquipment?.routines) {
+				for (const equipement of routine.equipments) {
+					const response = await createNotification({
+						collaborator: selectedEquipment?.collaborator || '',
+						equipment: equipement.uuid || '',
+						message: `O colaborador solicitou a retirada antecipada dos equipamentos previstos para ${timestampToDate(String(selectedEquipment?.expected_withdrawl_at || ''))}. Aguarda aprovação para prosseguir com a entrega.`,
+						needs_approval: true,
+						status: 'RECEIVED',
+						title: `Retirada antecipada para ${selectedEquipment?.collaborator_name}`,
+						withdrawal_at: selectedEquipment?.expected_withdrawl_at || new Date(),
+						quantity: Number(equipement.quantity || 0),
+						event: equipement.event || ''
+					})
+
+					if (response?.status === 201) {
+						toast.custom(() => (
+							<ToastSuccess text={`Solicitação de retirada antecipada enviada`} />
+						));
+					} else {
+						toast.custom(() => (
+							<ToastError text="Não foi possível solicitar a retirada antecipada" />
+						))
+					}
+				}
+			}
+		}
+	}
 
 	const handleCloseModalDeleteGetOut = useCallback(() => {
 		//handleCloseModal();
@@ -601,7 +640,7 @@ const Agenda: FC = () => {
 					<div className="z-[55] flex flex-row justify-center gap-3 pt-6">
 						<button
 							type="button"
-							onClick={handleCloseModalDelete}
+							onClick={handleRequestApproval}
 							className="group group z-[55] relative flex justify-center items-center gap-3 bg-[--primaryColor] hover:bg-[--secondaryColor] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none"
 						>
 							<span className="font-medium text-white text-sm transition-all duration-300">

@@ -1,4 +1,24 @@
 'use client'
+import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
+import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
+import { AddIcon } from '@/components/Display/Icons/Add'
+import { FilterIcon } from '@/components/Display/Icons/Filter'
+import { SearchIcon } from '@/components/Display/Icons/Search'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
+import { Modal } from '@/components/Display/Modal'
+import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
+import { PrimaryLink } from '@/components/Links/PrimaryLink'
+import { Paginations } from '@/components/Navigation/Paginations'
+import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
+import { FilterOperator } from '@/components/Template/Filter/Operator'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useQueryParams } from '@/components/Utils/UseQueryParams'
+import useDebounce from '@/lib/context/debounce'
+import { deleteUser, getUsers } from '@/services/User'
+import { calcPages } from '@/utils/calc-pages'
+import { timestampToDate } from '@/utils/timestamp-to-date'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -10,27 +30,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { DestructiveButton } from '@/components/Buttons/DestructiveButton'
-import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
-import { AddIcon } from '@/components/Display/Icons/Add'
-import { FilterIcon } from '@/components/Display/Icons/Filter'
-import { SearchIcon } from '@/components/Display/Icons/Search'
-import { TrashIcon } from '@/components/Display/Icons/Trash'
-import { Modal } from '@/components/Display/Modal'
-import { PrimaryLink } from '@/components/Links/PrimaryLink'
-import { Paginations } from '@/components/Navigation/Paginations'
-import { CaretOrder } from '@/components/Template/Filter/CaretOrder'
-import { FilterOperator } from '@/components/Template/Filter/Operator'
-import { useQueryParams } from '@/components/Utils/UseQueryParams'
-import { deleteUser, getUsers } from '@/services/User'
-import { timestampToDate } from '@/utils/timestamp-to-date'
-import { calcPages } from '@/utils/calc-pages'
 import { toast } from 'sonner'
-import { ToastError } from '@/components/Template/Toast/Error'
-import useDebounce from '@/lib/context/debounce'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
-import { Skeleton } from '@/components/ui/skeleton'
 
 type Operator = {
   uuid: string
@@ -304,7 +304,7 @@ const Operator: FC = () => {
             transition={{ duration: 0.3 }}
             className="flex flex-row items-center gap-3 px-6 w-1/2">
               <div
-                className="bg-[--tableRow] box-border flex flex-row items-center gap-2 focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
+                className="box-border flex flex-row items-center gap-2 bg-[--tableRow] focus-within:bg-[--buttonPrimary] px-3 rounded-xl w-full h-10 transition-all duration-300">
                 <div className="flex">
                   <SearchIcon
                     size="size-4"
@@ -337,6 +337,12 @@ const Operator: FC = () => {
         </AnimatePresence>
 
         <div className="flex flex-col justify-between gap-6 pb-0 w-full h-full">
+          {!hasPermission && !loading && (
+            <div className='flex justify-center items-center w-full h-full'>
+              <PermissionDeniedScreen margin={false} />
+            </div>
+          )}
+          
           <div className="flex flex-col gap-2 px-3 h-full">
             <AnimatePresence mode='wait'>
               {hasPermission && (
@@ -429,7 +435,7 @@ const Operator: FC = () => {
             </AnimatePresence>
 
             <AnimatePresence mode='wait'>
-            {loading && (
+            {hasPermission && loading && (
               <motion.div
                 key="loading"
                 initial={{ opacity: 0 }}
@@ -451,7 +457,7 @@ const Operator: FC = () => {
               </motion.div>
             )}
 
-            {!loading && (
+            {!loading && hasPermission && (
               <motion.div
                 key="data"
                 initial={{ opacity: 0 }}
@@ -465,7 +471,7 @@ const Operator: FC = () => {
                     <li key={operator.uuid}>
                       <Link
                         href={`/usuarios/detalhes/${operator.uuid}`}
-                        className="bg-[--tableRow] gap-3 grid grid-cols-12 px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
+                        className="gap-3 grid grid-cols-12 bg-[--tableRow] px-3 rounded-xl font-normal text-[--textSecondary] text-sm capitalize transition-all duration-300"
                       >
                         <div className="flex items-center gap-3 col-span-5 py-3 font-medium">
                           <input
@@ -518,10 +524,6 @@ const Operator: FC = () => {
             </AnimatePresence>
           </div>
         </div>
-
-        {!hasPermission && (
-          <PermissionDeniedScreen />
-        )}
       </div>
     </div>
   )
