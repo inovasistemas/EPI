@@ -10,6 +10,7 @@ import { ToastError } from '../../Toast/Error'
 import { ToastSuccess } from '../../Toast/Success'
 
 type BiometricsCreateProps = {
+  collaboratorUUID: string
   collaborator: string
   title: string
   isModalOpen: boolean
@@ -17,6 +18,7 @@ type BiometricsCreateProps = {
 }
 
 export function BiometricsCreate({
+  collaboratorUUID,
   collaborator,
   title,
   isModalOpen,
@@ -33,6 +35,7 @@ export function BiometricsCreate({
       if (response.status === 200 || response.status === 201) {
         const responseCreate = await collaboratorBiometrics({
           id,
+          uuid: collaboratorUUID || '',
           loading: setLoading,
           biometrics: '',
           message: response.data.message,

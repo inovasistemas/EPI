@@ -54,6 +54,7 @@ type CreateCollaboratorService = {
 
 type CollaboratorBiometricsService = {
   id: string
+  uuid: string
   loading: React.Dispatch<React.SetStateAction<boolean>>
   biometrics: string
   message: string

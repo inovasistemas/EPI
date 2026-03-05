@@ -233,13 +233,13 @@ export async function collaboratorFaceRecognition(image: string) {
 	}
 }
 
-export async function collaboratorBiometrics({ id, loading, biometrics, status, message }: CollaboratorBiometricsService) {
+export async function collaboratorBiometrics({ uuid, id, loading, biometrics, status, message }: CollaboratorBiometricsService) {
 	try {
 		loading(true)
 
 		const response = await axios.post(
-			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/${id}/biometrics`,
-			{ biometrics, message, status },
+			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/${uuid}/biometrics`,
+			{ id, biometrics, message, status },
 			{ withCredentials: true },
 		)
 
