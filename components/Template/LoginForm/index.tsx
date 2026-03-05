@@ -33,6 +33,7 @@ type OperatorEnterprise = {
   security_code: string
   security_code_secret: string
   required_2fa_configuration: boolean
+  two_factor_authentication_in_use: boolean
 }
 
 export function LoginForm() {
@@ -46,6 +47,7 @@ export function LoginForm() {
     security_code: '',
     security_code_secret: '',
     required_2fa_configuration: false,
+    two_factor_authentication_in_use: false
   })
 
   const [height, setHeight] = useState(0)
@@ -117,16 +119,34 @@ export function LoginForm() {
           response.data.required_2fa_configuration
         )
 
-        if (response.data.required_2fa_configuration === true) {
-          const response = await setTwoFactorAuthentication({loading: setLoading})
+        if (response.data.two_factor_authentication_in_use) {
+          if (response.data.required_2fa_configuration === true) {
+            const response = await setTwoFactorAuthentication({loading: setLoading})
 
-          if (response && response.data && response.data.uri) {
-            setQrCodeUri(response.data.uri)
-            handleChange('security_code_secret', response.data.secret)
+            if (response && response.data && response.data.uri) {
+              setQrCodeUri(response.data.uri)
+              handleChange('security_code_secret', response.data.secret)
+            }
           }
-        }
 
-        setStep(prev => Math.min(prev + 1, 2))
+          setStep(prev => Math.min(prev + 1, 2))
+        } else {
+          Cookies.set(
+            'authToken',
+            Buffer.from(
+              JSON.stringify({
+                enterprise: '',
+                name: formData.name,
+                permission_group: formData.permission_group,
+                user: formData.user_uuid,
+              }),
+              'binary'
+            ).toString('base64'),
+            { expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) }
+          )
+          
+          router.push('/painel')
+        }
       } else if (response && response.status === 400) {
         toast.custom(() => <ToastError text='Usuário ou senha incorretos' />)
       } else if (response && response.status === 401) {
@@ -323,7 +343,7 @@ export function LoginForm() {
               </div>
 
               {formData.required_2fa_configuration && (
-                <div className='bg-[--tableRow] flex flex-col justify-center items-center gap-6 p-4 rounded-xl'>
+                <div className='flex flex-col justify-center items-center gap-6 bg-[--tableRow] p-4 rounded-xl'>
                   <div className='flex flex-row items-center gap-6 w-full'>
                     <div className='flex flex-col gap-2 rounded w-full'>
                       <span className='text-sm'>
