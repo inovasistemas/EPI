@@ -4,8 +4,8 @@ import type { EnrollBiometricsProps, IdentifyBiometricsProps } from './types/iDB
 export async function EnrollBiometrics({ id, loading }: EnrollBiometricsProps) {
   try {
     loading(true)
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BIOUSB}/biometry/enroll/${id}`
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BIOUSB}/biometry/enroll/${id}`
     )
     loading(false)
     return response
@@ -22,8 +22,8 @@ export async function EnrollBiometrics({ id, loading }: EnrollBiometricsProps) {
 export async function IdentifyBiometrics({ loading }: IdentifyBiometricsProps) {
   try {
     loading(true)
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BIOUSB}/biometry/identify`
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BIOUSB}/biometry/identify`
     )
     loading(false)
     return response
