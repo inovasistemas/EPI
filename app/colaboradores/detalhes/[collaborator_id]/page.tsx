@@ -94,6 +94,7 @@ const CollaboratorDetails: FC = () => {
   }
 
   const [modalStatus, setModalStatus] = useState(false)
+  const [biometricsCollected, setBiometricsCollected] = useState(false)
   const [modalCreateBiometrics, setModalCreateBiometrics] = useState(false)
   const handleCloseModal = useCallback(() => {
     setModalStatus(prev => !prev)
@@ -101,6 +102,10 @@ const CollaboratorDetails: FC = () => {
 
   const handleCreateBiometricsModal = useCallback(() => {
     setModalCreateBiometrics(prev => !prev)
+  }, [])
+
+  const handleBiometricsCollected = useCallback(() => {
+    setBiometricsCollected(prev => !prev)
   }, [])
 
   const [jobPositionsData, setJobPositionsData] = useState([
@@ -242,6 +247,7 @@ const CollaboratorDetails: FC = () => {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <BiometricsCreate
+        biometricsCollected={handleBiometricsCollected}
         collaborator={String(collaborator.id)}
         collaboratorUUID={String(CollaboratorId)}
         title=''
@@ -312,7 +318,7 @@ const CollaboratorDetails: FC = () => {
 
             <div className='flex flex-row items-center gap-2'>
               <SecondaryButton
-                label={collaborator?.biometrics ? 'Atualizar Biometria' : 'Cadastrar Biometria'}
+                label={collaborator?.biometrics || biometricsCollected ? 'Atualizar Biometria' : 'Cadastrar Biometria'}
                 icon={
                   <FingerPrintIcon
                     size='size-5'

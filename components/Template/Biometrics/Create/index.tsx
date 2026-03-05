@@ -14,6 +14,7 @@ type BiometricsCreateProps = {
   collaborator: string
   title: string
   isModalOpen: boolean
+  biometricsCollected: () => void
   handleClickOverlay: () => void
 }
 
@@ -23,6 +24,7 @@ export function BiometricsCreate({
   title,
   isModalOpen,
   handleClickOverlay,
+  biometricsCollected
 }: BiometricsCreateProps) {
   const [loading, setLoading] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
@@ -49,6 +51,7 @@ export function BiometricsCreate({
           ))
         } else {
           setHasStarted(false)
+          biometricsCollected()
           toast.custom(() => (
             <ToastSuccess text='Biometria cadastrada com sucesso' />
           ))

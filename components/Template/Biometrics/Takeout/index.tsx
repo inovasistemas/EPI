@@ -576,12 +576,6 @@ export function BiometricsTakeout({
                     Retirada de Equipamentos
                   </h2>
                 </div>
-
-                <div className='flex flex-col'>
-                  <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-                    Selecione a retirada para visualizar os equipamentos.
-                  </span>
-                </div>
               </div>
               <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
                 <div className="flex flex-col gap-2 px-3">
@@ -652,6 +646,12 @@ export function BiometricsTakeout({
                               </button>
                             </li>
                           ))}
+
+                          {equipmentsGrouped.length === 0 && (
+                            <li className='flex justify-center items-center w-full text-center'>
+                              <span className='flex justify-center items-center text-center'>Nenhum equipamento para retirar</span>
+                            </li>
+                          )}
                         </ul>
                       </motion.div>
                     )}
