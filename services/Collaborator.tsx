@@ -239,7 +239,7 @@ export async function collaboratorBiometrics({ uuid, id, loading, biometrics, st
 
 		const response = await axios.post(
 			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/${uuid}/biometrics`,
-			{ id, biometrics, message, status },
+			{ id: String(id), biometrics, message, status },
 			{ withCredentials: true },
 		)
 
