@@ -42,7 +42,7 @@ export function BiometricsCreate({
           status: 'successful'
         })
 
-        if (!responseCreate || responseCreate.status !== 200) {
+        if (!responseCreate || responseCreate.status !== 201) {
           setHasStarted(false)
           toast.custom(() => (
             <ToastError text='Não foi possível cadastrar a biometria' />
