@@ -30,6 +30,7 @@ import { type FC, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 type Collaborator = {
+  id: number
   name: string
   birthdate: string
   rg: string
@@ -59,6 +60,7 @@ const CollaboratorDetails: FC = () => {
   const [loading, setLoading] = useState(false)
   const [loadingJobPositions, setLoadingJobPositions] = useState(true)
   const [collaborator, setCollaborator] = useState<Collaborator>({
+    id: 0,
     name: '',
     birthdate: '',
     rg: '',
@@ -240,7 +242,7 @@ const CollaboratorDetails: FC = () => {
   return (
     <div className='flex flex-col gap-6 bg-[--backgroundSecondary] sm:pr-3 pb-8 sm:pb-3 w-full lg:h-[calc(100vh-50px)] overflow-auto'>
       <BiometricsCreate
-        collaborator={String(CollaboratorId)}
+        collaborator={String(collaborator.id)}
         title=''
         isModalOpen={modalCreateBiometrics}
         handleClickOverlay={handleCreateBiometricsModal}

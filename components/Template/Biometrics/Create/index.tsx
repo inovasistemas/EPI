@@ -58,6 +58,7 @@ export function BiometricsCreate({
         ))
       }
     } else {
+      setHasStarted(false)
       toast.custom(() => (
         <ToastError text='Não foi possível cadastrar a biometria' />
       ))
