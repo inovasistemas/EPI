@@ -4,6 +4,8 @@ import type { EnrollBiometricsProps, IdentifyBiometricsProps } from './types/iDB
 export async function EnrollBiometrics({ id, loading }: EnrollBiometricsProps) {
   try {
     loading(true)
+    await DeleteBiometrics(id)
+
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BIOUSB}/biometry/enroll/${id}`
     )
@@ -33,6 +35,20 @@ export async function IdentifyBiometrics({ loading }: IdentifyBiometricsProps) {
       return error.response || null
     }
     loading(false)
+    return null
+  }
+}
+
+async function DeleteBiometrics(id: string) {
+  try {
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_BIOUSB}/biometry/templates/${id}`
+    )
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return error.response || null
+    }
     return null
   }
 }
