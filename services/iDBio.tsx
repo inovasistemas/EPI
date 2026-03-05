@@ -2,8 +2,6 @@ import axios from 'axios'
 import type { EnrollBiometricsProps, IdentifyBiometricsProps } from './types/iDBio'
 
 export async function EnrollBiometrics({ id, loading }: EnrollBiometricsProps) {
-  await new Promise((resolve) => setTimeout(resolve, 5000))
-
   try {
     loading(true)
     const response = await axios.get(
