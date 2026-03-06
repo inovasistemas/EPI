@@ -1,34 +1,36 @@
 'use client'
-import { type FC, useCallback, useEffect, useState } from 'react'
+import { BriefcaseIcon } from '@/components/Display/Icons/Briefcase'
+import { CorporateIcon } from '@/components/Display/Icons/Corporate'
+import { FactoryIcon } from '@/components/Display/Icons/Factory'
 import { GroupIcon } from '@/components/Display/Icons/Group'
 import { LaborIcon } from '@/components/Display/Icons/Labor'
+import { LoadingIcon } from '@/components/Display/Icons/Loading'
 import { PersonalDetailsIcon } from '@/components/Display/Icons/PersonalDetails'
 import { ShieldIcon } from '@/components/Display/Icons/Shield'
+import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
 import { Modal } from '@/components/Display/Modal'
+import { Category } from '@/components/Features/Category'
+import { JobPosition } from '@/components/Features/JobPosition'
+import { Manufacturer } from '@/components/Features/Manufacturer'
+import { Sector } from '@/components/Features/Sector'
+import { CorporateDetailsSettings } from '@/components/Template/CorporateDetailsSettings'
 import { PasswordSettings } from '@/components/Template/PasswordSettings'
 import { PermissionGroupSettings } from '@/components/Template/PermissionGroupSettings'
 import { PersonalDetailsSettings } from '@/components/Template/PersonalDetailsSettings'
-import { Sector } from '@/components/Features/Sector'
 import { SecurityCode } from '@/components/Template/SecurityCode'
+import { ToastError } from '@/components/Template/Toast/Error'
+import { ToastSuccess } from '@/components/Template/Toast/Success'
 import {
-  useClearQueryParams,
-  useQueryParams,
+  useClearQueryParams
 } from '@/components/Utils/UseQueryParams'
 import { updateUserMePassword } from '@/services/User'
-import { toast } from 'sonner'
-import { ToastSuccess } from '@/components/Template/Toast/Success'
-import { ToastError } from '@/components/Template/Toast/Error'
-import { BriefcaseIcon } from '@/components/Display/Icons/Briefcase'
-import { JobPosition } from '@/components/Features/JobPosition'
-import { WorkflowSquareIcon } from '@/components/Display/Icons/WorkflowSquare'
-import { FactoryIcon } from '@/components/Display/Icons/Factory'
-import { Manufacturer } from '@/components/Features/Manufacturer'
-import { Category } from '@/components/Features/Category'
-import { useParams } from 'next/navigation'
-import { LoadingIcon } from '@/components/Display/Icons/Loading'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { type FC, useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 enum menus {
+  corporateDetails,
   personalDetails,
   permissionGroup,
   sector,
@@ -116,6 +118,7 @@ const Settings: FC = () => {
   }
 
   useEffect(()=>{
+    if (SettingsMenu === 'empresa') setActiveMenu(menus.corporateDetails)
     if (SettingsMenu === 'dados') setActiveMenu(menus.personalDetails)
     if (SettingsMenu === 'grupo-permissoes') setActiveMenu(menus.permissionGroup)
     if (SettingsMenu === 'cargos') setActiveMenu(menus.jobPosition)
@@ -185,6 +188,21 @@ const Settings: FC = () => {
       </Modal>
       <div className='items-start gap-2 grid sm:grid-cols-3 grid-rows-12 sm:grid-rows-1 sm:rounded-2xl w-full h-full'>
         <div className='flex flex-row sm:flex-col justify-between sm:justify-start items-center sm:items-start sm:gap-2 order-1 sm:order-1 sm:col-start-1 row-span-1 bg-[--backgroundPrimary] p-3 rounded-2xl w-full h-full'>
+          <Link
+            href="/configuracoes/empresa"
+            data-active={activeMenu === menus.corporateDetails}
+            className='group flex items-center gap-1 data-[active=true]:bg-[--backgroundSecondary] hover:bg-[--backgroundSecondary] px-2 sm:px-1 py-1 sm:py-3 rounded-xl sm:w-full font-normal active:scale-95 transition-all duration-300'
+          >
+            <div className='group flex justify-center min-w-[32px] !max-w-[32px]'>
+              <CorporateIcon
+                size='size-5'
+                stroke='stroke-[--iconPrimaryColor] group-data-[active=true]:stroke-[--primaryColor]'
+              />
+            </div>
+            <span className='hidden sm:flex w-full font-medium text-[--iconPrimaryColor] group-data-[active=true]:text-[--primaryColor] text-sm transition-all select-none'>
+              Dados da empresa
+            </span>
+          </Link>
           <Link
             href="/configuracoes/dados"
             data-active={activeMenu === menus.personalDetails}
@@ -299,6 +317,7 @@ const Settings: FC = () => {
         </div>
 
         <div className='order-2 sm:order-2 sm:col-span-2 sm:col-start-2 row-span-full row-start-2 sm:row-start-auto bg-[--backgroundPrimary] rounded-2xl w-full h-full overflow-y-auto'>
+          {activeMenu === menus.corporateDetails && <CorporateDetailsSettings />}
           {activeMenu === menus.personalDetails && <PersonalDetailsSettings />}
           {activeMenu === menus.permissionGroup && <PermissionGroupSettings />}
           {activeMenu === menus.jobPosition && <JobPosition />}

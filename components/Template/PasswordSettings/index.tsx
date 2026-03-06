@@ -9,7 +9,7 @@ import { ActionGroupSave } from '@/components/Surfaces/ActionGroupSave'
 import { checkTwoFactorAuthentication, deleteTwoFactorAuthentication, setTwoFactorAuthentication } from '@/services/Login'
 import { getUserMe, updateUserMePassword } from '@/services/User'
 import classNames from 'classnames'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import QRCode from 'react-qr-code'
 import { toast } from 'sonner'
@@ -337,16 +337,21 @@ export function PasswordSettings({
           </div>
         </div>
 
-        <div className='mt-6 py-6 !border-t-0 select-none'>
-          <h2 className='font-medium text-xl leading-none'>
-            Autenticação de dois fatores
-          </h2>
-          <span className='opacity-60 text-[--textSecondary] text-sm'>
-            Altere ou recupere sua senha para manter sua conta segura.
-          </span>
+        <div className='py-6 !border-t-0 select-none'>
+          <AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className='hidden sm:block mt-6 px-1 !border-t-0 font-semibold text-[--labelPrimary] text-[10px] transition-all duration-300 select-none'
+            >
+              <span className='uppercase'>Autenticação em dois fatores</span>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        <div className='flex flex-col gap-6 pt-8'>
+        <div className='flex flex-col gap-6 mt-3 !border-t-0'>
           <div className='flex gap-3'>
             <SecondaryButton
               label="Configurar 2FA"

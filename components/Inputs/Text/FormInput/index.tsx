@@ -16,6 +16,7 @@ type FormInputProps = {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   actionButton?: () => void
   textTransform?: string
+  disabled?: boolean
 }
 
 export function FormInput({
@@ -32,6 +33,7 @@ export function FormInput({
   onKeyDown,
   maxLength = 255,
   textTransform = '',
+  disabled=false
 }: FormInputProps) {
   type = reveal ? 'text' : type
 
@@ -47,8 +49,9 @@ export function FormInput({
             id={name}
             type={type}
             name={name}
+            disabled={disabled}
             className={classNames(
-              'peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none',
+              'disabled:text-[--labelPrimary] peer block bg-[--backgroundSecondary] px-[12px] pt-[23px] pb-[7px] rounded-xl outline-none focus:outline-none w-full font-normal text-[--textSecondary] text-base transition-all duration-300 appearance-none',
               textTransform
             )}
             placeholder=' '
