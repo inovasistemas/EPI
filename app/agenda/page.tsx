@@ -464,7 +464,6 @@ const Agenda: FC = () => {
 		setSelectedEquipment(equipment);
 		setNeedApproval(true);
 
-		console.log(now >= new Date(equipment.expected_withdrawl_at).setHours(0, 0, 0, 0))
 		if (now >= new Date(equipment.expected_withdrawl_at).setHours(0, 0, 0, 0)) {
 			if (equipment.uuid) {
 				await fetchEvent(equipment.uuid);

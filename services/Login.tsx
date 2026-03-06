@@ -65,6 +65,27 @@ export async function setTwoFactorAuthentication({loading}: SetTwoFactorAuthenti
   }
 }
 
+export async function deleteTwoFactorAuthentication({loading}: SetTwoFactorAuthenticationProps) {
+  try {
+    loading(true)
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_HOST}/users/me/2fa`,
+      {
+        withCredentials: true,
+      }
+    )
+    loading(false)
+    return response
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      loading(false)
+      return error.response || null
+    }
+    loading(false)
+    return null
+  }
+}
+
 export async function checkTwoFactorAuthentication({ code, loading }: CheckTwoFactorAuthenticationProps) {
   try {
     loading(true)

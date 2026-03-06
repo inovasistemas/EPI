@@ -2,10 +2,11 @@ import { SecondaryButton } from '@/components/Buttons/SecondaryButton'
 import { FloppyDiskIcon } from '@/components/Display/Icons/FloppyDisk'
 import { SecurityIcon } from '@/components/Display/Icons/Security'
 import { SettingsIcon } from '@/components/Display/Icons/Settings'
+import { TrashIcon } from '@/components/Display/Icons/Trash'
 import { Modal } from '@/components/Display/Modal'
 import { PasswordInput } from '@/components/Inputs/Password'
 import { ActionGroupSave } from '@/components/Surfaces/ActionGroupSave'
-import { checkTwoFactorAuthentication, setTwoFactorAuthentication } from '@/services/Login'
+import { checkTwoFactorAuthentication, deleteTwoFactorAuthentication, setTwoFactorAuthentication } from '@/services/Login'
 import { getUserMe, updateUserMePassword } from '@/services/User'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
@@ -29,6 +30,7 @@ export function PasswordSettings({
 }: PasswordSettingsProps) {
   const fetchedUserMe = useRef(false)
   const [modalStatus, setModalStatus] = useState(false)
+  const [modalAlertStatus, setModalAlertStatus] = useState(false)
   const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(false)
   const [qrCodeUri, setQrCodeUri] = useState('')
@@ -144,9 +146,7 @@ export function PasswordSettings({
     const response = await getUserMe({loading: setLoading})
 
     if (response && response.status === 200) {
-      console.log(response.data[0].two_factor_authentication_in_use)
       handleChangeOperator('twoFactorAuthenticationInUse', response.data[0].two_factor_authentication_in_use)
-      console.log(operatorData.twoFactorAuthenticationInUse)
     } else {
       toast.custom(() => (
         <ToastError text='Não foi possível buscar os dados do usuário' />
@@ -161,6 +161,27 @@ export function PasswordSettings({
     }))
   }
 
+  const handleDeleteTwoFactorAuthentication = async () => {
+    const response = await deleteTwoFactorAuthentication({loading: setLoading})
+    
+    if (response && response.status === 204) {
+      toast.custom(() => (
+        <ToastSuccess text='Autenticação em duas etapas desativada com sucesso' />
+      ))
+
+      handleCloseModal()
+      fetchUser()
+    } else {
+      toast.custom(() => (
+        <ToastError text='Não foi possível desativar a autenticação em duas etapas dessa conta' />
+      ))
+    }
+  }
+
+  const handleCloseModalAlert = () => {
+    setModalAlertStatus(prev => !prev)
+  }
+
   useEffect(() => {
     if (fetchedUserMe.current) return
     fetchedUserMe.current = true
@@ -169,6 +190,44 @@ export function PasswordSettings({
 
   return (
     <div className='relative flex flex-col w-full h-full'>
+      <Modal
+        title=''
+        size='extra-small'
+        isModalOpen={modalAlertStatus}
+        handleClickOverlay={handleCloseModalAlert}
+        showClose={false}
+      >
+        <div className='flex flex-col gap-2'>
+          <span className='font-medium text-xl text-center'>
+            Tem certeza que deseja desativar o 2FA?
+          </span>
+          <span className='px-6 text-base text-center'>
+            A autenticação em duas etapas será removida da sua conta e sua segurança pode ser reduzida.
+          </span>
+
+          <div className='flex flex-row justify-center gap-3 pt-6'>
+            <button
+              onClick={handleDeleteTwoFactorAuthentication}
+              type='button'
+              className='group group z-[55] relative flex justify-center items-center gap-3 bg-[--errorLoader] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-white text-sm transition-all duration-300'>
+                Confirmar
+              </span>
+            </button>
+
+            <button
+              type='button'
+              onClick={handleCloseModalAlert}
+              className='group z-[55] relative flex justify-center items-center gap-3 bg-[--buttonPrimary] hover:bg-[--buttonSecondary] px-8 rounded-xl h-10 text-white active:scale-95 transition-all duration-300 cursor-pointer select-none'
+            >
+              <span className='font-medium text-[--textSecondary] text-sm'>
+                Cancelar
+              </span>
+            </button>
+          </div>
+        </div>
+      </Modal>
       <Modal
         title="Autenticação 2FA"
         size="small"
@@ -301,6 +360,19 @@ export function PasswordSettings({
               }
               onClick={handleTwoFactorAuthenticationCreate}
             />
+
+            <button
+              disabled={!operatorData.twoFactorAuthenticationInUse}
+              type='button'
+              onClick={handleCloseModalAlert}
+              className='group z-[45] relative flex justify-center items-center gap-3 bg-[--tableRow] hover:bg-[--buttonPrimary] disabled:bg-[--tableRow] disabled:opacity-60 px-4 rounded-xl h-10 text-[--textSecondary] active:scale-95 transition-all duration-300 cursor-pointer disabled:cursor-not-allowed select-none'
+            >
+              <TrashIcon
+                size="size-4"
+                stroke="stroke-[--textSecondary] group-data-[active=true]:stroke-[--primaryColor]"
+                strokeWidth={2.5}
+              />
+            </button>
           </div>
         </div>
       </div>

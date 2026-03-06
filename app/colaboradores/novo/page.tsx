@@ -157,7 +157,7 @@ const CreateCollaborator: FC = () => {
               type='date'
               value={formData?.birthdate}
               position='right'
-              onChange={e => {handleChange('birthdate', e.target.value); console.log(e.target.value)}}
+              onChange={e => {handleChange('birthdate', e.target.value);}}
             />
 
             <SearchSelect

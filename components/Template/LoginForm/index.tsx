@@ -163,7 +163,6 @@ export function LoginForm() {
 
   const handleBack = () => {
     setStep(prev => Math.max(prev - 1, 0))
-    console.log(step)
 
     if (step === 1) {
       handleChange('password', '')
