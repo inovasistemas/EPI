@@ -1,11 +1,18 @@
 'use client'
 import { getUnreadNotifications, updateNotificationDelivered } from '@/services/Notification'
+import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { ToastDefault } from '../Template/Toast/Default'
 
 export default function NotificationPoller() {
+  const pathname = usePathname()
+
   useEffect(() => {
+    if (pathname === '/entrar' || pathname === '/sair') {
+      return
+    }
+
     const interval = setInterval(async () => {
       const response = await getUnreadNotifications()
       if (response && response.status === 200) {
@@ -28,7 +35,7 @@ export default function NotificationPoller() {
     }, 15000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [pathname])
 
   return null
 }
