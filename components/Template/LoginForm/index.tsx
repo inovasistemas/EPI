@@ -22,6 +22,7 @@ import QRCode from 'react-qr-code'
 import { toast } from 'sonner'
 import { SecurityCodeSimple } from '../SecurityCodeSimples'
 import { ToastError } from '../Toast/Error'
+import { getSummaryReports } from '@/services/Report'
 
 type OperatorEnterprise = {
   enterprise_uuid: string
@@ -144,6 +145,8 @@ export function LoginForm() {
             ).toString('base64'),
             { expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) }
           )
+
+          getSummaryReports({ loading: setLoading });
           
           router.push('/painel')
         }
