@@ -1,5 +1,6 @@
 'use client'
 import { MaskedInput } from '@/components/Inputs/Masked'
+import { PasswordInput } from '@/components/Inputs/Password'
 import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
@@ -46,7 +47,8 @@ const CreateCollaborator: FC = () => {
     state: '',
     phone: '',
     observations: '',
-    situation: ''
+    situation: '',
+    password: '',
   })
 
   const handleChange = (name: string, value: string) => {
@@ -76,23 +78,33 @@ const CreateCollaborator: FC = () => {
       state: formData.state,
       phone: formData.phone,
       observations: formData.observations,
-      situation: formData.situation
+      situation: formData.situation,
+      password: formData.password
     })
 
     if (response) {
       if (response.status === 201) {
+        formData.password = '********'
         toast.custom(() => <ToastSuccess text='Colaborador criado com sucesso' />)
         router.push(`/colaboradores/${response.data.data.uuid}`)
+      }  else if (response.status === 422) {
+        formData.password = ''
+        toast.custom(() => (
+          <ToastError text='Esta senha já está em uso. Por favor, escolha uma combinação diferente.' />
+        )) 
       } else if (response.status === 403) {
+        formData.password = ''
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
+        formData.password = ''
         toast.custom(() => (
           <ToastError text='Não foi possível criar o colaborador. Verifique os campos obrigatórios e tente novamente' />
         ))
       }
     } else {
+      formData.password = ''
       toast.custom(() => (
         <ToastError text='Não foi possível criar o colaborador. Verifique os campos obrigatórios e tente novamente' />
       ))
@@ -205,6 +217,12 @@ const CreateCollaborator: FC = () => {
               placeholder='Gênero'
               value={formData.gender}
               onChange={(value: string) => handleChange('gender', value)}
+            />
+
+            <PasswordInput label='Senha única'
+              required={false}
+              value={formData.password || ''}
+              onChange={e => handleChange('password', e.target.value)}
             />
           </div>
 

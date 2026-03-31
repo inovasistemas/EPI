@@ -31,6 +31,7 @@ type UpdateCollaboratorService = {
   phone: string
   observations: string
   situation: string
+  password?: string
 }
 
 type CreateCollaboratorService = {
@@ -50,6 +51,7 @@ type CreateCollaboratorService = {
   phone: string
   observations: string
   situation: string
+  password?: string
 }
 
 type CollaboratorBiometricsService = {
@@ -66,4 +68,9 @@ type CollaboratorSearchBiometricsService = {
   found: boolean
   loading: React.Dispatch<React.SetStateAction<boolean>>
   status: string
+}
+
+type CollaboratorSearchPasswordService = {
+  password: string
+  loading: React.Dispatch<React.SetStateAction<boolean>>
 }

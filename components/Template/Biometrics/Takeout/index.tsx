@@ -4,7 +4,7 @@ import { Modal } from '@/components/Display/Modal'
 import { PrimaryButton } from '@/components/Inputs/Button/Primary'
 import { Paginations } from '@/components/Navigation/Paginations'
 import { Skeleton } from '@/components/ui/skeleton'
-import { collaboratorSearchBiometrics } from '@/services/Collaborator'
+import { collaboratorSearchBiometrics, collaboratorSearchPassword } from '@/services/Collaborator'
 import { getEvent, getEventsByCollaborator, withdrawnEvent } from '@/services/Event'
 import { IdentifyBiometrics } from '@/services/iDBio'
 import { calcDaysRemaining } from '@/utils/cal-days-remaining'
@@ -13,10 +13,11 @@ import { timestampToDate } from '@/utils/timestamp-to-date'
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from "next/image"
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ToastError } from '../../Toast/Error'
 import { ToastSuccess } from '../../Toast/Success'
+import { PasswordInputAnimationIcon } from '@/components/Display/Icons/PasswordInputAnimation'
 
 type EventEquipment = {
 	event: string | null;
@@ -83,6 +84,7 @@ export function BiometricsTakeout({
 }: BiometricsTakeoutProps) {
   const [loading, setLoading] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
+  const [hasStartedPassword, setHasStartedPassword] = useState(false)
   const [showEvents, setShowEvents] = useState(false)
 
   const [modalStatus, setModalStatus] = useState(false);
@@ -92,6 +94,8 @@ export function BiometricsTakeout({
   const [selectedEquipment, setSelectedEquipment] = useState<Event>();
   const [hasPermission, setHasPermission] = useState(true);
   const [loadingEvent, setLoadingEvent] = useState(false);
+  const [password, setPassword] = useState<string>('');
+  const [isCapturing, setIsCapturing] = useState<boolean>(false);
 
   const totalEquipments =
     selectedEquipment?.routines.reduce((sum, routine) => {
@@ -113,9 +117,10 @@ export function BiometricsTakeout({
       }
     } else {
       setNeedApproval(false);
+      handleCloseModal();
     }
 
-    //handleCloseModal();
+    //
   };
 
   const handleCloseModalDelete = useCallback(() => {
@@ -242,7 +247,7 @@ export function BiometricsTakeout({
         if (!responseSearch || responseSearch.status !== 200) {
           setHasStarted(false)
           toast.custom(() => (
-            <ToastError text='Não foi possível cadastrar a biometria' />
+            <ToastError text='Não foi possível buscar a biometria' />
           ))
         } else {
           await fetchEvents(responseSearch.data.uuid)
@@ -251,15 +256,70 @@ export function BiometricsTakeout({
       } else {
         setHasStarted(false)
         toast.custom(() => (
-          <ToastError text='Não foi possível cadastrar a biometria' />
+          <ToastError text='Não foi possível buscar a biometria' />
         ))
       }
     } else {
+      setHasStarted(false)
       toast.custom(() => (
-        <ToastError text='Não foi possível cadastrar a biometria' />
+        <ToastError text='Não foi possível buscar a biometria' />
       ))
     }
   }
+
+  const handleKeyPress = useCallback(async (event: KeyboardEvent) => {
+    if (!isCapturing) return;
+
+    if (event.key === 'Enter') {
+      setIsCapturing(false);
+      setPassword('');
+
+      const responseSearch = await collaboratorSearchPassword({
+        loading: setLoading,
+        password: String(password)
+      })
+
+      if (!responseSearch || responseSearch.status !== 200) {
+        setHasStartedPassword(false)
+        toast.custom(() => (
+          <ToastError text='Não foi possível buscar a senha' />
+        ))
+      } else {
+        if (responseSearch.data.uuid) {
+          await fetchEvents(responseSearch.data.uuid)
+          setHasStartedPassword(false)
+        } else {
+          setHasStartedPassword(false)
+          toast.custom(() => (
+            <ToastError text='Nenhum colaborador encontrado' />
+          ))
+        }
+      }
+    } 
+    else if (event.key === 'Backspace') {
+      setPassword((prev) => prev.slice(0, -1));
+    } 
+    else if (event.key.length === 1) {
+      setPassword((prev) => prev + event.key);
+    }
+  }, [isCapturing, password, setLoading]);
+
+
+  useEffect(() => {
+    if (isCapturing) {
+      window.addEventListener('keydown', handleKeyPress);
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      };
+    }
+  }, [isCapturing, handleKeyPress]);
+
+
+  const handleSearchPassword = () => {
+    setPassword('');
+    setIsCapturing(true);
+    setHasStartedPassword(true);
+  };
 
   const handleProperClose = () => {
     setShowEvents(false)
@@ -415,23 +475,48 @@ export function BiometricsTakeout({
                 </h2>
               </div>
 
-              <div className='flex flex-col'>
-                <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-                  Peça ao colaborador para posicionar o dedo indicador da mão direita
-                </span>
-                <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
-                  corretamente no leitor e aguarde a captura da digital.
-                </span>
-              </div>
-            </div>
+              <div className='gap-1 grid grid-cols-2 pb-6 divide-x divide-[--border] w-full'>
+                <div className='px-6'>
+                  <div className='flex flex-col'>
+                    <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+                      Peça ao colaborador para digitar sua senha corretamente
+                    </span>
+                    <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+                      e pressione a tecla enter para validação do sistema.
+                    </span>
 
-            <div className='flex justify-center items-center py-6 w-full'>
-              <FingerPrintAnimationIcon size="w-40 h-40" progress={0} strokeWidth={1.2} started={hasStarted} />
-            </div>
+                    <div className='flex justify-center items-center py-6 w-full'>
+                      <PasswordInputAnimationIcon size="w-40 h-40" progress={0} strokeWidth={1.2} started={hasStartedPassword} />
+                    </div>
+                  </div>
 
-            <div className='flex justify-center items-center pb-8'>
-              <div className='max-w-48 scale-95'>
-                <PrimaryButton name='capture' action={handleSearchBiometrics} text='Iniciar captura' type='button' disabled={hasStarted} />
+                  <div className='flex justify-center items-center pb-8'>
+                    <div className='max-w-48 scale-95'>
+                      <PrimaryButton name='capture' action={handleSearchPassword} text='Digitar senha' type='button' disabled={hasStartedPassword} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className='px-6'>
+                  <div className='flex flex-col'>
+                    <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+                      Peça ao colaborador para posicionar o dedo indicador da mão direita
+                    </span>
+                    <span className='opacity-60 text-[--textSecondary] text-sm text-center'>
+                      corretamente no leitor e aguarde a captura da digital.
+                    </span>
+
+                    <div className='flex justify-center items-center py-6 w-full'>
+                      <FingerPrintAnimationIcon size="w-40 h-40" progress={0} strokeWidth={1.2} started={hasStarted} />
+                    </div>
+                  </div>
+
+                  <div className='flex justify-center items-center pb-8'>
+                    <div className='max-w-48 scale-95'>
+                      <PrimaryButton name='capture' action={handleSearchBiometrics} text='Iniciar captura' type='button' disabled={hasStarted} />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -571,12 +656,12 @@ export function BiometricsTakeout({
             </Modal>
               <div className="flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto">
                 <div className='flex flex-col justify-center items-center gap-6 py-6 w-full'>
-                <div className='flex flex-row items-center gap-2'>
-                  <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
-                    Retirada de Equipamentos
-                  </h2>
+                  <div className='flex flex-row items-center gap-2'>
+                    <h2 className='font-medium text-[--textSecondary] text-xl select-none'>
+                      Retirada de Equipamentos
+                    </h2>
+                  </div>
                 </div>
-              </div>
               <div className="flex flex-col justify-between gap-y-6 pb-6 w-full h-full">
                 <div className="flex flex-col gap-2 px-3">
                   <AnimatePresence mode="wait">

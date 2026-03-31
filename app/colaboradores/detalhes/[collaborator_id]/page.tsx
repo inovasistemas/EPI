@@ -4,6 +4,7 @@ import { FingerPrintIcon } from '@/components/Display/Icons/FingerPrint'
 import { Modal } from '@/components/Display/Modal'
 import { PermissionDeniedScreen } from '@/components/Features/PermissionDenied'
 import { MaskedInput } from '@/components/Inputs/Masked'
+import { PasswordInput } from '@/components/Inputs/Password'
 import { SelectJobPositions } from '@/components/Inputs/Select/JobPositions'
 import { SearchSelect } from '@/components/Inputs/Select/SearchSelect'
 import { FormInput } from '@/components/Inputs/Text/FormInput'
@@ -51,6 +52,7 @@ type Collaborator = {
   biometrics: boolean
   biometrics_collected_at: string
   biometrics_updated_at: string
+  password?: string
 }
 
 const CollaboratorDetails: FC = () => {
@@ -81,6 +83,7 @@ const CollaboratorDetails: FC = () => {
     biometrics: false,
     biometrics_collected_at: '',
     biometrics_updated_at: '',
+    password: '',
   })
   const fetchedCollaborator = useRef(false)
   const [hasPermission, setHasPermission] = useState(true)
@@ -166,24 +169,35 @@ const CollaboratorDetails: FC = () => {
       state: collaborator.state,
       phone: collaborator.phone,
       observations: collaborator.observations,
-      situation: collaborator.situation
+      situation: collaborator.situation,
+      password: collaborator.password,
     })
 
     if (response) {
       if (response.status === 200) {
+        collaborator.password = '********'
+
         toast.custom(() => (
           <ToastSuccess text='Colaborador atualizado com sucesso' />
         ))
+      } else if (response.status === 422) {
+        collaborator.password = ''
+        toast.custom(() => (
+          <ToastError text='Esta senha já está em uso. Por favor, escolha uma combinação diferente.' />
+        )) 
       } else if (response.status === 403) {
+        collaborator.password = ''
         toast.custom(() => (
           <ToastError text='Você não possui permissão para esta ação' />
         )) 
       } else {
+        collaborator.password = ''
         toast.custom(() => (
           <ToastError text='Não foi possível atualizar o colaborador' />
         ))
       }
     } else {
+      collaborator.password = ''
       toast.custom(() => (
         <ToastError text='Não foi possível atualizar o colaborador' />
       ))
@@ -409,6 +423,12 @@ const CollaboratorDetails: FC = () => {
                 ]}
                 placeholder='Gênero'
                 onChange={(value: string) => handleChange('gender', value)}
+              />
+
+              <PasswordInput label='Senha única'
+                required={false}
+                value={collaborator?.password || ''}
+                onChange={e => handleChange('password', e.target.value)}
               />
             </div>
 

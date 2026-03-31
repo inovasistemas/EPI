@@ -110,7 +110,8 @@ export async function updateCollaborator({
 	phone,
 	observations,
 	id,
-	situation
+	situation,
+	password
 }: UpdateCollaboratorService) {
 	try {
 		loading(true)
@@ -131,7 +132,8 @@ export async function updateCollaborator({
 			state,
 			phone: extractOnlyNumbers(phone ?? ''),
 			observations,
-			situation
+			situation,
+			password
 		}
 
 		const response = await axios.put(
@@ -144,6 +146,8 @@ export async function updateCollaborator({
 		return response
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
+			loading(false)
+			
 			if (error.response?.status === 401) {
 				logoutUserOn401()
 			}
@@ -171,7 +175,8 @@ export async function createCollaborator({
 	state,
 	phone,
 	observations,
-	situation
+	situation,
+	password
 }: CreateCollaboratorService) {
 	try {
 		const params = {
@@ -190,7 +195,8 @@ export async function createCollaborator({
 			state,
 			phone: extractOnlyNumbers(phone ?? ''),
 			observations,
-			situation
+			situation,
+			password
 		}
 
 		const response = await axios.post(
@@ -267,6 +273,33 @@ export async function collaboratorSearchBiometrics({ biometrics, found, loading,
 		const response = await axios.post(
 			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/biometrics/search`,
 			{ biometrics, found, status },
+			{ withCredentials: true },
+		)
+
+		loading(false)
+		return response
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			if (error.response?.status === 401) {
+				logoutUserOn401()
+			}
+
+			loading(false)
+			return error.response || null
+		}
+
+		loading(false)
+		return null
+	}
+}
+
+export async function collaboratorSearchPassword({ password, loading }: CollaboratorSearchPasswordService) {
+	try {
+		loading(true)
+
+		const response = await axios.post(
+			`${process.env.NEXT_PUBLIC_API_HOST}/collaborators/password/search`,
+			{ password },
 			{ withCredentials: true },
 		)
 

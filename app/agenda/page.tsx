@@ -244,13 +244,15 @@ const Agenda: FC = () => {
 
 		if (response) {
 			if (response.status === 200) {
-				if (response.data.need_approval === true && (now < new Date(response.data.expected_withdrawl_at).setHours(0, 0, 0, 0))) {
-					setNeedApproval(true);
-					handleCloseModalDelete();
-				} else {
-					handleCloseModal();
-					setNeedApproval(false);
-				}
+				// if (response.data.need_approval === true && (now < new Date(response.data.expected_withdrawl_at).setHours(0, 0, 0, 0))) {
+				// 	setNeedApproval(true);
+				// 	handleCloseModalDelete();
+				// } else {
+				// 	handleCloseModal();
+				// 	setNeedApproval(false);
+				// }
+				handleCloseModal();
+				setNeedApproval(false);
 			} else if (response.status === 403) {
 				setHasPermission(false);
 			} else {
@@ -483,37 +485,37 @@ const Agenda: FC = () => {
 		setModalDeleteStatus((prev) => !prev);
 	}, []);
 
-	const handleRequestApproval = async () => {
-		handleCloseModalDelete()
+	// const handleRequestApproval = async () => {
+	// 	handleCloseModalDelete()
 
-		if (selectedEquipment) {
-			for (const routine of selectedEquipment?.routines) {
-				for (const equipement of routine.equipments) {
-					const response = await createNotification({
-						collaborator: selectedEquipment?.collaborator || '',
-						equipment: equipement.uuid || '',
-						message: `O colaborador solicitou a retirada antecipada dos equipamentos previstos para ${timestampToDate(String(selectedEquipment?.expected_withdrawl_at || ''))}. Aguarda aprovação para prosseguir com a entrega.`,
-						needs_approval: true,
-						status: 'RECEIVED',
-						title: `Retirada antecipada para ${selectedEquipment?.collaborator_name}`,
-						withdrawal_at: selectedEquipment?.expected_withdrawl_at || new Date(),
-						quantity: Number(equipement.quantity || 0),
-						event: equipement.event || ''
-					})
+	// 	if (selectedEquipment) {
+	// 		for (const routine of selectedEquipment?.routines) {
+	// 			for (const equipement of routine.equipments) {
+	// 				const response = await createNotification({
+	// 					collaborator: selectedEquipment?.collaborator || '',
+	// 					equipment: equipement.uuid || '',
+	// 					message: `O colaborador solicitou a retirada antecipada dos equipamentos previstos para ${timestampToDate(String(selectedEquipment?.expected_withdrawl_at || ''))}. Aguarda aprovação para prosseguir com a entrega.`,
+	// 					needs_approval: true,
+	// 					status: 'RECEIVED',
+	// 					title: `Retirada antecipada para ${selectedEquipment?.collaborator_name}`,
+	// 					withdrawal_at: selectedEquipment?.expected_withdrawl_at || new Date(),
+	// 					quantity: Number(equipement.quantity || 0),
+	// 					event: equipement.event || ''
+	// 				})
 
-					if (response?.status === 201) {
-						toast.custom(() => (
-							<ToastSuccess text={`Solicitação de retirada antecipada enviada`} />
-						));
-					} else {
-						toast.custom(() => (
-							<ToastError text="Não foi possível solicitar a retirada antecipada" />
-						))
-					}
-				}
-			}
-		}
-	}
+	// 				if (response?.status === 201) {
+	// 					toast.custom(() => (
+	// 						<ToastSuccess text={`Solicitação de retirada antecipada enviada`} />
+	// 					));
+	// 				} else {
+	// 					toast.custom(() => (
+	// 						<ToastError text="Não foi possível solicitar a retirada antecipada" />
+	// 					))
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	const handleCloseModalDeleteGetOut = useCallback(() => {
 		//handleCloseModal();
@@ -585,7 +587,7 @@ const Agenda: FC = () => {
 									</div>
 								</li>
 							))}
-							<li>
+							{/* <li>
 								<div className="flex justify-end items-end w-full">
 									<AnimatePresence mode="wait">
 										{needApproval === false && (
@@ -610,12 +612,12 @@ const Agenda: FC = () => {
 										)}
 									</AnimatePresence>
 								</div>
-							</li>
+							</li> */}
 						</ul>
 					))}
 				</div>
 			</Modal>
-			<Modal
+			{/* <Modal
 				title=""
 				size="extra-small"
 				isModalOpen={modalDeleteStatus}
@@ -658,7 +660,7 @@ const Agenda: FC = () => {
 						</button>
 					</div>
 				</div>
-			</Modal>
+			</Modal> */}
 			<div className="flex flex-col items-start gap-3 bg-[--backgroundPrimary] sm:rounded-2xl w-full h-full overflow-auto">
 				<div className="flex justify-between items-center gap-3 p-6 pt-8 w-full">
 					<div className="flex flex-row items-center gap-2">

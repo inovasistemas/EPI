@@ -34,6 +34,7 @@ export function CollaboratorSkeleton() {
           <Skeleton className="rounded-xl w-full h-[54px]" />
           <Skeleton className="rounded-xl w-full h-[54px]" />
           <Skeleton className="rounded-xl w-full h-[54px]" />
+          <Skeleton className="rounded-xl w-full h-[54px]" />
         </div>
 
         <div className='gap-4 grid grid-cols-2 px-6 w-full'>
