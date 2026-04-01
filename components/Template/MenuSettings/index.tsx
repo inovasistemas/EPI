@@ -1,3 +1,4 @@
+import { DownloadIcon } from '@/components/Display/Icons/Download'
 import { LogoutIcon } from '@/components/Display/Icons/Logout'
 import { MoonIcon } from '@/components/Display/Icons/Moon'
 import { SettingsIcon } from '@/components/Display/Icons/Settings'
@@ -5,6 +6,16 @@ import { SubMenuSelect } from '@/components/Inputs/Select/SubMenuSelect'
 import { SubNavLink } from '@/components/Navigation/SubNavLink'
 
 export function MenuSettings() {
+  const downloadBiometricService = () => {
+    const link = document.createElement('a');
+
+    link.href = '/downloads/leitor.exe';
+    link.download = 'leitor.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <ul className='flex flex-col gap-1 p-3 text-sm transition-all duration-300 select-none'>
       <li className='whitespace-nowrap'>
@@ -14,6 +25,14 @@ export function MenuSettings() {
             <SettingsIcon size='size-5' stroke='stroke-[--textSecondary]' />
           }
           href='/configuracoes/empresa'
+        />
+        <SubNavLink
+          name='Serviço biométrico'
+          target='_blank'
+          icon={
+            <DownloadIcon size='size-5' stroke='stroke-[--textSecondary]' />
+          }
+          href='/setup/IDBioAPI_Setup.zip'
         />
         <div className='relative flex flex-row justify-end items-center bg-transparent hover:bg-[--buttonHover] rounded-xl transition-all duration-300'>
           <span className='left-0 absolute flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--backgroundPrimary] px-3 py-2 rounded-xl font-normal whitespace-normal transition-all duration-300 select-none'>

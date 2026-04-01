@@ -8,9 +8,10 @@ type SubNavLinkProps = {
   date?: string
   read?: boolean
   variant?: 'default' | 'plain'
+  target?: string
 }
 
-export function SubNavLink({ name, icon, href, date, read }: SubNavLinkProps) {
+export function SubNavLink({ name, icon, href, date, read, target = '_self' }: SubNavLinkProps) {
   const textClassName = cn(
     'font-medium text-[--textSecondary] text-sm line-clamp-2',
     {
@@ -21,6 +22,7 @@ export function SubNavLink({ name, icon, href, date, read }: SubNavLinkProps) {
   return (
     <Link
       href={href}
+      target={target}
       className='relative flex items-center gap-3 data-[active=true]:bg-[--backgroundPrimary] hover:bg-[--buttonHover] px-3 py-2 rounded-xl font-normal whitespace-normal transition-all duration-300'
     >
       {date && (
